@@ -1,2 +1,2 @@
-const aaa: number = 1
-export default aaa
+export { ObjectFactory } from './objects'
+export { MasterData } from './data'
