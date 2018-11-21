@@ -1,6 +1,6 @@
 {
   "name": "kc-calculator",
-  "version": "0.0.8",
+  "version": "0.0.12",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "madono (https://github.com/MadonoHaru)",
@@ -13,7 +13,7 @@
     "test": "jest",
     "build": "tsc",
     "script": "yarn run ts-node --files scripts",
-    "deploy": "git push origin master npm publish"
+    "upload": "yarn build && yarn publish"
   },
   "jest": {
     "transform": {
