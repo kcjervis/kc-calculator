@@ -1,6 +1,6 @@
 {
   "name": "kc-calculator",
-  "version": "0.0.43",
+  "version": "0.0.44",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "madono (https://github.com/MadonoHaru)",
@@ -13,6 +13,7 @@
     "test": "jest",
     "build": "tsc",
     "script": "yarn run ts-node --files scripts",
+    "update-ships": "yarn run ts-node --files scripts",
     "upload": "yarn build && yarn publish"
   },
   "jest": {
