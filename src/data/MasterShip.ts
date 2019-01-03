@@ -1,5 +1,5 @@
+import { IShipData, TShipStat } from '../../ships.json'
 import ShipClass from './ShipClass'
-import { IShipData, TShipStat } from './ships'
 import ShipType from './ShipType'
 
 const conversionStat = (stat: TShipStat): StatRange => {
@@ -11,7 +11,9 @@ const conversionStat = (stat: TShipStat): StatRange => {
 
 type StatRange = [number, number]
 
-export default class ShipMaster {
+export default class MasterShip {
+  public static readonly all = new Array<MasterShip>()
+
   public static readonly abyssalIdFrom = 1500
 
   public readonly id: number
@@ -69,9 +71,28 @@ export default class ShipMaster {
         nextLevel: 0
       }
     }
+
+    MasterShip.all.push(this)
   }
 
   get isAbyssal() {
-    return this.id > ShipMaster.abyssalIdFrom
+    return this.id > MasterShip.abyssalIdFrom
+  }
+
+  get canRemodel() {
+    return this.remodel.nextId > 0
+  }
+
+  get canConvert() {
+    const {
+      id,
+      remodel: { nextId }
+    } = this
+
+    const nextShip = MasterShip.all.find(ship => ship.id === nextId)
+    if (!nextShip) {
+      return false
+    }
+    return nextShip.remodel.nextId === id
   }
 }

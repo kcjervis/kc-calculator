@@ -33,4 +33,17 @@ export default class AirControlState<
   private constructor(public readonly name: Name, public readonly constant: Constant, public readonly api: Api) {
     AirControlState.values.push(this)
   }
+
+  get contactMultiplier() {
+    switch (this) {
+      case AirControlState.AirSupremacy:
+        return 3
+      case AirControlState.AirSuperiority:
+        return 2
+      case AirControlState.AirDenial:
+        return 1
+      default:
+        return 0
+    }
+  }
 }

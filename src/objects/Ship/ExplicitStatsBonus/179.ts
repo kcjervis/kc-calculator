@@ -9,7 +9,7 @@ const createBonus: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
 
   // 単体ボーナス
-  if (ship.shipClass.equal('AkizukiClass')) {
+  if (ship.shipClass.is('AkizukiClass')) {
     bonus.add({
       multiplier: count,
       torpedo: 1

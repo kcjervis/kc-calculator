@@ -12,10 +12,10 @@ const createBonus: StatsBonusCreator = ship => {
   const isKai2 = ship.name.includes('改二')
 
   if (
-    shipClass.equal('KumaClass') ||
-    shipClass.equal('NagaraClass') ||
-    shipClass.equal('SendaiClass') ||
-    shipClass.equal('AganoClass')
+    shipClass.is('KumaClass') ||
+    shipClass.is('NagaraClass') ||
+    shipClass.is('SendaiClass') ||
+    shipClass.is('AganoClass')
   ) {
     bonus.add({
       multiplier: count,
@@ -23,7 +23,7 @@ const createBonus: StatsBonusCreator = ship => {
       evasion: 1,
       asw: 1
     })
-  } else if (shipClass.equal('GotlandClass')) {
+  } else if (shipClass.is('GotlandClass')) {
     bonus.add({
       multiplier: count,
       firepower: 1,

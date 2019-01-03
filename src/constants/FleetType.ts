@@ -4,19 +4,19 @@
  */
 const enum FleetType {
   /** 通常 */
-  Single,
+  Single = 'Single',
 
   /** 空母機動部隊 */
-  CarrierTaskForce = 1,
+  CarrierTaskForce = 'CarrierTaskForce',
 
   /** 水上打撃部隊 */
-  SurfaceTaskForce = 2,
+  SurfaceTaskForce = 'SurfaceTaskForce',
 
   /** 輸送護衛部隊 */
-  TransportEscort = 4,
+  TransportEscort = 'TransportEscort',
 
   /** 敵連合 */
-  Combined
+  Combined = 'Combined'
 }
 
 export default FleetType

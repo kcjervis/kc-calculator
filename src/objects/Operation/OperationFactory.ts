@@ -1,10 +1,11 @@
-import { Side } from '../../constants'
+import { FleetType, Side } from '../../constants'
 import { FleetFactory, IFleetDataObject } from '../Fleet'
 import { ILandBasedAirCorpsDataObject, LandBasedAirCorpsFactory } from '../LandBasedAirCorps'
 import Operation from './Operation'
 
 export interface IOperationDataObject {
   side: Side
+  fleetType: FleetType
   fleets: IFleetDataObject[]
   landBase: ILandBasedAirCorpsDataObject[]
 }
@@ -15,10 +16,12 @@ export default class OperationFactory {
     private readonly landBasedAirCorpsFactory: LandBasedAirCorpsFactory
   ) {}
 
-  public create({ side, fleets: fleetObjs, landBase: airCorpsObjs }: IOperationDataObject) {
-    const fleets = fleetObjs.map(fleetObj => this.fleetFactory.create(fleetObj, side))
+  public create(dataObj: IOperationDataObject) {
+    const { side, fleetType, fleets: fleetObjs, landBase: airCorpsObjs } = dataObj
+
+    const fleets = fleetObjs.map(this.fleetFactory.create)
     const landBase = airCorpsObjs.map(this.landBasedAirCorpsFactory.create)
 
-    return new Operation(side, fleets, landBase)
+    return new Operation(side, fleetType, fleets, landBase)
   }
 }

@@ -1,4 +1,4 @@
-declare module '*/ships' {
+declare module '*/ships.json' {
   export type TShipStat = number | [number, number]
   export interface IShipData {
     id: number

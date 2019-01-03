@@ -5,3 +5,6 @@ export { default as Side } from './Side'
 export { default as FleetRole } from './FleetRole'
 export { default as FleetType } from './FleetType'
 export { default as Speed } from './Speed'
+export { default as BattleType } from './BattleType'
+
+export { default as EquipmentStatNames, EquipmentStatName } from './EquipmentStatNames'

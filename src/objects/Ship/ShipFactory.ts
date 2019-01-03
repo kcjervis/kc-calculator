@@ -1,46 +1,53 @@
-import { ShipMaster } from '../../data'
+import { MasterShip } from '../../data'
 import { EquipmentFactory, IEquipmentDataObject } from '../Equipment'
-import { IFleetInformation } from '../Fleet/FleetInformation'
-
 import { createPlanes } from '../Plane'
-import BaseShip from './BaseShip'
+
 import { createExplicitStatsBonus } from './ExplicitStatsBonus'
+import Health from './Health'
+import Morale from './Morale'
 import Ship, { IShip } from './Ship'
-import ShipAerialCombat from './ShipAerialCombat'
 import ShipNakedStats, { IBaseStats } from './ShipNakedStats'
 import ShipStats from './ShipStats'
 
 export interface IShipDataObject {
   masterId: number
   level: number
+  slots: number[]
   equipments: Array<IEquipmentDataObject | undefined>
-  slots?: number[]
+
+  morale?: number
   increased?: Partial<IBaseStats>
 }
 
 export default class ShipFactory {
-  constructor(private readonly masters: ShipMaster[], private readonly equipmentFactory: EquipmentFactory) {}
+  constructor(private readonly masters: MasterShip[], private readonly equipmentFactory: EquipmentFactory) {}
 
-  public create(obj: IShipDataObject, fleetInformation: IFleetInformation): IShip | undefined {
-    const { masterId, level, increased, equipments: equipObjs } = obj
+  public create = (obj?: IShipDataObject): IShip | undefined => {
+    if (!obj) {
+      return undefined
+    }
+
+    const { masterId, level, increased, equipments: equipObjs, morale: moraleValue } = obj
     const foundMaster = this.masters.find(master => master.id === masterId)
     if (!foundMaster) {
       return undefined
     }
 
-    const equipmentCollection = this.equipmentFactory.createCollection(equipObjs)
+    const equipments = equipObjs.map(this.equipmentFactory.create)
 
     const nakedStats = new ShipNakedStats(foundMaster, level, increased)
-    const stats = new ShipStats(nakedStats, equipmentCollection)
-    const baseShip = new BaseShip(foundMaster, fleetInformation, stats, nakedStats, equipmentCollection)
+    const stats = new ShipStats(nakedStats, equipments)
+    const health = new Health(stats.hp, stats.hp)
+    const morale = new Morale(moraleValue)
+
+    const slots = obj.slots.concat()
+
+    const planes = createPlanes(slots, equipments)
+    const ship = new Ship(foundMaster, stats, nakedStats, health, morale, slots, equipments, planes)
 
     // 装備ボーナスを適応
-    baseShip.stats.statsBonus = createExplicitStatsBonus(baseShip)
+    ship.stats.statsBonus = createExplicitStatsBonus(ship)
 
-    const aerialCombat = new ShipAerialCombat(baseShip)
-
-    const planes = createPlanes(baseShip.slots, equipmentCollection.list)
-
-    return new Ship(baseShip, planes, aerialCombat)
+    return ship
   }
 }

@@ -1,6 +1,6 @@
+import { IShip } from '../Ship'
 import StatsBonus, { IStatsBonus, StatsBonusCreator } from './StatsBonus'
 
-import { IBaseShip } from '../BaseShip'
 import createBonus104 from './104'
 import createBonus15 from './15'
 import createBonus174 from './174'
@@ -69,7 +69,7 @@ const statsBonusCreators: StatsBonusCreator[] = [
   createBonusZuiun634AirGroup
 ]
 
-export const createExplicitStatsBonus = (ship: IBaseShip) => {
+export const createExplicitStatsBonus = (ship: IShip) => {
   const explicitStatsBonus = new StatsBonus()
   statsBonusCreators.forEach(createBonus => {
     const bonus = createBonus(ship)

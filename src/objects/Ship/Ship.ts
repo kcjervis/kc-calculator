@@ -1,68 +1,97 @@
-import { IPlane } from '../Plane'
-import { IBaseShip } from './BaseShip'
-import ShipAerialCombat from './ShipAerialCombat'
+import { ListIterator } from 'lodash'
+import sumBy from 'lodash/sumBy'
 
-export interface IShip extends IBaseShip {
+import { IHealth } from './Health'
+import { IMorale } from './Morale'
+import { IShipNakedStats } from './ShipNakedStats'
+import { IShipStats } from './ShipStats'
+
+import { MasterShip, ShipClass, ShipType } from '../../data'
+import { nonNullable } from '../../utils'
+import { IEquipment } from '../Equipment'
+import { IPlane } from '../Plane'
+
+type EquipmentIterator<R> = ListIterator<IEquipment, R>
+type EquipmentIteratee<R, S> = EquipmentIterator<R> | S
+
+export interface IShip {
+  masterId: number
+  name: string
+
+  shipClass: ShipClass
+  shipType: ShipType
+
+  level: number
+  stats: IShipStats
+  nakedStats: IShipStats
+
+  health: IHealth
+  morale: IMorale
+
+  slots: number[]
+  equipments: Array<IEquipment | undefined>
   planes: IPlane[]
-  aerialCombat: ShipAerialCombat
+
+  hasEquipment: (iteratee: EquipmentIteratee<boolean, number>) => boolean
+  countEquipment: (iteratee?: EquipmentIteratee<boolean, number>) => number
+  totalEquipmentStats: (iteratee: ((equip: IEquipment) => number) | keyof IEquipment) => number
 }
 
 export default class Ship implements IShip {
   constructor(
-    private readonly baseShip: IBaseShip,
-    public readonly planes: IPlane[],
-    public readonly aerialCombat: ShipAerialCombat
+    private readonly master: MasterShip,
+    public readonly stats: IShipStats,
+    public readonly nakedStats: IShipNakedStats,
+    public readonly health: IHealth,
+    public readonly morale: IMorale,
+    public readonly slots: number[],
+    public readonly equipments: Array<IEquipment | undefined>,
+    public readonly planes: IPlane[]
   ) {}
 
   get masterId() {
-    return this.baseShip.masterId
+    return this.master.id
   }
 
   get name() {
-    return this.baseShip.name
-  }
-
-  get fleetInformation() {
-    return this.baseShip.fleetInformation
+    return this.master.name
   }
 
   get shipClass() {
-    return this.baseShip.shipClass
+    return this.master.shipClass
   }
 
   get shipType() {
-    return this.baseShip.shipType
+    return this.master.shipType
   }
 
   get level() {
-    return this.baseShip.level
+    return this.nakedStats.level
   }
 
-  get stats() {
-    return this.baseShip.stats
+  get nonNullableEquipments() {
+    return this.equipments.filter(nonNullable)
   }
 
-  get nakedStats() {
-    return this.baseShip.nakedStats
+  public hasEquipment = (iteratee: EquipmentIteratee<boolean, number>) => {
+    if (typeof iteratee === 'number') {
+      return this.nonNullableEquipments.some(({ masterId }) => masterId === iteratee)
+    }
+    return this.nonNullableEquipments.some(iteratee)
   }
 
-  get slots() {
-    return this.baseShip.slots
+  public countEquipment = (iteratee?: EquipmentIteratee<boolean, number>) => {
+    const { nonNullableEquipments } = this
+    if (iteratee === undefined) {
+      return nonNullableEquipments.length
+    }
+    if (typeof iteratee === 'number') {
+      return nonNullableEquipments.filter(({ masterId }) => masterId === iteratee).length
+    }
+    return nonNullableEquipments.filter(iteratee).length
   }
 
-  get equipments() {
-    return this.baseShip.equipments
-  }
-
-  get equipmentCollection() {
-    return this.baseShip.equipmentCollection
-  }
-
-  get hasEquipment() {
-    return this.baseShip.hasEquipment
-  }
-
-  get countEquipment() {
-    return this.baseShip.countEquipment
+  public totalEquipmentStats = (iteratee: ((equip: IEquipment) => number) | keyof IEquipment) => {
+    return sumBy(this.nonNullableEquipments, iteratee)
   }
 }

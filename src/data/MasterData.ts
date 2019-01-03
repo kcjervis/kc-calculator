@@ -1,27 +1,21 @@
 import defaultRawMstData from '@kancolle/data'
-import defaultShipsData from './ships'
+import defaultShipsData from '../../ships.json'
 
 import EquipmentCategory from './EquipmentCategory'
-import EquipmentMaster from './EquipmentMaster'
+import MasterEquipment from './MasterEquipment'
+import MasterShip from './MasterShip'
 import ShipClass from './ShipClass'
-import ShipMaster from './ShipMaster'
 import ShipType from './ShipType'
 
 /**
- *
+ * マスターデータ
  */
 export default class MasterData {
-  /** 装備カテゴリ */
-  public readonly EquipmentCategory = EquipmentCategory.all
-
   /** 装備リスト */
-  public readonly equipments: EquipmentMaster[]
-
-  /** 艦種 */
-  public readonly ShipType = ShipType.all
+  public readonly equipments: MasterEquipment[]
 
   /** 艦娘リスト */
-  public readonly ships: ShipMaster[]
+  public readonly ships: MasterShip[]
 
   constructor(public readonly rawData = defaultRawMstData, public readonly shipsData = defaultShipsData) {
     this.equipments = rawData.api_mst_slotitem.map(raw => {
@@ -45,27 +39,27 @@ export default class MasterData {
         radius: raw.api_distance
       }
       const equipmentCategory = EquipmentCategory.fromId(raw.api_type[2])
-      return new EquipmentMaster(equipmentData, equipmentCategory)
+      return new MasterEquipment(equipmentData, equipmentCategory)
     })
 
     this.ships = shipsData.map(shipData => {
       const shipType = ShipType.fromId(shipData.shipTypeId)
       const shipClass = ShipClass.fromId(shipData.classId)
-      return new ShipMaster(shipData, shipType, shipClass)
+      return new MasterShip(shipData, shipType, shipClass)
     })
   }
 
   /**
    * 装備マスターデータを探す
    */
-  public findEquipmentMaster(masterId: number) {
+  public findMasterEquipment(masterId: number) {
     return this.equipments.find(equip => equip.id === masterId)
   }
 
   /**
    * 艦娘マスターデータを探す
    */
-  public findShipMaster(masterId: number) {
+  public findMasterShip(masterId: number) {
     return this.ships.find(ship => ship.id === masterId)
   }
 }

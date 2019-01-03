@@ -1,9 +1,10 @@
-import { FleetRole, Side } from '../../constants'
+import { FleetRole, FleetType, Side } from '../../constants'
 import { IFleet } from '../Fleet'
 import { ILandBasedAirCorps } from '../LandBasedAirCorps'
 
 export interface IOperation {
   side: Side
+  fleetType: FleetType
   fleets: IFleet[]
   landBase: ILandBasedAirCorps[]
 
@@ -16,24 +17,23 @@ export interface IOperation {
 export default class Operation implements IOperation {
   constructor(
     public readonly side: Side,
+    public readonly fleetType: FleetType,
     public readonly fleets: IFleet[],
     public readonly landBase: ILandBasedAirCorps[]
   ) {}
 
   get mainFleet() {
-    const mainFleet = this.fleets.find(fleet => fleet.fleetRole === FleetRole.MainFleet)
-    if (!mainFleet) {
-      throw console.error('main fleet is not found')
-    }
-    return mainFleet
+    return this.fleets[0]
   }
 
   get escortFleet() {
-    return this.fleets.find(fleet => fleet.fleetRole === FleetRole.EscortFleet)
+    if (this.isCombinedFleetOperation) {
+      return this.fleets[1]
+    }
+    return undefined
   }
 
   get isCombinedFleetOperation() {
-    const { escortFleet } = this
-    return Boolean(escortFleet)
+    return Boolean(this.fleetType !== FleetType.Single)
   }
 }

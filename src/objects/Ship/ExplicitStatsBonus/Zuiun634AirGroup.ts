@@ -11,8 +11,8 @@ const createBonus: StatsBonusCreator = ship => {
   const isKai2 = ship.name.includes('改二')
   const { shipClass } = ship
 
-  const isIseClass = shipClass.equal('IseClass')
-  const isFusouClassKai2 = shipClass.equal('FusouClass') && isKai2
+  const isIseClass = shipClass.is('IseClass')
+  const isFusouClassKai2 = shipClass.is('FusouClass') && isKai2
 
   if (isIseClass && isKai2) {
     bonus.add({

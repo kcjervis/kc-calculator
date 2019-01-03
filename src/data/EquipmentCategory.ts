@@ -18,7 +18,7 @@ export default class EquipmentCategory {
 
   private constructor(public readonly id: EquipmentCategoryId, public readonly name: string) {}
 
-  public equal(key: keyof typeof EquipmentCategoryId) {
+  public is = (key: keyof typeof EquipmentCategoryId) => {
     return this.id === EquipmentCategoryId[key]
   }
   /** 電探 */
@@ -120,6 +120,7 @@ export default class EquipmentCategory {
       case EquipmentCategoryId.CarrierBasedReconnaissanceAircraft2:
       case EquipmentCategoryId.ReconnaissanceSeaplane:
       case EquipmentCategoryId.LargeFlyingBoat:
+      case EquipmentCategoryId.LandBasedReconnaissanceAircraft:
       case EquipmentCategoryId.JetPoweredReconnaissanceAircraft:
         return true
     }
@@ -138,5 +139,22 @@ export default class EquipmentCategory {
         return true
     }
     return this.isAerialCombatAircraft
+  }
+
+  get isArmor() {
+    const { is } = this
+    return is('ExtraArmor') || is('MediumExtraArmor') || is('LargeExtraArmor')
+  }
+
+  get isObservationPlane() {
+    const { is } = this
+    return is('SeaplaneBomber') || is('ReconnaissanceSeaplane')
+  }
+
+  get isMainGun() {
+    const { is } = this
+    return (
+      is('SmallCaliberMainGun') || is('MediumCaliberMainGun') || is('LargeCaliberMainGun') || is('LargeCaliberMainGun2')
+    )
   }
 }

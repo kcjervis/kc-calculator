@@ -1,34 +1,37 @@
+import sumBy from 'lodash/sumBy'
+
+import { FleetRole, FleetType, Side } from '../../constants'
+import { nonNullable } from '../../utils'
 import { IPlane } from '../Plane'
 import { IShip } from '../Ship'
 
-import { IBaseFleet } from './BaseFleet'
-import { IFleetAerialCombat } from './FleetAerialCombat'
+type ShipIterator<R> = (ship: IShip) => R
 
-export interface IFleet extends IBaseFleet {
+export interface IFleet {
+  ships: Array<IShip | undefined>
+  nonNullableShips: IShip[]
   planes: IPlane[]
-  aerialCombat: IFleetAerialCombat
+  fighterPower: number
+
+  totalShipStats: (iteratee: ShipIterator<number>) => number
 }
 
 export default class Fleet implements IFleet {
-  constructor(private readonly baseFleet: IBaseFleet, public readonly aerialCombat: IFleetAerialCombat) {}
+  constructor(public readonly ships: Array<IShip | undefined>) {}
 
-  get side() {
-    return this.baseFleet.side
+  get nonNullableShips() {
+    return this.ships.filter(nonNullable)
   }
 
-  get fleetType() {
-    return this.baseFleet.fleetType
-  }
-
-  get fleetRole() {
-    return this.baseFleet.fleetRole
-  }
-
-  get ships() {
-    return this.baseFleet.ships
+  public totalShipStats = (iteratee: ShipIterator<number>) => {
+    return sumBy(this.nonNullableShips, iteratee)
   }
 
   get planes() {
-    return this.ships.filter((ship): ship is IShip => ship !== undefined).flatMap(ship => ship.planes)
+    return this.nonNullableShips.flatMap(ship => ship.planes)
+  }
+
+  get fighterPower() {
+    return sumBy(this.planes.filter(({ category }) => !category.isReconnaissanceAircraft), plane => plane.fighterPower)
   }
 }

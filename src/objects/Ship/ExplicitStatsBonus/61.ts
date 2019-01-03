@@ -2,7 +2,7 @@ import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
   const isKai2 = ship.name.includes('改二')
-  const isIseClassKai2 = ship.shipClass.equal('IseClass') && isKai2
+  const isIseClassKai2 = ship.shipClass.is('IseClass') && isKai2
   // 二式艦上偵察機
   if (!isIseClassKai2 || !ship.hasEquipment(61)) {
     return undefined

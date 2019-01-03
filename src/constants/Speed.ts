@@ -1,4 +1,4 @@
-import { IBaseShip } from '../objects/Ship'
+import { IShip } from '../objects'
 
 export const enum SpeedValue {
   Land = 0,
@@ -47,7 +47,7 @@ export default class Speed<Value extends SpeedValue = SpeedValue, Name extends s
    * 艦速グループを取得
    * 参考 http://kancolle.wikia.com/wiki/Partials/Speed_system
    */
-  public static getSpeedGroup(ship: IBaseShip) {
+  public static getSpeedGroup(ship: IShip) {
     const className = ship.shipClass.name
     const { shipType } = ship
 

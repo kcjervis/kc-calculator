@@ -12,17 +12,17 @@ const createBonus: StatsBonusCreator = ship => {
 
   // 単体ボーナス
   if (
-    shipClass.equal('KumaClass') ||
-    shipClass.equal('NagaraClass') ||
-    shipClass.equal('SendaiClass') ||
-    shipClass.equal('AganoClass')
+    shipClass.is('KumaClass') ||
+    shipClass.is('NagaraClass') ||
+    shipClass.is('SendaiClass') ||
+    shipClass.is('AganoClass')
   ) {
     bonus.add({
       multiplier: count,
       firepower: 1,
       antiAir: 1
     })
-  } else if (shipClass.equal('GotlandClass')) {
+  } else if (shipClass.is('GotlandClass')) {
     bonus.add({
       multiplier: count,
       firepower: 1,

@@ -92,15 +92,7 @@ const data: Array<[ShipClassId, string]> = [
 ]
 
 export default class ShipClass {
-  public static readonly all: ShipClass[] = data.map(datum => ShipClass.fromDatum(datum))
-
-  public static fromDatum(datum: [number, string]) {
-    const found = ShipClass.all.find(shipClass => shipClass.id === datum[0])
-    if (found) {
-      return found
-    }
-    return new ShipClass(...datum)
-  }
+  public static readonly all: ShipClass[] = data.map(datum => new ShipClass(...datum))
 
   public static fromId(id: number) {
     const found = ShipClass.all.find(shipClass => shipClass.id === id)
@@ -114,7 +106,7 @@ export default class ShipClass {
 
   private constructor(public readonly id: ShipClassId, public readonly name: string) {}
 
-  public equal(key: keyof typeof ShipClassId) {
+  public is(key: keyof typeof ShipClassId) {
     return this.id === ShipClassId[key]
   }
 

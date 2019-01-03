@@ -27,7 +27,7 @@ export default class ShipType {
     }
   }
 
-  public equal(key: keyof typeof ShipTypeId) {
+  public is(key: keyof typeof ShipTypeId) {
     return this.id === ShipTypeId[key]
   }
 

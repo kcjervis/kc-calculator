@@ -1,10 +1,10 @@
-import { IBaseShip } from '../BaseShip'
+import { IShip } from '../Ship'
 
 type StatKey = 'firepower' | 'torpedo' | 'antiAir' | 'armor' | 'asw' | 'los' | 'evasion' | 'speed' | 'range'
 const keies: StatKey[] = ['firepower', 'torpedo', 'antiAir', 'armor', 'asw', 'los', 'evasion', 'speed', 'range']
 type BonusPojo = { [K in StatKey | 'multiplier']?: number }
 
-export type StatsBonusCreator = (ship: IBaseShip) => StatsBonus | undefined
+export type StatsBonusCreator = (ship: IShip) => StatsBonus | undefined
 
 export interface IStatsBonus {
   firepower: number

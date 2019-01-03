@@ -1,4 +1,4 @@
-import ShipMasterId from '../../../data/ShipMasterId'
+import MasterShipId from '../../../data/MasterShipId'
 import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
@@ -10,8 +10,8 @@ const createBonus: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
   const { shipClass } = ship
 
-  const isShinyou = [ShipMasterId.Shinyou, ShipMasterId.ShinyouKai, ShipMasterId.ShinyouKai2].includes(ship.masterId)
-  if (shipClass.equal('GrafZeppelinClass') || shipClass.equal('AquilaClass')) {
+  const isShinyou = [MasterShipId.Shinyou, MasterShipId.ShinyouKai, MasterShipId.ShinyouKai2].includes(ship.masterId)
+  if (shipClass.is('GrafZeppelinClass') || shipClass.is('AquilaClass')) {
     bonus.add({
       multiplier: count,
       firepower: 1,
@@ -23,7 +23,7 @@ const createBonus: StatsBonusCreator = ship => {
       asw: 3,
       evasion: 2
     })
-  } else if (shipClass.equal('TaiyouClass')) {
+  } else if (shipClass.is('TaiyouClass')) {
     bonus.add({
       multiplier: count,
       asw: 1,

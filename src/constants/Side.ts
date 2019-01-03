@@ -1,6 +1,6 @@
 const enum Side {
-  Player,
-  Enemy
+  Player = 'Player',
+  Enemy = 'Enemy'
 }
 
 export default Side

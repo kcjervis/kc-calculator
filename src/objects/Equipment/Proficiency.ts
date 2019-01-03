@@ -1,4 +1,4 @@
-import { EquipmentCategoryId, EquipmentMaster } from '../../data'
+import { EquipmentCategoryId, MasterEquipment } from '../../data'
 
 export interface IProficiency {
   internal: number
@@ -27,10 +27,14 @@ export default class Proficiency implements IProficiency {
     ]
   }
 
-  constructor(public internal = 0, private readonly master: EquipmentMaster) {}
+  public static internalToLevel(internal: number) {
+    return Proficiency.internalBounds.filter(bound => bound <= internal).length - 1
+  }
+
+  constructor(public internal = 0, private readonly master: MasterEquipment) {}
 
   get level() {
-    return Proficiency.internalBounds.filter(bound => bound <= this.internal).length - 1
+    return Proficiency.internalToLevel(this.internal)
   }
 
   set level(value: number) {

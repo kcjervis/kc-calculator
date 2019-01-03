@@ -9,11 +9,11 @@ const createBonus: StatsBonusCreator = ship => {
   const { shipClass } = ship
 
   const isUSNavy =
-    shipClass.equal('JohnCButlerClass') ||
-    shipClass.equal('IowaClass') ||
-    shipClass.equal('LexingtonClass') ||
-    shipClass.equal('EssexClass') ||
-    shipClass.equal('CasablancaClass')
+    shipClass.is('JohnCButlerClass') ||
+    shipClass.is('IowaClass') ||
+    shipClass.is('LexingtonClass') ||
+    shipClass.is('EssexClass') ||
+    shipClass.is('CasablancaClass')
 
   if (!isUSNavy) {
     return undefined

@@ -1,38 +1,13 @@
 import random from 'lodash/random'
 
+import { fixedShotdownNumber, getCombinedFleetModifier, proportionalShotdownRate } from '../../AerialCombat/antiAir'
 import { AirControlState, Side } from '../../constants'
 import AntiAirCutIn from '../../data/AntiAirCutIn'
-import { IOperation, IPlane, IShip } from '../../objects'
-import BattleType from '../BattleType'
+import { IPlane, IShip } from '../../objects'
 import { ICombatInformation } from '../CombatInformation'
 
 export default abstract class AerialCombat {
   constructor(readonly combatInformation: ICombatInformation) {}
-
-  public abstract operationToFighterCombatPlanes(operation: IOperation): IPlane[]
-
-  public execution() {
-    const { playerInformation, enemyInformation } = this.combatInformation
-
-    const playerPlanes = this.operationToFighterCombatPlanes(playerInformation.operation)
-    const enemyPlanes = this.operationToFighterCombatPlanes(enemyInformation.operation)
-
-    // stage1
-    const airControlState = this.fighterCombat(playerPlanes, enemyPlanes)
-
-    // stage2
-
-    const playerAirstrikePlanes = playerPlanes.filter(plane => plane.slotSize > 0 && plane.canParticipateInAirstrike)
-    const enemyAirstrikePlanes = enemyPlanes.filter(plane => plane.slotSize > 0 && plane.canParticipateInAirstrike)
-
-    this.stage2(playerAirstrikePlanes, enemyAirstrikePlanes)
-
-    return {
-      airControlState
-    }
-  }
-
-  public abstract stage2(playerAirstrikePlanes: IPlane[], enemyAirstrikePlanes: IPlane[]): void
 
   public fighterCombat(playerPlanes: IPlane[], enemyPlanes: IPlane[]) {
     const playerFp = playerPlanes.reduce((value, plane) => value + plane.fighterPower, 0)
@@ -46,32 +21,18 @@ export default abstract class AerialCombat {
     return airControlState
   }
 
-  protected operationToShips({ mainFleet, escortFleet, isCombinedFleetOperation }: IOperation) {
-    const ships = mainFleet.ships.concat()
-    if (isCombinedFleetOperation && escortFleet) {
-      ships.push(...escortFleet.ships)
-    }
-    return ships.filter((ship): ship is IShip => ship !== undefined)
-  }
-
-  protected antiAirDefense(
-    ships: IShip[],
-    airstrikePlanes: IPlane[],
-    fleetAntiAir: number,
-    antiAirCutIn?: AntiAirCutIn
-  ) {
-    const { battleType } = this.combatInformation
+  public antiAirDefense(ships: IShip[], airstrikePlanes: IPlane[], antiAirCutIn?: AntiAirCutIn) {
     for (const plane of airstrikePlanes) {
       const ship = ships[random(ships.length - 1)]
-      shipAntiAirDefense(ship, plane, battleType, fleetAntiAir, antiAirCutIn)
+      this.shipAntiAirDefense(ship, plane, antiAirCutIn)
     }
   }
 
-  private shotdownInFighterCombat(plane: IPlane, airControlStateConstant: number, side: Side) {
+  private shotdownInFighterCombat = (plane: IPlane, airControlStateConstant: number, side: Side) => {
     let randomValue: number
     if (side === Side.Player) {
       const minNum = airControlStateConstant / 4
-      const maxRandomValue = Math.floor(Math.sqrt((airControlStateConstant / 3) * 100))
+      const maxRandomValue = Math.floor((airControlStateConstant / 3) * 100)
       randomValue = Math.floor(Math.random() * (maxRandomValue + 1)) / 100 + minNum
     } else {
       const maxRandomValue = 11 - airControlStateConstant
@@ -87,32 +48,30 @@ export default abstract class AerialCombat {
       plane.shotdown(shotdownNum)
     }
   }
-}
 
-const shipAntiAirDefense = (
-  ship: IShip,
-  airstrikePlane: IPlane,
-  battleType: BattleType,
-  fleetAntiAir: number,
-  antiAirCutIn: AntiAirCutIn | undefined
-) => {
-  let shotdownNumber = 0
-  // 割合撃墜
-  if (Math.random() > 0.5) {
-    const proportional = ship.aerialCombat.calculateProportionalShotdownRate(battleType)
-    shotdownNumber += Math.floor(airstrikePlane.slotSize * proportional)
-  }
-  // 固定撃墜
-  if (Math.random() > 0.5) {
-    shotdownNumber += ship.aerialCombat.calculateFixedShotdownNumber(battleType, fleetAntiAir, antiAirCutIn)
-  }
+  private shipAntiAirDefense = (ship: IShip, airstrikePlane: IPlane, antiAirCutIn?: AntiAirCutIn) => {
+    const { battleType } = this.combatInformation
+    const { side: shipSide, fleetType, fleetRole, fleetAntiAir } = this.combatInformation.getShipInformation(ship)
+    const combinedFleetModifier = getCombinedFleetModifier(battleType, fleetRole)
 
-  if (antiAirCutIn) {
-    shotdownNumber += antiAirCutIn.minimumBonus
-  } else if (ship.fleetInformation.side === Side.Player) {
-    // 味方最低保証1
-    shotdownNumber += 1
-  }
+    let shotdownNumber = 0
+    // 割合撃墜
+    if (Math.random() > 0.5) {
+      const proportional = proportionalShotdownRate(ship, shipSide, combinedFleetModifier)
+      shotdownNumber += Math.floor(airstrikePlane.slotSize * proportional)
+    }
+    // 固定撃墜
+    if (Math.random() > 0.5) {
+      shotdownNumber += fixedShotdownNumber(ship, shipSide, fleetAntiAir, combinedFleetModifier)
+    }
 
-  airstrikePlane.shotdown(shotdownNumber)
+    if (antiAirCutIn) {
+      shotdownNumber += antiAirCutIn.minimumBonus
+    } else if (shipSide === Side.Player) {
+      // 味方最低保証1
+      shotdownNumber += 1
+    }
+
+    airstrikePlane.shotdown(shotdownNumber)
+  }
 }

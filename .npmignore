@@ -1,5 +1,8 @@
 /tests
 /src
+/scripts
+.gitignore
+.gitattributes
 .prettierrc
 tsconfig.json
 tslint.json

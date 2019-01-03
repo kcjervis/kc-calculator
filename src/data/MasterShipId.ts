@@ -1,4 +1,4 @@
-const enum ShipMasterId {
+const enum MasterShipId {
   KongouKai2 = 149,
   HieiKai2 = 150,
   HarunaKai2 = 151,
@@ -9,4 +9,4 @@ const enum ShipMasterId {
   ShinyouKai2 = 536
 }
 
-export default ShipMasterId
+export default MasterShipId

@@ -1,4 +1,4 @@
-import ShipMasterId from '../../../data/ShipMasterId'
+import MasterShipId from '../../../data/MasterShipId'
 import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
@@ -11,20 +11,20 @@ const createBonus: StatsBonusCreator = ship => {
   const { shipClass } = ship
 
   // 単体ボーナス
-  if (shipClass.equal('NelsonClass')) {
+  if (shipClass.is('NelsonClass')) {
     bonus.add({
       multiplier: count,
       firepower: 2,
       armor: 1
     })
-  } else if (shipClass.equal('QueenElizabethClass')) {
+  } else if (shipClass.is('QueenElizabethClass')) {
     bonus.add({
       multiplier: count,
       firepower: 2,
       armor: 1,
       evasion: -2
     })
-  } else if (ship.masterId === ShipMasterId.KongouKai2) {
+  } else if (ship.masterId === MasterShipId.KongouKai2) {
     bonus.add({
       multiplier: count,
       firepower: 1,

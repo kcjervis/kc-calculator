@@ -7,7 +7,7 @@ const createBonus: StatsBonusCreator = ship => {
     return undefined
   }
   const bonus = new StatsBonus()
-  if (ship.shipClass.equal('TaiyouClass')) {
+  if (ship.shipClass.is('TaiyouClass')) {
     bonus.add({
       multiplier: count,
       asw: 1,

@@ -1,5 +1,7 @@
 /** 陣形 */
 export default class Formation<Name extends string = string, Api extends number = number> {
+  public static all: Formation[] = []
+
   public static readonly LineAhead = new Formation('単縦陣', 1)
   public static readonly DoubleLine = new Formation('複縦陣', 2)
   public static readonly Diamond = new Formation('輪形陣', 3)
@@ -12,7 +14,13 @@ export default class Formation<Name extends string = string, Api extends number 
   public static readonly CruisingFormation3 = new Formation('第三警戒航行序列', 13)
   public static readonly CruisingFormation4 = new Formation('第四警戒航行序列', 14)
 
-  private constructor(public readonly name: Name, public readonly api: Api) {}
+  public static fromId(id: number) {
+    return Formation.all.find(({ api }) => api === id)
+  }
+
+  private constructor(public readonly name: Name, public readonly api: Api) {
+    Formation.all.push(this)
+  }
 
   get fleetAntiAirModifier() {
     switch (this) {
@@ -25,6 +33,38 @@ export default class Formation<Name extends string = string, Api extends number 
         return 1.1
       case Formation.CruisingFormation3:
         return 1.5
+      default:
+        return 1
+    }
+  }
+
+  get shellingPowerModifier() {
+    switch (this) {
+      case Formation.CruisingFormation4:
+        return 1.1
+      case Formation.DoubleLine:
+      case Formation.CruisingFormation1:
+        return 0.8
+      case Formation.Diamond:
+      case Formation.CruisingFormation3:
+        return 0.7
+      case Formation.Echelon:
+        return 0.6
+      case Formation.LineAbreast:
+        return 0.6
+      default:
+        return 1
+    }
+  }
+
+  get shellingAccuracyModifier() {
+    switch (this) {
+      case Formation.Diamond:
+        return 1.1
+      case Formation.Echelon:
+        return 1.2
+      case Formation.LineAbreast:
+        return 1.3
       default:
         return 1
     }

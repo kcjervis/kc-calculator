@@ -1,5 +1,9 @@
-import { EquipmentCollection } from '../Equipment'
+import maxBy from 'lodash/maxBy'
+import sumBy from 'lodash/sumBy'
 
+import { IEquipment } from '../Equipment'
+
+import { nonNullable } from '../../utils'
 import { IStatsBonus } from './ExplicitStatsBonus'
 import ShipNakedStats, { IBaseStats } from './ShipNakedStats'
 
@@ -12,17 +16,17 @@ export interface IShipStats extends IBaseStats {
 export default class ShipStats implements IShipStats {
   constructor(
     private readonly nakedStats: ShipNakedStats,
-    private readonly equipmentCollection: EquipmentCollection,
+    private readonly equipments: Array<IEquipment | undefined>,
     public statsBonus?: IStatsBonus
   ) {}
 
-  private getStat(statName: keyof Omit<IBaseStats, 'hp' | 'luck'>) {
-    const { nakedStats, equipmentCollection, statsBonus } = this
+  private getStat(statName: keyof Omit<IBaseStats, 'luck' | 'hp'>) {
+    const { nakedStats, equipments, statsBonus } = this
     let bonus = 0
     if (statsBonus !== undefined) {
       bonus = statsBonus[statName]
     }
-    return nakedStats[statName] + equipmentCollection.sumBy(statName) + bonus
+    return nakedStats[statName] + sumBy(equipments.filter(nonNullable), statName) + bonus
   }
 
   get hp() {
@@ -66,9 +70,9 @@ export default class ShipStats implements IShipStats {
   }
 
   get range() {
-    const { nakedStats, equipmentCollection, statsBonus } = this
+    const { nakedStats, equipments, statsBonus } = this
     const nakedRange = nakedStats.range
-    const longest = equipmentCollection.maxBy('range')
+    const longest = maxBy(equipments, 'range')
     const range = longest && longest.range > nakedRange ? longest.range : nakedRange
 
     if (statsBonus === undefined) {

@@ -1,44 +1,28 @@
-import { IOperation, IPlane } from '../../objects'
+import { ILandBasedAirCorps } from '../../objects'
 import { ICombatInformation } from '../CombatInformation'
 
-import { Side } from '../../constants'
 import AerialCombat from './AerialCombat'
 
 export default class LandBaseAerialSupport extends AerialCombat {
-  constructor(combatInformation: ICombatInformation, private readonly airCorpsIndex: number) {
+  constructor(combatInformation: ICombatInformation, private readonly landBasedAirCorps: ILandBasedAirCorps) {
     super(combatInformation)
   }
 
-  public stage2(playerAirstrikePlanes: IPlane[]) {
-    const { operation, fleetAntiAir } = this.combatInformation.enemyInformation
-    const enemyShips = this.operationToShips(operation)
-    this.antiAirDefense(enemyShips, playerAirstrikePlanes, fleetAntiAir)
-  }
+  public main() {
+    const { enemy } = this.combatInformation
 
-  public operationToFighterCombatPlanes(operation: IOperation) {
-    const planes = new Array<IPlane>()
-    if (operation.side === Side.Player) {
-      planes.push(...operation.landBase[this.airCorpsIndex].planes)
-    } else {
-      const { mainFleet, escortFleet } = operation
-      planes.push(...mainFleet.planes)
-      if (escortFleet) {
-        planes.push(...escortFleet.planes)
-      }
-    }
+    const playerPlanes = this.landBasedAirCorps.planes
+    const enemyPlanes = enemy.allShips.flatMap(({ planes }) => planes)
 
-    return planes.filter(plane => this.canParticipateInFighterCombat(plane))
-  }
+    // stage1
+    const airControlState = this.fighterCombat(playerPlanes, enemyPlanes)
 
-  private canParticipateInFighterCombat(plane: IPlane) {
-    const { slotSize, category } = plane
-    if (slotSize === 0) {
-      return false
+    // stage2
+    const playerAirstrikePlanes = playerPlanes.filter(plane => plane.slotSize > 0 && plane.canParticipateInAirstrike)
+    this.antiAirDefense(enemy.allShips, playerAirstrikePlanes)
+
+    return {
+      airControlState
     }
-    // 偵察機も参加する
-    if (category.isFighter || category.isDiveBomber || category.isTorpedoBomber || category.isReconnaissanceAircraft) {
-      return true
-    }
-    return false
   }
 }

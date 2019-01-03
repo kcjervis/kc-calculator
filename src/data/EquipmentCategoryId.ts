@@ -143,6 +143,9 @@ enum EquipmentCategoryId {
   /** 局地戦闘機 */
   LandBasedFighter = 48,
 
+  /** 陸上偵察機 */
+  LandBasedReconnaissanceAircraft = 49,
+
   /** 輸送機材 */
   TransportationMaterial = 50,
 

@@ -21,7 +21,7 @@ interface IEquipmentData {
   radius?: number
 }
 
-export default class EquipmentMaster implements IEquipmentData {
+export default class MasterEquipment implements IEquipmentData {
   public static readonly abyssalIdFrom = 500
 
   public readonly id: number

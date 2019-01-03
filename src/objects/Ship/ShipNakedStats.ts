@@ -1,4 +1,4 @@
-import { ShipMaster } from '../../data'
+import { MasterShip } from '../../data'
 
 export interface IBaseStats {
   hp: number
@@ -29,7 +29,7 @@ const calculateStatAtLevel = (stats: [number, number], level: number) => {
 }
 
 export default class ShipNakedStats implements IShipNakedStats {
-  constructor(private readonly master: ShipMaster, public level: number, private increased?: Partial<IBaseStats>) {}
+  constructor(private readonly master: MasterShip, public level: number, private increased?: Partial<IBaseStats>) {}
 
   private getIncreasedStat(statName: keyof IBaseStats) {
     const { increased } = this
@@ -44,9 +44,29 @@ export default class ShipNakedStats implements IShipNakedStats {
   }
 
   get hp() {
-    // とりあえず初期値
-    return this.master.hp[0]
+    let maxHp = this.master.hp[0]
+    const limitHp = this.master.hp[1]
+    if (this.level >= 100) {
+      const unmarriedHp = this.master.hp[0]
+      if (unmarriedHp >= 91) {
+        maxHp += 9
+      } else if (unmarriedHp >= 70) {
+        maxHp += 8
+      } else if (unmarriedHp >= 50) {
+        maxHp += 7
+      } else if (unmarriedHp >= 40) {
+        maxHp += 6
+      } else if (unmarriedHp >= 30) {
+        maxHp += 5
+      } else if (unmarriedHp >= 8) {
+        maxHp += 4
+      } else {
+        maxHp += 3
+      }
+    }
+    return Math.min(maxHp, limitHp) + this.getIncreasedStat('hp')
   }
+
   get firepower() {
     return this.master.firepower[1] + this.getIncreasedStat('firepower')
   }

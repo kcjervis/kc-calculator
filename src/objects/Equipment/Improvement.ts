@@ -1,4 +1,4 @@
-import { EquipmentCategoryId, EquipmentMaster } from '../../data'
+import { EquipmentCategoryId, MasterEquipment } from '../../data'
 
 export interface IImprovement {
   /** 改修値 */
@@ -7,11 +7,14 @@ export interface IImprovement {
   fighterPowerModifier: number
   adjustedAntiAirModifier: number
   fleetAntiAirModifier: number
+
+  shellingPowerModifier: number
+  shellingAccuracyModifier: number
 }
 
 export default class Improvement implements IImprovement {
   public value: number
-  constructor(value: number | undefined, private readonly master: EquipmentMaster) {
+  constructor(value: number | undefined, private readonly master: MasterEquipment) {
     this.value = value ? value : 0
   }
 
@@ -54,5 +57,57 @@ export default class Improvement implements IImprovement {
       multiplier = 1.5
     }
     return multiplier * Math.sqrt(this.value)
+  }
+
+  get shellingPowerModifier() {
+    const { firepower, category } = this.master
+
+    if (
+      category.is('Torpedo') ||
+      category.is('MidgetSubmarine') ||
+      category.isRadar ||
+      category.isArmor ||
+      category.is('EngineImprovement')
+    ) {
+      return 0
+    }
+
+    let multiplier = 1
+
+    if (firepower > 12) {
+      multiplier = 1.5
+    } else if (category.is('Sonar') || category.is('LargeSonar') || category.is('DepthCharge')) {
+      multiplier = 0.75
+    }
+
+    return multiplier * Math.sqrt(this.value)
+  }
+
+  get shellingAccuracyModifier() {
+    const { accuracy, category } = this.master
+
+    if (category.is('Torpedo')) {
+      return 0
+    }
+
+    const isLargeRadar = category.is('LargeRadar') || category.is('LargeRadar2')
+    const isSurfaceRadar = category.isRadar && accuracy > 2
+
+    let multiplier = 0
+    if (isLargeRadar || isSurfaceRadar) {
+      multiplier = 1.7
+    } else if (
+      category.is('Sonar') ||
+      category.is('LargeSonar') ||
+      category.is('DepthCharge') ||
+      category.isArmor ||
+      category.is('AntiAircraftGun')
+    ) {
+      multiplier = 1
+    } else {
+      return 0
+    }
+
+    return multiplier * Math.floor(this.value)
   }
 }

@@ -12,7 +12,7 @@ const createBonus: StatsBonusCreator = ship => {
   const isKai2 = name.includes('改二')
 
   // 単体ボーナス
-  if (shipClass.equal('KagerouClass') && isKai2) {
+  if (shipClass.is('KagerouClass') && isKai2) {
     bonus.add({
       multiplier: count,
       torpedo: 2
