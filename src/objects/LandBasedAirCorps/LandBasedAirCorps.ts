@@ -4,6 +4,7 @@ import { nonNullable } from '../../utils'
 import { IEquipment } from '../Equipment'
 import { createPlanes, IPlane } from '../Plane'
 
+// 陸偵出撃制空補正
 const getReconnaissanceFighterPowerModifier = (equip: IEquipment) => {
   const { category, los } = equip
   if (!category.is('LandBasedReconnaissanceAircraft')) {
