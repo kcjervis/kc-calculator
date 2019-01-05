@@ -10,11 +10,11 @@ const getReconnaissanceFighterPowerModifier = (equip: IEquipment) => {
     return 1
   }
   if (los <= 7) {
-    return 1.2
+    return 1.12
   } else if (los === 8) {
-    return 1.5
+    return 1.15
   }
-  return 1.8
+  return 1.18
 }
 
 const getReconnaissanceInterceptionPowerModifier = (equip: IEquipment) => {
