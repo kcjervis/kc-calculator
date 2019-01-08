@@ -11,12 +11,18 @@ export const equipmentInterceptionPowerMultiplier = (equipment: IEquipment) => {
 }
 
 export const equipmentFighterPower = (equipment: IEquipment, slotSize: number) => {
+  if (slotSize === 0) {
+    return 0
+  }
   const { proficiency } = equipment
   const multiplier = equipmentFighterPowerMultiplier(equipment)
   return Math.floor(multiplier * Math.sqrt(slotSize) + proficiency.fighterPowerBonus)
 }
 
 export const equipmentInterceptionPower = (equipment: IEquipment, slotSize: number) => {
+  if (slotSize === 0) {
+    return 0
+  }
   const { proficiency } = equipment
   const multiplier = equipmentInterceptionPowerMultiplier(equipment)
   return Math.floor(multiplier * Math.sqrt(slotSize) + proficiency.fighterPowerBonus)

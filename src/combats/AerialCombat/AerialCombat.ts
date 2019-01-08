@@ -2,7 +2,7 @@ import random from 'lodash/random'
 
 import { fixedShotdownNumber, getCombinedFleetModifier, proportionalShotdownRate } from '../../AerialCombat/antiAir'
 import { AirControlState, Side } from '../../constants'
-import AntiAirCutIn from '../../data/AntiAirCutIn'
+import AntiAirCutin from '../../data/AntiAirCutin'
 import { IPlane, IShip } from '../../objects'
 import { ICombatInformation } from '../CombatInformation'
 
@@ -21,14 +21,14 @@ export default abstract class AerialCombat {
     return airControlState
   }
 
-  public antiAirDefense(ships: IShip[], airstrikePlanes: IPlane[], antiAirCutIn?: AntiAirCutIn) {
+  public antiAirDefense(ships: IShip[], airstrikePlanes: IPlane[], antiAirCutin?: AntiAirCutin) {
     for (const plane of airstrikePlanes) {
       const ship = ships[random(ships.length - 1)]
-      this.shipAntiAirDefense(ship, plane, antiAirCutIn)
+      this.shipAntiAirDefense(ship, plane, antiAirCutin)
     }
   }
 
-  private shotdownInFighterCombat = (plane: IPlane, airControlStateConstant: number, side: Side) => {
+  public shotdownInFighterCombat = (plane: IPlane, airControlStateConstant: number, side: Side) => {
     let randomValue: number
     if (side === Side.Player) {
       const minNum = airControlStateConstant / 4
@@ -49,7 +49,7 @@ export default abstract class AerialCombat {
     }
   }
 
-  private shipAntiAirDefense = (ship: IShip, airstrikePlane: IPlane, antiAirCutIn?: AntiAirCutIn) => {
+  private shipAntiAirDefense = (ship: IShip, airstrikePlane: IPlane, antiAirCutin?: AntiAirCutin) => {
     const { battleType } = this.combatInformation
     const { side: shipSide, fleetType, fleetRole, fleetAntiAir } = this.combatInformation.getShipInformation(ship)
     const combinedFleetModifier = getCombinedFleetModifier(battleType, fleetRole)
@@ -65,8 +65,8 @@ export default abstract class AerialCombat {
       shotdownNumber += fixedShotdownNumber(ship, shipSide, fleetAntiAir, combinedFleetModifier)
     }
 
-    if (antiAirCutIn) {
-      shotdownNumber += antiAirCutIn.minimumBonus
+    if (antiAirCutin) {
+      shotdownNumber += antiAirCutin.minimumBonus
     } else if (shipSide === Side.Player) {
       // 味方最低保証1
       shotdownNumber += 1

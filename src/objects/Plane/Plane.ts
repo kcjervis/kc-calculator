@@ -66,7 +66,10 @@ export default class Plane implements IPlane {
   }
 
   get canParticipateInAirstrike() {
-    const { category } = this
+    const { category, slotSize } = this
+    if (slotSize === 0) {
+      return false
+    }
     return category.isDiveBomber || category.isTorpedoBomber
   }
 

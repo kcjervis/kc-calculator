@@ -1,3 +1,4 @@
+import { AirControlState, Side } from '../../constants'
 import { ILandBasedAirCorps } from '../../objects'
 import { ICombatInformation } from '../CombatInformation'
 
@@ -11,11 +12,16 @@ export default class LandBaseAerialSupport extends AerialCombat {
   public main() {
     const { enemy } = this.combatInformation
 
-    const playerPlanes = this.landBasedAirCorps.planes
-    const enemyPlanes = enemy.allShips.flatMap(({ planes }) => planes)
-
     // stage1
-    const airControlState = this.fighterCombat(playerPlanes, enemyPlanes)
+    const { fighterPower: playerFp, planes: playerPlanes } = this.landBasedAirCorps
+
+    const enemyPlanes = enemy.allShips.flatMap(({ planes }) => planes)
+    const enemyFp = enemyPlanes.reduce((value, plane) => value + plane.fighterPower, 0)
+
+    const airControlState = AirControlState.fromFighterPower(playerFp, enemyFp)
+
+    playerPlanes.forEach(plane => this.shotdownInFighterCombat(plane, airControlState.constant, Side.Player))
+    enemyPlanes.forEach(plane => this.shotdownInFighterCombat(plane, airControlState.constant, Side.Enemy))
 
     // stage2
     const playerAirstrikePlanes = playerPlanes.filter(plane => plane.slotSize > 0 && plane.canParticipateInAirstrike)

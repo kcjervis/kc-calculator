@@ -45,17 +45,17 @@ export const getPossibleArtillerySpottings = (ship: IShip) => {
   if (mainGunCount >= 2) {
     artillerySpottings.push(ArtillerySpotting.DoubleAttack)
     if (hasApShell) {
-      artillerySpottings.push(ArtillerySpotting.MainMaim)
+      artillerySpottings.push(ArtillerySpotting.MainMain)
     }
   }
 
   if (hasSecondaryGun) {
-    artillerySpottings.push(ArtillerySpotting.MainSec)
+    artillerySpottings.push(ArtillerySpotting.MainSecond)
     if (hasRader) {
       artillerySpottings.push(ArtillerySpotting.MainRader)
     }
     if (hasApShell) {
-      artillerySpottings.push(ArtillerySpotting.MainAp)
+      artillerySpottings.push(ArtillerySpotting.MainApShell)
     }
   }
 
@@ -64,16 +64,14 @@ export const getPossibleArtillerySpottings = (ship: IShip) => {
 
 export default class ArtillerySpotting {
   public static all: ArtillerySpotting[] = []
-  public static MainMaim = new ArtillerySpotting(6, '主主', 150)
-  public static MainAp = new ArtillerySpotting(5, '主徹', 140)
+  public static MainMain = new ArtillerySpotting(6, '主主', 150)
+  public static MainApShell = new ArtillerySpotting(5, '主徹', 140)
   public static MainRader = new ArtillerySpotting(4, '主電', 130)
-  public static MainSec = new ArtillerySpotting(3, '主副', 120)
+  public static MainSecond = new ArtillerySpotting(3, '主副', 120)
   public static DoubleAttack = new ArtillerySpotting(2, '連撃', 130)
 
   public static calculateFleetLosModifier = calculateFleetLosModifier
-
   public static calculateArtillerySpottingBaseValue = calculateArtillerySpottingBaseValue
-
   public static getPossibleArtillerySpottings = getPossibleArtillerySpottings
 
   constructor(public readonly id: number, public readonly name: string, public readonly typeFactor: number) {

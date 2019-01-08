@@ -29307,7 +29307,9 @@
       88
     ],
     "speed": 5,
-    "los": -1,
+    "los": [
+      32, 64
+    ],
     "range": 2,
     "luck": [
       15,
@@ -30662,9 +30664,15 @@
       20,
       60
     ],
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": [
+      45, 81
+    ],
+    "asw": [
+      50, 82
+    ],
+    "los": [
+      20, 32
+    ],
     "antiAir": [
       32,
       60
@@ -31349,9 +31357,13 @@
       0,
       40
     ],
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion":[
+      26, 45
+    ],
+    "asw": 0,
+    "los": [
+      40, 80
+    ],
     "antiAir": [
       20,
       48
@@ -31454,9 +31466,13 @@
       0,
       88
     ],
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": [
+      36, 63
+    ],
+    "asw": 0,
+    "los": [
+      48, 96
+    ],
     "antiAir": [
       25,
       65
@@ -32061,9 +32077,15 @@
       26,
       72
     ],
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": [
+      46, 89
+    ],
+    "asw": [
+      52, 90
+    ],
+    "los": [
+      20, 60
+    ],
     "antiAir": [
       40,
       90
@@ -32111,9 +32133,13 @@
       0,
       75
     ],
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": [
+      32, 58
+    ],
+    "asw": 0,
+    "los": [
+      48, 95
+    ],
     "antiAir": [
       22,
       62
@@ -32129,8 +32155,7 @@
     "slotCapacities": [
       8,
       8,
-      12,
-      2
+      12
     ],
     "equipments": [],
     "remodel": {
@@ -41652,8 +41677,8 @@
     "los": -2,
     "luck": -2,
     "slotCapacities": [
-      48,
-      48,
+      52,
+      44,
       0,
       0
     ],
@@ -41683,8 +41708,8 @@
     "los": -2,
     "luck": -2,
     "slotCapacities": [
-      -1,
-      -1,
+      72,
+      50,
       0,
       0
     ],
@@ -41776,8 +41801,8 @@
     "los": -2,
     "luck": -2,
     "slotCapacities": [
-      -1,
-      -1,
+      92,
+      56,
       0,
       0
     ],
@@ -42227,7 +42252,7 @@
     "torpedo": 0,
     "evasion": -2,
     "antiAir": 140,
-    "asw": -1,
+    "asw": 0,
     "speed": 5,
     "los": -2,
     "luck": -2,
@@ -42294,10 +42319,10 @@
     "los": -2,
     "luck": -2,
     "slotCapacities": [
-      -1,
-      -1,
-      -1,
-      -1
+      0,
+      0,
+      0,
+      36
     ],
     "equipments": [
       587,
@@ -42381,13 +42406,13 @@
     "firepower": 111,
     "armor": 130,
     "torpedo":  0,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
     "antiAir": 77,
     "speed": 10,
     "range": 1,
-    "luck": -1,
+    "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
@@ -42414,13 +42439,13 @@
     "firepower": 144,
     "armor": 160,
     "torpedo": 0,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
     "antiAir": 88,
     "speed": 10,
     "range": 1,
-    "luck": -1,
+    "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
@@ -42447,13 +42472,13 @@
     "firepower": 177,
     "armor": 190,
     "torpedo": 0,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
     "antiAir": 99,
     "speed": 10,
     "range": 1,
-    "luck": -1,
+    "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
@@ -42480,13 +42505,13 @@
     "firepower": 133,
     "armor": 170,
     "torpedo": 0,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
     "antiAir": 	77,
     "speed": 10,
     "range": 1,
-    "luck": -1,
+    "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
@@ -42513,13 +42538,13 @@
     "firepower": 166,
     "armor": 200,
     "torpedo": 0,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
     "antiAir": 88,
     "speed": 10,
     "range": 1,
-    "luck": -1,
+    "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
@@ -42546,13 +42571,13 @@
     "firepower": 188,
     "armor": 230,
     "torpedo": 0,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
     "antiAir": 99,
     "speed": 10,
     "range": 1,
-    "luck": -1,
+    "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
@@ -42579,13 +42604,13 @@
     "firepower": 199,
     "armor": 200,
     "torpedo": 102,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
     "antiAir": 88,
     "speed": 10,
     "range": 4,
-    "luck": -1,
+    "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
@@ -42612,13 +42637,13 @@
     "firepower": 233,
     "armor": 222,
     "torpedo": 122,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
     "antiAir": 108,
     "speed": 10,
     "range": 4,
-    "luck": -1,
+    "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
@@ -42645,13 +42670,13 @@
     "firepower": 288,
     "armor": 244,
     "torpedo": 166,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
     "antiAir": 128,
     "speed": 10,
     "range": 4,
-    "luck": -1,
+    "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
@@ -42678,13 +42703,13 @@
     "firepower": 199,
     "armor": 233,
     "torpedo": 102,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
-    "antiAir": -2,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
+    "antiAir": 88,
     "speed": 10,
     "range": 4,
-    "luck": -1,
+    "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
@@ -42711,13 +42736,13 @@
     "firepower": 233,
     "armor": 255,
     "torpedo": 122,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
     "antiAir": 108,
     "speed": 10,
     "range": 4,
-    "luck": -1,
+    "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
@@ -42744,13 +42769,13 @@
     "firepower": 288,
     "armor": 288,
     "torpedo": 166,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
     "antiAir": 128,
     "speed": 10,
     "range": 4,
-    "luck": -1,
+    "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
@@ -42773,25 +42798,25 @@
     "readingName": "",
     "shipTypeId": 2,
     "classId": 1,
-    "hp": -2,
-    "firepower": -2,
-    "armor": -2,
-    "torpedo": -2,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
-    "antiAir": -2,
+    "hp": 39,
+    "firepower": 34,
+    "armor": 	19,
+    "torpedo": 48,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
+    "antiAir": 28,
     "speed": 10,
-    "range": -2,
+    "range": 2,
     "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
-      -1,
-      -1,
-      -1
+      0,
+      0,
+      0
     ],
-    "equipments": [],
+    "equipments": [591, 514, 531],
     "remodel": {
       "nextId": 0,
       "nextLevel": 0
@@ -42805,25 +42830,25 @@
     "readingName": "",
     "shipTypeId": 2,
     "classId": 1,
-    "hp": -2,
-    "firepower": -2,
-    "armor": -2,
-    "torpedo": -2,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
-    "antiAir": -2,
+    "hp": 	49,
+    "firepower": 54,
+    "armor": 39,
+    "torpedo": 88,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
+    "antiAir": 	48,
     "speed": 10,
-    "range": -2,
+    "range": 2,
     "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
-      -1,
-      -1,
-      -1
+      0,
+      0,
+      0
     ],
-    "equipments": [],
+    "equipments": [591, 514, 531],
     "remodel": {
       "nextId": 0,
       "nextLevel": 0
@@ -42837,25 +42862,25 @@
     "readingName": "elite",
     "shipTypeId": 2,
     "classId": 1,
-    "hp": -2,
-    "firepower": -2,
-    "armor": -2,
-    "torpedo": -2,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
-    "antiAir": -2,
+    "hp": 49,
+    "firepower": 64,
+    "armor": 	49,
+    "torpedo": 	98,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
+    "antiAir": 58,
     "speed": 10,
-    "range": -2,
+    "range": 2,
     "luck": -2,
     "fuel": 0,
     "ammo": 0,
     "slotCapacities": [
-      -1,
-      -1,
-      -1
+      0,
+      0,
+      0
     ],
-    "equipments": [],
+    "equipments": [591, 514, 531],
     "remodel": {
       "nextId": 0,
       "nextLevel": 0
@@ -42873,9 +42898,9 @@
     "firepower": 68,
     "armor": 59,
     "torpedo": 98,
-    "evasion": -1,
-    "asw": -1,
-    "los": -1,
+    "evasion": -2,
+    "asw": -2,
+    "los": -2,
     "antiAir": 68,
     "speed": 10,
     "range": 2,

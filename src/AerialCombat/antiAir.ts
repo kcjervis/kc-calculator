@@ -1,5 +1,5 @@
 import { BattleType, FleetRole, Side } from '../constants'
-import AntiAirCutIn from '../data/AntiAirCutIn'
+import AntiAirCutin from '../data/AntiAirCutin'
 import { IEquipment, IFleet, IShip } from '../objects'
 
 export const equipmentAdjustedAntiAir = (equipment: IEquipment) => {
@@ -88,15 +88,15 @@ export const fixedShotdownNumber = (
   side: Side,
   fleetAA: number,
   combinedFleetModifier = 1,
-  antiAirCutIn?: AntiAirCutIn
+  antiAirCutin?: AntiAirCutin
 ) => {
   const adjustedAntiAir = shipAdjustedAntiAir(ship, side)
 
   // 敵味方補正
   const campMod = side === Side.Player ? 0.8 : 0.75
   let preFloor = (adjustedAntiAir + fleetAA) * 0.5 * 0.25 * campMod * combinedFleetModifier
-  if (antiAirCutIn) {
-    preFloor *= antiAirCutIn.fixedAirDefenseModifier
+  if (antiAirCutin) {
+    preFloor *= antiAirCutin.fixedAirDefenseModifier
   }
   return Math.floor(preFloor)
 }

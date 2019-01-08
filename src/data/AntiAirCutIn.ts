@@ -34,14 +34,14 @@ const data: Array<[number, number, number, number]> = [
   [29, 6, 1.55, 58]
 ]
 /** 対空カットイン */
-export default class AntiAirCutIn {
-  public static readonly all = data.map(datum => new AntiAirCutIn(...datum))
+export default class AntiAirCutin {
+  public static readonly all = data.map(datum => new AntiAirCutin(...datum))
 
   public static fromApi(api: number) {
     return this.all.find(aaci => aaci.api === api)
   }
 
-  public static getPossibleAntiAirCutIns(ship: IShip) {
+  public static getPossibleAntiAirCutins(ship: IShip) {
     const enum MasterShipId {
       MayaKai2 = 428,
       IsuzuKai2 = 141,
@@ -96,146 +96,146 @@ export default class AntiAirCutIn {
     const hasAtLeast = (callback: EquipmentIteratee, count: number) => ship.countEquipment(callback) >= count
     const hasSome = (callback: EquipmentIteratee) => ship.hasEquipment(callback)
 
-    const possibleAntiAirCutInApis: number[] = []
+    const possibleAntiAirCutinApis: number[] = []
 
     // 秋月型 かつ 高角砲を装備
     if (ship.shipClass.id === ShipClassId.AkizukiClass && hasSome(isHighAngleMount)) {
       // 高角砲を2つ以上装備 かつ 電探を装備
       if (hasAtLeast(isHighAngleMount, 2) && hasSome(isRadar)) {
-        possibleAntiAirCutInApis.push(1)
+        possibleAntiAirCutinApis.push(1)
       }
       // 電探を装備
       if (hasSome(isRadar)) {
-        possibleAntiAirCutInApis.push(2)
+        possibleAntiAirCutinApis.push(2)
       }
       // 高角砲を2つ以上装備
       if (hasAtLeast(isHighAngleMount, 2)) {
-        possibleAntiAirCutInApis.push(3)
+        possibleAntiAirCutinApis.push(3)
       }
     } else {
       // 摩耶改二 かつ 高角砲を装備 かつ 特殊機銃を装備
       if (shipIs(MasterShipId.MayaKai2) && hasSome(isHighAngleMount) && hasSome(isCDMG)) {
         if (hasSome(isAARadar)) {
-          possibleAntiAirCutInApis.push(10)
+          possibleAntiAirCutinApis.push(10)
         }
-        possibleAntiAirCutInApis.push(11)
+        possibleAntiAirCutinApis.push(11)
 
         // 五十鈴改二 かつ 高角砲を装備 かつ 対空機銃を装備
       } else if (shipIs(MasterShipId.IsuzuKai2) && hasSome(isHighAngleMount) && hasSome(isAAGun)) {
         if (hasSome(isAARadar)) {
-          possibleAntiAirCutInApis.push(14)
+          possibleAntiAirCutinApis.push(14)
         }
-        possibleAntiAirCutInApis.push(15)
+        possibleAntiAirCutinApis.push(15)
 
         // 霞改二乙 かつ 高角砲を装備 かつ 対空機銃を装備
       } else if (shipIs(MasterShipId.KasumiKai2B) && hasSome(isHighAngleMount) && hasSome(isAAGun)) {
         if (hasSome(isAARadar)) {
-          possibleAntiAirCutInApis.push(16)
+          possibleAntiAirCutinApis.push(16)
         }
-        possibleAntiAirCutInApis.push(17)
+        possibleAntiAirCutinApis.push(17)
 
         // 鬼怒改二 かつ 特殊機銃を装備 かつ 標準高角砲を装備
       } else if (shipIs(MasterShipId.KinuKai2) && hasSome(isCDMG) && hasSome(isNormalHighAngleMount)) {
-        possibleAntiAirCutInApis.push(19)
+        possibleAntiAirCutinApis.push(19)
 
         // 由良改二 かつ 高角砲を装備 かつ 対空電探
       } else if (shipIs(MasterShipId.YuraKai2) && hasSome(isHighAngleMount) && hasSome(isAARadar)) {
-        possibleAntiAirCutInApis.push(21)
+        possibleAntiAirCutinApis.push(21)
 
         // 伊勢型改 かつ 12㎝30連装噴進砲改二を装備 かつ 対空強化弾(三式弾)を装備 かつ 対空電探を装備
       } else if (isIseClassKai && hasSome(is12cm30tubeRocketLauncherKai2) && hasSome(isAAShell) && hasSome(isAARadar)) {
-        possibleAntiAirCutInApis.push(25)
+        possibleAntiAirCutinApis.push(25)
       }
 
       // 高射装置を装備 かつ 大口径主砲を装備 かつ 対空強化弾(三式弾)を装備 かつ 対空電探を装備
       if (hasSome(isAAFD) && hasSome(isLargeCaliberMainGun) && hasSome(isAAShell) && hasSome(isAARadar)) {
-        possibleAntiAirCutInApis.push(4)
+        possibleAntiAirCutinApis.push(4)
       }
 
       // 特殊高角砲を2つ以上装備 かつ 対空電探を装備
       if (hasAtLeast(isBuiltinHighAngleMount, 2) && hasSome(isAARadar)) {
-        possibleAntiAirCutInApis.push(5)
+        possibleAntiAirCutinApis.push(5)
       }
 
       // 高射装置を装備 かつ 大口径主砲を装備 かつ 対空強化弾(三式弾)を装備
       if (hasSome(isAAFD) && hasSome(isLargeCaliberMainGun) && hasSome(isAAShell)) {
-        possibleAntiAirCutInApis.push(6)
+        possibleAntiAirCutinApis.push(6)
       }
 
       // 高射装置を装備かつ 高角砲を装備 かつ 対空電探を装備
       if (hasSome(isAAFD) && hasSome(isHighAngleMount) && hasSome(isAARadar)) {
-        possibleAntiAirCutInApis.push(7)
+        possibleAntiAirCutinApis.push(7)
       }
 
       // 特殊高角砲を装備 かつ 対空電探を装備
       if (hasSome(isBuiltinHighAngleMount) && hasSome(isAARadar)) {
-        possibleAntiAirCutInApis.push(8)
+        possibleAntiAirCutinApis.push(8)
       }
 
       // 武蔵改二 かつ 10cm連装高角砲改＋増設機銃を装備 かつ 対空電探を装備
       if (shipIs(MasterShipId.MusashiKai2) && hasSome(is10cmTwinHighAngleMountKaiAMG) && hasSome(isRadar)) {
-        possibleAntiAirCutInApis.push(26)
+        possibleAntiAirCutinApis.push(26)
       }
 
       // (伊勢型改 または 武蔵改 または 武蔵改二) かつ 12㎝30連装噴進砲改二を装備 かつ 対空電探を装備
       if (isIseClassKai || shipIs(MasterShipId.MusashiKai) || shipIs(MasterShipId.MusashiKai2)) {
         if (hasSome(is12cm30tubeRocketLauncherKai2) && hasSome(isAARadar)) {
-          possibleAntiAirCutInApis.push(28)
+          possibleAntiAirCutinApis.push(28)
         }
       }
 
       // (浜風乙改 または 磯風乙改) かつ 高角砲を装備 かつ 対空電探を装備
       if (shipIs(MasterShipId.IsokazeBKai) || shipIs(MasterShipId.HamakazeBKai)) {
         if (hasSome(isHighAngleMount) && hasSome(isAARadar)) {
-          possibleAntiAirCutInApis.push(29)
+          possibleAntiAirCutinApis.push(29)
         }
       }
 
       // 高射装置を装備 かつ 高角砲を装備
       if (hasSome(isAAFD) && hasSome(isHighAngleMount)) {
-        possibleAntiAirCutInApis.push(9)
+        possibleAntiAirCutinApis.push(9)
       }
 
       // 特殊機銃を装備 かつ 標準機銃または特殊機銃を装備 かつ 対空電探を装備
       if (hasSome(isCDMG) && (hasSome(isNormalAAGun) || hasSome(isCDMG)) && hasSome(isAARadar)) {
-        possibleAntiAirCutInApis.push(12)
+        possibleAntiAirCutinApis.push(12)
       }
 
       // 特殊高角砲を装備 かつ 特殊機銃を装備 かつ 対空電探を装備
       if (hasSome(isBuiltinHighAngleMount) && hasSome(isCDMG) && hasSome(isAARadar)) {
-        possibleAntiAirCutInApis.push(13)
+        possibleAntiAirCutinApis.push(13)
       }
 
       // 皐月改二 かつ 特殊機銃を装備
       if (shipIs(MasterShipId.SatsukiKai2) && hasSome(isCDMG)) {
-        possibleAntiAirCutInApis.push(18)
+        possibleAntiAirCutinApis.push(18)
       }
 
       // 鬼怒改二 かつ 特殊機銃を装備
       if (shipIs(MasterShipId.KinuKai2) && hasSome(isCDMG)) {
-        possibleAntiAirCutInApis.push(20)
+        possibleAntiAirCutinApis.push(20)
       }
 
       // 文月改二 かつ 特殊機銃を装備
       if (shipIs(MasterShipId.FumizukiKai2) && hasSome(isCDMG)) {
-        possibleAntiAirCutInApis.push(22)
+        possibleAntiAirCutinApis.push(22)
       }
 
       // (UIT-25 または 伊504) かつ 標準機銃を装備
       if (shipIs(MasterShipId.Uit25) || shipIs(MasterShipId.I504)) {
         if (hasSome(isCDMG)) {
-          possibleAntiAirCutInApis.push(23)
+          possibleAntiAirCutinApis.push(23)
         }
       }
 
       // 龍田改二 かつ 高角砲を装備 かつ 標準機銃を装備
       if (shipIs(MasterShipId.TatsutaKai2) && hasSome(isHighAngleMount) && hasSome(isNormalAAGun)) {
-        possibleAntiAirCutInApis.push(24)
+        possibleAntiAirCutinApis.push(24)
       }
     }
-    return possibleAntiAirCutInApis
-      .map(api => AntiAirCutIn.fromApi(api))
-      .filter((aaci): aaci is AntiAirCutIn => aaci !== undefined)
+    return possibleAntiAirCutinApis
+      .map(api => AntiAirCutin.fromApi(api))
+      .filter((aaci): aaci is AntiAirCutin => aaci !== undefined)
   }
   private constructor(
     public readonly api: number,
