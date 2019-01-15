@@ -1,6 +1,6 @@
 {
   "name": "kc-calculator",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "madono (https://github.com/MadonoHaru)",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "script": "yarn run ts-node --files scripts",
     "update-ships": "yarn run ts-node --files scripts",
     "upload": "yarn build && yarn publish"
