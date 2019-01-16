@@ -1,6 +1,6 @@
 {
   "name": "kc-calculator",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "madono (https://github.com/MadonoHaru)",
@@ -13,8 +13,9 @@
     "test": "jest",
     "build": "tsc -p tsconfig.build.json",
     "script": "yarn run ts-node --files scripts",
+    "upload": "yarn build && yarn publish",
     "update-ships": "yarn run ts-node --files scripts",
-    "upload": "yarn build && yarn publish"
+    "db": "yarn run ts-node --files scripts/db"
   },
   "jest": {
     "transform": {
@@ -37,8 +38,10 @@
   "devDependencies": {
     "@types/jest": "^23.3.3",
     "@types/lodash": "^4.14.118",
+    "@types/nedb": "^1.8.7",
     "@types/node": "^10.11.4",
     "jest": "^23.6.0",
+    "nedb": "^1.8.0",
     "prettier": "^1.15.3",
     "ts-jest": "^23.10.4",
     "ts-node": "^7.0.1",
