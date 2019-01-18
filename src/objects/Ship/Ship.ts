@@ -1,3 +1,4 @@
+import { api_mst_equip_exslot } from '@kancolle/data'
 import { ListIterator } from 'lodash'
 import sumBy from 'lodash/sumBy'
 
@@ -71,6 +72,16 @@ export default class Ship implements IShip {
 
   get nonNullableEquipments() {
     return this.equipments.filter(nonNullable)
+  }
+
+  public canEquip = (equipment: IEquipment, slotIndex: number) => {
+    const { equippable } = this.master
+    if (this.slots.length <= slotIndex) {
+      return (
+        api_mst_equip_exslot.includes(equipment.category.id) || equippable.expantionSlot.includes(equipment.masterId)
+      )
+    }
+    return equippable.categories.includes(equipment.category.id)
   }
 
   public hasEquipment = (iteratee: EquipmentIteratee<boolean, number>) => {

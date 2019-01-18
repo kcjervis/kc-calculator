@@ -1,4 +1,4 @@
-const enum AerialCombatType {
+enum AerialCombatType {
   CarrierBasedAerialCombat,
   AerialSupport,
   JetAssault,

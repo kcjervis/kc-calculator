@@ -18,6 +18,20 @@ export interface IBaseStats {
   range: number
 }
 
+export const shipStatNames: Array<keyof IBaseStats> = [
+  'hp',
+  'armor',
+  'firepower',
+  'torpedo',
+  'antiAir',
+  'asw',
+  'los',
+  'evasion',
+  'luck',
+  'speed',
+  'range'
+]
+
 export interface IShipNakedStats extends IBaseStats {
   level: number
 }

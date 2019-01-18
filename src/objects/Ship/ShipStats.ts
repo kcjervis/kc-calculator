@@ -4,20 +4,19 @@ import sumBy from 'lodash/sumBy'
 import { IEquipment } from '../Equipment'
 
 import { nonNullable } from '../../utils'
-import { IStatsBonus } from './ExplicitStatsBonus'
 import ShipNakedStats, { IBaseStats } from './ShipNakedStats'
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 export interface IShipStats extends IBaseStats {
-  statsBonus?: IStatsBonus
+  statsBonus?: IBaseStats
 }
 
 export default class ShipStats implements IShipStats {
   constructor(
     private readonly nakedStats: ShipNakedStats,
     private readonly equipments: Array<IEquipment | undefined>,
-    public statsBonus?: IStatsBonus
+    public statsBonus?: IBaseStats
   ) {}
 
   private getStat(statName: keyof Omit<IBaseStats, 'luck' | 'hp'>) {

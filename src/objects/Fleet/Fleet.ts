@@ -1,6 +1,6 @@
 import sumBy from 'lodash/sumBy'
 
-import { FleetRole, FleetType, Side } from '../../constants'
+import EffectiveLos from '../../EffectiveLos'
 import { nonNullable } from '../../utils'
 import { IPlane } from '../Plane'
 import { IShip } from '../Ship'
@@ -11,9 +11,11 @@ export interface IFleet {
   ships: Array<IShip | undefined>
   nonNullableShips: IShip[]
   planes: IPlane[]
-  fighterPower: number
 
   totalShipStats: (iteratee: ShipIterator<number>) => number
+
+  fighterPower: number
+  effectiveLos: (nodeDivaricatedFactor: number, hqLevel: number) => number
 }
 
 export default class Fleet implements IFleet {
@@ -33,5 +35,9 @@ export default class Fleet implements IFleet {
 
   get fighterPower() {
     return sumBy(this.planes.filter(({ category }) => !category.isReconnaissanceAircraft), plane => plane.fighterPower)
+  }
+
+  public effectiveLos = (nodeDivaricatedFactor: number, hqLevel: number): number => {
+    return EffectiveLos.fleetEffectiveLos(this, nodeDivaricatedFactor, hqLevel)
   }
 }

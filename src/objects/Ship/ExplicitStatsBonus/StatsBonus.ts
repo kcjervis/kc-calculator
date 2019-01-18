@@ -1,44 +1,23 @@
 import { IShip } from '../Ship'
+import { IBaseStats, shipStatNames } from '../ShipNakedStats'
 
-type StatKey = 'firepower' | 'torpedo' | 'antiAir' | 'armor' | 'asw' | 'los' | 'evasion' | 'speed' | 'range'
-const keies: StatKey[] = ['firepower', 'torpedo', 'antiAir', 'armor', 'asw', 'los', 'evasion', 'speed', 'range']
-type BonusPojo = { [K in StatKey | 'multiplier']?: number }
+type BonusPojo = Partial<IBaseStats> & { multiplier?: number }
 
 export type StatsBonusCreator = (ship: IShip) => StatsBonus | undefined
 
-export interface IStatsBonus {
-  firepower: number
-  torpedo: number
-  antiAir: number
-  armor: number
-  asw: number
-  los: number
-  evasion: number
-  speed: number
-  range: number
-}
-
-export default class StatsBonus implements IStatsBonus {
-  public firepower: number
-  public torpedo: number
-  public antiAir: number
-  public armor: number
-  public asw: number
-  public los: number
-  public evasion: number
-  public speed: number
-  public range: number
+export default class StatsBonus implements IBaseStats {
+  public hp = 0
+  public firepower = 0
+  public torpedo = 0
+  public antiAir = 0
+  public armor = 0
+  public asw = 0
+  public los = 0
+  public evasion = 0
+  public speed = 0
+  public range = 0
+  public luck = 0
   constructor(pojo?: BonusPojo) {
-    this.firepower = 0
-    this.torpedo = 0
-    this.antiAir = 0
-    this.armor = 0
-    this.asw = 0
-    this.los = 0
-    this.evasion = 0
-    this.speed = 0
-    this.range = 0
-
     if (pojo) {
       this.add(pojo)
     }
@@ -46,11 +25,13 @@ export default class StatsBonus implements IStatsBonus {
 
   public add(pojo: BonusPojo) {
     const { multiplier = 1 } = pojo
-    for (const key of keies) {
+    for (const key of shipStatNames) {
       const value = pojo[key]
       if (typeof value === 'number') {
         this[key] += value * multiplier
       }
     }
+
+    return this
   }
 }

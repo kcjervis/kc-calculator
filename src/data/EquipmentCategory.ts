@@ -21,6 +21,11 @@ export default class EquipmentCategory {
   public is = (key: keyof typeof EquipmentCategoryId) => {
     return this.id === EquipmentCategoryId[key]
   }
+
+  public either = (...keys: Array<keyof typeof EquipmentCategoryId>) => {
+    return keys.some(this.is)
+  }
+
   /** 電探 */
   get isRadar() {
     switch (this.id) {

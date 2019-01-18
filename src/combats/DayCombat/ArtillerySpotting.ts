@@ -64,17 +64,22 @@ export const getPossibleArtillerySpottings = (ship: IShip) => {
 
 export default class ArtillerySpotting {
   public static all: ArtillerySpotting[] = []
-  public static MainMain = new ArtillerySpotting(6, '主主', 150)
-  public static MainApShell = new ArtillerySpotting(5, '主徹', 140)
-  public static MainRader = new ArtillerySpotting(4, '主電', 130)
-  public static MainSecond = new ArtillerySpotting(3, '主副', 120)
-  public static DoubleAttack = new ArtillerySpotting(2, '連撃', 130)
+  public static MainMain = new ArtillerySpotting(6, '主主', 1.5, 150)
+  public static MainApShell = new ArtillerySpotting(5, '主徹', 1.3, 140)
+  public static MainRader = new ArtillerySpotting(4, '主電', 1.2, 130)
+  public static MainSecond = new ArtillerySpotting(3, '主副', 1.1, 120)
+  public static DoubleAttack = new ArtillerySpotting(2, '連撃', 1.2, 130)
 
   public static calculateFleetLosModifier = calculateFleetLosModifier
   public static calculateArtillerySpottingBaseValue = calculateArtillerySpottingBaseValue
   public static getPossibleArtillerySpottings = getPossibleArtillerySpottings
 
-  constructor(public readonly id: number, public readonly name: string, public readonly typeFactor: number) {
+  constructor(
+    public readonly id: number,
+    public readonly name: string,
+    public readonly powerModifier: number,
+    public readonly typeFactor: number
+  ) {
     ArtillerySpotting.all.push(this)
   }
 }

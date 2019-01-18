@@ -1,5 +1,6 @@
 import defaultRawMstData from '@kancolle/data'
-import defaultShipsData from '../../ships.json'
+import improvements from '../../data/improvements.json'
+import defaultShipsData from '../../data/ships.json'
 
 import EquipmentCategory from './EquipmentCategory'
 import MasterEquipment from './MasterEquipment'
@@ -19,27 +20,9 @@ export default class MasterData {
 
   constructor(public readonly rawData = defaultRawMstData, public readonly shipsData = defaultShipsData) {
     this.equipments = rawData.api_mst_slotitem.map(raw => {
-      const equipmentData = {
-        id: raw.api_id,
-        name: raw.api_name,
-        typeIds: raw.api_type,
-        hp: raw.api_taik,
-        armor: raw.api_souk,
-        firepower: raw.api_houg,
-        torpedo: raw.api_raig,
-        speed: raw.api_soku,
-        bombing: raw.api_baku,
-        antiAir: raw.api_tyku,
-        asw: raw.api_tais,
-        accuracy: raw.api_houm,
-        evasion: raw.api_houk,
-        los: raw.api_saku,
-        luck: raw.api_luck,
-        range: raw.api_leng,
-        radius: raw.api_distance
-      }
       const equipmentCategory = EquipmentCategory.fromId(raw.api_type[2])
-      return new MasterEquipment(equipmentData, equipmentCategory)
+      const improvable = improvements.includes(raw.api_id)
+      return new MasterEquipment(raw, equipmentCategory, improvable)
     })
 
     this.ships = shipsData.map(shipData => {

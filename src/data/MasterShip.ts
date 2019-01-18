@@ -1,4 +1,4 @@
-import { IShipData, TShipStat } from '../../ships.json'
+import { IShipData, TShipStat } from '../../data/ships.json'
 import ShipClass from './ShipClass'
 import ShipType from './ShipType'
 
@@ -40,6 +40,12 @@ export default class MasterShip {
     nextId: number
     nextLevel: number
   }>
+
+  public readonly equippable: {
+    categories: number[]
+    expantionSlot: number[]
+  }
+
   constructor(shipData: IShipData, public readonly shipType: ShipType, public readonly shipClass: ShipClass) {
     this.id = shipData.id
     this.sortNo = shipData.sortNo
@@ -70,6 +76,13 @@ export default class MasterShip {
         nextId: 0,
         nextLevel: 0
       }
+    }
+
+    const equippable = shipData.equippable ? shipData.equippable : {}
+    this.equippable = {
+      categories: this.shipType.equippableCategoryIds,
+      expantionSlot: [],
+      ...equippable
     }
 
     MasterShip.all.push(this)

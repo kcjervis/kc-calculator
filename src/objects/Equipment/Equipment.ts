@@ -11,15 +11,32 @@ export interface IEquipmentStats {
   bombing: number
   antiAir: number
   asw: number
-  accuracy: number
-  interception: number
-  evasion: number
-  antiBomber: number
   los: number
+  accuracy: number
+  evasion: number
+  interception: number
+  antiBomber: number
   luck: number
   range: number
   radius: number
 }
+
+export const equipmentStatKeys: Array<keyof IEquipmentStats> = [
+  'hp',
+  'armor',
+  'firepower',
+  'torpedo',
+  'speed',
+  'bombing',
+  'antiAir',
+  'asw',
+  'accuracy',
+  'evasion',
+  'interception',
+  'antiBomber',
+  'range',
+  'radius'
+]
 
 export interface IEquipment extends IEquipmentStats {
   /** 装備ID */
@@ -138,8 +155,8 @@ export default class Equipment implements IEquipment {
   }
 
   get isSurfaceRadar() {
-    const { category, accuracy } = this
-    return category.isRadar && accuracy >= 3
+    const { category, los } = this
+    return category.isRadar && los >= 5
   }
 
   get isAntiAirRadar() {

@@ -1,5 +1,5 @@
 /** 本隊か護衛艦隊か */
-const enum FleetRole {
+enum FleetRole {
   /** 本隊 */
   MainFleet = 'MainFleet',
 

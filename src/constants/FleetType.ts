@@ -2,7 +2,7 @@
  * 艦隊の種類
  * 通常, 空母機動部隊, 水上打撃部隊, 輸送護衛部隊, 敵連合
  */
-const enum FleetType {
+enum FleetType {
   /** 通常 */
   Single = 'Single',
 

@@ -1,7 +1,7 @@
 /**
  * 戦闘種別
  */
-const enum BattleType {
+enum BattleType {
   /** 通常戦 */
   NormalBattle = 'NormalBattle',
 

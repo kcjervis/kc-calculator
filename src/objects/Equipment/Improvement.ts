@@ -10,6 +10,8 @@ export interface IImprovement {
 
   shellingPowerModifier: number
   shellingAccuracyModifier: number
+
+  effectiveLosModifier: number
 }
 
 export default class Improvement implements IImprovement {
@@ -109,5 +111,26 @@ export default class Improvement implements IImprovement {
     }
 
     return multiplier * Math.floor(this.value)
+  }
+
+  get effectiveLosModifier() {
+    let multiplier = 0
+    const { category } = this.master
+    if (category.is('SmallRadar')) {
+      multiplier = 1.25
+    } else if (category.either('LargeRadar', 'LargeRadar2')) {
+      multiplier = 1.4
+    } else if (
+      category.either(
+        'CarrierBasedReconnaissanceAircraft',
+        'CarrierBasedReconnaissanceAircraft2',
+        'ReconnaissanceSeaplane'
+      )
+    ) {
+      multiplier = 1.2
+    } else if (category.is('SeaplaneBomber')) {
+      multiplier = 1.15
+    }
+    return multiplier * Math.sqrt(this.value)
   }
 }

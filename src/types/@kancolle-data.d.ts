@@ -1,13 +1,13 @@
 declare module '@kancolle/data' {
   export type TStatTuple = [number, number]
 
-  type TMstSlotCapacity = [number, number, number, number, number]
+  type MstSlotCapacity = [number, number, number, number, number]
 
-  type TMstMaterials = [number, number, number, number]
+  type MstMaterials = [number, number, number, number]
 
   type TEquipmentTypeIds = [number, number, number, number, number]
 
-  export type TMstAbysallShip = {
+  export type MstAbysallShip = {
     "api_id": number,
     "api_sort_id": number,
     "api_name": string,
@@ -18,7 +18,7 @@ declare module '@kancolle/data' {
     "api_slot_num": number
   }
 
-  export type TMstAllyShip = {
+  export type MstAllyShip = {
     "api_id": number,
     "api_sortno": number,
     "api_sort_id": number,
@@ -43,10 +43,10 @@ declare module '@kancolle/data' {
     "api_soku": number,
     "api_leng": number,
     "api_slot_num": number,
-    "api_maxeq": TMstSlotCapacity,
+    "api_maxeq": MstSlotCapacity,
     "api_buildtime": number,
-    "api_broken": TMstMaterials,
-    "api_powup": TMstMaterials,
+    "api_broken": MstMaterials,
+    "api_powup": MstMaterials,
     "api_backs": number,
     "api_getmes": string,
     "api_afterfuel": number,
@@ -56,31 +56,26 @@ declare module '@kancolle/data' {
     "api_voicef": number
   }
 
-  export type TMstShip = TMstAbysallShip | TMstAllyShip
+  export type MstShip = MstAbysallShip | MstAllyShip
 
-  type TMstEquipmentCategory = {
+  type MstEquipmentCategory = {
     "api_id": number,
     "api_name": string,
     "api_show_flg": number
   }
 
-  type TMstReinforceExpansionShip = {
-    "api_slotitem_id": number,
-    "api_ship_ids": number[]
-  }
-
-  type TMstShipType = {
+  type MstShipType = {
     "api_id": number,
     "api_sortno": number,
     "api_name": string,
     "api_scnt": number,
     "api_kcnt": number,
     "api_equip_type": {
-      [K: string]: number
+      [K: string]: 0 | 1
     }
   }
 
-  type TMstEquipment = {
+  type MstEquipment = {
     "api_id": number,
     "api_sortno": number,
     "api_name": string,
@@ -104,21 +99,21 @@ declare module '@kancolle/data' {
     "api_luck": number,
     "api_leng": number,
     "api_cost ": number,
-    "api_distance": number,
+    "api_distance"?: number,
     "api_rare": number,
-    "api_broken": TMstMaterials,
+    "api_broken": MstMaterials,
     "api_info": string,
     "api_usebull": string,
     "api_version": number
   }
 
-  type TMstMapArea = {
+  type MstMapArea = {
     "api_id": number,
     "api_name": string,
     "api_type": number
   }
 
-  type TMstMapInfo = {
+  type MstMapInfo = {
     "api_id": number,
     "api_maparea_id": number,
     "api_no": number,
@@ -131,12 +126,26 @@ declare module '@kancolle/data' {
     "api_required_defeat_count": number | null,
     "api_sally_flag": [number, number, number]
   }
-  export const api_mst_ship: TMstShip[]
-  export const api_mst_stype: TMstShipType[]
-  export const api_mst_slotitem: TMstEquipment[]
-  export const api_mst_slotitem_equiptype: TMstEquipmentCategory[]
+
+  /** 艦娘 */
+  export const api_mst_ship: MstShip[]
+  /** 艦種 */
+  export const api_mst_stype: MstShipType[]
+  /** 装備 */
+  export const api_mst_slotitem: MstEquipment[]
+
+  /** 装備カテゴリ */
+  export const api_mst_slotitem_equiptype: MstEquipmentCategory[]
+
+  /** 艦娘ごとの装備可否設定 */
+  export const api_mst_equip_ship: Array<{ api_ship_id: number, api_equip_type: number[] }>
+
+  /** 補強スロットに装備可能なカテゴリ */
   export const api_mst_equip_exslot: number[]
-  export const api_mst_equip_exslot_ship: TMstReinforceExpansionShip[]
-  export const api_mst_maparea: TMstMapArea[]
-  export const api_mst_mapinfo: TMstMapInfo[]
+
+  /** 補強スロットへの特殊装備 */
+  export const api_mst_equip_exslot_ship: Array<{ api_slotitem_id: number, api_ship_ids: number[] }>
+
+  export const api_mst_maparea: MstMapArea[]
+  export const api_mst_mapinfo: MstMapInfo[]
 }

@@ -34,30 +34,27 @@ const createBonus: StatsBonusCreator = ship => {
       })
     }
 
-    // 61cm三連装(酸素)魚雷
-    const count125 = ship.countEquipment(125)
     // 61cm三連装(酸素)魚雷後期型
-    const count285 = ship.countEquipment(285)
-    if (count125 >= 1) {
+    const tripleTorpedoLateModelCount = ship.countEquipment(285)
+    // 61cm三連装魚雷系の数
+    const tripleTorpedoCount = ship.countEquipment(13) + ship.countEquipment(125) + tripleTorpedoLateModelCount
+
+    if (tripleTorpedoCount >= 1) {
       bonus.add({
         firepower: 1,
         torpedo: 3
       })
-    } else if (count285 >= 1) {
+    }
+    if (tripleTorpedoCount >= 2) {
       bonus.add({
         firepower: 1,
-        torpedo: 4
-      })
-    }
-
-    if (count125 + count285 >= 2) {
-      bonus.add({
         torpedo: 2
       })
     }
-    if (count125 >= 1 && count285 >= 1) {
+
+    if (tripleTorpedoLateModelCount >= 1) {
       bonus.add({
-        firepower: 1
+        torpedo: 1
       })
     }
   }

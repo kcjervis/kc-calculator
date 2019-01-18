@@ -1,6 +1,7 @@
 /tests
 /src
 /scripts
+/tests
 .gitignore
 .gitattributes
 .prettierrc

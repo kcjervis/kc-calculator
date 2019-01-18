@@ -88,7 +88,10 @@ const data: Array<[ShipClassId, string]> = [
   [85, '日振型'],
   [86, '呂号潜水艦'],
   [87, 'John C.Butler級'],
-  [88, 'Nelson級']
+  [88, 'Nelson級'],
+  [89, 'Gotland級'],
+  [90, '日進型'],
+  [91, 'Fletcher級']
 ]
 
 export default class ShipClass {
@@ -106,8 +109,12 @@ export default class ShipClass {
 
   private constructor(public readonly id: ShipClassId, public readonly name: string) {}
 
-  public is(key: keyof typeof ShipClassId) {
+  public is = (key: keyof typeof ShipClassId) => {
     return this.id === ShipClassId[key]
+  }
+
+  public either = (...keys: Array<keyof typeof ShipClassId>) => {
+    return keys.some(this.is)
   }
 
   /**
@@ -115,5 +122,13 @@ export default class ShipClass {
    */
   get isSpecialTypeDD() {
     return [ShipClassId.FubukiClass, ShipClassId.AyanamiClass, ShipClassId.AkatsukiClass].includes(this.id)
+  }
+
+  get isUsNavy() {
+    return this.either('JohnCButlerClass', 'FletcherClass', 'IowaClass', 'EssexClass', 'CasablancaClass')
+  }
+
+  get isRoyalNavy() {
+    return this.either('QueenElizabethClass', 'NelsonClass', 'ArkRoyalClass', 'JClass')
   }
 }

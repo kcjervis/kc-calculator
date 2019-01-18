@@ -1,0 +1,3 @@
+[submodule "scripts/WhoCallsTheFleet-DB"]
+	path = scripts/WhoCallsTheFleet-DB
+	url = https://github.com/TeamFleet/WhoCallsTheFleet-DB.git

@@ -1,26 +1,9 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es5",
-    "lib": [
-      "esnext",
-      "dom"
-    ],
-    "moduleResolution": "node",
-    "noImplicitReturns": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "strict": true,
-    "declaration": true,
-    "outDir": "./dist",
-    "experimentalDecorators": true
-  },
+  "extends": "./tsconfig.base.json",
   "include": [
-    "src/**/*"
-  ],
-  
-  "exclude": [
-    "node_modules",
-    "dist",
+    "src/**/*",
+    "data/**/*",
+    "tests/**/*",
+    "scripts/**/*",
   ]
 }

@@ -33,15 +33,15 @@ const getPossibleAircraftCarrierCutins = (ship: IShip) => {
 export default class AircraftCarrierCutin {
   public static all: AircraftCarrierCutin[] = []
 
-  public static FighterBomberAttacker = new AircraftCarrierCutin('FBA', 125)
-  public static BomberBomberAttacker = new AircraftCarrierCutin('BBA', 140)
-  public static BomberAttacker = new AircraftCarrierCutin('BA', 155)
+  public static FighterBomberAttacker = new AircraftCarrierCutin('FBA', 1.25, 125)
+  public static BomberBomberAttacker = new AircraftCarrierCutin('BBA', 1.2, 140)
+  public static BomberAttacker = new AircraftCarrierCutin('BA', 1.15, 155)
 
   public static calculateFleetLosModifier = calculateFleetLosModifier
   public static calculateAircraftCarrierCutinBaseValue = calculateArtillerySpottingBaseValue
   public static getPossibleAircraftCarrierCutins = getPossibleAircraftCarrierCutins
 
-  constructor(public readonly name: string, public readonly typeFactor: number) {
+  constructor(public readonly name: string, public readonly powerModifier: number, public readonly typeFactor: number) {
     AircraftCarrierCutin.all.push(this)
   }
 }

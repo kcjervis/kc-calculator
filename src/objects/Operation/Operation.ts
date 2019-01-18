@@ -1,4 +1,4 @@
-import { FleetRole, FleetType, Side } from '../../constants'
+import { FleetType, Side } from '../../constants'
 import { IFleet } from '../Fleet'
 import { ILandBasedAirCorps } from '../LandBasedAirCorps'
 

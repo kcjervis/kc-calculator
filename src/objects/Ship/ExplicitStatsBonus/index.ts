@@ -1,5 +1,5 @@
 import { IShip } from '../Ship'
-import StatsBonus, { IStatsBonus, StatsBonusCreator } from './StatsBonus'
+import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
 import createBonus104 from './104'
 import createBonus15 from './15'
@@ -19,10 +19,8 @@ import createBonus295 from './295'
 import createBonus296 from './296'
 import createBonus297 from './297'
 import createBonus301 from './301'
-import createBonus303 from './303'
 import createBonus304 from './304'
 import createBonus307 from './307'
-import createBonus308 from './308'
 import createBonus33 from './33'
 import createBonus58 from './58'
 import createBonus61 from './61'
@@ -30,11 +28,19 @@ import createBonus63 from './63'
 import createBonus67 from './67'
 import createBonusBL16InchMkI from './BL16InchMkI'
 import createBonusJu87CKai2KMX from './Ju87CKai2KMX'
+import mediumCaliberMainGunBonusCreators from './mediumCaliberMainGun'
+import radarBonusCreators from './radar'
+import searchlightBonusCreators from './searchlight'
+import smallCaliberMainGunBonusCreators from './smallCaliberMainGun'
 import createBonusSuisei from './Suisei'
 import createBonusType97TorpedoBomber931AirGroup from './Type97TorpedoBomber931AirGroup'
 import createBonusZuiun634AirGroup from './Zuiun634AirGroup'
 
-const statsBonusCreators: StatsBonusCreator[] = [
+export const statsBonusCreators: StatsBonusCreator[] = [
+  ...searchlightBonusCreators,
+  ...smallCaliberMainGunBonusCreators,
+  ...mediumCaliberMainGunBonusCreators,
+  ...radarBonusCreators,
   createBonus104,
   createBonus15,
   createBonus174,
@@ -53,10 +59,9 @@ const statsBonusCreators: StatsBonusCreator[] = [
   createBonus296,
   createBonus297,
   createBonus301,
-  createBonus303,
+
   createBonus304,
   createBonus307,
-  createBonus308,
   createBonus33,
   createBonus58,
   createBonus61,
@@ -81,4 +86,4 @@ export const createExplicitStatsBonus = (ship: IShip) => {
   return explicitStatsBonus
 }
 
-export { StatsBonus, IStatsBonus }
+export { StatsBonus }

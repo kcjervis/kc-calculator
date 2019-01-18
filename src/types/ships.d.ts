@@ -27,6 +27,13 @@ declare module '*/ships.json' {
       nextId: number
       nextLevel: number
     }>
+    /** 特殊な装備可能設定 */
+    equippable?: {
+      /** 装備カテゴリによる設定 */
+      categories?: number[],
+      /** 補強増設に装備できるID一覧 */
+      expantionSlot?: number[]
+    }
   }
   const ships: IShipData[]
   export default ships

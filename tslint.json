@@ -17,5 +17,10 @@
   },
   "rulesDirectory": [
     "tslint-plugin-prettier"
-  ]
+  ],
+  "linterOptions": {
+    "exclude": [
+      "src/**/*.json"
+    ]
+  }
 }

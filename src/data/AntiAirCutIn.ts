@@ -42,7 +42,7 @@ export default class AntiAirCutin {
   }
 
   public static getPossibleAntiAirCutins(ship: IShip) {
-    const enum MasterShipId {
+    enum MasterShipId {
       MayaKai2 = 428,
       IsuzuKai2 = 141,
       KasumiKai2B = 470,

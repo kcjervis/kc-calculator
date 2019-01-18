@@ -264,7 +264,13 @@ enum ShipClassId {
   NelsonClass = 88,
 
   /** Gotland級 */
-  GotlandClass = 89
+  GotlandClass = 89,
+
+  /** 日進型 */
+  NisshinClass = 90,
+
+  /** Fletcher級 */
+  FletcherClass = 91
 }
 
 export default ShipClassId

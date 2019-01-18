@@ -8,13 +8,8 @@ const createBonus: StatsBonusCreator = ship => {
   }
 
   const { shipClass } = ship
-  const isRoyalNavy =
-    shipClass.is('QueenElizabethClass') ||
-    shipClass.is('NelsonClass') ||
-    shipClass.is('ArkRoyalClass') ||
-    shipClass.is('JClass')
 
-  if (!isRoyalNavy) {
+  if (!shipClass.isRoyalNavy) {
     return undefined
   }
 

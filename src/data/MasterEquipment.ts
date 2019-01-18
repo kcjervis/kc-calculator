@@ -1,3 +1,4 @@
+import { MstEquipment } from '@kancolle/data'
 import EquipmentCategory from './EquipmentCategory'
 import EquipmentCategoryId from './EquipmentCategoryId'
 
@@ -28,8 +29,6 @@ export default class MasterEquipment implements IEquipmentData {
   public readonly name: string
 
   public readonly typeIds: Readonly<number[]>
-  public readonly categoryId: number
-  public readonly iconId: number
 
   public readonly hp: number
   public readonly armor: number
@@ -42,53 +41,34 @@ export default class MasterEquipment implements IEquipmentData {
   public readonly los: number
   public readonly luck: number
   public readonly range: number
-  public readonly radius: number
 
   public readonly accuracy: number
   public readonly antiBomber: number
   public readonly evasion: number
   public readonly interception: number
 
-  constructor(equipmentData: IEquipmentData, public readonly category: EquipmentCategory) {
-    const {
-      id,
-      name,
-      typeIds,
-      hp = 0,
-      armor = 0,
-      firepower = 0,
-      torpedo = 0,
-      speed = 0,
-      bombing = 0,
-      antiAir = 0,
-      asw = 0,
-      accuracy = 0,
-      evasion = 0,
-      los = 0,
-      luck = 0,
-      range = 0,
-      radius = 0
-    } = equipmentData
+  public readonly radius: number = 0
 
-    this.id = id
-    this.name = name
+  constructor(raw: MstEquipment, public readonly category: EquipmentCategory, public readonly improvable: boolean) {
+    this.id = raw.api_id
+    this.name = raw.api_name
 
-    this.typeIds = typeIds
-    this.categoryId = this.typeIds[2]
-    this.iconId = this.typeIds[3]
+    this.typeIds = raw.api_type
 
-    this.hp = hp
-    this.armor = armor
-    this.firepower = firepower
-    this.torpedo = torpedo
-    this.speed = speed
-    this.bombing = bombing
-    this.antiAir = antiAir
-    this.asw = asw
-    this.los = los
-    this.luck = luck
-    this.range = range
-    this.radius = radius
+    this.hp = raw.api_taik
+    this.armor = raw.api_taik
+    this.firepower = raw.api_houg
+    this.torpedo = raw.api_raig
+    this.speed = raw.api_soku
+    this.bombing = raw.api_baku
+    this.antiAir = raw.api_tyku
+    this.asw = raw.api_tais
+    this.los = raw.api_saku
+    this.luck = raw.api_luck
+    this.range = raw.api_leng
+
+    const accuracy = raw.api_houm
+    const evasion = raw.api_houk
 
     this.accuracy = 0
     this.evasion = 0
@@ -101,6 +81,17 @@ export default class MasterEquipment implements IEquipmentData {
       this.accuracy = accuracy
       this.evasion = evasion
     }
+    if (raw.api_distance) {
+      this.radius = raw.api_distance
+    }
+  }
+
+  get categoryId() {
+    return this.typeIds[2]
+  }
+
+  get iconId() {
+    return this.typeIds[3]
   }
 
   get isHighAngleMount() {

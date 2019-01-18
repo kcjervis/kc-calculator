@@ -1,6 +1,15 @@
-import { api_mst_ship, TMstAllyShip, TMstShip, TStatTuple } from '@kancolle/data'
+import {
+  api_mst_equip_exslot_ship,
+  api_mst_equip_ship,
+  api_mst_ship,
+  MstAllyShip,
+  MstShip,
+  TStatTuple
+} from '@kancolle/data'
 import fs from 'fs'
-import ships, { IShipData } from '../ships.json'
+import ships, { IShipData } from '../data/ships.json'
+
+const isMstAllyShip = (mstShip: MstShip): mstShip is MstAllyShip => 'api_houg' in mstShip
 
 const writeStats = (stats1: TStatTuple | number, stats2: TStatTuple) => {
   if (typeof stats1 === 'number') {
@@ -10,7 +19,7 @@ const writeStats = (stats1: TStatTuple | number, stats2: TStatTuple) => {
   stats1[1] = stats2[1]
 }
 
-const getSlotCapacities = (mstShip: TMstShip, shipData?: IShipData) => {
+const getSlotCapacities = (mstShip: MstShip, shipData?: IShipData) => {
   const { api_slot_num } = mstShip
   if ('api_maxeq' in mstShip) {
     const { api_maxeq } = mstShip
@@ -22,7 +31,7 @@ const getSlotCapacities = (mstShip: TMstShip, shipData?: IShipData) => {
   return shipData.slotCapacities
 }
 
-const getRemodel = (mstShip: TMstShip) => {
+const getRemodel = (mstShip: MstShip) => {
   if ('api_afterlv' in mstShip) {
     const { api_aftershipid, api_afterlv } = mstShip
     return {
@@ -36,8 +45,22 @@ const getRemodel = (mstShip: TMstShip) => {
   }
 }
 
-const createShipData = (apiShip: TMstShip): IShipData => {
-  if ('api_houg' in apiShip) {
+const getEquippable = (masterId: number) => {
+  const found = api_mst_equip_ship.find(({ api_ship_id }) => api_ship_id === masterId)
+  const expansionSlot = api_mst_equip_exslot_ship
+    .filter(({ api_ship_ids }) => api_ship_ids.includes(masterId))
+    .map(({ api_slotitem_id }) => api_slotitem_id)
+  if (found || expansionSlot.length > 0) {
+    return {
+      categories: found && found.api_equip_type,
+      expansionSlot
+    }
+  }
+  return undefined
+}
+
+const createShipData = (apiShip: MstShip): IShipData => {
+  if (isMstAllyShip(apiShip)) {
     return {
       id: apiShip.api_id,
       sortNo: apiShip.api_sortno,
@@ -61,7 +84,8 @@ const createShipData = (apiShip: TMstShip): IShipData => {
       ammo: apiShip.api_bull_max,
       slotCapacities: getSlotCapacities(apiShip),
       equipments: [],
-      remodel: getRemodel(apiShip)
+      remodel: getRemodel(apiShip),
+      equippable: getEquippable(apiShip.api_id)
     }
   }
   return {
@@ -101,14 +125,19 @@ for (const apiShip of api_mst_ship) {
     continue
   }
 
-  if ('api_houg' in apiShip) {
-    writeStats(shipData.firepower, apiShip.api_houg)
-    writeStats(shipData.torpedo, apiShip.api_raig)
-    writeStats(shipData.armor, apiShip.api_souk)
-    writeStats(shipData.antiAir, apiShip.api_tyku)
+  if (isMstAllyShip(apiShip)) {
+    const nextShipData = createShipData(apiShip)
+    nextShipData.evasion = shipData.evasion
+    nextShipData.asw = shipData.asw
+    nextShipData.los = shipData.los
+    nextShipData.slotCapacities = shipData.slotCapacities
+    nextShipData.equipments = shipData.equipments
+
+    newShipsData.push(nextShipData)
+    continue
   }
 
   newShipsData.push(shipData)
 }
 
-fs.writeFile('./scripts/ships.json', JSON.stringify(newShipsData), err => console.error(err))
+fs.writeFile('./scripts/ships.json', JSON.stringify(newShipsData), console.error)

@@ -1,6 +1,6 @@
 import { IShip } from '../objects'
 
-export const enum SpeedValue {
+export enum SpeedValue {
   Land = 0,
   Slow = 5,
   Fast = 10,
@@ -11,7 +11,7 @@ export const enum SpeedValue {
 /**
  * 潜在艦速区分
  */
-export const enum SpeedGroup {
+export enum SpeedGroup {
   FastA,
   FastB1SlowA,
   FastB2SlowB,
@@ -28,19 +28,11 @@ export default class Speed<Value extends SpeedValue = SpeedValue, Name extends s
   public static readonly FastPlus = new Speed(15, '高速+')
   public static readonly Fastest = new Speed(20, '最速')
 
-  public static fromNumber(value: SpeedValue): Speed {
-    switch (value) {
-      case SpeedValue.Land:
-        return Speed.Land
-      case SpeedValue.Slow:
-        return Speed.Land
-      case SpeedValue.Fast:
-        return Speed.Fast
-      case SpeedValue.FastPlus:
-        return Speed.FastPlus
-      case SpeedValue.Fastest:
-        return Speed.Fastest
-    }
+  public static fromNumber = (value: number): Speed => {
+    const found = [Speed.Land, Speed.Slow, Speed.Fast, Speed.FastPlus, Speed.Fastest].find(
+      speed => value <= speed.value
+    )
+    return found ? found : Speed.Fastest
   }
 
   /**
@@ -51,7 +43,7 @@ export default class Speed<Value extends SpeedValue = SpeedValue, Name extends s
     const className = ship.shipClass.name
     const { shipType } = ship
 
-    const isFastAV = ship.nakedStats.speed === SpeedValue.Fast && className === '水上機母艦'
+    const isFastAV = Speed.fromNumber(ship.nakedStats.speed) === Speed.Fast && shipType.is('SeaplaneTender')
 
     if (
       isFastAV ||
@@ -125,11 +117,7 @@ export default class Speed<Value extends SpeedValue = SpeedValue, Name extends s
   /**
    * 加速
    */
-  public add(value: SpeedValue) {
-    const addedValue = this.value + value
-    if (addedValue > SpeedValue.Fastest) {
-      return Speed.Fastest
-    }
-    return Speed.fromNumber(addedValue)
+  public add = (value: SpeedValue): Speed => {
+    return Speed.fromNumber(this.value + value)
   }
 }

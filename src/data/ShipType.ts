@@ -3,32 +3,39 @@ import ShipTypeId from './ShipTypeId'
 
 /** 艦種 */
 export default class ShipType {
-  public static readonly all = api_mst_stype.map(
-    ({ api_id, api_name, api_scnt }) => new ShipType(api_id, api_name, api_scnt)
-  )
+  public static readonly all = api_mst_stype.map(raw => {
+    const equippableCategoryIds = Object.entries(raw.api_equip_type)
+      .filter(([categoryId, equippable]) => equippable === 1)
+      .map(([categoryId, equippable]) => Number(categoryId))
+    return new ShipType(raw.api_id, raw.api_name, equippableCategoryIds)
+  })
 
   public static fromId(id: number) {
     const found = ShipType.all.find(shipType => shipType.id === id)
     if (found) {
       return found
     }
-    const newShipType = new ShipType(id, '', 0)
+    const newShipType = new ShipType(id, '', [])
     ShipType.all.push(newShipType)
     return newShipType
   }
 
   private constructor(
-    public readonly id: number,
+    public readonly id: ShipTypeId,
     public readonly name: string,
-    public readonly repairTimeMultiplier: number
+    public readonly equippableCategoryIds: number[]
   ) {
-    if (id === 8) {
+    if (id === ShipTypeId.Battlecruiser) {
       this.name = '巡洋戦艦'
     }
   }
 
   public is(key: keyof typeof ShipTypeId) {
     return this.id === ShipTypeId[key]
+  }
+
+  public either = (...keys: Array<keyof typeof ShipTypeId>) => {
+    return keys.some(this.is)
   }
 
   /**

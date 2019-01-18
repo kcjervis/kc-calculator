@@ -1,4 +1,4 @@
-const enum Side {
+enum Side {
   Player = 'Player',
   Enemy = 'Enemy'
 }
