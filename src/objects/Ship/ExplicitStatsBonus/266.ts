@@ -9,25 +9,14 @@ const createBonus: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
 
   const shipName = ship.name
-  const className = ship.shipClass.name
+  const { shipClass } = ship
 
-  const isShiratsuyuClass = className === '白露型'
-  const isAsashioClass = className === '朝潮型'
-  const isKagerouClass = className === '陽炎型'
+  const isShiratsuyuClass = shipClass.is('ShiratsuyuClass')
+  const isAsashioClass = shipClass.is('AsashioClass')
+  const isKagerouClass = shipClass.is('KagerouClass')
 
   // 単体ボーナス
-  if (shipName === '時雨改二') {
-    bonus.add({
-      multiplier: count266,
-      firepower: 1,
-      evasion: 1
-    })
-  } else if (isShiratsuyuClass || isAsashioClass) {
-    bonus.add({
-      multiplier: count266,
-      firepower: 1
-    })
-  } else if (isKagerouClass && shipName.includes('改二')) {
+  if (isKagerouClass && shipName.includes('改二')) {
     if (count266 === 1) {
       bonus.add({
         firepower: 2
@@ -40,18 +29,18 @@ const createBonus: StatsBonusCreator = ship => {
       bonus.add({
         firepower: 6
       })
-    } else if (shipName === '雪風改' || shipName === '磯風乙改') {
-      bonus.add({
-        multiplier: count266,
-        firepower: 1,
-        evasion: 1
-      })
-    } else if (isKagerouClass) {
-      bonus.add({
-        multiplier: count266,
-        firepower: 1
-      })
     }
+  } else if (shipName === '雪風改' || shipName === '磯風乙改' || shipName === '時雨改二') {
+    bonus.add({
+      multiplier: count266,
+      firepower: 1,
+      evasion: 1
+    })
+  } else if (isShiratsuyuClass || isAsashioClass || isKagerouClass) {
+    bonus.add({
+      multiplier: count266,
+      firepower: 1
+    })
   }
 
   // 相互シナジーボーナス
@@ -63,7 +52,7 @@ const createBonus: StatsBonusCreator = ship => {
         torpedo: 3,
         evasion: 1
       })
-    } else if (isShiratsuyuClass) {
+    } else if (isKagerouClass) {
       bonus.add({
         firepower: 2,
         torpedo: 3,

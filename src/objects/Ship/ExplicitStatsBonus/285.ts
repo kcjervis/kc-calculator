@@ -1,9 +1,11 @@
+import { nonNullable } from '../../../utils'
 import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
   // 61cm三連装(酸素)魚雷後期型
-  const count = ship.countEquipment(285)
-  const countImproved10 = ship.countEquipment(equip => equip.improvement.value >= 10)
+  const tripleTorpedoLateModels = ship.equipments.filter(nonNullable).filter(equip => equip.masterId === 285)
+  const count = tripleTorpedoLateModels.length
+  const improved10Count = tripleTorpedoLateModels.filter(torpedo => torpedo.improvement.value >= 10).length
   if (count === 0) {
     return undefined
   }
@@ -22,16 +24,14 @@ const createBonus: StatsBonusCreator = ship => {
   // 単体ボーナス
   if (isSpecialTypeDDKai2 || isHatsuharuClassKai2) {
     bonus.add({
-      multiplier: count,
+      multiplier: Math.min(count, 2),
       torpedo: 2,
       evasion: 1
     })
-    if (countImproved10 > 0) {
-      bonus.add({
-        multiplier: countImproved10,
-        firepower: 1
-      })
-    }
+    bonus.add({
+      multiplier: Math.min(improved10Count, 2),
+      firepower: 1
+    })
   }
 
   return bonus

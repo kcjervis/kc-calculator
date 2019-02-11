@@ -10,7 +10,11 @@ export {
   ILandBasedAirCorpsDataObject,
   IOperationDataObject,
   IShipDataObject,
-  IPlane
+  IPlane,
+  EquipmentStatKey,
+  equipmentStatKeys,
+  ShipStatKey,
+  shipStatKeys
 } from './objects'
 
 export { MasterData, ShipClass, ShipType, EquipmentCategory, MasterEquipment, MasterShip } from './data'
@@ -29,5 +33,11 @@ export {
 
 export { nonNullable, softcap } from './utils'
 
-export { LandBaseAerialSupport, CarrierBasedAerialCombat } from './combats/AerialCombat'
+export {
+  LandBaseAerialSupport,
+  CarrierBasedAerialCombat,
+  NightBattleSpecialAttack,
+  DayCombatSpecialAttack
+} from './combats'
+
 export { ArtillerySpotting, AircraftCarrierCutin } from './combats/DayCombat'

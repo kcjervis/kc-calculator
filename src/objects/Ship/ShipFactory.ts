@@ -15,6 +15,7 @@ export interface IShipDataObject {
   slots: number[]
   equipments: Array<IEquipmentDataObject | undefined>
 
+  nowHp?: number
   morale?: number
   increased?: Partial<IBaseStats>
 }
@@ -37,7 +38,9 @@ export default class ShipFactory {
 
     const nakedStats = new ShipNakedStats(foundMaster, level, increased)
     const stats = new ShipStats(nakedStats, equipments)
-    const health = new Health(stats.hp, stats.hp)
+
+    const { nowHp = stats.hp } = obj
+    const health = new Health(stats.hp, nowHp)
     const morale = new Morale(moraleValue)
 
     const slots = obj.slots.concat()

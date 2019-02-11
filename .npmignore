@@ -5,6 +5,6 @@
 .gitignore
 .gitattributes
 .prettierrc
-tsconfig.json
-tslint.json
+tsconfig.*
+tslint.*
 .vscode/

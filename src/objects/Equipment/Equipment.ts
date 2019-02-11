@@ -21,23 +21,6 @@ export interface IEquipmentStats {
   radius: number
 }
 
-export const equipmentStatKeys: Array<keyof IEquipmentStats> = [
-  'hp',
-  'armor',
-  'firepower',
-  'torpedo',
-  'speed',
-  'bombing',
-  'antiAir',
-  'asw',
-  'accuracy',
-  'evasion',
-  'interception',
-  'antiBomber',
-  'range',
-  'radius'
-]
-
 export interface IEquipment extends IEquipmentStats {
   /** 装備ID */
   masterId: number

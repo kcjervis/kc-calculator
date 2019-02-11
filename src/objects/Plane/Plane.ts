@@ -1,4 +1,4 @@
-import { equipmentFighterPower, equipmentInterceptionPower } from '../../AerialCombat/fighterCombat'
+import { equipmentFighterPower, equipmentInterceptionPower } from '../../combats/AerialCombat/fighterCombat'
 import { AirControlState } from '../../constants'
 import { EquipmentCategory } from '../../data'
 import { IEquipment } from '../Equipment'
@@ -62,7 +62,8 @@ export default class Plane implements IPlane {
   }
 
   public contactSelectionRate = (state: AirControlState) => {
-    return Math.ceil(this.equipment.los) / (20 - 2 * state.contactMultiplier)
+    const { los, improvement } = this.equipment
+    return Math.ceil(los + improvement.contactSelectionModifier) / (20 - 2 * state.contactMultiplier)
   }
 
   get canParticipateInAirstrike() {

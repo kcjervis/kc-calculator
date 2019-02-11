@@ -1,4 +1,4 @@
-import { api_mst_stype } from '@kancolle/data'
+import { api_mst_stype } from '../../data'
 import ShipTypeId from './ShipTypeId'
 
 /** 艦種 */

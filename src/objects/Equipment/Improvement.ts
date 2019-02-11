@@ -4,6 +4,8 @@ export interface IImprovement {
   /** 改修値 */
   value: number
 
+  contactSelectionModifier: number
+
   fighterPowerModifier: number
   adjustedAntiAirModifier: number
   fleetAntiAirModifier: number
@@ -20,11 +22,30 @@ export default class Improvement implements IImprovement {
     this.value = value ? value : 0
   }
 
+  get contactSelectionModifier() {
+    const { value, master } = this
+    const { los, category } = master
+    if (!category.isReconnaissanceAircraft) {
+      return 0
+    }
+    if (category.either('CarrierBasedReconnaissanceAircraft', 'CarrierBasedReconnaissanceAircraft2')) {
+      return 0.4 * value
+    }
+    if (los >= 6) {
+      return 0.2 * value
+    }
+    if (los >= 4) {
+      return 0.14 * value
+    }
+    return 0.1 * value
+  }
+
   get fighterPowerModifier() {
     const { value, master } = this
-    if (master.category.isFighter) {
+    const { category } = master
+    if (category.isFighter) {
       return 0.2 * value
-    } else if (master.category.id === EquipmentCategoryId.SeaplaneBomber) {
+    } else if (category.is('CarrierBasedDiveBomber')) {
       return 0.25 * value
     }
     return 0

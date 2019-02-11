@@ -1,5 +1,5 @@
 import { IShip } from '../Ship'
-import { IBaseStats, shipStatNames } from '../ShipNakedStats'
+import { IBaseStats, shipStatKeys } from '../ShipNakedStats'
 
 type BonusPojo = Partial<IBaseStats> & { multiplier?: number }
 
@@ -25,7 +25,7 @@ export default class StatsBonus implements IBaseStats {
 
   public add(pojo: BonusPojo) {
     const { multiplier = 1 } = pojo
-    for (const key of shipStatNames) {
+    for (const key of shipStatKeys) {
       const value = pojo[key]
       if (typeof value === 'number') {
         this[key] += value * multiplier

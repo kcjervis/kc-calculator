@@ -29,10 +29,12 @@ import createBonus67 from './67'
 import createBonusBL16InchMkI from './BL16InchMkI'
 import createBonusJu87CKai2KMX from './Ju87CKai2KMX'
 import mediumCaliberMainGunBonusCreators from './mediumCaliberMainGun'
-import radarBonusCreators from './radar'
+import radar from './radar'
 import searchlightBonusCreators from './searchlight'
 import smallCaliberMainGunBonusCreators from './smallCaliberMainGun'
+import sonar from './sonar'
 import createBonusSuisei from './Suisei'
+import torpedo from './torpedo'
 import createBonusType97TorpedoBomber931AirGroup from './Type97TorpedoBomber931AirGroup'
 import createBonusZuiun634AirGroup from './Zuiun634AirGroup'
 
@@ -40,7 +42,9 @@ export const statsBonusCreators: StatsBonusCreator[] = [
   ...searchlightBonusCreators,
   ...smallCaliberMainGunBonusCreators,
   ...mediumCaliberMainGunBonusCreators,
-  ...radarBonusCreators,
+  ...torpedo,
+  ...radar,
+  ...sonar,
   createBonus104,
   createBonus15,
   createBonus174,

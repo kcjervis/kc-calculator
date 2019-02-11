@@ -1,23 +1,15 @@
+import fs from 'fs'
 import {
   api_mst_equip_exslot_ship,
   api_mst_equip_ship,
   api_mst_ship,
+  IShipData,
   MstAllyShip,
   MstShip,
-  TStatTuple
-} from '@kancolle/data'
-import fs from 'fs'
-import ships, { IShipData } from '../data/ships.json'
+  ships
+} from '../data'
 
 const isMstAllyShip = (mstShip: MstShip): mstShip is MstAllyShip => 'api_houg' in mstShip
-
-const writeStats = (stats1: TStatTuple | number, stats2: TStatTuple) => {
-  if (typeof stats1 === 'number') {
-    return
-  }
-  stats1[0] = stats2[0]
-  stats1[1] = stats2[1]
-}
 
 const getSlotCapacities = (mstShip: MstShip, shipData?: IShipData) => {
   const { api_slot_num } = mstShip
@@ -47,13 +39,13 @@ const getRemodel = (mstShip: MstShip) => {
 
 const getEquippable = (masterId: number) => {
   const found = api_mst_equip_ship.find(({ api_ship_id }) => api_ship_id === masterId)
-  const expansionSlot = api_mst_equip_exslot_ship
+  const expantionSlot = api_mst_equip_exslot_ship
     .filter(({ api_ship_ids }) => api_ship_ids.includes(masterId))
     .map(({ api_slotitem_id }) => api_slotitem_id)
-  if (found || expansionSlot.length > 0) {
+  if (found || expantionSlot.length > 0) {
     return {
       categories: found && found.api_equip_type,
-      expansionSlot
+      expantionSlot
     }
   }
   return undefined

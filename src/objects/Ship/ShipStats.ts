@@ -19,13 +19,13 @@ export default class ShipStats implements IShipStats {
     public statsBonus?: IBaseStats
   ) {}
 
-  private getStat(statName: keyof Omit<IBaseStats, 'luck' | 'hp'>) {
+  private getStat(statKey: keyof Omit<IBaseStats, 'luck' | 'hp'>) {
     const { nakedStats, equipments, statsBonus } = this
     let bonus = 0
     if (statsBonus !== undefined) {
-      bonus = statsBonus[statName]
+      bonus = statsBonus[statKey]
     }
-    return nakedStats[statName] + sumBy(equipments.filter(nonNullable), statName) + bonus
+    return nakedStats[statKey] + sumBy(equipments.filter(nonNullable), statKey) + bonus
   }
 
   get hp() {

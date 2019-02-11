@@ -1,4 +1,4 @@
-import { api_mst_slotitem_equiptype } from '@kancolle/data'
+import { api_mst_slotitem_equiptype } from '../../data'
 import EquipmentCategoryId from './EquipmentCategoryId'
 
 export default class EquipmentCategory {
@@ -28,108 +28,65 @@ export default class EquipmentCategory {
 
   /** 電探 */
   get isRadar() {
-    switch (this.id) {
-      case EquipmentCategoryId.SmallRadar:
-      case EquipmentCategoryId.LargeRadar:
-      case EquipmentCategoryId.LargeRadar2:
-        return true
-    }
-    return false
+    return this.either('SmallRadar', 'LargeRadar', 'LargeRadar2')
   }
 
   /** 艦載機 */
   get isCarrierBasedAircraft() {
-    switch (this.id) {
-      case EquipmentCategoryId.CarrierBasedFighterAircraft:
-      case EquipmentCategoryId.CarrierBasedDiveBomber:
-      case EquipmentCategoryId.CarrierBasedTorpedoBomber:
-      case EquipmentCategoryId.CarrierBasedReconnaissanceAircraft:
-      case EquipmentCategoryId.CarrierBasedReconnaissanceAircraft2:
-        return true
-    }
-    return false
+    return this.either(
+      'CarrierBasedFighterAircraft',
+      'CarrierBasedDiveBomber',
+      'CarrierBasedTorpedoBomber',
+      'CarrierBasedReconnaissanceAircraft',
+      'CarrierBasedReconnaissanceAircraft2'
+    )
   }
 
   /** 水上機 */
   get isSeaplane() {
-    switch (this.id) {
-      case EquipmentCategoryId.ReconnaissanceSeaplane:
-      case EquipmentCategoryId.SeaplaneBomber:
-      case EquipmentCategoryId.LargeFlyingBoat:
-      case EquipmentCategoryId.SeaplaneFighter:
-        return true
-    }
-    return false
+    return this.either('ReconnaissanceSeaplane', 'SeaplaneBomber', 'SeaplaneFighter', 'LargeFlyingBoat')
   }
 
   /** 陸上機 */
   get isLandBasedAircraft() {
-    switch (this.id) {
-      case EquipmentCategoryId.LandBasedAttackAircraft:
-      case EquipmentCategoryId.LandBasedFighter:
-        return true
-    }
-    return false
+    return this.either('LandBasedAttackAircraft', 'LandBasedFighter', 'LandBasedReconnaissanceAircraft')
   }
 
   /** 噴式機 */
   get isJetPoweredAircraft() {
-    switch (this.id) {
-      case EquipmentCategoryId.JetPoweredFighter:
-      case EquipmentCategoryId.JetPoweredFighterBomber:
-      case EquipmentCategoryId.JetPoweredTorpedoBomber:
-      case EquipmentCategoryId.JetPoweredReconnaissanceAircraft:
-        return true
-    }
-    return false
+    return this.either(
+      'JetPoweredFighter',
+      'JetPoweredFighterBomber',
+      'JetPoweredTorpedoBomber',
+      'JetPoweredReconnaissanceAircraft'
+    )
   }
 
   /** 戦闘機 */
   get isFighter() {
-    switch (this.id) {
-      case EquipmentCategoryId.CarrierBasedFighterAircraft:
-      case EquipmentCategoryId.SeaplaneFighter:
-      case EquipmentCategoryId.LandBasedFighter:
-      case EquipmentCategoryId.JetPoweredFighter:
-        return true
-    }
-    return false
+    return this.either('CarrierBasedFighterAircraft', 'SeaplaneFighter', 'LandBasedFighter', 'JetPoweredFighter')
   }
 
   /** 爆撃機 */
   get isDiveBomber() {
-    switch (this.id) {
-      case EquipmentCategoryId.CarrierBasedDiveBomber:
-      case EquipmentCategoryId.SeaplaneBomber:
-      case EquipmentCategoryId.JetPoweredFighterBomber:
-        return true
-    }
-    return false
+    return this.either('CarrierBasedDiveBomber', 'SeaplaneBomber', 'JetPoweredFighterBomber')
   }
 
   /** 攻撃機 */
   get isTorpedoBomber() {
-    switch (this.id) {
-      case EquipmentCategoryId.CarrierBasedTorpedoBomber:
-      case EquipmentCategoryId.LandBasedAttackAircraft:
-      case EquipmentCategoryId.JetPoweredTorpedoBomber:
-        return true
-    }
-    return false
+    return this.either('CarrierBasedTorpedoBomber', 'JetPoweredTorpedoBomber', 'LandBasedAttackAircraft')
   }
 
   /** 偵察機 */
   get isReconnaissanceAircraft() {
-    switch (this.id) {
-      case EquipmentCategoryId.CarrierBasedReconnaissanceAircraft:
-      case EquipmentCategoryId.CarrierBasedReconnaissanceAircraft2:
-      case EquipmentCategoryId.ReconnaissanceSeaplane:
-      case EquipmentCategoryId.LargeFlyingBoat:
-      case EquipmentCategoryId.LandBasedReconnaissanceAircraft:
-      case EquipmentCategoryId.JetPoweredReconnaissanceAircraft:
-        return true
-    }
-    return false
+    return this.either(
+      'CarrierBasedReconnaissanceAircraft',
+      'CarrierBasedReconnaissanceAircraft2',
+      'ReconnaissanceSeaplane',
+      'LargeFlyingBoat',
+      'JetPoweredReconnaissanceAircraft',
+      'LandBasedReconnaissanceAircraft'
+    )
   }
 
   /** 航空戦に参加する航空機 */
@@ -138,28 +95,26 @@ export default class EquipmentCategory {
   }
 
   get isAircraft() {
-    switch (this.id) {
-      case EquipmentCategoryId.Autogyro:
-      case EquipmentCategoryId.AntiSubmarinePatrolAircraft:
-        return true
-    }
-    return this.isAerialCombatAircraft
+    const { isFighter, isDiveBomber, isTorpedoBomber, isReconnaissanceAircraft, either } = this
+
+    return (
+      isFighter ||
+      isDiveBomber ||
+      isTorpedoBomber ||
+      isReconnaissanceAircraft ||
+      either('Autogyro', 'AntiSubmarinePatrolAircraft')
+    )
   }
 
   get isArmor() {
-    const { is } = this
-    return is('ExtraArmor') || is('MediumExtraArmor') || is('LargeExtraArmor')
+    return this.either('ExtraArmor', 'MediumExtraArmor', 'LargeExtraArmor')
   }
 
   get isObservationPlane() {
-    const { is } = this
-    return is('SeaplaneBomber') || is('ReconnaissanceSeaplane')
+    return this.either('SeaplaneBomber', 'ReconnaissanceSeaplane')
   }
 
   get isMainGun() {
-    const { is } = this
-    return (
-      is('SmallCaliberMainGun') || is('MediumCaliberMainGun') || is('LargeCaliberMainGun') || is('LargeCaliberMainGun2')
-    )
+    return this.either('SmallCaliberMainGun', 'MediumCaliberMainGun', 'LargeCaliberMainGun', 'LargeCaliberMainGun2')
   }
 }

@@ -12,7 +12,8 @@ const createBonus: StatsBonusCreator = ship => {
   // 累積しない
   bonus.add({
     firepower: 3,
-    evasion: 2
+    evasion: 2,
+    armor: 1
   })
 
   const longRange = 3

@@ -23,9 +23,11 @@ const getReconnaissanceInterceptionPowerModifier = (equip: IEquipment) => {
   if (category.is('CarrierBasedReconnaissanceAircraft') || category.is('CarrierBasedReconnaissanceAircraft2')) {
     if (los <= 7) {
       return 1.2
-    } else if (los === 9) {
-      return 1.3
+    } else if (los === 8) {
+      // 予測値
+      return 1.25
     }
+    return 1.3
   }
   if (category.is('LandBasedReconnaissanceAircraft')) {
     return 1.18

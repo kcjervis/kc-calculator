@@ -1,4 +1,4 @@
-import { IEquipment } from '../objects'
+import { IEquipment } from '../../objects'
 
 export const equipmentFighterPowerMultiplier = (equipment: IEquipment) => {
   const { antiAir, interception, improvement } = equipment

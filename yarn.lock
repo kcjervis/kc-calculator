@@ -16,10 +16,10 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@kancolle/data@^2018.12.27":
-  version "2018.12.27"
-  resolved "https://registry.yarnpkg.com/@kancolle/data/-/data-2018.12.27.tgz#300aa4995a1d74a531a1aadd84c912dff5c0c852"
-  integrity sha512-F24AGxF/BOqV1JAJlmnGFwi8rysN8Zh3RZtAmDBkz67x6ck/QijsyLpMh8AEA2jP5eCVqjhM59yFep2bKmSzvw==
+"@kancolle/data@^2019.1.22":
+  version "2019.1.22"
+  resolved "https://registry.yarnpkg.com/@kancolle/data/-/data-2019.1.22.tgz#18d47d6c457a2b71f41b2fd88e84376d4902101b"
+  integrity sha512-/KLfwy0MTxC5yx1/XYQ14/vTQgklnTIJ6NsT6vUyQAKu9ZDSbDxGaUBbcEsLXu7hxlj0mxAvgqFO0fUxM0jkdQ==
 
 "@types/jest@^23.3.3":
   version "23.3.3"
@@ -3108,10 +3108,10 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-typescript@^3.2.2:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.2.2.tgz#fe8101c46aa123f8353523ebdcf5730c2ae493e5"
-  integrity sha512-VCj5UiSyHBjwfYacmDuc/NOk4QQixbE+Wn7MFJuS0nRuPQbof132Pw4u53dm264O8LPc2MVsc7RJNml5szurkg==
+typescript@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.1.tgz#6de14e1db4b8a006ac535e482c8ba018c55f750b"
+  integrity sha512-cTmIDFW7O0IHbn1DPYjkiebHxwtCMU+eTy30ZtJNBPF9j2O1ITu5XH2YnBeVRKWHqF+3JQwWJv0Q0aUgX8W7IA==
 
 uglify-js@^3.1.4:
   version "3.4.9"

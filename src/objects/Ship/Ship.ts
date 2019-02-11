@@ -1,6 +1,6 @@
-import { api_mst_equip_exslot } from '@kancolle/data'
 import { ListIterator } from 'lodash'
 import sumBy from 'lodash/sumBy'
+import { api_mst_equip_exslot } from '../../../data'
 
 import { IHealth } from './Health'
 import { IMorale } from './Morale'
@@ -32,6 +32,8 @@ export interface IShip {
   slots: number[]
   equipments: Array<IEquipment | undefined>
   planes: IPlane[]
+
+  canEquip: (equipment: IEquipment, slotIndex: number) => boolean
 
   hasEquipment: (iteratee: EquipmentIteratee<boolean, number>) => boolean
   countEquipment: (iteratee?: EquipmentIteratee<boolean, number>) => number
@@ -76,12 +78,22 @@ export default class Ship implements IShip {
 
   public canEquip = (equipment: IEquipment, slotIndex: number) => {
     const { equippable } = this.master
+    const { masterId, category } = equipment
+
+    if (!equippable.categories.includes(category.id)) {
+      return false
+    }
+
+    const turbine = 33
     if (this.slots.length <= slotIndex) {
       return (
-        api_mst_equip_exslot.includes(equipment.category.id) || equippable.expantionSlot.includes(equipment.masterId)
+        api_mst_equip_exslot.includes(category.id) ||
+        equippable.expantionSlot.includes(masterId) ||
+        masterId === turbine
       )
     }
-    return equippable.categories.includes(equipment.category.id)
+
+    return true
   }
 
   public hasEquipment = (iteratee: EquipmentIteratee<boolean, number>) => {

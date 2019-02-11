@@ -9,7 +9,7 @@ const createBonus: StatsBonusCreator = ship => {
 
   const egusaCount = ship.countEquipment(100)
   const model22634AirGroup = ship.countEquipment(291)
-  const model22634AirGroupSkilled = ship.countEquipment(291)
+  const model22634AirGroupSkilled = ship.countEquipment(292)
   const otherSuiseiCount = ship.countEquipment(24) + ship.countEquipment(57) + ship.countEquipment(111)
   const bonus = new StatsBonus()
 

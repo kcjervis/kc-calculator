@@ -1,4 +1,4 @@
-import { MstEquipment } from '@kancolle/data'
+import { MstEquipment } from '../../data'
 import EquipmentCategory from './EquipmentCategory'
 import EquipmentCategoryId from './EquipmentCategoryId'
 
@@ -56,7 +56,7 @@ export default class MasterEquipment implements IEquipmentData {
     this.typeIds = raw.api_type
 
     this.hp = raw.api_taik
-    this.armor = raw.api_taik
+    this.armor = raw.api_souk
     this.firepower = raw.api_houg
     this.torpedo = raw.api_raig
     this.speed = raw.api_soku

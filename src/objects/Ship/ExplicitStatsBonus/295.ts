@@ -13,8 +13,7 @@ const createBonus: StatsBonusCreator = ship => {
     bonus.add({
       multiplier: count295,
       firepower: 2,
-      torpedo: 1,
-      evasion: 2
+      antiAir: 2
     })
 
     // 相互シナジーボーナス

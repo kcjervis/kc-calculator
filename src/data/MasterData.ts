@@ -1,8 +1,7 @@
-import defaultRawMstData from '@kancolle/data'
-import improvements from '../../data/improvements.json'
-import defaultShipsData from '../../data/ships.json'
+import { api_mst_slotitem, improvements, ships as defaultShipsData } from '../../data'
 
 import EquipmentCategory from './EquipmentCategory'
+import EquipmentCategoryId from './EquipmentCategoryId'
 import MasterEquipment from './MasterEquipment'
 import MasterShip from './MasterShip'
 import ShipClass from './ShipClass'
@@ -18,9 +17,22 @@ export default class MasterData {
   /** 艦娘リスト */
   public readonly ships: MasterShip[]
 
-  constructor(public readonly rawData = defaultRawMstData, public readonly shipsData = defaultShipsData) {
-    this.equipments = rawData.api_mst_slotitem.map(raw => {
-      const equipmentCategory = EquipmentCategory.fromId(raw.api_type[2])
+  constructor(public readonly shipsData = defaultShipsData) {
+    this.equipments = api_mst_slotitem.map(raw => {
+      const masterId = raw.api_id
+      let categoryId = raw.api_type[2]
+
+      if (masterId === 128 || masterId === 281) {
+        // 試製51cm連装砲 51cm連装砲
+        categoryId = EquipmentCategoryId.LargeCaliberMainGun2
+      } else if (masterId === 142) {
+        // 15m二重測距儀＋21号電探改二
+        categoryId = EquipmentCategoryId.LargeRadar2
+      } else if (masterId === 151) {
+        // 試製景雲(艦偵型)
+        categoryId = EquipmentCategoryId.CarrierBasedReconnaissanceAircraft2
+      }
+      const equipmentCategory = EquipmentCategory.fromId(categoryId)
       const improvable = improvements.includes(raw.api_id)
       return new MasterEquipment(raw, equipmentCategory, improvable)
     })

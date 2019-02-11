@@ -1,4 +1,4 @@
-import { IShipData, TShipStat } from '../../data/ships.json'
+import { IShipData, TShipStat } from '../../data'
 import ShipClass from './ShipClass'
 import ShipType from './ShipType'
 
