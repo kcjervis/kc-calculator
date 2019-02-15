@@ -16,7 +16,7 @@ export const calculateArtillerySpottingBaseValue = (
   isFlagship?: boolean
 ) => {
   const { luck } = ship.stats
-  const luckFactor = Math.sqrt(luck) + 10
+  const luckFactor = Math.floor(Math.sqrt(luck) + 10)
   const equipmentsFactor = ship.totalEquipmentStats('los')
   const flagshipFactor = isFlagship ? 15 : 0
   if (airControlState === AirControlState.AirSupremacy) {
