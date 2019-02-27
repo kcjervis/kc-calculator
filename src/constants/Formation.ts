@@ -33,9 +33,8 @@ export default class Formation<Name extends string = string, Api extends number 
         return 1.1
       case Formation.CruisingFormation3:
         return 1.5
-      default:
-        return 1
     }
+    return 1
   }
 
   get shellingPowerModifier() {
@@ -52,9 +51,8 @@ export default class Formation<Name extends string = string, Api extends number 
         return 0.6
       case Formation.LineAbreast:
         return 0.6
-      default:
-        return 1
     }
+    return 1
   }
 
   get shellingAccuracyModifier() {
@@ -65,8 +63,22 @@ export default class Formation<Name extends string = string, Api extends number 
         return 1.2
       case Formation.LineAbreast:
         return 1.3
-      default:
-        return 1
     }
+    return 1
+  }
+
+  get nightBattleAccuracyModifier() {
+    switch (this) {
+      case Formation.LineAhead:
+        return 1
+      case Formation.DoubleLine:
+        return 0.9
+      case Formation.Diamond:
+        return 0.7
+      case Formation.Echelon:
+      case Formation.LineAbreast:
+        return 0.8
+    }
+    return 1
   }
 }

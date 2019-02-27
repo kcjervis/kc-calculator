@@ -1,3 +1,4 @@
+import flatMap from 'lodash/flatMap'
 import sumBy from 'lodash/sumBy'
 
 import EffectiveLos from '../../EffectiveLos'
@@ -30,7 +31,7 @@ export default class Fleet implements IFleet {
   }
 
   get planes() {
-    return this.nonNullableShips.flatMap(ship => ship.planes)
+    return flatMap(this.nonNullableShips, ship => ship.planes)
   }
 
   get fighterPower() {

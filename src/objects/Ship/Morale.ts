@@ -2,6 +2,7 @@ export interface IMorale {
   value: number
   state: 'Sparkling' | 'Normal' | 'Orange' | 'Red'
   shellingAccuracyModifier: number
+  nightBattleAccuracyModifier: number
 }
 
 export default class Morale implements IMorale {
@@ -30,5 +31,9 @@ export default class Morale implements IMorale {
       case 'Red':
         return 0.5
     }
+  }
+
+  get nightBattleAccuracyModifier() {
+    return this.shellingAccuracyModifier
   }
 }

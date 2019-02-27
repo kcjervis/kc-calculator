@@ -1,6 +1,0 @@
-[submodule "scripts/WhoCallsTheFleet-DB"]
-	path = scripts/WhoCallsTheFleet-DB
-	url = https://github.com/TeamFleet/WhoCallsTheFleet-DB.git
-[submodule "data/api_start2"]
-	path = data/api_start2
-	url = https://github.com/Tibo442/api_start2.git

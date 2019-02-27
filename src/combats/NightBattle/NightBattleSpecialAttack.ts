@@ -1,4 +1,6 @@
+import { Side } from '../../constants'
 import { IShip } from '../../objects'
+import { ISidedNightBattleState } from './INightBattleState'
 
 const Lookout = 129
 
@@ -58,10 +60,8 @@ const calcPreModifierValue = (ship: IShip) => {
 const calcBaseValue = (
   ship: IShip,
   isFlagship: boolean,
-  playerSearchlight: boolean,
-  enemySearchlight: boolean,
-  playerStarshell: boolean,
-  enemyStarshell: boolean
+  attackerSideState: ISidedNightBattleState,
+  defenderSideState: ISidedNightBattleState
 ) => {
   let baseValue = calcPreModifierValue(ship)
   if (isFlagship) {
@@ -73,35 +73,40 @@ const calcBaseValue = (
   if (ship.hasEquipment(Lookout)) {
     baseValue += 5
   }
-  if (playerSearchlight) {
+
+  if (attackerSideState.searchlight) {
     baseValue += 7
   }
-  if (enemySearchlight) {
+  if (defenderSideState.searchlight) {
     baseValue += -5
   }
-  if (playerStarshell) {
+  if (attackerSideState.starshell) {
     baseValue += 4
   }
-  if (enemyStarshell) {
+  if (defenderSideState.starshell) {
     baseValue += -10
   }
 
   return baseValue
 }
 
+const tryNightBattleSpecialAttack = (ship: IShip) => {
+  NightBattleSpecialAttack.getPossibleSpecialAttacks(ship)
+}
+
 export default class NightBattleSpecialAttack {
-  public static DoubleAttack = new NightBattleSpecialAttack(1, '連撃', 1.2)
-  public static MainTorp = new NightBattleSpecialAttack(2, '主魚', 1.3, 115)
-  public static TorpTorp = new NightBattleSpecialAttack(3, '魚雷', 1.5, 122)
+  public static DoubleAttack = new NightBattleSpecialAttack(1, '連撃', 110, 1.2, 1.1)
+  public static MainTorp = new NightBattleSpecialAttack(2, '主魚', 115, 1.3, 1.5)
+  public static TorpTorp = new NightBattleSpecialAttack(3, '魚雷', 122, 1.5, 1.6)
 
-  public static SubmarineTorpTorp = new NightBattleSpecialAttack(3, '潜水魚雷', 1.65, 110)
-  public static SubmarineRadarTorp = new NightBattleSpecialAttack(3, '潜水電探', 1.75, 102)
+  public static SubmarineTorpTorp = new NightBattleSpecialAttack(3, '潜水魚雷', 110, 1.65)
+  public static SubmarineRadarTorp = new NightBattleSpecialAttack(3, '潜水電探', 102, 1.75)
 
-  public static MainMainSecond = new NightBattleSpecialAttack(4, '主副', 1.75, 130)
-  public static MainMainMain = new NightBattleSpecialAttack(5, '主砲', 2, 140)
+  public static MainMainSecond = new NightBattleSpecialAttack(4, '主副', 130, 1.75, 1.65)
+  public static MainMainMain = new NightBattleSpecialAttack(5, '主砲', 140, 2, 1.5)
 
-  public static MainTorpRadar = new NightBattleSpecialAttack(7, '主魚電', 1.3, 130)
-  public static TorpRadarLookout = new NightBattleSpecialAttack(8, '魚見電', 1.2, 150)
+  public static MainTorpRadar = new NightBattleSpecialAttack(7, '主魚電', 130, 1.3)
+  public static TorpRadarLookout = new NightBattleSpecialAttack(8, '魚見電', 150, 1.2)
 
   public static getPossibleSpecialAttacks = getPossibleSpecialAttacks
 
@@ -109,10 +114,22 @@ export default class NightBattleSpecialAttack {
 
   public static calcBaseValue = calcBaseValue
 
+  public accuracyModifier: number
+
   constructor(
     public readonly id: number,
     public readonly name: string,
+    public readonly typeFactor: number,
     public readonly powerModifier: number,
-    public readonly typeFactor?: number
-  ) {}
+    accuracyModifier?: number
+  ) {
+    this.accuracyModifier = accuracyModifier ? accuracyModifier : 1.1
+  }
+
+  public calcRate = (baseValue: number) => {
+    if (this === NightBattleSpecialAttack.DoubleAttack) {
+      return 109 / 110
+    }
+    return Math.ceil(baseValue) / this.typeFactor
+  }
 }
