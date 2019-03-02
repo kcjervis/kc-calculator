@@ -22,18 +22,24 @@ const createBonus: StatsBonusCreator = ship => {
   }
 
   if (ship.name === '蒼龍改二') {
-    bonus.add({ firepower: 3, los: 3 })
+    if (improvementValue >= 1) {
+      bonus.add({ firepower: 3, los: 3 })
+    }
     if (improvementValue >= 8) {
       bonus.add({ firepower: 1, los: 1 })
     }
   }
 
   if (ship.name === '飛龍改二') {
-    bonus.add({ firepower: 2, los: 2 })
+    if (improvementValue >= 1) {
+      bonus.add({ firepower: 2, los: 2 })
+    }
   }
 
   if (['瑞鳳改二乙', '鈴谷航改二', '熊野航改二'].includes(ship.name)) {
-    bonus.add({ firepower: 1, los: 1 })
+    if (improvementValue >= 1) {
+      bonus.add({ firepower: 1, los: 1 })
+    }
   }
 
   return bonus
