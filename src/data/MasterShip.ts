@@ -1,8 +1,8 @@
-import { IShipData, TShipStat } from '../../data'
+import { ShipData, ShipStat } from '@jervis/data'
 import ShipClass from './ShipClass'
 import ShipType from './ShipType'
 
-const conversionStat = (stat: TShipStat): StatRange => {
+const conversionStat = (stat: ShipStat): StatRange => {
   if (typeof stat === 'number') {
     return [stat, stat]
   }
@@ -46,7 +46,7 @@ export default class MasterShip {
     expantionSlot: number[]
   }
 
-  constructor(shipData: IShipData, public readonly shipType: ShipType, public readonly shipClass: ShipClass) {
+  constructor(shipData: ShipData, public readonly shipType: ShipType, public readonly shipClass: ShipClass) {
     this.id = shipData.id
     this.sortNo = shipData.sortNo
     this.sortId = shipData.sortId

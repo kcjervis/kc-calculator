@@ -1,6 +1,12 @@
 import { IShip } from '../Ship'
 import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
+import largeCaliberMainGun from './largeCaliberMainGun'
+import mediumCaliberMainGun from './mediumCaliberMainGun'
+
+import carrierBasedFighterAircraft from './carrierBasedFighterAircraft'
+import carrierBasedReconnaissanceAircraft from './carrierBasedReconnaissanceAircraft'
+
 import createBonus104 from './104'
 import createBonus15 from './15'
 import createBonus174 from './174'
@@ -12,7 +18,6 @@ import createBonus267 from './267'
 import createBonus268 from './268'
 import createBonus285 from './285'
 import createBonus289 from './289'
-import createBonus290 from './290'
 import createBonus293 from './293'
 import createBonus294 from './294'
 import createBonus295 from './295'
@@ -23,12 +28,11 @@ import createBonus304 from './304'
 import createBonus307 from './307'
 import createBonus33 from './33'
 import createBonus58 from './58'
-import createBonus61 from './61'
 import createBonus63 from './63'
 import createBonus67 from './67'
+import antiAirShell from './antiAirShell'
 import createBonusBL16InchMkI from './BL16InchMkI'
 import createBonusJu87CKai2KMX from './Ju87CKai2KMX'
-import mediumCaliberMainGunBonusCreators from './mediumCaliberMainGun'
 import radar from './radar'
 import searchlightBonusCreators from './searchlight'
 import smallCaliberMainGunBonusCreators from './smallCaliberMainGun'
@@ -39,9 +43,13 @@ import createBonusType97TorpedoBomber931AirGroup from './Type97TorpedoBomber931A
 import createBonusZuiun634AirGroup from './Zuiun634AirGroup'
 
 export const statsBonusCreators: StatsBonusCreator[] = [
+  ...mediumCaliberMainGun,
+  ...largeCaliberMainGun,
+  ...carrierBasedFighterAircraft,
+  ...carrierBasedReconnaissanceAircraft,
   ...searchlightBonusCreators,
   ...smallCaliberMainGunBonusCreators,
-  ...mediumCaliberMainGunBonusCreators,
+  ...antiAirShell,
   ...torpedo,
   ...radar,
   ...sonar,
@@ -56,7 +64,6 @@ export const statsBonusCreators: StatsBonusCreator[] = [
   createBonus268,
   createBonus285,
   createBonus289,
-  createBonus290,
   createBonus293,
   createBonus294,
   createBonus295,
@@ -68,7 +75,6 @@ export const statsBonusCreators: StatsBonusCreator[] = [
   createBonus307,
   createBonus33,
   createBonus58,
-  createBonus61,
   createBonus63,
   createBonus67,
   createBonusBL16InchMkI,

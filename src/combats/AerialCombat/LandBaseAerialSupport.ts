@@ -1,4 +1,4 @@
-import flatMap from 'lodash/flatMap'
+import { flatMap } from 'lodash-es'
 
 import { AirControlState, Side } from '../../constants'
 import { ILandBasedAirCorps } from '../../objects'

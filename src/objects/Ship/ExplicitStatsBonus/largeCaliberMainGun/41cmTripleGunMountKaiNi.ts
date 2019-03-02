@@ -1,9 +1,9 @@
-import StatsBonus, { StatsBonusCreator } from './StatsBonus'
+import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
   // 41cm三連装砲改二
-  const count290 = ship.countEquipment(290)
-  if (count290 === 0) {
+  const multiplier = ship.countEquipment(290)
+  if (multiplier === 0) {
     return undefined
   }
   const bonus = new StatsBonus()
@@ -18,25 +18,12 @@ const createBonus: StatsBonusCreator = ship => {
 
   // 単体ボーナス
   if (isFusouClass && isKai2) {
-    bonus.add({
-      multiplier: count290,
-      firepower: 1
-    })
+    bonus.add({ multiplier, firepower: 1 })
   } else if (isIseClass) {
     if (isKai2) {
-      bonus.add({
-        multiplier: count290,
-        firepower: 3,
-        antiAir: 2,
-        evasion: 1
-      })
+      bonus.add({ multiplier, firepower: 3, antiAir: 2, evasion: 1 })
     } else {
-      bonus.add({
-        multiplier: count290,
-        firepower: 2,
-        antiAir: 2,
-        evasion: 1
-      })
+      bonus.add({ multiplier, firepower: 2, antiAir: 2, evasion: 1 })
     }
   }
 
@@ -44,10 +31,7 @@ const createBonus: StatsBonusCreator = ship => {
   // 対空電探
   if (ship.hasEquipment(equip => equip.isAntiAirRadar)) {
     if (isIseClass && isKai2) {
-      bonus.add({
-        antiAir: 2,
-        evasion: 3
-      })
+      bonus.add({ antiAir: 2, evasion: 3 })
     }
   }
 

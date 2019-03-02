@@ -1,4 +1,4 @@
-import sumBy from 'lodash/sumBy'
+import { sumBy } from 'lodash-es'
 
 import { nonNullable } from '../../utils'
 import { IEquipment } from '../Equipment'

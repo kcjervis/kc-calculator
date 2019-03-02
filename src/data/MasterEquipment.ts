@@ -1,4 +1,4 @@
-import { MstEquipment } from '../../data'
+import { MstEquipment } from '@jervis/data'
 import EquipmentCategory from './EquipmentCategory'
 import EquipmentCategoryId from './EquipmentCategoryId'
 

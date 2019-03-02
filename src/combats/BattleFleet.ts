@@ -1,5 +1,4 @@
-import maxBy from 'lodash/maxBy'
-import random from 'lodash/random'
+import { maxBy, random } from 'lodash-es'
 
 import { FleetRole, FleetType, Formation, Side } from '../constants'
 import AntiAirCutin from '../data/AntiAirCutin'
@@ -41,7 +40,7 @@ export default class BattleFleet implements IBattleFleet {
     public readonly landBase: ILandBasedAirCorps[],
     public readonly mainFleet: IFleet,
     public readonly escortFleet?: IFleet
-  ) {}
+  ) { }
 
   get fleetAntiAir() {
     return 1

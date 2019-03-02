@@ -1,4 +1,4 @@
-import random from 'lodash/random'
+import { random } from 'lodash-es'
 
 import { AirControlState, Side } from '../../constants'
 import AntiAirCutin from '../../data/AntiAirCutin'

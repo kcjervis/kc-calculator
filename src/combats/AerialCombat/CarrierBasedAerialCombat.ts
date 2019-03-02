@@ -1,4 +1,4 @@
-import flatMap from 'lodash/flatMap'
+import { flatMap } from 'lodash-es'
 
 import { IShip } from '../../objects'
 import { ICombatInformation } from '../CombatInformation'

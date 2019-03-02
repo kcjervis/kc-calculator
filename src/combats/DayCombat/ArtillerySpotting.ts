@@ -1,4 +1,4 @@
-import sumBy from 'lodash/sumBy'
+import { sumBy } from 'lodash-es'
 import { AirControlState } from '../../constants'
 import { IFleet, IShip } from '../../objects'
 

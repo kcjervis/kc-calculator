@@ -1,4 +1,4 @@
-import { api_mst_slotitem, improvements, ships as defaultShipsData } from '../../data'
+import { api_mst_slotitem, improvements, ships as defaultShipsData } from '@jervis/data'
 
 import EquipmentCategory from './EquipmentCategory'
 import EquipmentCategoryId from './EquipmentCategoryId'

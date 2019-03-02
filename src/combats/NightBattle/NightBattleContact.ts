@@ -1,5 +1,4 @@
-import flatMap from 'lodash/flatMap'
-import random from 'lodash/random'
+import { flatMap, random } from 'lodash-es'
 
 import { AirControlState } from '../../constants'
 import { IPlane, IShip } from '../../objects'

@@ -1,5 +1,4 @@
-import maxBy from 'lodash/maxBy'
-import sumBy from 'lodash/sumBy'
+import { maxBy, sumBy } from 'lodash-es'
 
 import { IEquipment } from '../Equipment'
 

@@ -1,6 +1,6 @@
+import { api_mst_equip_exslot } from '@jervis/data'
 import { ListIterator } from 'lodash'
-import sumBy from 'lodash/sumBy'
-import { api_mst_equip_exslot } from '../../../data'
+import { sumBy } from 'lodash-es'
 
 import { IHealth } from './Health'
 import { IMorale } from './Morale'

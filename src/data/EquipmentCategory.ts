@@ -1,4 +1,4 @@
-import { api_mst_slotitem_equiptype } from '../../data'
+import { api_mst_slotitem_equiptype } from '@jervis/data'
 import EquipmentCategoryId from './EquipmentCategoryId'
 
 export default class EquipmentCategory {
