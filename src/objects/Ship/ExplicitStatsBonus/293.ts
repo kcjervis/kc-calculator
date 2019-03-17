@@ -48,19 +48,20 @@ const createBonus: StatsBonusCreator = ship => {
         asw: 1
       })
     }
-    // 53cm連装魚雷
-    const count174 = ship.countEquipment(174)
-    if (count174 === 1) {
-      bonus.add({
-        firepower: 2,
-        torpedo: 4
-      })
-    } else if (count174 === 2) {
-      bonus.add({
-        firepower: 3,
-        torpedo: 7
-      })
-    }
+  }
+
+  // 53cm連装魚雷
+  const count174 = ship.countEquipment(174)
+  if (count174 === 1) {
+    bonus.add({
+      firepower: 2,
+      torpedo: 4
+    })
+  } else if (count174 === 2) {
+    bonus.add({
+      firepower: 3,
+      torpedo: 7
+    })
   }
 
   return bonus

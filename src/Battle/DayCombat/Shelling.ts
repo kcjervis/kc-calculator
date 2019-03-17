@@ -2,7 +2,7 @@ import { Formation } from '../../constants'
 import { IShip } from '../../objects'
 import { softcap } from '../../utils'
 
-export const shellingPower = (ship: IShip, formation: Formation, engagementModifier = 1, criticalModifier = 1) => {
+const calcShellingPower = (ship: IShip, formation: Formation, engagementModifier = 1, criticalModifier = 1) => {
   const { stats, health, totalEquipmentStats } = ship
   const basePower = 5 + stats.firepower + totalEquipmentStats(equip => equip.improvement.shellingPowerModifier)
   const preCap = basePower * formation.shellingPowerModifier * engagementModifier * health.shellingPowerModifier
@@ -13,7 +13,7 @@ export const shellingPower = (ship: IShip, formation: Formation, engagementModif
 
 const calculateFitModifier = (ship: IShip) => 0
 
-const shellingAccuracy = (
+const calcShellingAccuracy = (
   ship: IShip,
   formation: Formation,
   fitBonus = 0,
@@ -34,4 +34,17 @@ const shellingAccuracy = (
 
   const postFitBonus = baseAccuracy * formation.shellingAccuracyModifier * morale.shellingAccuracyModifier + fitBonus
   return Math.floor(postFitBonus * artillerySpottingAccuracyModifier * apShellAccuracyModifier)
+}
+
+export default class Shelling {
+  public static calcPower = calcShellingPower
+
+  public static calcAccuracy = calcShellingAccuracy
+
+  public power = 0
+  public accuracy = 0
+
+  constructor(ship: IShip, formation: Formation = Formation.LineAhead) {
+    this.power = calcShellingPower(ship, formation)
+  }
 }

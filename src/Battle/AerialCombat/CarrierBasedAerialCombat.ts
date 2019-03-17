@@ -4,6 +4,7 @@ import { IShip } from '../../objects'
 import { ICombatInformation } from '../CombatInformation'
 
 import AerialCombat from './AerialCombat'
+import AntiAirCutin from './AntiAirCutin'
 
 /**
  * 艦隊同士の航空戦
@@ -47,8 +48,9 @@ export default class CarrierBasedAerialCombat extends AerialCombat {
     const enemyAirstrikePlanes = enemyFighterCombatPlanes.filter(
       plane => plane.slotSize > 0 && plane.canParticipateInAirstrike
     )
-    this.antiAirDefense(playerAntiAirDefenseShips, enemyAirstrikePlanes, player.tryAntiAirCutin())
-    this.antiAirDefense(enemyAntiAirDefenseShips, playerAirstrikePlanes, enemy.tryAntiAirCutin())
+
+    this.antiAirDefense(playerAntiAirDefenseShips, enemyAirstrikePlanes, AntiAirCutin.try(player.allShips))
+    this.antiAirDefense(enemyAntiAirDefenseShips, playerAirstrikePlanes, AntiAirCutin.try(player.allShips))
 
     return {
       airControlState

@@ -31,13 +31,6 @@ export {
   BattleType
 } from './constants'
 
+export * from './Battle'
+
 export { nonNullable, softcap } from './utils'
-
-export {
-  LandBaseAerialSupport,
-  CarrierBasedAerialCombat,
-  NightBattleSpecialAttack,
-  DayCombatSpecialAttack
-} from './combats'
-
-export { ArtillerySpotting, AircraftCarrierCutin } from './combats/DayCombat'

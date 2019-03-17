@@ -1,6 +1,6 @@
 import { IEquipment, IEquipmentStats } from './Equipment'
 
-type EquipmentStatKey = keyof IEquipmentStats
+export type EquipmentStatKey = keyof IEquipmentStats
 
 const equipmentStatKeys: EquipmentStatKey[] = [
   'armor',
@@ -19,7 +19,7 @@ const equipmentStatKeys: EquipmentStatKey[] = [
   'radius'
 ]
 
-export { IEquipment, equipmentStatKeys, EquipmentStatKey }
+export { IEquipment, equipmentStatKeys }
 export { default as Proficiency, IProficiency } from './Proficiency'
 export { default as Improvement, IImprovement } from './Improvement'
 export { default as EquipmentFactory, IEquipmentDataObject } from './EquipmentFactory'

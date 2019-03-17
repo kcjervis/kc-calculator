@@ -31,6 +31,7 @@ export default class Morale implements IMorale {
       case 'Red':
         return 0.5
     }
+    return 0
   }
 
   get nightBattleAccuracyModifier() {

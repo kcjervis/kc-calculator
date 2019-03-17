@@ -1,4 +1,4 @@
-import { equipmentFighterPower, equipmentInterceptionPower } from '../../combats/AerialCombat/fighterCombat'
+import { equipmentFighterPower, equipmentInterceptionPower } from '../../Battle/AerialCombat/fighterCombat'
 import { AirControlState } from '../../constants'
 import { EquipmentCategory } from '../../data'
 import { IEquipment } from '../Equipment'

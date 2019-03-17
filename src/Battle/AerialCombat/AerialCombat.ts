@@ -1,10 +1,10 @@
 import { random } from 'lodash-es'
 
 import { AirControlState, Side } from '../../constants'
-import AntiAirCutin from '../../data/AntiAirCutin'
 import { IPlane, IShip } from '../../objects'
 import { ICombatInformation } from '../CombatInformation'
 import { fixedShotdownNumber, getCombinedFleetModifier, proportionalShotdownRate } from './antiAir'
+import AntiAirCutin from './AntiAirCutin'
 
 export default abstract class AerialCombat {
   constructor(readonly combatInformation: ICombatInformation) {}

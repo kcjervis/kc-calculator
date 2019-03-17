@@ -1,7 +1,4 @@
-import { maxBy, random } from 'lodash-es'
-
 import { FleetRole, FleetType, Formation, Side } from '../constants'
-import AntiAirCutin from '../data/AntiAirCutin'
 import { IFleet, ILandBasedAirCorps, IPlane, IShip } from '../objects'
 
 export interface IShipBattleInformation {
@@ -28,7 +25,6 @@ export interface IBattleFleet {
   isCombinedFleet: boolean
 
   getShipInformation: (ship: IShip) => IShipBattleInformation | undefined
-  tryAntiAirCutin: () => AntiAirCutin | undefined
 }
 
 export default class BattleFleet implements IBattleFleet {
@@ -40,7 +36,7 @@ export default class BattleFleet implements IBattleFleet {
     public readonly landBase: ILandBasedAirCorps[],
     public readonly mainFleet: IFleet,
     public readonly escortFleet?: IFleet
-  ) { }
+  ) {}
 
   get fleetAntiAir() {
     return 1
@@ -77,20 +73,4 @@ export default class BattleFleet implements IBattleFleet {
     }
     return undefined
   }
-
-  public tryAntiAirCutin() {
-    return tryAntiAirCutin(this.allShips)
-  }
-}
-
-const tryAntiAirCutin = (ships: IShip[]) => {
-  const possibleAntiAirCutins = new Array<AntiAirCutin>()
-  ships.forEach(ship => {
-    const randomNum = random(100)
-    const shipAntiAirCutin = AntiAirCutin.getPossibleAntiAirCutins(ship).find(aaci => aaci.probability > randomNum)
-    if (shipAntiAirCutin) {
-      possibleAntiAirCutins.push(shipAntiAirCutin)
-    }
-  })
-  return maxBy(possibleAntiAirCutins, aaci => aaci.api)
 }

@@ -19,7 +19,7 @@ export interface IFleet {
 }
 
 export default class Fleet implements IFleet {
-  constructor(public readonly ships: Array<IShip | undefined>) { }
+  constructor(public readonly ships: Array<IShip | undefined>) {}
 
   get nonNullableShips() {
     return this.ships.filter(nonNullable)

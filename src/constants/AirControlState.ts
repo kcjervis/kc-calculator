@@ -2,7 +2,7 @@
 export default class AirControlState<
   Name extends string = string,
   Constant extends number = number,
-  Api extends number = number
+  Id extends number = number
 > {
   public static readonly values = new Array<AirControlState<string, number, number>>()
 
@@ -26,11 +26,11 @@ export default class AirControlState<
     }
   }
 
-  public static fromApi(api: number) {
-    return AirControlState.values.find(airState => airState.api === api)
+  public static fromId(id: number) {
+    return AirControlState.values.find(airState => airState.id === id)
   }
 
-  private constructor(public readonly name: Name, public readonly constant: Constant, public readonly api: Api) {
+  private constructor(public readonly name: Name, public readonly constant: Constant, public readonly id: Id) {
     AirControlState.values.push(this)
   }
 

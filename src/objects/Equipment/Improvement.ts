@@ -22,6 +22,11 @@ export default class Improvement implements IImprovement {
     this.value = value ? value : 0
   }
 
+  /**
+   * https://t.co/Ou8KzFANPK
+   * https://twitter.com/shiro_sh39/status/1103281372548878337
+   *
+   */
   get contactSelectionModifier() {
     const { value, master } = this
     const { los, category } = master
@@ -29,15 +34,30 @@ export default class Improvement implements IImprovement {
       return 0
     }
     if (category.either('CarrierBasedReconnaissanceAircraft', 'CarrierBasedReconnaissanceAircraft2')) {
-      return 0.4 * value
+      if (los === 8) {
+        // 二式艦偵 [0.25, 3) または√☆
+        return 0.25 * value
+      }
+      if (los === 11) {
+        // 景雲 (0.333..., 0.4]
+        return 0.4 * value
+      }
+    } else {
+      if (los === 6) {
+        // 零観 (0.166..., 0.2]
+        return 0.2 * value
+      }
+      if (los >= 4) {
+        // 零偵 Ro.43 (0.125, 0.1428...]
+        return 0.14 * value
+      }
+      if (los === 3) {
+        // 夜偵 (0, 0.1]
+        return 0.1 * value
+      }
     }
-    if (los >= 6) {
-      return 0.2 * value
-    }
-    if (los >= 4) {
-      return 0.14 * value
-    }
-    return 0.1 * value
+
+    return 0
   }
 
   get fighterPowerModifier() {

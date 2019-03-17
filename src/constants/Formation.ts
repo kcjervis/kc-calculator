@@ -1,5 +1,5 @@
 /** 陣形 */
-export default class Formation<Name extends string = string, Api extends number = number> {
+export default class Formation<Name extends string = string, Id extends number = number> {
   public static all: Formation[] = []
 
   public static readonly LineAhead = new Formation('単縦陣', 1)
@@ -15,10 +15,10 @@ export default class Formation<Name extends string = string, Api extends number 
   public static readonly CruisingFormation4 = new Formation('第四警戒航行序列', 14)
 
   public static fromId(id: number) {
-    return Formation.all.find(({ api }) => api === id)
+    return Formation.all.find(form => form.id === id)
   }
 
-  private constructor(public readonly name: Name, public readonly api: Api) {
+  private constructor(public readonly name: Name, public readonly id: Id) {
     Formation.all.push(this)
   }
 

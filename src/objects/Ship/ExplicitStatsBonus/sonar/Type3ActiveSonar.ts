@@ -8,15 +8,17 @@ const createBonus: StatsBonusCreator = ship => {
   }
   const bonus = new StatsBonus()
 
+  const shipNameIs = (name: string) => name === ship.name || name + '改' === ship.name || name + '改二' === ship.name
+
   // 単体ボーナス
-  if (['神風', '春風', '時雨', '山風', '舞風', '朝霜'].some(name => ship.name.includes(name))) {
+  if (['神風', '春風', '時雨', '山風', '舞風', '朝霜'].some(shipNameIs)) {
     bonus.add({
       multiplier: count,
       firepower: 1,
       evasion: 2,
       asw: 3
     })
-  } else if (['潮', '雷', '山雲', '磯風', '浜風', '岸波'].some(name => ship.name.includes(name))) {
+  } else if (['潮', '雷', '山雲', '磯風', '浜風', '岸波'].some(shipNameIs)) {
     bonus.add({
       multiplier: count,
       evasion: 2,
