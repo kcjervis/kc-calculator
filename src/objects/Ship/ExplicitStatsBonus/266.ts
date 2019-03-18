@@ -1,4 +1,5 @@
 import StatsBonus, { StatsBonusCreator } from './StatsBonus'
+import { shipNameIsKai2 } from '../../../utils'
 
 const createBonus: StatsBonusCreator = ship => {
   // 12.7cm連装砲C型改二
@@ -16,7 +17,7 @@ const createBonus: StatsBonusCreator = ship => {
   const isKagerouClass = shipClass.is('KagerouClass')
 
   // 単体ボーナス
-  if (isKagerouClass && shipName.includes('改二')) {
+  if (isKagerouClass && shipNameIsKai2(shipName)) {
     if (count266 === 1) {
       bonus.add({
         firepower: 2

@@ -1,4 +1,5 @@
 import StatsBonus, { StatsBonusCreator } from './StatsBonus'
+import { shipNameIsKai2 } from '../../../utils'
 
 const createBonus: StatsBonusCreator = ship => {
   // 瑞雲(六三四空) 瑞雲12型(六三四空)
@@ -8,7 +9,7 @@ const createBonus: StatsBonusCreator = ship => {
   }
   const bonus = new StatsBonus()
 
-  const isKai2 = ship.name.includes('改二')
+  const isKai2 = shipNameIsKai2(ship.name)
   const { shipClass } = ship
 
   const isIseClass = shipClass.is('IseClass')

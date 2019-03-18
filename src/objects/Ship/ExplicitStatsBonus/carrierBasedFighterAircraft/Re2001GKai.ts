@@ -1,16 +1,16 @@
 import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
-  // Re.2005 改
-  const multiplier = ship.countEquipment(189)
+  // Re.2001 G改
+  const multiplier = ship.countEquipment(188)
   if (multiplier === 0) {
     return undefined
   }
   const bonus = new StatsBonus()
 
   // 単体ボーナス
-  if (ship.shipClass.either('AquilaClass', 'GrafZeppelinClass')) {
-    bonus.add({ multiplier, antiAir: 1, evasion: 2 })
+  if (ship.shipClass.is('AquilaClass')) {
+    bonus.add({ multiplier, firepower: 3, antiAir: 1, evasion: 1 })
   }
 
   return bonus

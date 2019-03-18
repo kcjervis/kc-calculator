@@ -1,4 +1,4 @@
-import { nonNullable } from '../../../utils'
+import { nonNullable, shipNameIsKai2 } from '../../../utils'
 import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
@@ -11,15 +11,11 @@ const createBonus: StatsBonusCreator = ship => {
   }
   const bonus = new StatsBonus()
 
-  const shipName = ship.name
-  const className = ship.shipClass.name
+  const { shipClass } = ship
+  const isKai2 = shipNameIsKai2(ship.name)
 
-  const isHatsuharuClass = className === '初春型'
-
-  const isKai2 = shipName.includes('改二')
-
-  const isSpecialTypeDDKai2 = ship.shipClass.isSpecialTypeDD && isKai2
-  const isHatsuharuClassKai2 = isHatsuharuClass && isKai2
+  const isSpecialTypeDDKai2 = shipClass.isSpecialTypeDD && isKai2
+  const isHatsuharuClassKai2 = shipClass.is('HatsuharuClass') && isKai2
 
   // 単体ボーナス
   if (isSpecialTypeDDKai2 || isHatsuharuClassKai2) {

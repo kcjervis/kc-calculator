@@ -4,51 +4,6 @@ import { ISidedNightBattleState } from './INightBattleState'
 
 const Lookout = 129
 
-const getPossibleSpecialAttacks = (ship: IShip) => {
-  const { shipType, hasEquipment, countEquipment, health } = ship
-  const possibleSpecialAttacks = new Array<NightBattleSpecialAttack>()
-
-  if (health.damage === 'Heavy') {
-    return possibleSpecialAttacks
-  }
-
-  const submarineTorpedoCount = countEquipment(equip => equip.category.is('SubmarineTorpedo'))
-  const torpedoCount = countEquipment(equip => equip.category.is('Torpedo')) + submarineTorpedoCount
-
-  // 駆逐カットイン
-  if (shipType.is('Destroyer') && hasEquipment(equip => equip.isSurfaceRadar) && torpedoCount >= 1) {
-    if (hasEquipment(equip => equip.category.is('SmallCaliberMainGun'))) {
-      possibleSpecialAttacks.push(NightBattleSpecialAttack.MainTorpRadar)
-    }
-    if (hasEquipment(Lookout)) {
-      possibleSpecialAttacks.push(NightBattleSpecialAttack.TorpRadarLookout)
-    }
-  }
-
-  const mainGunCount = countEquipment(equip => equip.category.isMainGun)
-  const secondaryGunCount = countEquipment(equip => equip.category.is('SecondaryGun'))
-
-  // 潜水カットイン
-  if (submarineTorpedoCount >= 1 && hasEquipment(equip => equip.category.is('SubmarineEquipment'))) {
-    possibleSpecialAttacks.push(NightBattleSpecialAttack.SubmarineRadarTorp)
-  } else if (submarineTorpedoCount >= 2) {
-    possibleSpecialAttacks.push(NightBattleSpecialAttack.SubmarineTorpTorp)
-  } else if (mainGunCount >= 3) {
-    // 以降汎用カットイン
-    possibleSpecialAttacks.push(NightBattleSpecialAttack.MainMainMain)
-  } else if (mainGunCount >= 2 && secondaryGunCount >= 1) {
-    possibleSpecialAttacks.push(NightBattleSpecialAttack.MainMainSecond)
-  } else if (torpedoCount >= 2) {
-    possibleSpecialAttacks.push(NightBattleSpecialAttack.TorpTorp)
-  } else if (mainGunCount >= 1 && torpedoCount >= 1) {
-    possibleSpecialAttacks.push(NightBattleSpecialAttack.MainTorp)
-  } else if (mainGunCount + secondaryGunCount >= 2) {
-    possibleSpecialAttacks.push(NightBattleSpecialAttack.DoubleAttack)
-  }
-
-  return possibleSpecialAttacks
-}
-
 const calcPreModifierValue = (ship: IShip) => {
   const { nakedStats, level } = ship
   if (nakedStats.luck < 50) {
@@ -90,10 +45,6 @@ const calcBaseValue = (
   return baseValue
 }
 
-const tryNightBattleSpecialAttack = (ship: IShip) => {
-  NightBattleSpecialAttack.getPossibleSpecialAttacks(ship)
-}
-
 export default class NightBattleSpecialAttack {
   public static DoubleAttack = new NightBattleSpecialAttack(1, '連撃', 110, 1.2, 1.1)
   public static MainTorp = new NightBattleSpecialAttack(2, '主魚', 115, 1.3, 1.5)
@@ -108,7 +59,50 @@ export default class NightBattleSpecialAttack {
   public static MainTorpRadar = new NightBattleSpecialAttack(7, '主魚電', 130, 1.3)
   public static TorpRadarLookout = new NightBattleSpecialAttack(8, '魚見電', 150, 1.2)
 
-  public static getPossibleSpecialAttacks = getPossibleSpecialAttacks
+  public static getPossibleSpecialAttacks = (ship: IShip) => {
+    const { shipType, hasEquipment, countEquipment, health } = ship
+    const possibleSpecialAttacks = new Array<NightBattleSpecialAttack>()
+
+    if (health.damage === 'Heavy') {
+      return possibleSpecialAttacks
+    }
+
+    const submarineTorpedoCount = countEquipment(equip => equip.category.is('SubmarineTorpedo'))
+    const torpedoCount = countEquipment(equip => equip.category.is('Torpedo')) + submarineTorpedoCount
+
+    // 駆逐カットイン
+    if (shipType.is('Destroyer') && hasEquipment(equip => equip.isSurfaceRadar) && torpedoCount >= 1) {
+      if (hasEquipment(equip => equip.category.is('SmallCaliberMainGun'))) {
+        possibleSpecialAttacks.push(NightBattleSpecialAttack.MainTorpRadar)
+      }
+      if (hasEquipment(Lookout)) {
+        possibleSpecialAttacks.push(NightBattleSpecialAttack.TorpRadarLookout)
+      }
+    }
+
+    const mainGunCount = countEquipment(equip => equip.category.isMainGun)
+    const secondaryGunCount = countEquipment(equip => equip.category.is('SecondaryGun'))
+
+    // 潜水カットイン
+    if (submarineTorpedoCount >= 1 && hasEquipment(equip => equip.category.is('SubmarineEquipment'))) {
+      possibleSpecialAttacks.push(NightBattleSpecialAttack.SubmarineRadarTorp)
+    } else if (submarineTorpedoCount >= 2) {
+      possibleSpecialAttacks.push(NightBattleSpecialAttack.SubmarineTorpTorp)
+    } else if (mainGunCount >= 3) {
+      // 以降汎用カットイン
+      possibleSpecialAttacks.push(NightBattleSpecialAttack.MainMainMain)
+    } else if (mainGunCount >= 2 && secondaryGunCount >= 1) {
+      possibleSpecialAttacks.push(NightBattleSpecialAttack.MainMainSecond)
+    } else if (torpedoCount >= 2) {
+      possibleSpecialAttacks.push(NightBattleSpecialAttack.TorpTorp)
+    } else if (mainGunCount >= 1 && torpedoCount >= 1) {
+      possibleSpecialAttacks.push(NightBattleSpecialAttack.MainTorp)
+    } else if (mainGunCount + secondaryGunCount >= 2) {
+      possibleSpecialAttacks.push(NightBattleSpecialAttack.DoubleAttack)
+    }
+
+    return possibleSpecialAttacks
+  }
 
   public static calcPreModifierValue = calcPreModifierValue
 

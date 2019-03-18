@@ -1,4 +1,5 @@
 import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import { shipNameIsKai2 } from '../../../../utils'
 
 const createBonus: StatsBonusCreator = ship => {
   // 41cm三連装砲改二
@@ -14,7 +15,7 @@ const createBonus: StatsBonusCreator = ship => {
   const isFusouClass = className === '扶桑型'
   const isIseClass = className === '伊勢型'
 
-  const isKai2 = shipName.includes('改二')
+  const isKai2 = shipNameIsKai2(ship.name)
 
   // 単体ボーナス
   if (isFusouClass && isKai2) {

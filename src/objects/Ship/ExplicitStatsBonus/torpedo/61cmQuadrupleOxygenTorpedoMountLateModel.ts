@@ -1,4 +1,4 @@
-import { nonNullable } from '../../../../utils'
+import { nonNullable, shipNameIsKai2 } from '../../../../utils'
 import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
@@ -13,7 +13,7 @@ const createBonus: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
 
   const { shipClass } = ship
-  const isKai2 = ship.name.includes('改二')
+  const isKai2 = shipNameIsKai2(ship.name)
   if (!isKai2) {
     return undefined
   }

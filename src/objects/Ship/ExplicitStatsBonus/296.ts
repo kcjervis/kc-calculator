@@ -9,20 +9,15 @@ const createBonus: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
 
   const shipName = ship.name
-  const className = ship.shipClass.name
-
-  const isAyanamiClass = className === '綾波型'
-  const isAkatsukiClass = className === '暁型'
-  const isHatsuharuClass = className === '初春型'
-  const isShiratsuyuClass = className === '白露型'
+  const { shipClass } = ship
 
   // 単体ボーナス
-  if (isAyanamiClass || isAkatsukiClass) {
+  if (shipClass.either('AyanamiClass', 'AkatsukiClass')) {
     bonus.add({
       multiplier: count296,
       firepower: 1
     })
-  } else if (isHatsuharuClass) {
+  } else if (shipClass.is('HatsuharuClass')) {
     bonus.add({
       multiplier: count296,
       firepower: 1,
@@ -61,7 +56,7 @@ const createBonus: StatsBonusCreator = ship => {
       firepower: 2,
       evasion: 2
     })
-  } else if (isShiratsuyuClass) {
+  } else if (shipClass.is('ShiratsuyuClass')) {
     bonus.add({
       multiplier: count296,
       firepower: 1
@@ -71,13 +66,13 @@ const createBonus: StatsBonusCreator = ship => {
   // 相互シナジーボーナス
   // 水上電探
   if (ship.hasEquipment(equip => equip.isSurfaceRadar)) {
-    if (isAyanamiClass || isAkatsukiClass || isHatsuharuClass) {
+    if (shipClass.either('AyanamiClass', 'AkatsukiClass', 'HatsuharuClass')) {
       bonus.add({
         firepower: 1,
         torpedo: 2,
         evasion: 2
       })
-    } else if (isShiratsuyuClass) {
+    } else if (shipClass.is('ShiratsuyuClass')) {
       bonus.add({
         firepower: 1,
         torpedo: 3,
@@ -87,11 +82,11 @@ const createBonus: StatsBonusCreator = ship => {
   }
   // 対空電探
   if (ship.hasEquipment(equip => equip.isAntiAirRadar)) {
-    if (isAyanamiClass || isAkatsukiClass || isHatsuharuClass) {
+    if (shipClass.either('AyanamiClass', 'AkatsukiClass', 'HatsuharuClass')) {
       bonus.add({
         antiAir: 5
       })
-    } else if (isShiratsuyuClass) {
+    } else if (shipClass.is('ShiratsuyuClass')) {
       bonus.add({
         antiAir: 6
       })
@@ -100,7 +95,7 @@ const createBonus: StatsBonusCreator = ship => {
 
   // 61cm三連装(酸素)魚雷後期型
   if (ship.hasEquipment(285)) {
-    if (isAyanamiClass || isAkatsukiClass || isHatsuharuClass) {
+    if (shipClass.either('AyanamiClass', 'AkatsukiClass', 'HatsuharuClass')) {
       bonus.add({
         firepower: 1,
         torpedo: 3
@@ -108,8 +103,8 @@ const createBonus: StatsBonusCreator = ship => {
     }
   }
   // 61cm四連装(酸素)魚雷後期型
-  if (ship.hasEquipment(285)) {
-    if (isShiratsuyuClass) {
+  if (ship.hasEquipment(286)) {
+    if (shipClass.is('ShiratsuyuClass')) {
       bonus.add({
         firepower: 1,
         torpedo: 3

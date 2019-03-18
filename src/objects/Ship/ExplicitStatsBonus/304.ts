@@ -9,7 +9,6 @@ const createBonus: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
 
   const { shipClass } = ship
-  const isKai2 = ship.name.includes('改二')
 
   if (
     shipClass.is('KumaClass') ||

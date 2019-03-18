@@ -1,4 +1,5 @@
 import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import { shipNameIsKai2 } from '../../../../utils'
 
 const bonusCreator: StatsBonusCreator = ship => {
   // 三式弾
@@ -9,7 +10,7 @@ const bonusCreator: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
 
   // 単体ボーナス
-  if (ship.shipClass.is('KongouClass') && !ship.name.includes('改二')) {
+  if (ship.shipClass.is('KongouClass') && !shipNameIsKai2(ship.name)) {
     bonus.add({
       firepower: 1,
       antiAir: 1

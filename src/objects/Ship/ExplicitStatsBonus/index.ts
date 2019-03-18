@@ -15,7 +15,6 @@ import createBonus229 from './229'
 import createBonus237 from './237'
 import createBonus266 from './266'
 import createBonus267 from './267'
-import createBonus268 from './268'
 import createBonus285 from './285'
 import createBonus289 from './289'
 import createBonus293 from './293'
@@ -25,12 +24,13 @@ import createBonus296 from './296'
 import createBonus297 from './297'
 import createBonus301 from './301'
 import createBonus304 from './304'
-import createBonus307 from './307'
 import createBonus33 from './33'
 import createBonus58 from './58'
 import createBonus63 from './63'
 import createBonus67 from './67'
+
 import antiAirShell from './antiAirShell'
+import armor from './armor'
 import createBonusBL16InchMkI from './BL16InchMkI'
 import createBonusJu87CKai2KMX from './Ju87CKai2KMX'
 import radar from './radar'
@@ -43,16 +43,18 @@ import createBonusType97TorpedoBomber931AirGroup from './Type97TorpedoBomber931A
 import createBonusZuiun634AirGroup from './Zuiun634AirGroup'
 
 export const statsBonusCreators: StatsBonusCreator[] = [
+  ...antiAirShell,
+  ...armor,
   ...mediumCaliberMainGun,
   ...largeCaliberMainGun,
   ...carrierBasedFighterAircraft,
   ...carrierBasedReconnaissanceAircraft,
   ...searchlightBonusCreators,
   ...smallCaliberMainGunBonusCreators,
-  ...antiAirShell,
   ...torpedo,
   ...radar,
   ...sonar,
+
   createBonus104,
   createBonus15,
   createBonus174,
@@ -61,7 +63,6 @@ export const statsBonusCreators: StatsBonusCreator[] = [
   createBonus237,
   createBonus266,
   createBonus267,
-  createBonus268,
   createBonus285,
   createBonus289,
   createBonus293,
@@ -72,7 +73,6 @@ export const statsBonusCreators: StatsBonusCreator[] = [
   createBonus301,
 
   createBonus304,
-  createBonus307,
   createBonus33,
   createBonus58,
   createBonus63,

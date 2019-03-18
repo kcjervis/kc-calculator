@@ -8,7 +8,8 @@ const createBonus: StatsBonusCreator = ship => {
   }
   const bonus = new StatsBonus()
 
-  const shipNameIs = (name: string) => name === ship.name || name + '改' === ship.name || name + '改二' === ship.name
+  const shipNameIs = (name: string) =>
+    ['', '改', '乙改', '改二', '改二乙', '改ニ丁'].map(grade => name + grade).includes(ship.name)
 
   // 単体ボーナス
   if (['神風', '春風', '時雨', '山風', '舞風', '朝霜'].some(shipNameIs)) {

@@ -121,11 +121,18 @@ export default class ShipClass {
    * 特型駆逐艦
    */
   get isSpecialTypeDD() {
-    return [ShipClassId.FubukiClass, ShipClassId.AyanamiClass, ShipClassId.AkatsukiClass].includes(this.id)
+    return this.either('FubukiClass', 'AyanamiClass', 'AkatsukiClass')
   }
 
   get isUsNavy() {
-    return this.either('JohnCButlerClass', 'FletcherClass', 'IowaClass', 'EssexClass', 'CasablancaClass')
+    return this.either(
+      'JohnCButlerClass',
+      'FletcherClass',
+      'IowaClass',
+      'LexingtonClass',
+      'EssexClass',
+      'CasablancaClass'
+    )
   }
 
   get isRoyalNavy() {

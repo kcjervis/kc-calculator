@@ -21,7 +21,7 @@ const createBonus: StatsBonusCreator = ship => {
   } else if (shipId === MasterShipId.KongouKai2) {
     bonus.add({
       multiplier: count,
-      firepower: 1
+      firepower: 2
     })
   } else if (shipId === MasterShipId.HieiKai2 || shipId === MasterShipId.KirishimaKai2) {
     bonus.add({

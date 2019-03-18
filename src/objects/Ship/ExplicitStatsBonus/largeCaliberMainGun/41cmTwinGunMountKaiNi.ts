@@ -1,4 +1,5 @@
 import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import { shipNameIsKai2 } from '../../../../utils'
 
 const createBonus: StatsBonusCreator = ship => {
   // 41cm連装砲改二
@@ -8,7 +9,9 @@ const createBonus: StatsBonusCreator = ship => {
   }
   const bonus = new StatsBonus()
 
-  const isNagatoClassKai2 = ship.shipClass.is('NagatoClass') && ship.name.includes('改二')
+  const isKai2 = shipNameIsKai2(ship.name)
+
+  const isNagatoClassKai2 = ship.shipClass.is('NagatoClass') && isKai2
   const isIseClassAviationBattleship = ship.shipType.is('AviationBattleship') && ship.shipClass.is('IseClass')
 
   // 単体ボーナス
@@ -20,7 +23,7 @@ const createBonus: StatsBonusCreator = ship => {
     bonus.add({ multiplier, firepower: 2, antiAir: 2, evasion: 2 })
   }
 
-  if (ship.shipClass.is('FusouClass') && ship.name.includes('改二')) {
+  if (ship.shipClass.is('FusouClass') && isKai2) {
     bonus.add({ multiplier, firepower: 1 })
   }
 
