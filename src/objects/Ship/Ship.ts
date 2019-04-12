@@ -8,7 +8,7 @@ import { IShipNakedStats } from './ShipNakedStats'
 import { IShipStats } from './ShipStats'
 
 import { MasterShip, ShipClass, ShipType } from '../../data'
-import { nonNullable } from '../../utils'
+import { nonNullable, shipNameIsKai2 } from '../../utils'
 import { IEquipment } from '../Equipment'
 import { IPlane } from '../Plane'
 
@@ -84,13 +84,17 @@ export default class Ship implements IShip {
       return false
     }
 
-    const turbine = 33
     if (this.slots.length <= slotIndex) {
+      const turbine = 33
       return (
         api_mst_equip_exslot.includes(category.id) ||
         equippable.expantionSlot.includes(masterId) ||
         masterId === turbine
       )
+    }
+
+    if (this.shipClass.is('IseClass') && shipNameIsKai2(this.name)) {
+      return !(slotIndex > 1 && category.isMainGun)
     }
 
     return true

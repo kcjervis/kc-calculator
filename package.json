@@ -19,19 +19,7 @@
     "db": "yarn run ts-node --files scripts/db"
   },
   "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest",
-      "automock": true
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
+    "preset": "ts-jest"
   },
   "dependencies": {
     "lodash-es": "^4.17.11"
@@ -40,16 +28,16 @@
     "@types/jest": "^24.0.11",
     "@types/lodash-es": "^4.17.3",
     "@types/nedb": "^1.8.7",
-    "@types/node": "^11.11.3",
-    "@typescript-eslint/eslint-plugin": "^1.4.2",
+    "@types/node": "^11.13.4",
+    "@typescript-eslint/eslint-plugin": "^1.6.0",
     "eslint": "^5.15.2",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
-    "jest": "^24.5.0",
+    "jest": "^24.7.1",
     "nedb": "^1.8.0",
     "prettier": "^1.16.4",
-    "ts-jest": "^24.0.0",
+    "ts-jest": "^24.0.2",
     "ts-node": "^8.0.3",
-    "typescript": "^3.3.1"
+    "typescript": "^3.4.3"
   }
 }

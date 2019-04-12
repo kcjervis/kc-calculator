@@ -12,7 +12,6 @@ import createBonus15 from './15'
 import createBonus174 from './174'
 import createBonus179 from './179'
 import createBonus229 from './229'
-import createBonus237 from './237'
 import createBonus266 from './266'
 import createBonus267 from './267'
 import createBonus285 from './285'
@@ -40,7 +39,9 @@ import sonar from './sonar'
 import createBonusSuisei from './Suisei'
 import torpedo from './torpedo'
 import createBonusType97TorpedoBomber931AirGroup from './Type97TorpedoBomber931AirGroup'
-import createBonusZuiun634AirGroup from './Zuiun634AirGroup'
+
+import SeaplaneBomber from './SeaplaneBomber'
+import Autogyro from './Autogyro'
 
 export const statsBonusCreators: StatsBonusCreator[] = [
   ...antiAirShell,
@@ -55,12 +56,14 @@ export const statsBonusCreators: StatsBonusCreator[] = [
   ...radar,
   ...sonar,
 
+  ...SeaplaneBomber,
+  ...Autogyro,
+
   createBonus104,
   createBonus15,
   createBonus174,
   createBonus179,
   createBonus229,
-  createBonus237,
   createBonus266,
   createBonus267,
   createBonus285,
@@ -80,8 +83,7 @@ export const statsBonusCreators: StatsBonusCreator[] = [
   createBonusBL16InchMkI,
   createBonusJu87CKai2KMX,
   createBonusSuisei,
-  createBonusType97TorpedoBomber931AirGroup,
-  createBonusZuiun634AirGroup
+  createBonusType97TorpedoBomber931AirGroup
 ]
 
 export const createExplicitStatsBonus = (ship: IShip) => {

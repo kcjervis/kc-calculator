@@ -19,7 +19,7 @@ const bonusCreator: StatsBonusCreator = ship => {
       los: 4
     })
     bonus.add({
-      range: 2
+      range: 1
     })
   } else if (shipClass.isUsNavy) {
     bonus.add({

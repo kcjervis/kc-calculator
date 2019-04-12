@@ -7,6 +7,6 @@ export const softcap = (cap: number, value: number) => {
   return value + Math.sqrt(value - cap)
 }
 
-export const shipNameIsKai2 = (name: string) => {
-  return name.includes('改二') || name === 'Верный'
-}
+export const shipNameIsKai = (name: string) => /改$/.test(name)
+
+export const shipNameIsKai2 = (name: string) => /(改二|Верный)/.test(name)

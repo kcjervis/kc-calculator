@@ -1,5 +1,5 @@
-import StatsBonus, { StatsBonusCreator } from './StatsBonus'
-import { shipNameIsKai2 } from '../../../utils'
+import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import { shipNameIsKai2 } from '../../../../utils'
 
 const createBonus: StatsBonusCreator = ship => {
   // 瑞雲(六三四空/熟練)
