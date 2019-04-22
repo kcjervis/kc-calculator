@@ -7,17 +7,16 @@ const createBonus: StatsBonusCreator = ship => {
     return undefined
   }
 
-  const className = ship.shipClass.name
+  const bonus = new StatsBonus()
 
-  const isKamikazeClass = className === '神風型'
+  const { shipClass } = ship
 
   // 単体ボーナス
-  if (isKamikazeClass) {
-    return new StatsBonus({
-      multiplier: count,
-      torpedo: 1,
-      evasion: 2
-    })
+  if (shipClass.is('KamikazeClass')) {
+    bonus.add({ multiplier: count, torpedo: 1, evasion: 2 })
+  }
+  if (shipClass.is('KongouClass')) {
+    bonus.add({ multiplier: count, torpedo: 6, evasion: 3 })
   }
 
   return undefined

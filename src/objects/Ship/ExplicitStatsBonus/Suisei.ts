@@ -12,6 +12,8 @@ const createBonus: StatsBonusCreator = ship => {
   const model22634AirGroup = ship.countEquipment(291)
   const model22634AirGroupSkilled = ship.countEquipment(292)
   const otherSuiseiCount = ship.countEquipment(24) + ship.countEquipment(57) + ship.countEquipment(111)
+  // 三号爆弾搭載機
+  const type3ClusterBombsCount = ship.countEquipment(319)
   const bonus = new StatsBonus()
 
   if (egusaCount) {
@@ -41,6 +43,15 @@ const createBonus: StatsBonusCreator = ship => {
     bonus.add({
       multiplier: otherSuiseiCount,
       firepower: 2
+    })
+  }
+
+  if (type3ClusterBombsCount) {
+    bonus.add({
+      multiplier: type3ClusterBombsCount,
+      firepower: 7,
+      antiAir: 3,
+      evasion: 2
     })
   }
 

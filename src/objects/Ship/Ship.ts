@@ -30,6 +30,7 @@ export interface IShip {
   morale: IMorale
 
   slots: number[]
+  slotCapacities: number[]
   equipments: Array<IEquipment | undefined>
   planes: IPlane[]
 
@@ -38,9 +39,13 @@ export interface IShip {
   hasEquipment: (iteratee: EquipmentIteratee<boolean, number>) => boolean
   countEquipment: (iteratee?: EquipmentIteratee<boolean, number>) => number
   totalEquipmentStats: (iteratee: ((equip: IEquipment) => number) | keyof IEquipment) => number
+
+  canNightAttack: boolean
 }
 
 export default class Ship implements IShip {
+  public slotCapacities: number[]
+
   constructor(
     private readonly master: MasterShip,
     public readonly stats: IShipStats,
@@ -50,7 +55,9 @@ export default class Ship implements IShip {
     public readonly slots: number[],
     public readonly equipments: Array<IEquipment | undefined>,
     public readonly planes: IPlane[]
-  ) {}
+  ) {
+    this.slotCapacities = master.slotCapacities.concat()
+  }
 
   get masterId() {
     return this.master.id
@@ -120,5 +127,18 @@ export default class Ship implements IShip {
 
   public totalEquipmentStats = (iteratee: ((equip: IEquipment) => number) | keyof IEquipment) => {
     return sumBy(this.nonNullableEquipments, iteratee)
+  }
+
+  get canNightAttack() {
+    const { shipClass, shipType, health, master } = this
+    if (health.damage === 'Heavy') {
+      return false
+    }
+
+    if (shipClass.is('ArkRoyalClass')) {
+      const swordfishes = [242, 243, 244]
+      return health.damage !== 'Moderate' && this.hasEquipment(equip => swordfishes.includes(equip.masterId))
+    }
+    return master.firepower[0] > 0
   }
 }

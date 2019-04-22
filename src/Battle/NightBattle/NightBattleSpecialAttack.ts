@@ -60,10 +60,10 @@ export default class NightBattleSpecialAttack {
   public static TorpRadarLookout = new NightBattleSpecialAttack(8, '魚見電', 150, 1.2)
 
   public static getPossibleSpecialAttacks = (ship: IShip) => {
-    const { shipType, hasEquipment, countEquipment, health } = ship
+    const { shipType, hasEquipment, countEquipment } = ship
     const possibleSpecialAttacks = new Array<NightBattleSpecialAttack>()
 
-    if (health.damage === 'Heavy') {
+    if (!ship.canNightAttack) {
       return possibleSpecialAttacks
     }
 
