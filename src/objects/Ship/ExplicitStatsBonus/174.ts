@@ -19,7 +19,7 @@ const createBonus: StatsBonusCreator = ship => {
     bonus.add({ multiplier: count, torpedo: 6, evasion: 3 })
   }
 
-  return undefined
+  return bonus
 }
 
 export default createBonus

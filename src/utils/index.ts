@@ -9,4 +9,4 @@ export const softcap = (cap: number, value: number) => {
 
 export const shipNameIsKai = (name: string) => /改$/.test(name)
 
-export const shipNameIsKai2 = (name: string) => /(改二|Верный)/.test(name)
+export const shipNameIsKai2 = (name: string) => /(改二|Верный)(?!丙)/.test(name)

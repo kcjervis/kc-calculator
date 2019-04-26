@@ -141,14 +141,14 @@ export default (ship: IShip) => {
       possibleAntiAirCutinIds.push(6)
     }
 
-    // 高射装置を装備かつ 高角砲を装備 かつ 対空電探を装備
-    if (hasSome(isAAFD) && hasSome(isHighAngleMount) && hasSome(isAARadar)) {
-      possibleAntiAirCutinIds.push(7)
-    }
-
     // 特殊高角砲を装備 かつ 対空電探を装備
     if (hasSome(isBuiltinHighAngleMount) && hasSome(isAARadar)) {
       possibleAntiAirCutinIds.push(8)
+    }
+
+    // 高射装置を装備かつ 高角砲を装備 かつ 対空電探を装備
+    if (hasSome(isAAFD) && hasSome(isHighAngleMount) && hasSome(isAARadar)) {
+      possibleAntiAirCutinIds.push(7)
     }
 
     // 武蔵改二 かつ 10cm連装高角砲改＋増設機銃を装備 かつ 対空電探を装備

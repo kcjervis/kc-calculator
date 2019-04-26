@@ -10,7 +10,7 @@ const bonusCreator: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
 
   // 単体ボーナス
-  if (ship.name === '金剛改二') {
+  if (ship.name === '金剛改二' || ship.name === '金剛改二丙') {
     bonus.add({ firepower: 3, antiAir: 3 })
   } else if (ship.name === '比叡改二') {
     bonus.add({ firepower: 2, antiAir: 2 })
