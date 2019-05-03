@@ -65,13 +65,23 @@ export default class LandBasedAirCorps implements ILandBasedAirCorps {
     return this.equipments.filter(nonNullable)
   }
 
+  private get hasPlanes() {
+    return this.nonNullableEquipments.length > 0
+  }
+
   get fighterPower() {
+    if (!this.hasPlanes) {
+      return 0
+    }
     const total = sumBy(this.planes, plane => plane.fighterPower)
     const reconnaissanceModifier = Math.max(...this.nonNullableEquipments.map(getReconnaissanceFighterPowerModifier))
     return Math.floor(total * reconnaissanceModifier)
   }
 
   get interceptionPower() {
+    if (!this.hasPlanes) {
+      return 0
+    }
     const total = sumBy(this.planes, plane => plane.interceptionPower)
     const reconnaissanceModifier = Math.max(
       ...this.nonNullableEquipments.map(getReconnaissanceInterceptionPowerModifier)
@@ -80,10 +90,16 @@ export default class LandBasedAirCorps implements ILandBasedAirCorps {
   }
 
   get minCombatRadius() {
+    if (!this.hasPlanes) {
+      return 0
+    }
     return Math.min(...this.nonNullableEquipments.map(equip => equip.radius))
   }
 
   get combatRadius() {
+    if (!this.hasPlanes) {
+      return 0
+    }
     const { minCombatRadius, nonNullableEquipments } = this
     const maxReconRadius = Math.max(
       ...nonNullableEquipments.map(({ radius, category }) => {

@@ -47,7 +47,7 @@ export default class Speed<Value extends SpeedValue = SpeedValue, Name extends s
 
     if (
       isFastAV ||
-      shipType.isSubmarine ||
+      shipType.isSubmarineClass ||
       ['加賀型', '夕張型', '特種船丙型', '工作艦', '改風早型'].includes(className)
     ) {
       return SpeedGroup.OtherC

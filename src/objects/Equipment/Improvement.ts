@@ -103,23 +103,32 @@ export default class Improvement implements IImprovement {
   }
 
   get shellingPowerModifier() {
-    const { firepower, category } = this.master
+    const { firepower, category, id: masterId } = this.master
+
+    const isDepthCharge = [226, 227].includes(masterId)
 
     if (
-      category.is('Torpedo') ||
-      category.is('MidgetSubmarine') ||
+      isDepthCharge ||
       category.isRadar ||
       category.isArmor ||
-      category.is('EngineImprovement')
+      category.isAircraft ||
+      category.either('Torpedo', 'MidgetSubmarine', 'EngineImprovement', 'CombatRation')
     ) {
       return 0
+    }
+
+    if ([10, 66, 220, 275].includes(masterId)) {
+      return 0.2 * this.value
+    }
+    if ([12, 234, 247].includes(masterId)) {
+      return 0.3 * this.value
     }
 
     let multiplier = 1
 
     if (firepower > 12) {
       multiplier = 1.5
-    } else if (category.is('Sonar') || category.is('LargeSonar') || category.is('DepthCharge')) {
+    } else if (category.either('Sonar', 'LargeSonar', 'DepthCharge')) {
       multiplier = 0.75
     }
 

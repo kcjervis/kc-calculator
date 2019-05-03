@@ -10,7 +10,7 @@ export default class ShipType {
     return new ShipType(raw.api_id, raw.api_name, equippableCategoryIds)
   })
 
-  public static fromId(id: number) {
+  public static fromId = (id: number) => {
     const found = ShipType.all.find(shipType => shipType.id === id)
     if (found) {
       return found
@@ -30,7 +30,7 @@ export default class ShipType {
     }
   }
 
-  public is(key: keyof typeof ShipTypeId) {
+  public is = (key: keyof typeof ShipTypeId) => {
     return this.id === ShipTypeId[key]
   }
 
@@ -46,30 +46,41 @@ export default class ShipType {
   }
 
   /**
-   * 戦艦系
+   * 軽巡級
+   * 軽巡,雷巡,練巡
    */
-  get isBattleship() {
-    return [
-      ShipTypeId.Battlecruiser,
-      ShipTypeId.Battleship,
-      ShipTypeId.AviationBattleship,
-      ShipTypeId.SuperDreadnoughts
-    ].includes(this.id)
+  get isLightCruiserClass() {
+    return this.either('LightCruiser', 'TorpedoCruiser', 'TrainingCruiser')
   }
 
   /**
-   * 空母系
+   * 重巡級
+   * 重巡,航巡
    */
-  get isAircraftCarrier() {
-    return [ShipTypeId.LightAircraftCarrier, ShipTypeId.AircraftCarrier, ShipTypeId.ArmoredAircraftCarrier].includes(
-      this.id
-    )
+  get isHeavyCruiserClass() {
+    return this.either('HeavyCruiser', 'AviationCruiser')
   }
 
   /**
-   * 潜水系
+   * 戦艦級
+   * 戦艦,巡洋戦艦,航空戦艦,超弩級戦艦
    */
-  get isSubmarine() {
+  get isBattleshipClass() {
+    return this.either('Battlecruiser', 'Battleship', 'AviationBattleship', 'SuperDreadnoughts')
+  }
+
+  /**
+   * 空母級
+   * 軽空母,正規空母,装甲空母
+   */
+  get isAircraftCarrierClass() {
+    return this.either('LightAircraftCarrier', 'AircraftCarrier', 'ArmoredAircraftCarrier')
+  }
+
+  /**
+   * 潜水級
+   */
+  get isSubmarineClass() {
     return [ShipTypeId.Submarine, ShipTypeId.SubmarineAircraftCarrier].includes(this.id)
   }
 }

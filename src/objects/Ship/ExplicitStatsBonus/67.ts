@@ -8,7 +8,7 @@ const createBonus: StatsBonusCreator = ship => {
   }
   const bonus = new StatsBonus()
 
-  if (!ship.shipType.isSubmarine) {
+  if (!ship.shipType.isSubmarineClass) {
     bonus.add({
       multiplier: count,
       torpedo: -5

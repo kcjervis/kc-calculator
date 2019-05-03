@@ -1,4 +1,5 @@
 import { IEquipment, IShip } from '../../../objects'
+import { shipNameIsKai2 } from '../../../utils'
 
 export default (ship: IShip) => {
   enum MasterShipId {
@@ -19,7 +20,6 @@ export default (ship: IShip) => {
   }
 
   const shipIs = (masterId: MasterShipId) => ship.masterId === masterId
-  const isIseClassKai = ship.shipClass.is('IseClass') && ship.masterId !== 77 && ship.masterId !== 87
 
   type EquipmentIteratee = (equip: IEquipment) => boolean
 
@@ -121,8 +121,14 @@ export default (ship: IShip) => {
     } else if (shipIs(MasterShipId.YuraKai2) && hasSome(isHighAngleMount) && hasSome(isAARadar)) {
       possibleAntiAirCutinIds.push(21)
 
-      // 伊勢型改 かつ 12㎝30連装噴進砲改二を装備 かつ 対空強化弾(三式弾)を装備 かつ 対空電探を装備
-    } else if (isIseClassKai && hasSome(is12cm30tubeRocketLauncherKai2) && hasSome(isAAShell) && hasSome(isAARadar)) {
+      // 伊勢型航空戦艦 かつ 12㎝30連装噴進砲改二を装備 かつ 対空強化弾(三式弾)を装備 かつ 対空電探を装備
+    } else if (
+      ship.shipClass.is('IseClass') &&
+      ship.shipType.is('AviationBattleship') &&
+      hasSome(is12cm30tubeRocketLauncherKai2) &&
+      hasSome(isAAShell) &&
+      hasSome(isAARadar)
+    ) {
       possibleAntiAirCutinIds.push(25)
     }
 
@@ -156,8 +162,12 @@ export default (ship: IShip) => {
       possibleAntiAirCutinIds.push(26)
     }
 
-    // (伊勢型改 または 武蔵改 または 武蔵改二) かつ 12㎝30連装噴進砲改二を装備 かつ 対空電探を装備
-    if (isIseClassKai || shipIs(MasterShipId.MusashiKai) || shipIs(MasterShipId.MusashiKai2)) {
+    // (伊勢型航空戦艦|武蔵改|武蔵改二) かつ 12㎝30連装噴進砲改二を装備 かつ 対空電探を装備
+    if (
+      (ship.shipClass.is('IseClass') && ship.shipType.is('AviationBattleship')) ||
+      shipIs(MasterShipId.MusashiKai) ||
+      shipIs(MasterShipId.MusashiKai2)
+    ) {
       if (hasSome(is12cm30tubeRocketLauncherKai2) && hasSome(isAARadar)) {
         possibleAntiAirCutinIds.push(28)
       }
@@ -173,6 +183,11 @@ export default (ship: IShip) => {
     // 高射装置を装備 かつ 高角砲を装備
     if (hasSome(isAAFD) && hasSome(isHighAngleMount)) {
       possibleAntiAirCutinIds.push(9)
+    }
+
+    // Gotland改 かつ 高角砲を装備 かつ 対空機銃を装備
+    if (ship.name === 'Gotland改' && ship.hasEquipment(isHighAngleMount) && ship.hasEquipment(isNormalAAGun)) {
+      possibleAntiAirCutinIds.push(33)
     }
 
     // 特殊機銃を装備 かつ 標準機銃または特殊機銃を装備 かつ 対空電探を装備
@@ -208,8 +223,28 @@ export default (ship: IShip) => {
     }
 
     // 龍田改二 かつ 高角砲を装備 かつ 標準機銃を装備
-    if (shipIs(MasterShipId.TatsutaKai2) && hasSome(isHighAngleMount) && hasSome(isNormalAAGun)) {
+    if (['龍田改二', '天龍改二'].includes(ship.name) && hasSome(isHighAngleMount) && hasSome(isNormalAAGun)) {
       possibleAntiAirCutinIds.push(24)
+    }
+
+    // (天龍改二 または Gotland改) かつ 高角砲を3つ以上装備
+    if (['天龍改二', 'Gotland改'].includes(ship.name) && ship.countEquipment(isHighAngleMount) >= 3) {
+      possibleAntiAirCutinIds.push(30)
+    }
+
+    // 天龍改二 かつ 高角砲を2つ以上装備
+    if (ship.name === '天龍改二' && ship.countEquipment(isHighAngleMount) >= 2) {
+      possibleAntiAirCutinIds.push(31)
+    }
+
+    if (ship.shipClass.isRoyalNavy || (ship.shipClass.is('KongouClass') && ship.name.includes('改二'))) {
+      if (
+        ship.countEquipment(301) >= 2 ||
+        (ship.hasEquipment(301) && ship.hasEquipment(191)) ||
+        (ship.hasEquipment(300) && ship.hasEquipment(191))
+      ) {
+        possibleAntiAirCutinIds.push(32)
+      }
     }
   }
   return possibleAntiAirCutinIds

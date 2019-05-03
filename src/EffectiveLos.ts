@@ -1,6 +1,6 @@
 import { sumBy } from 'lodash-es'
 import { IEquipment, IFleet, IShip } from './objects'
-import carrierBasedReconnaissanceAircraftBonus from './objects/Ship/ExplicitStatsBonus/carrierBasedReconnaissanceAircraft'
+import carrierBasedReconnaissanceAircraftBonus from './objects/Ship/ExplicitStatsBonus/艦上偵察機'
 
 const equipmentEffectiveLos = (equipment: IEquipment) => {
   const { category, los, improvement } = equipment

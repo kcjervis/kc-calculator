@@ -34,6 +34,6 @@ export default class Operation implements IOperation {
   }
 
   get isCombinedFleetOperation() {
-    return Boolean(this.fleetType !== FleetType.Single)
+    return this.fleetType !== FleetType.Single
   }
 }

@@ -1,6 +1,6 @@
 import { nonNullable } from '../../../../utils'
 import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
-import type2ReconnaissanceAircraft from './type2ReconnaissanceAircraft'
+import 二式艦上偵察機 from './二式艦上偵察機'
 
 const improvementBonus: StatsBonusCreator = ship => {
   const improvements = ship.equipments
@@ -26,4 +26,4 @@ const improvementBonus: StatsBonusCreator = ship => {
   return bonus
 }
 
-export default [improvementBonus, type2ReconnaissanceAircraft]
+export default [improvementBonus, 二式艦上偵察機]

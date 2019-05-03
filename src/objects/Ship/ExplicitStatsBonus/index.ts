@@ -1,11 +1,8 @@
 import { IShip } from '../Ship'
 import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
-import largeCaliberMainGun from './largeCaliberMainGun'
+import 大口径主砲 from './大口径主砲'
 import mediumCaliberMainGun from './mediumCaliberMainGun'
-
-import carrierBasedFighterAircraft from './carrierBasedFighterAircraft'
-import carrierBasedReconnaissanceAircraft from './carrierBasedReconnaissanceAircraft'
 
 import createBonus104 from './104'
 import createBonus15 from './15'
@@ -40,16 +37,24 @@ import createBonusSuisei from './Suisei'
 import torpedo from './torpedo'
 import createBonusType97TorpedoBomber931AirGroup from './Type97TorpedoBomber931AirGroup'
 
+import 艦上戦闘機 from './艦上戦闘機'
+import 艦上攻撃機 from './艦上攻撃機'
+import 艦上爆撃機 from './艦上爆撃機'
+import 艦上偵察機 from './艦上偵察機'
+
 import SeaplaneBomber from './SeaplaneBomber'
 import Autogyro from './Autogyro'
 
 export const statsBonusCreators: StatsBonusCreator[] = [
+  ...大口径主砲,
+  ...艦上戦闘機,
+  ...艦上攻撃機,
+  ...艦上爆撃機,
+  ...艦上偵察機,
+
   ...antiAirShell,
   ...armor,
   ...mediumCaliberMainGun,
-  ...largeCaliberMainGun,
-  ...carrierBasedFighterAircraft,
-  ...carrierBasedReconnaissanceAircraft,
   ...searchlightBonusCreators,
   ...smallCaliberMainGunBonusCreators,
   ...torpedo,
