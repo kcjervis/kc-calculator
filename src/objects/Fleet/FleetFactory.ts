@@ -1,4 +1,3 @@
-import { FleetRole, FleetType, Side } from '../../constants'
 import { IShipDataObject, ShipFactory } from '../Ship'
 
 import Fleet from './Fleet'

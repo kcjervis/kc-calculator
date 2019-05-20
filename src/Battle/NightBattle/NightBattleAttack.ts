@@ -5,26 +5,6 @@ import { softcap } from '../../utils'
 import { ISidedNightBattleState } from './INightBattleState'
 import NightBattleSpecialAttack from './NightBattleSpecialAttack'
 
-const nightBattleAttack = (
-  attacker: IShip,
-  defender: IShip,
-  isFlagship: boolean,
-  attackerSideState: ISidedNightBattleState,
-  defenderSideState: ISidedNightBattleState
-) => {
-  const specialAttacks = NightBattleSpecialAttack.getPossibleSpecialAttacks(attacker)
-  const baseValue = NightBattleSpecialAttack.calcBaseValue(attacker, isFlagship, attackerSideState, defenderSideState)
-
-  const nightBattleSpecialAttack = specialAttacks.find(specialAttack => {
-    if (specialAttack === NightBattleSpecialAttack.DoubleAttack) {
-      return 110 > random(specialAttack.typeFactor)
-    }
-    return baseValue > random(specialAttack.typeFactor - 1)
-  })
-
-  const accuracyValue = calcNightBattleAccuracy(attacker, attackerSideState, nightBattleSpecialAttack)
-}
-
 const calcFitModifier = (ship: IShip) => {
   if (!ship.shipType.either('HeavyCruiser', 'AviationCruiser')) {
     return 0
@@ -42,6 +22,7 @@ const calcFitModifier = (ship: IShip) => {
 
 const calcNightBattleAccuracy = (
   ship: IShip,
+  formationModifier: number,
   battleState: ISidedNightBattleState,
   specialAttack?: NightBattleSpecialAttack
 ) => {
@@ -52,7 +33,6 @@ const calcNightBattleAccuracy = (
   const searchlightModifier = searchlight ? 7 : 0
   const contactModifier = contact ? contact.accuracyModifier : 1
 
-  const formationModifier = battleState.formation.nightBattleAccuracyModifier
   const moraleModifier = ship.morale.nightBattleAccuracyModifier
   const specialAttackModifier = specialAttack ? specialAttack.accuracyModifier : 1
 
@@ -64,6 +44,24 @@ const calcNightBattleAccuracy = (
   accuracyValue += searchlightModifier + calcFitModifier(ship)
 
   return Math.floor(accuracyValue)
+}
+
+const nightBattleAttack = (
+  attacker: IShip,
+  defender: IShip,
+  isFlagship: boolean,
+  attackerSideState: ISidedNightBattleState,
+  defenderSideState: ISidedNightBattleState
+) => {
+  const specialAttacks = NightBattleSpecialAttack.getPossibleSpecialAttacks(attacker)
+  const baseValue = NightBattleSpecialAttack.calcBaseValue(attacker, isFlagship, attackerSideState, defenderSideState)
+
+  const nightBattleSpecialAttack = specialAttacks.find(specialAttack => {
+    if (specialAttack === NightBattleSpecialAttack.DoubleAttack) {
+      return 110 > random(specialAttack.typeFactor)
+    }
+    return baseValue > random(specialAttack.typeFactor - 1)
+  })
 }
 
 const calcNightBattlePower = (ship: IShip, criticalModifier: number, specialAttack?: NightBattleSpecialAttack) => {

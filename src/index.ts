@@ -19,18 +19,10 @@ export {
 
 export { MasterData, ShipClass, ShipType, EquipmentCategory, MasterEquipment, MasterShip } from './data'
 
-export {
-  Side,
-  Speed,
-  Formation,
-  FleetRole,
-  FleetType,
-  EngagementForm,
-  EquipmentStatName,
-  AirControlState,
-  BattleType
-} from './constants'
+export * from './constants'
 
 export * from './Battle'
+
+export * from './types'
 
 export { nonNullable, softcap } from './utils'

@@ -19,6 +19,7 @@
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/array-type": ["error", "array-simple"],
+    "@typescript-eslint/prefer-interface": "off",
 
     "@typescript-eslint/camelcase": "off",
     

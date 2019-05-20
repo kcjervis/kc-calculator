@@ -1,0 +1,3 @@
+interface Fleet {
+  name: string
+}

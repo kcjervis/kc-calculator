@@ -1,9 +1,9 @@
-import { FleetRole, FleetType, Formation, Side } from '../constants'
-import { IFleet, ILandBasedAirCorps,  IShip } from '../objects'
+import { FleetRole, FleetTypeName, Formation, Side } from '../constants'
+import { IFleet, ILandBasedAirCorps, IShip } from '../objects'
 
 export interface IShipBattleInformation {
   side: Side
-  fleetType: FleetType
+  fleetType: FleetTypeName
   fleetRole: FleetRole
   fleetAntiAir: number
 
@@ -12,7 +12,7 @@ export interface IShipBattleInformation {
 
 export interface IBattleFleet {
   side: Side
-  fleetType: FleetType
+  fleetType: FleetTypeName
   formation: Formation
 
   landBase: ILandBasedAirCorps[]
@@ -32,7 +32,7 @@ export default class BattleFleet implements IBattleFleet {
 
   constructor(
     public readonly side: Side,
-    public readonly fleetType: FleetType,
+    public readonly fleetType: FleetTypeName,
     public readonly landBase: ILandBasedAirCorps[],
     public readonly mainFleet: IFleet,
     public readonly escortFleet?: IFleet
@@ -57,7 +57,7 @@ export default class BattleFleet implements IBattleFleet {
   }
 
   get isCombinedFleet() {
-    return this.fleetType !== FleetType.Single
+    return this.fleetType !== FleetTypeName.Single
   }
 
   public getShipInformation(ship: IShip) {

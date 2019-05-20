@@ -1,11 +1,11 @@
-import { FleetType, Side } from '../../constants'
+import { FleetTypeName, Side } from '../../constants'
 import { FleetFactory, IFleetDataObject } from '../Fleet'
 import { ILandBasedAirCorpsDataObject, LandBasedAirCorpsFactory } from '../LandBasedAirCorps'
 import Operation from './Operation'
 
 export interface IOperationDataObject {
   side: Side
-  fleetType: FleetType
+  fleetType: FleetTypeName
   fleets: IFleetDataObject[]
   landBase: ILandBasedAirCorpsDataObject[]
 }

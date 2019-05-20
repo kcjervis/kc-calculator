@@ -1,10 +1,10 @@
-import { FleetType, Side } from '../../constants'
+import { FleetTypeName, Side } from '../../constants'
 import { IFleet } from '../Fleet'
 import { ILandBasedAirCorps } from '../LandBasedAirCorps'
 
 export interface IOperation {
   side: Side
-  fleetType: FleetType
+  fleetType: FleetTypeName
   fleets: IFleet[]
   landBase: ILandBasedAirCorps[]
 
@@ -17,7 +17,7 @@ export interface IOperation {
 export default class Operation implements IOperation {
   constructor(
     public readonly side: Side,
-    public readonly fleetType: FleetType,
+    public readonly fleetType: FleetTypeName,
     public readonly fleets: IFleet[],
     public readonly landBase: ILandBasedAirCorps[]
   ) {}
@@ -34,6 +34,6 @@ export default class Operation implements IOperation {
   }
 
   get isCombinedFleetOperation() {
-    return this.fleetType !== FleetType.Single
+    return this.fleetType !== FleetTypeName.Single
   }
 }

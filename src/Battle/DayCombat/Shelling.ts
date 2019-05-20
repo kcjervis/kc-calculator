@@ -1,9 +1,9 @@
 import { Formation } from '../../constants'
 import { IShip } from '../../objects'
 import { softcap } from '../../utils'
-import { sum } from 'lodash-es'
+import { sum, sumBy } from 'lodash-es'
 
-const calculateFitModifier = (ship: IShip) => 0
+type ShellingType = 'Shelling' | 'CarrierShelling'
 
 const calcShellingAccuracy = (
   ship: IShip,
@@ -28,25 +28,50 @@ const calcShellingAccuracy = (
 }
 
 export default class Shelling {
-  public static calcArmorPiercingShellModifier = (attacker: IShip, defender: IShip) => {
+  public static readonly cap = 180
+
+  private static getShellingType = (ship: IShip): ShellingType => {
+    const { shipType, shipClass, isInstallation } = ship
+    if (shipType.isAircraftCarrierClass) {
+      return 'CarrierShelling'
+    }
+
+    if (!shipClass.is('RevisedKazahayaClass') && !isInstallation) {
+      return 'Shelling'
+    }
+
+    if (ship.hasEquipment(equip => equip.category.isAerialCombatAircraft)) {
+      return 'CarrierShelling'
+    }
+
+    return 'Shelling'
+  }
+
+  private static canParticipate = (ship: IShip) => {
+    const shellingType = Shelling.getShellingType(ship)
+    if (shellingType == 'CarrierShelling') {
+      return ship.planes.some(plane => plane.slotSize > 0 && plane.category.isCarrierShellingAircraft)
+    }
+    return true
+  }
+
+  public static isEffectiveShip = ({ shipType }: IShip) =>
+    shipType.isBattleshipClass ||
+    shipType.isHeavyCruiserClass ||
+    shipType.either('AircraftCarrier', 'ArmoredAircraftCarrier')
+
+  public static calcArmorPiercingShellModifier = (ship: IShip) => {
+    const { hasEquipment } = ship
     const modifier = { power: 1, accuracy: 1 }
     if (
-      !attacker.hasEquipment(equip => equip.category.is('ArmorPiercingShell')) ||
-      !attacker.hasEquipment(equip => equip.category.isMainGun)
+      !hasEquipment(equip => equip.category.is('ArmorPiercingShell')) ||
+      !hasEquipment(equip => equip.category.isMainGun)
     ) {
       return modifier
     }
 
-    if (
-      !defender.shipType.isBattleshipClass &&
-      !defender.shipType.isHeavyCruiserClass &&
-      !defender.shipType.either('AircraftCarrier', 'ArmoredAircraftCarrier')
-    ) {
-      return modifier
-    }
-
-    const hasSecondaryGun = attacker.hasEquipment(equip => equip.category.is('SecondaryGun'))
-    const hasRader = attacker.hasEquipment(equip => equip.category.isRadar)
+    const hasSecondaryGun = hasEquipment(equip => equip.category.is('SecondaryGun'))
+    const hasRader = hasEquipment(equip => equip.category.isRadar)
 
     if (hasSecondaryGun && hasRader) {
       return { power: 1.15, accuracy: 1.3 }
@@ -69,18 +94,34 @@ export default class Shelling {
     return modifier
   }
 
-  public static getCriticalModifier = (ship: IShip) => {
-    const pros = ship.planes.filter(plane => plane.slotSize > 0).map(plane => plane.equipment.proficiency.internal)
-    const average = sum(pros) / pros.length
-    return 1.5
+  public static calcProficiencyModifier = (ship: IShip) => {
+    const planes = ship.planes.filter(
+      ({ slotSize, category }) =>
+        slotSize > 0 && (category.isDiveBomber || category.isTorpedoBomber || category.is('LargeFlyingBoat'))
+    )
+    return sumBy(planes, plane => {
+      if (plane.index === 0) {
+        return plane.equipment.proficiency.criticalPowerModifier / 100
+      }
+      return plane.equipment.proficiency.criticalPowerModifier / 200
+    })
   }
 
-  public static calcBasePower = (ship: IShip) => {
+  public static getCriticalModifier = (ship: IShip) => {
+    const shellingType = Shelling.getShellingType(ship)
+    if (shellingType === 'Shelling') {
+      return 1.5
+    }
+    return 1.5 * Shelling.calcProficiencyModifier(ship)
+  }
+
+  public static calcBasePower = (ship: IShip, isAntiInstallation = false) => {
+    const shellingType = Shelling.getShellingType(ship)
     const { stats, totalEquipmentStats } = ship
     let basePower = 5 + stats.firepower + totalEquipmentStats(equip => equip.improvement.shellingPowerModifier)
-    if (ship.shipType.isAircraftCarrierClass) {
+    if (shellingType === 'CarrierShelling') {
       const bombing = totalEquipmentStats('bombing')
-      const torpedo = totalEquipmentStats('torpedo')
+      const torpedo = isAntiInstallation ? 0 : totalEquipmentStats('torpedo')
       basePower += Math.floor(Math.floor(1.3 * bombing) + torpedo) + 15
       basePower = 25 + Math.floor(1.5 * basePower)
     }
@@ -95,7 +136,7 @@ export default class Shelling {
     specialAttackModifier = 1,
     apShellModifier = 1
   ) => {
-    const { stats, health, totalEquipmentStats } = ship
+    const { health } = ship
     const healthModifier = health.shellingPowerModifier
 
     let fitBonus = 0
@@ -117,7 +158,7 @@ export default class Shelling {
     const basePower = Shelling.calcBasePower(ship)
     const preCap = basePower * formationModifier * engagementModifier * healthModifier + fitBonus
 
-    let postCap = Math.floor(softcap(180, preCap)) * specialAttackModifier
+    let postCap = Math.floor(softcap(Shelling.cap, preCap)) * specialAttackModifier
     if (apShellModifier > 1) {
       postCap = Math.floor(postCap * apShellModifier)
     }

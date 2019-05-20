@@ -5,6 +5,7 @@ import { IEquipment } from '../Equipment'
 
 export interface IPlane {
   equipment: IEquipment
+  index: number
   category: EquipmentCategory
   slotSize: number
   fighterPower: number
@@ -22,11 +23,7 @@ export interface IPlane {
 }
 
 export default class Plane implements IPlane {
-  constructor(
-    public readonly equipment: IEquipment,
-    private readonly slots: number[],
-    private readonly index: number
-  ) {}
+  constructor(public readonly equipment: IEquipment, private readonly slots: number[], public readonly index: number) {}
 
   get category() {
     return this.equipment.category

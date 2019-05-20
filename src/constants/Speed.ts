@@ -1,12 +1,6 @@
 import { IShip } from '../objects'
 
-export enum SpeedValue {
-  Land = 0,
-  Slow = 5,
-  Fast = 10,
-  FastPlus = 15,
-  Fastest = 20
-}
+type SpeedValue = 0 | 5 | 10 | 15 | 20
 
 /**
  * 潜在艦速区分
@@ -21,7 +15,7 @@ export enum SpeedGroup {
 /**
  * 速力
  */
-export default class Speed<Value extends SpeedValue = SpeedValue, Name extends string = string> {
+export default class Speed {
   public static readonly Land = new Speed(0, '陸上')
   public static readonly Slow = new Speed(5, '低速')
   public static readonly Fast = new Speed(10, '高速')
@@ -40,24 +34,23 @@ export default class Speed<Value extends SpeedValue = SpeedValue, Name extends s
    * 参考 http://kancolle.wikia.com/wiki/Partials/Speed_system
    */
   public static getSpeedGroup(ship: IShip) {
-    const className = ship.shipClass.name
-    const { shipType } = ship
+    const { shipType, shipClass } = ship
 
     const isFastAV = Speed.fromNumber(ship.nakedStats.speed) === Speed.Fast && shipType.is('SeaplaneTender')
 
     if (
       isFastAV ||
       shipType.isSubmarineClass ||
-      ['加賀型', '夕張型', '特種船丙型', '工作艦', '改風早型'].includes(className)
+      ['加賀型', '夕張型', '特種船丙型', '工作艦', '改風早型'].includes(shipClass.name)
     ) {
       return SpeedGroup.OtherC
     }
 
-    if (['島風型', 'Ташкент級', '大鳳型', '翔鶴型', '利根型', '最上型'].includes(className)) {
+    if (['島風型', 'Ташкент級', '大鳳型', '翔鶴型', '利根型', '最上型'].includes(shipClass.name)) {
       return SpeedGroup.FastA
     }
 
-    if (['阿賀野型', '蒼龍型', '飛龍型', '金剛型', '大和型', 'Iowa級'].includes(className)) {
+    if (['阿賀野型', '蒼龍型', '飛龍型', '金剛型', '大和型', 'Iowa級'].includes(shipClass.name)) {
       return SpeedGroup.FastB1SlowA
     }
     // 天津風
@@ -112,7 +105,7 @@ export default class Speed<Value extends SpeedValue = SpeedValue, Name extends s
     return 0
   }
 
-  private constructor(public readonly value: Value, public readonly name: Name) {}
+  private constructor(public readonly value: number, public readonly name: string) {}
 
   /**
    * 加速

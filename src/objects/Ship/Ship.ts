@@ -34,6 +34,8 @@ export interface IShip {
   equipments: Array<IEquipment | undefined>
   planes: IPlane[]
 
+  isInstallation: boolean
+
   canEquip: (equipment: IEquipment, slotIndex: number) => boolean
 
   hasEquipment: (iteratee: EquipmentIteratee<boolean, number>) => boolean
@@ -77,6 +79,10 @@ export default class Ship implements IShip {
 
   get level() {
     return this.nakedStats.level
+  }
+
+  get isInstallation() {
+    return this.nakedStats.speed === 0
   }
 
   get nonNullableEquipments() {

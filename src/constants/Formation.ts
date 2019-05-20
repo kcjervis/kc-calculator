@@ -1,84 +1,143 @@
+import { ShipRole } from '../types'
+
+interface FormationWarfareModifier {
+  power: number
+  accuracy: number
+  evasion: number
+}
+interface FormationModifier {
+  fleetAntiAir: number
+  shelling: FormationWarfareModifier
+  torpedo: FormationWarfareModifier
+  asw: FormationWarfareModifier
+  nightBattle: FormationWarfareModifier
+}
+
 /** 陣形 */
-export default class Formation<Name extends string = string, Id extends number = number> {
-  public static all: Formation[] = []
+export default class Formation {
+  public static values: Formation[] = []
 
-  public static readonly LineAhead = new Formation('単縦陣', 1)
-  public static readonly DoubleLine = new Formation('複縦陣', 2)
-  public static readonly Diamond = new Formation('輪形陣', 3)
-  public static readonly Echelon = new Formation('梯形陣', 4)
-  public static readonly LineAbreast = new Formation('単横陣', 5)
-  public static readonly Vanguard = new Formation('警戒陣', 6)
+  public static readonly LineAhead = new Formation(1, '単縦陣', {
+    fleetAntiAir: 1,
+    shelling: { power: 1, accuracy: 1, evasion: 1 },
+    torpedo: { power: 1, accuracy: 1, evasion: 1 },
+    asw: { power: 0.6, accuracy: 1, evasion: 1 },
+    nightBattle: { power: 1, accuracy: 1, evasion: 1 }
+  })
 
-  public static readonly CruisingFormation1 = new Formation('第一警戒航行序列', 11)
-  public static readonly CruisingFormation2 = new Formation('第二警戒航行序列', 12)
-  public static readonly CruisingFormation3 = new Formation('第三警戒航行序列', 13)
-  public static readonly CruisingFormation4 = new Formation('第四警戒航行序列', 14)
+  public static readonly DoubleLine = new Formation(2, '複縦陣', {
+    fleetAntiAir: 1.2,
+    shelling: { power: 0.8, accuracy: 1.2, evasion: 1 },
+    torpedo: { power: 0.8, accuracy: 0.8, evasion: 1 },
+    asw: { power: 0.8, accuracy: 1.2, evasion: 1 },
+    nightBattle: { power: 1, accuracy: 0.9, evasion: 1 }
+  })
+
+  public static readonly Diamond = new Formation(3, '輪形陣', {
+    fleetAntiAir: 1.6,
+    shelling: { power: 0.7, accuracy: 1, evasion: 1.1 },
+    torpedo: { power: 0.7, accuracy: 0.4, evasion: 1.1 },
+    asw: { power: 1.2, accuracy: 1, evasion: 1 },
+    nightBattle: { power: 1, accuracy: 0.7, evasion: 1 }
+  })
+
+  public static readonly Echelon = new Formation(4, '梯形陣', {
+    fleetAntiAir: 1,
+    shelling: { power: 0.75, accuracy: 1.2, evasion: 1.2 },
+    torpedo: { power: 0.6, accuracy: 0.6, evasion: 1.3 },
+    asw: { power: 1.1, accuracy: 1.2, evasion: 1.3 },
+    // https://twitter.com/shiro_sh39/status/1121812791843627008
+    nightBattle: { power: 1, accuracy: 0.9, evasion: 1.2 }
+  })
+
+  public static readonly LineAbreast = new Formation(5, '単横陣', {
+    fleetAntiAir: 1,
+    shelling: { power: 0.6, accuracy: 1.2, evasion: 1.3 },
+    torpedo: { power: 0.6, accuracy: 0.3, evasion: 1.4 },
+    asw: { power: 1.3, accuracy: 1.2, evasion: 1.1 },
+    nightBattle: { power: 1, accuracy: 0.8, evasion: 1.2 }
+  })
+
+  public static readonly Vanguard = new Formation(6, '警戒陣', {
+    fleetAntiAir: 1.1,
+    shelling: { power: 1, accuracy: 1, evasion: 1 },
+    torpedo: { power: 1, accuracy: 1, evasion: 1 },
+    asw: { power: 1, accuracy: 1, evasion: 1 },
+    nightBattle: { power: 1, accuracy: 1, evasion: 1 }
+  })
+
+  public static readonly CruisingFormation1 = new Formation(11, '第一警戒航行序列', {
+    fleetAntiAir: 1.1,
+    shelling: { power: 0.8, accuracy: 1, evasion: 1 },
+    torpedo: { power: 0.7, accuracy: 1, evasion: 1 },
+    asw: { power: 1.3, accuracy: 1, evasion: 1 },
+    nightBattle: { power: 1, accuracy: 1, evasion: 1 }
+  })
+
+  public static readonly CruisingFormation2 = new Formation(12, '第二警戒航行序列', {
+    fleetAntiAir: 1,
+    shelling: { power: 1, accuracy: 1, evasion: 1 },
+    torpedo: { power: 0.9, accuracy: 1, evasion: 1 },
+    asw: { power: 1.1, accuracy: 1, evasion: 1 },
+    nightBattle: { power: 1, accuracy: 1, evasion: 1 }
+  })
+
+  public static readonly CruisingFormation3 = new Formation(13, '第三警戒航行序列', {
+    fleetAntiAir: 1.5,
+    shelling: { power: 0.7, accuracy: 1, evasion: 1 },
+    torpedo: { power: 0.6, accuracy: 1, evasion: 1 },
+    asw: { power: 1, accuracy: 1, evasion: 1 },
+    nightBattle: { power: 1, accuracy: 1, evasion: 1 }
+  })
+
+  public static readonly CruisingFormation4 = new Formation(14, '第四警戒航行序列', {
+    fleetAntiAir: 1,
+    //https://kancolle.fandom.com/ja/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:987#13
+    shelling: { power: 1.1, accuracy: 1.1, evasion: 1 },
+    torpedo: { power: 1, accuracy: 1, evasion: 1 },
+    asw: { power: 0.7, accuracy: 1, evasion: 1 },
+    nightBattle: { power: 1, accuracy: 1, evasion: 1 }
+  })
+
+  public static get singleFleetFormations() {
+    return Formation.values.filter(formation => formation.id <= 10)
+  }
+
+  public static get combinedFleetFormations() {
+    return Formation.values.filter(formation => formation.id > 10)
+  }
 
   public static fromId(id: number) {
-    return Formation.all.find(form => form.id === id)
+    return Formation.values.find(form => form.id === id)
   }
 
-  private constructor(public readonly name: Name, public readonly id: Id) {
-    Formation.all.push(this)
+  private constructor(
+    public readonly id: number,
+    public readonly name: string,
+    public readonly modifier: FormationModifier
+  ) {
+    Formation.values.push(this)
   }
 
-  get fleetAntiAirModifier() {
-    switch (this) {
-      case Formation.DoubleLine:
-        return 1.2
-      case Formation.Diamond:
-        return 1.6
-      case Formation.Vanguard:
-      case Formation.CruisingFormation1:
-        return 1.1
-      case Formation.CruisingFormation3:
-        return 1.5
+  public getModifierWithRole = (role: ShipRole): FormationModifier => {
+    if (this !== Formation.Vanguard) {
+      return this.modifier
     }
-    return 1
-  }
-
-  get shellingPowerModifier() {
-    switch (this) {
-      case Formation.CruisingFormation4:
-        return 1.1
-      case Formation.DoubleLine:
-      case Formation.CruisingFormation1:
-        return 0.8
-      case Formation.Diamond:
-      case Formation.CruisingFormation3:
-        return 0.7
-      case Formation.Echelon:
-        return 0.6
-      case Formation.LineAbreast:
-        return 0.6
+    if (role === 'Main') {
+      return {
+        ...this.modifier,
+        shelling: { power: 0.5, accuracy: 1, evasion: 1 },
+        torpedo: { power: 1, accuracy: 1, evasion: 1 },
+        asw: { power: 1, accuracy: 1, evasion: 1 },
+        nightBattle: { power: 0.5, accuracy: 1, evasion: 1 }
+      }
     }
-    return 1
-  }
-
-  get shellingAccuracyModifier() {
-    switch (this) {
-      case Formation.Diamond:
-        return 1.1
-      case Formation.Echelon:
-        return 1.2
-      case Formation.LineAbreast:
-        return 1.3
+    return {
+      ...this.modifier,
+      shelling: { power: 1, accuracy: 1, evasion: 1 },
+      torpedo: { power: 1, accuracy: 1, evasion: 1 },
+      asw: { power: 0.6, accuracy: 1, evasion: 1 },
+      nightBattle: { power: 1, accuracy: 1, evasion: 1 }
     }
-    return 1
-  }
-
-  get nightBattleAccuracyModifier() {
-    switch (this) {
-      case Formation.LineAhead:
-        return 1
-      case Formation.DoubleLine:
-        return 0.9
-      case Formation.Diamond:
-        return 0.7
-      case Formation.Echelon:
-      case Formation.LineAbreast:
-        return 0.8
-    }
-    return 1
   }
 }
