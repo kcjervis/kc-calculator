@@ -1,18 +1,4 @@
-import { ShipRole } from '../types'
-
-interface FormationWarfareModifier {
-  power: number
-  accuracy: number
-  evasion: number
-}
-interface FormationModifier {
-  fleetAntiAir: number
-  shelling: FormationWarfareModifier
-  torpedo: FormationWarfareModifier
-  asw: FormationWarfareModifier
-  nightBattle: FormationWarfareModifier
-}
-
+import { ShipRole, WarfareModifiers, FormationModifiers } from '../types'
 /** 陣形 */
 export default class Formation {
   public static values: Formation[] = []
@@ -114,18 +100,22 @@ export default class Formation {
   private constructor(
     public readonly id: number,
     public readonly name: string,
-    public readonly modifier: FormationModifier
+    private readonly modifiers: FormationModifiers
   ) {
     Formation.values.push(this)
   }
 
-  public getModifierWithRole = (role: ShipRole): FormationModifier => {
+  get fleetAntiAirModifier() {
+    return this.modifiers.fleetAntiAir
+  }
+
+  public getModifiersWithRole = (role: ShipRole): FormationModifiers => {
     if (this !== Formation.Vanguard) {
-      return this.modifier
+      return this.modifiers
     }
     if (role === 'Main') {
       return {
-        ...this.modifier,
+        ...this.modifiers,
         shelling: { power: 0.5, accuracy: 1, evasion: 1 },
         torpedo: { power: 1, accuracy: 1, evasion: 1 },
         asw: { power: 1, accuracy: 1, evasion: 1 },
@@ -133,7 +123,7 @@ export default class Formation {
       }
     }
     return {
-      ...this.modifier,
+      ...this.modifiers,
       shelling: { power: 1, accuracy: 1, evasion: 1 },
       torpedo: { power: 1, accuracy: 1, evasion: 1 },
       asw: { power: 0.6, accuracy: 1, evasion: 1 },

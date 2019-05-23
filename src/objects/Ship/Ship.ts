@@ -90,8 +90,12 @@ export default class Ship implements IShip {
   }
 
   public canEquip = (equipment: IEquipment, slotIndex: number) => {
-    const { equippable } = this.master
+    const { equippable, isAbyssal } = this.master
     const { masterId, category } = equipment
+
+    if (isAbyssal) {
+      return true
+    }
 
     if (!equippable.categories.includes(category.id)) {
       return false

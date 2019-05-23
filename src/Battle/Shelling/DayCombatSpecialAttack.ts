@@ -11,9 +11,9 @@ export default class DayCombatSpecialAttack {
   public static MainSecond = new DayCombatSpecialAttack(3, '主副', 1.1, 120)
   public static DoubleAttack = new DayCombatSpecialAttack(2, '連撃', 1.2, 130)
 
-  public static FighterBomberAttacker = new DayCombatSpecialAttack(7, 'FBA', 1.25, 125)
-  public static BomberBomberAttacker = new DayCombatSpecialAttack(7, 'BBA', 1.2, 140)
-  public static BomberAttacker = new DayCombatSpecialAttack(7, 'BA', 1.15, 155)
+  public static FighterBomberAttacker = new DayCombatSpecialAttack(7.1, 'FBA', 1.25, 125)
+  public static BomberBomberAttacker = new DayCombatSpecialAttack(7.2, 'BBA', 1.2, 140)
+  public static BomberAttacker = new DayCombatSpecialAttack(7.3, 'BA', 1.15, 155)
 
   private static getPossibleAircraftCarrierCutins = (ship: IShip) => {
     const cutins = new Array<DayCombatSpecialAttack>()
@@ -157,5 +157,17 @@ export default class DayCombatSpecialAttack {
     public readonly typeFactor: number
   ) {
     DayCombatSpecialAttack.all.push(this)
+  }
+
+  get api() {
+    return Math.floor(this.id)
+  }
+
+  get isCarrierSpecialAttack() {
+    return this.api === 7
+  }
+
+  get modifier() {
+    return { power: this.powerModifier }
   }
 }
