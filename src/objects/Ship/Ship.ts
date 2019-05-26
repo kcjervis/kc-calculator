@@ -34,6 +34,8 @@ export interface IShip {
   equipments: Array<IEquipment | undefined>
   planes: IPlane[]
 
+  fighterPower: number
+
   isInstallation: boolean
 
   canEquip: (equipment: IEquipment, slotIndex: number) => boolean
@@ -79,6 +81,13 @@ export default class Ship implements IShip {
 
   get level() {
     return this.nakedStats.level
+  }
+
+  get fighterPower() {
+    return sumBy(
+      this.planes.filter(({ category }) => category.isFighter || category.isTorpedoBomber || category.isDiveBomber),
+      'fighterPower'
+    )
   }
 
   get isInstallation() {

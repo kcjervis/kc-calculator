@@ -2,14 +2,16 @@ import { ShipData, ShipStat } from '@jervis/data'
 import ShipClass from './ShipClass'
 import ShipType from './ShipType'
 
+const toNaN = <Tuple extends number[]>(stat: Tuple) => stat.map(value => (value < 0 ? NaN : value)) as Tuple
+
+type StatRange = [number, number]
+
 const conversionStat = (stat: ShipStat): StatRange => {
   if (typeof stat === 'number') {
     return [stat, stat]
   }
   return stat
 }
-
-type StatRange = [number, number]
 
 export default class MasterShip {
   public static readonly all = new Array<MasterShip>()
@@ -66,7 +68,7 @@ export default class MasterShip {
     this.range = shipData.range
     this.fuel = shipData.fuel
     this.ammo = shipData.ammo
-    this.slotCapacities = shipData.slotCapacities
+    this.slotCapacities = shipData.slotCapacities.concat()
     this.equipments = shipData.equipments
 
     if (shipData.remodel) {

@@ -14,6 +14,12 @@ export type FormationModifiers = {
 
 export type ShellingType = 'Shelling' | 'CarrierShelling'
 
+export type AntiInstallationModifiers = {
+  shipTypeAdditive: number
+  additive: number
+  multiplicative: number
+}
+
 export type ShellingBasicPowerFactors = {
   shellingType: ShellingType
   firepower: number
@@ -28,9 +34,12 @@ export type ShellingPowerPreCapModifiers = {
   engagementModifier: number
   healthModifier: number
   cruiserFitBonus: number
+  antiInstallationModifiers: AntiInstallationModifiers
 }
 
 export type ShellingPowerPostCapModifiers = {
+  specialMultiplicative: number
+
   specialAttackModifier: number
   apShellModifier: number
   criticalModifier: number

@@ -1,5 +1,6 @@
 import { softcap, merge } from '../../utils'
 import {
+  AntiInstallationModifiers,
   ShellingType,
   ShellingBasicPowerFactors,
   ShellingPowerPreCapModifiers,
@@ -19,14 +20,38 @@ export const calcBasicPower = (factors: ShellingBasicPowerFactors) => {
 }
 
 export const calcPreCapPower = (basicPower: number, modifiers: ShellingPowerPreCapModifiers) => {
-  const { formationModifier, engagementModifier, healthModifier, cruiserFitBonus } = modifiers
-  return basicPower * formationModifier * engagementModifier * healthModifier + cruiserFitBonus
+  const {
+    antiInstallationModifiers,
+    formationModifier,
+    engagementModifier,
+    healthModifier,
+    cruiserFitBonus
+  } = modifiers
+
+  const { shipTypeAdditive, multiplicative, additive } = antiInstallationModifiers
+  const modified = (basicPower + shipTypeAdditive) * multiplicative + additive
+
+  return modified * formationModifier * engagementModifier * healthModifier + cruiserFitBonus
 }
 
 export const calcPower = (cappedPower: number, modifiers: ShellingPowerPostCapModifiers) => {
-  const { specialAttackModifier, apShellModifier, criticalModifier, proficiencyModifier } = modifiers
+  const {
+    specialMultiplicative,
+    specialAttackModifier,
+    apShellModifier,
+    criticalModifier,
+    proficiencyModifier
+  } = modifiers
 
   let postCap = Math.floor(cappedPower) * specialAttackModifier
+  for (const multiplier of [specialMultiplicative, apShellModifier]) {
+    if (multiplier > 1) {
+      postCap = Math.floor(postCap * specialMultiplicative)
+    }
+  }
+  if (specialMultiplicative > 1) {
+    postCap = Math.floor(postCap * specialMultiplicative)
+  }
   if (apShellModifier > 1) {
     postCap = Math.floor(postCap * apShellModifier)
   }
@@ -51,10 +76,17 @@ export default class ShellingPower implements ShellingPowerInformation {
   public healthModifier = 1
   public cruiserFitBonus = 0
 
+  public specialMultiplicative = 1
   public specialAttackModifier = 1
   public apShellModifier = 1
   public criticalModifier = 1
   public proficiencyModifier = 1
+
+  public antiInstallationModifiers: AntiInstallationModifiers = {
+    shipTypeAdditive: 0,
+    multiplicative: 1,
+    additive: 0
+  }
 
   constructor(factors: Partial<ShellingPowerFactors>) {
     merge(this, factors)

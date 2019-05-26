@@ -30,12 +30,12 @@ export const shipStatKeys: ShipStatKey[] = [
   'evasion',
   'antiAir',
 
-  'range',
   'asw',
 
   'speed',
   'los',
 
+  'range',
   'luck'
 ]
 

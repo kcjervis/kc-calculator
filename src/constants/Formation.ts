@@ -116,7 +116,7 @@ export default class Formation {
     if (role === 'Main') {
       return {
         ...this.modifiers,
-        shelling: { power: 0.5, accuracy: 1, evasion: 1 },
+        shelling: { power: 0.5, accuracy: 0.85, evasion: 1 },
         torpedo: { power: 1, accuracy: 1, evasion: 1 },
         asw: { power: 1, accuracy: 1, evasion: 1 },
         nightBattle: { power: 0.5, accuracy: 1, evasion: 1 }
@@ -124,7 +124,7 @@ export default class Formation {
     }
     return {
       ...this.modifiers,
-      shelling: { power: 1, accuracy: 1, evasion: 1 },
+      shelling: { power: 1, accuracy: 1.25, evasion: 1 },
       torpedo: { power: 1, accuracy: 1, evasion: 1 },
       asw: { power: 0.6, accuracy: 1, evasion: 1 },
       nightBattle: { power: 1, accuracy: 1, evasion: 1 }

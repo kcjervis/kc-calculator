@@ -1,11 +1,20 @@
-import { Formation, Engagement } from '../../constants'
+import { Formation, Engagement, FleetType, Side } from '../../constants'
 import { IShip } from '../../objects'
 import { sumBy } from 'lodash-es'
 import DayCombatSpecialAttack from './DayCombatSpecialAttack'
-import { ShipRole, ShellingType, ShellingPowerFactors, ShellingInformation, ShellingAccuracyFactors } from '../../types'
+import {
+  ShipInformation,
+  ShipRole,
+  AntiInstallationModifiers,
+  ShellingType,
+  ShellingPowerFactors,
+  ShellingInformation,
+  ShellingAccuracyFactors
+} from '../../types'
 
 import ShellingPower from './ShellingPower'
 import ShellingAccuracy from './ShellingAccuracy'
+import getCombinedFleetFactor from './getCombinedFleetFactor'
 
 type AttackModifiers = { power: number; accuracy: number }
 
@@ -112,26 +121,24 @@ const calcShellingAccuracy = (
 
 export default class Shelling implements ShellingInformation {
   constructor(
-    public ship: IShip,
-    public role: ShipRole,
-    public formation: Formation = Formation.LineAhead,
-    public engagement: Engagement = Engagement.Parallel,
+    public attacker: ShipInformation,
+    public defender: ShipInformation,
     public specialAttack?: DayCombatSpecialAttack,
-    public combinedFleetFactors = { power: 0, accuracy: 0 },
-    public isCritical = false
+    public isCritical = false,
+
+    public specialMultiplicative = 1,
+
+    public antiInstallationModifiers = {
+      shipTypeMultiplicative: 1,
+      shipTypeAdditive: 0,
+      multiplicative: 1,
+      additive: 0,
+      postCap: 1
+    }
   ) {}
 
-  get isArmoredShip() {
-    const { shipType } = this.ship
-    return (
-      shipType.isBattleshipClass ||
-      shipType.isHeavyCruiserClass ||
-      shipType.either('AircraftCarrier', 'ArmoredAircraftCarrier')
-    )
-  }
-
   get shellingType(): ShellingType {
-    const { shipType, shipClass, isInstallation, hasEquipment } = this.ship
+    const { shipType, shipClass, isInstallation, hasEquipment } = this.attacker.ship
     if (shipType.isAircraftCarrierClass) {
       return 'CarrierShelling'
     }
@@ -147,17 +154,65 @@ export default class Shelling implements ShellingInformation {
     return 'Shelling'
   }
 
-  get canParticipate() {
-    const { shellingType, ship } = this
-    if (shellingType == 'CarrierShelling') {
-      return ship.planes.some(plane => plane.slotSize > 0 && plane.category.isCarrierShellingAircraft)
-    }
-    return true
+  private get combinedFleetFactors() {
+    const { attacker, defender } = this
+    const power = getCombinedFleetFactor(attacker, defender)
+    // accuracy 仮置き
+    return { power, accuracy: 1 }
   }
 
   private get formationModifiers() {
-    const { role, formation } = this
+    const { role, formation } = this.attacker
     return formation.getModifiersWithRole(role).shelling
+  }
+
+  private get engagementModifier() {
+    return this.attacker.engagement.modifier
+  }
+
+  private get apShellModifiers() {
+    const { attacker, defender } = this
+    const modifier = { power: 1, accuracy: 1 }
+
+    const defenderShipType = defender.ship.shipType
+    if (
+      defenderShipType.isBattleshipClass ||
+      defenderShipType.isHeavyCruiserClass ||
+      defenderShipType.either('AircraftCarrier', 'ArmoredAircraftCarrier')
+    ) {
+      return modifier
+    }
+
+    const { hasEquipment } = attacker.ship
+
+    if (
+      !hasEquipment(equip => equip.category.is('ArmorPiercingShell')) ||
+      !hasEquipment(equip => equip.category.isMainGun)
+    ) {
+      return modifier
+    }
+
+    const hasSecondaryGun = hasEquipment(equip => equip.category.is('SecondaryGun'))
+    const hasRader = hasEquipment(equip => equip.category.isRadar)
+
+    if (hasSecondaryGun && hasRader) {
+      return { power: 1.15, accuracy: 1.3 }
+    }
+    if (hasSecondaryGun) {
+      return { power: 1.15, accuracy: 1.2 }
+    }
+    if (hasRader) {
+      return { power: 1.1, accuracy: 1.25 }
+    }
+    return { power: 1.08, accuracy: 1.1 }
+  }
+
+  get canParticipate() {
+    const { shellingType, attacker } = this
+    if (shellingType == 'CarrierShelling') {
+      return attacker.ship.planes.some(plane => plane.slotSize > 0 && plane.category.isCarrierShellingAircraft)
+    }
+    return true
   }
 
   private get specialAttackModifiers(): AttackModifiers {
@@ -168,50 +223,54 @@ export default class Shelling implements ShellingInformation {
     return { power: specialAttack.modifier.power, accuracy: 1 }
   }
 
-  private get apShellModifiers(): AttackModifiers {
-    const { ship } = this
-    if (this.isCritical) {
-      return { power: 1, accuracy: 1 }
-    }
-    return getApShellModifiers(ship)
-  }
-
   get criticalModifier() {
     return this.isCritical ? 1.5 : 1
   }
 
   private get proficiencyModifiers() {
-    const { ship, specialAttack } = this
-    return getProficiencyModifier(ship, specialAttack)
+    const { attacker, specialAttack } = this
+    return getProficiencyModifier(attacker.ship, specialAttack)
   }
 
   get power() {
     const {
+      attacker,
+
       shellingType,
       combinedFleetFactors,
-      ship,
       formationModifiers,
-      engagement,
+      engagementModifier,
+
+      antiInstallationModifiers,
       specialAttackModifiers,
       apShellModifiers,
       isCritical,
-      proficiencyModifiers
+      proficiencyModifiers,
+
+      specialMultiplicative
     } = this
 
-    const { firepower, torpedo } = ship.stats
+    const { stats, totalEquipmentStats, health } = attacker.ship
+    const { firepower, torpedo } = stats
+    const healthModifier = health.shellingPowerModifier
+    const cruiserFitBonus = calcCruiserFitBonus(attacker.ship)
     const criticalModifier = isCritical ? 1.5 : 1
 
     const factors: ShellingPowerFactors = {
       shellingType,
       firepower,
       torpedo,
-      bombing: ship.totalEquipmentStats('bombing'),
-      improvementModifier: ship.totalEquipmentStats(equip => equip.improvement.shellingPowerModifier),
+      bombing: totalEquipmentStats('bombing'),
+      improvementModifier: totalEquipmentStats(equip => equip.improvement.shellingPowerModifier),
       combinedFleetFactor: combinedFleetFactors.power,
+
+      antiInstallationModifiers,
       formationModifier: formationModifiers.power,
-      engagementModifier: engagement.modifier,
-      healthModifier: ship.health.shellingPowerModifier,
-      cruiserFitBonus: calcCruiserFitBonus(ship),
+      engagementModifier,
+      healthModifier,
+      cruiserFitBonus,
+
+      specialMultiplicative,
       specialAttackModifier: specialAttackModifiers.power,
       apShellModifier: apShellModifiers.power,
       criticalModifier,
@@ -222,9 +281,9 @@ export default class Shelling implements ShellingInformation {
   }
 
   get accuracy() {
-    const { combinedFleetFactors, ship, formationModifiers, specialAttackModifiers, apShellModifiers } = this
+    const { attacker, combinedFleetFactors, formationModifiers, specialAttackModifiers, apShellModifiers } = this
 
-    const { level, stats, totalEquipmentStats } = ship
+    const { level, stats, totalEquipmentStats } = attacker.ship
 
     // 仮置き
     const fitGunBonus = 0
