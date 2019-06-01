@@ -91,7 +91,9 @@ const data: Array<[ShipClassId, string]> = [
   [88, 'Nelson級'],
   [89, 'Gotland級'],
   [90, '日進型'],
-  [91, 'Fletcher級']
+  [91, 'Fletcher級'],
+  [92, 'L.d.S.D.d.Abruzzi級'],
+  [93, 'Colorado級']
 ]
 
 export default class ShipClass {

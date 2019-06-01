@@ -1,0 +1,236 @@
+import { Formation, Engagement } from '../../constants'
+import { IShip } from '../../objects'
+import { sumBy } from 'lodash-es'
+import DayCombatSpecialAttack from './DayCombatSpecialAttack'
+import { ShipRole, ShellingType, ShellingPowerFactors } from '../../types'
+import ShellingPower from './ShellingPower'
+import ShipAntiInstallationStatus from './ShipAntiInstallationStatus'
+
+type AttackModifiers = { power: number; accuracy: number }
+
+type InstallationType = 'None' | 'SoftSkinned' | 'Pillbox' | 'SupplyDepot' | 'IsolatedIsland'
+
+type ShipShellingPowerOptions = Partial<{
+  role: ShipRole
+  formation: Formation
+  engagement: Engagement
+  combinedFleetFactor: number
+  specialMultiplicative: number
+  specialAttack: DayCombatSpecialAttack
+  isArmorPiercing: boolean
+  installationType: InstallationType
+  isCritical: boolean
+}>
+
+/**
+ * 巡洋艦砲フィット補正
+ *
+ * 軽巡軽量砲補正と伊重巡フィット砲補正
+ * @see https://github.com/Nishisonic/UnexpectedDamage/blob/develop/攻撃力資料/キャップ前攻撃力.md#軽巡軽量砲補正
+ * @see https://github.com/Nishisonic/UnexpectedDamage/blob/develop/攻撃力資料/キャップ前攻撃力.md#伊重巡フィット砲補正
+ */
+const calcCruiserFitBonus = (ship: IShip) => {
+  let fitBonus = 0
+  if (ship.shipType.either('LightCruiser', 'TorpedoCruiser', 'TrainingCruiser')) {
+    const singleGunCount = ship.countEquipment(equip => [4, 11].includes(equip.masterId))
+    const twinGunCount = ship.countEquipment(equip => [65, 119, 139].includes(equip.masterId))
+    fitBonus += Math.sqrt(singleGunCount) + 2 * Math.sqrt(twinGunCount)
+  }
+  if (ship.shipClass.is('ZaraClass')) {
+    fitBonus += Math.sqrt(ship.countEquipment(162))
+  }
+  return fitBonus
+}
+
+/**
+ * 徹甲弾補正
+ */
+const getApShellModifiers = (ship: IShip): AttackModifiers => {
+  const { hasEquipment } = ship
+  const modifier = { power: 1, accuracy: 1 }
+  if (
+    !hasEquipment(equip => equip.category.is('ArmorPiercingShell')) ||
+    !hasEquipment(equip => equip.category.isMainGun)
+  ) {
+    return modifier
+  }
+
+  const hasSecondaryGun = hasEquipment(equip => equip.category.is('SecondaryGun'))
+  const hasRader = hasEquipment(equip => equip.category.isRadar)
+
+  if (hasSecondaryGun && hasRader) {
+    return { power: 1.15, accuracy: 1.3 }
+  }
+  if (hasSecondaryGun) {
+    return { power: 1.15, accuracy: 1.2 }
+  }
+  if (hasRader) {
+    return { power: 1.1, accuracy: 1.25 }
+  }
+  return { power: 1.08, accuracy: 1.1 }
+}
+
+/**
+ * 熟練度補正
+ * 戦爆連合は適当
+ */
+const getProficiencyModifier = (ship: IShip, specialAttack?: DayCombatSpecialAttack) => {
+  const modifier = { power: 1 }
+  if (specialAttack && specialAttack.isCarrierSpecialAttack) {
+    const planes = ship.planes.filter(plane => plane.slotSize > 0 && plane.category.isCarrierShellingAircraft)
+    if (planes.some(plane => plane.index === 0)) {
+      modifier.power = 1.25
+    } else {
+      modifier.power = 1.106
+    }
+    return modifier
+  }
+
+  const planes = ship.planes.filter(
+    ({ slotSize, category }) =>
+      slotSize > 0 && (category.isDiveBomber || category.isTorpedoBomber || category.is('LargeFlyingBoat'))
+  )
+  modifier.power =
+    1 +
+    sumBy(planes, plane => {
+      if (plane.index === 0) {
+        return plane.equipment.proficiency.criticalPowerModifier / 100
+      }
+      return plane.equipment.proficiency.criticalPowerModifier / 200
+    })
+  return modifier
+}
+
+export default class ShipShellingStatus {
+  public antiInstallationStatus: ShipAntiInstallationStatus
+
+  constructor(private ship: IShip) {
+    this.antiInstallationStatus = new ShipAntiInstallationStatus(ship)
+  }
+
+  get shellingType(): ShellingType {
+    const { shipType, shipClass, isInstallation, hasEquipment } = this.ship
+    if (shipType.isAircraftCarrierClass) {
+      return 'CarrierShelling'
+    }
+
+    if (!shipClass.is('RevisedKazahayaClass') && !isInstallation) {
+      return 'Shelling'
+    }
+
+    if (hasEquipment(equip => equip.category.isAerialCombatAircraft)) {
+      return 'CarrierShelling'
+    }
+
+    return 'Shelling'
+  }
+
+  get firepower() {
+    return this.ship.stats.firepower
+  }
+
+  get torpedo() {
+    return this.ship.stats.torpedo
+  }
+
+  get bombing() {
+    return this.ship.totalEquipmentStats('bombing')
+  }
+
+  get improvementModifier() {
+    return this.ship.totalEquipmentStats(equip => equip.improvement.shellingPowerModifier)
+  }
+
+  get cruiserFitBonus() {
+    return calcCruiserFitBonus(this.ship)
+  }
+
+  get healthModifier() {
+    return this.ship.health.shellingPowerModifier
+  }
+
+  get apShellModifiers() {
+    const { ship } = this
+    const modifier = { power: 1, accuracy: 1 }
+
+    const { hasEquipment } = ship
+
+    if (
+      !hasEquipment(equip => equip.category.is('ArmorPiercingShell')) ||
+      !hasEquipment(equip => equip.category.isMainGun)
+    ) {
+      return modifier
+    }
+
+    const hasSecondaryGun = hasEquipment(equip => equip.category.is('SecondaryGun'))
+    const hasRader = hasEquipment(equip => equip.category.isRadar)
+
+    if (hasSecondaryGun && hasRader) {
+      return { power: 1.15, accuracy: 1.3 }
+    }
+    if (hasSecondaryGun) {
+      return { power: 1.15, accuracy: 1.2 }
+    }
+    if (hasRader) {
+      return { power: 1.1, accuracy: 1.25 }
+    }
+    return { power: 1.08, accuracy: 1.1 }
+  }
+
+  get proficiencyModifier() {
+    return getProficiencyModifier(this.ship)
+  }
+
+  public calcPower = (options: ShipShellingPowerOptions) => {
+    const {
+      role = 'Main',
+      isCritical = false,
+      formation = Formation.LineAhead,
+      engagement = Engagement.Parallel,
+      combinedFleetFactor = 0,
+      specialMultiplicative = 1,
+      specialAttack,
+      isArmorPiercing = false,
+      installationType = 'None'
+    } = options
+
+    const { shellingType, firepower, torpedo, bombing, improvementModifier, cruiserFitBonus, healthModifier } = this
+
+    const formationModifier = formation.getModifiersWithRole(role).shelling.power
+    const engagementModifier = engagement.modifier
+
+    const criticalModifier = isCritical ? 1.5 : 1
+
+    const specialAttackModifier = specialAttack ? specialAttack.modifier.power : 1
+    const apShellModifier = isArmorPiercing ? this.apShellModifiers.power : 1
+
+    const antiInstallationModifiers = this.antiInstallationStatus.getModifiersFromType(installationType)
+    const isAntiInstallationWarfare = installationType !== 'None'
+
+    const effectiveBombing = isAntiInstallationWarfare ? this.antiInstallationStatus.bombing : bombing
+
+    const factors: ShellingPowerFactors = {
+      shellingType,
+      combinedFleetFactor,
+      firepower,
+      torpedo: isAntiInstallationWarfare ? torpedo : 0,
+      bombing: effectiveBombing,
+      improvementModifier,
+
+      antiInstallationModifiers,
+      formationModifier,
+      engagementModifier,
+      healthModifier,
+      cruiserFitBonus,
+
+      antiSupplyDepotPostCapModifier: antiInstallationModifiers.postCapMultiplicative,
+      specialMultiplicative,
+      specialAttackModifier,
+      apShellModifier,
+      criticalModifier,
+      proficiencyModifier: getProficiencyModifier(this.ship, specialAttack).power
+    }
+
+    return new ShellingPower(factors)
+  }
+}

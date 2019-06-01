@@ -12,5 +12,4 @@ export type ShipInformation = {
   fleetType: FleetType
   role: ShipRole
   formation: Formation
-  engagement: Engagement
 }

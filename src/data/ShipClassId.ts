@@ -270,7 +270,13 @@ enum ShipClassId {
   NisshinClass = 90,
 
   /** Fletcher級 */
-  FletcherClass = 91
+  FletcherClass = 91,
+
+  /** L.d.S.D.d.Abruzzi級 */
+  AbruzziClass = 92,
+
+  /** Colorado級 */
+  ColoradoClass = 93
 }
 
 export default ShipClassId

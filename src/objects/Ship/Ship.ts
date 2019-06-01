@@ -7,13 +7,16 @@ import { IMorale } from './Morale'
 import { IShipNakedStats } from './ShipNakedStats'
 import { IShipStats } from './ShipStats'
 
-import { MasterShip, ShipClass, ShipType } from '../../data'
+import { MasterShip, ShipClass, ShipType, EquipmentCategory } from '../../data'
 import { nonNullable, shipNameIsKai2 } from '../../utils'
 import { IEquipment } from '../Equipment'
 import { IPlane } from '../Plane'
+import { EquipmentCategoryKey } from '../../data/EquipmentCategory'
 
 type EquipmentIterator<R> = ListIterator<IEquipment, R>
 type EquipmentIteratee<R, S> = EquipmentIterator<R> | S
+
+type EquipmentCategoryIteratee = ListIterator<EquipmentCategory, boolean> | EquipmentCategoryKey
 
 export interface IShip {
   masterId: number
@@ -42,6 +45,10 @@ export interface IShip {
 
   hasEquipment: (iteratee: EquipmentIteratee<boolean, number>) => boolean
   countEquipment: (iteratee?: EquipmentIteratee<boolean, number>) => number
+
+  hasEquipmentCategory: (...args: EquipmentCategoryIteratee[]) => boolean
+  countEquipmentCategory: (...args: EquipmentCategoryIteratee[]) => number
+
   totalEquipmentStats: (iteratee: ((equip: IEquipment) => number) | keyof IEquipment) => number
 
   canNightAttack: boolean
@@ -142,6 +149,21 @@ export default class Ship implements IShip {
       return nonNullableEquipments.filter(({ masterId }) => masterId === iteratee).length
     }
     return nonNullableEquipments.filter(iteratee).length
+  }
+
+  public countEquipmentCategory = (...args: EquipmentCategoryIteratee[]) => {
+    const categories = this.nonNullableEquipments.map(({ category }) => category)
+    let count = 0
+    return sumBy(args, arg => {
+      if (typeof arg === 'string') {
+        return categories.filter(category => category.is(arg)).length
+      }
+      return categories.filter(arg).length
+    })
+  }
+
+  public hasEquipmentCategory = (...args: EquipmentCategoryIteratee[]) => {
+    return this.countEquipmentCategory(...args) > 0
   }
 
   public totalEquipmentStats = (iteratee: ((equip: IEquipment) => number) | keyof IEquipment) => {

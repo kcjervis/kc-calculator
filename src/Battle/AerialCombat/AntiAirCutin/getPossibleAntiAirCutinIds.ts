@@ -190,8 +190,12 @@ export default (ship: IShip) => {
       possibleAntiAirCutinIds.push(33)
     }
 
-    // 特殊機銃を装備 かつ 標準機銃または特殊機銃を装備 かつ 対空電探を装備
-    if (hasSome(isCDMG) && (hasSome(isNormalAAGun) || hasSome(isCDMG)) && hasSome(isAARadar)) {
+    // 特殊機銃を装備 かつ 対空電探を装備 かつ 標準機銃または特殊機銃を装備
+    if (
+      hasSome(isCDMG) &&
+      hasSome(isAARadar) &&
+      ship.countEquipment(equip => equip.category.is('AntiAircraftGun') && equip.antiAir >= 3) >= 2
+    ) {
       possibleAntiAirCutinIds.push(12)
     }
 
@@ -222,7 +226,7 @@ export default (ship: IShip) => {
       }
     }
 
-    // 龍田改二 かつ 高角砲を装備 かつ 標準機銃を装備
+    // (龍田改二|天龍改二) かつ 高角砲を装備 かつ 標準機銃を装備
     if (['龍田改二', '天龍改二'].includes(ship.name) && hasSome(isHighAngleMount) && hasSome(isNormalAAGun)) {
       possibleAntiAirCutinIds.push(24)
     }

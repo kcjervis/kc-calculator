@@ -57,7 +57,9 @@ const enemyAttackMatchers = [
   }
 ]
 
-const getCombinedFleetFactor = (attacker: ShipInformation, defender: ShipInformation) => {
+type ShipFleetState = Pick<ShipInformation, 'side' | 'fleetType' | 'formation' | 'role'>
+
+const getCombinedFleetFactor = (attacker: ShipFleetState, defender: ShipFleetState) => {
   // 通常vs通常
   if (!attacker.fleetType.isCombined && !defender.fleetType.isCombined) {
     return 0

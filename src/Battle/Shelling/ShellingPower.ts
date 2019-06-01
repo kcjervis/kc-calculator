@@ -36,6 +36,7 @@ export const calcPreCapPower = (basicPower: number, modifiers: ShellingPowerPreC
 
 export const calcPower = (cappedPower: number, modifiers: ShellingPowerPostCapModifiers) => {
   const {
+    antiSupplyDepotPostCapModifier,
     specialMultiplicative,
     specialAttackModifier,
     apShellModifier,
@@ -44,13 +45,9 @@ export const calcPower = (cappedPower: number, modifiers: ShellingPowerPostCapMo
   } = modifiers
 
   let postCap = Math.floor(cappedPower) * specialAttackModifier
-  for (const multiplier of [specialMultiplicative, apShellModifier]) {
-    if (multiplier > 1) {
-      postCap = Math.floor(postCap * specialMultiplicative)
-    }
-  }
-  if (specialMultiplicative > 1) {
-    postCap = Math.floor(postCap * specialMultiplicative)
+  const a6 = antiSupplyDepotPostCapModifier * specialMultiplicative
+  if (a6 > 1) {
+    postCap = Math.floor(postCap * a6)
   }
   if (apShellModifier > 1) {
     postCap = Math.floor(postCap * apShellModifier)
@@ -76,6 +73,7 @@ export default class ShellingPower implements ShellingPowerInformation {
   public healthModifier = 1
   public cruiserFitBonus = 0
 
+  public antiSupplyDepotPostCapModifier = 1
   public specialMultiplicative = 1
   public specialAttackModifier = 1
   public apShellModifier = 1
@@ -102,6 +100,10 @@ export default class ShellingPower implements ShellingPowerInformation {
 
   get cappedPower() {
     return softcap(ShellingPower.cap, this.preCapPower)
+  }
+
+  get isCapped() {
+    return this.preCapPower > 180
   }
 
   get value() {

@@ -1,7 +1,7 @@
-import { random } from 'lodash-es'
+import { random, range } from 'lodash-es'
 
 export default class DefensePower {
-  constructor(public baseArmor = 0) {}
+  constructor(public baseArmor: number) {}
 
   get min() {
     const baseArmor = Math.max(this.baseArmor, 1)
@@ -13,10 +13,13 @@ export default class DefensePower {
     return min + Math.floor(baseArmor - 1) * 0.6
   }
 
+  get values() {
+    const { min, baseArmor } = this
+    return range(Math.floor(baseArmor)).map(value => min + value)
+  }
+
   public random = () => {
     const { min, baseArmor } = this
     return min + random(Math.floor(baseArmor - 1)) * 0.6
   }
-
-  public valueOf = this.random
 }

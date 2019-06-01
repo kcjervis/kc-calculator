@@ -17,7 +17,8 @@ export default class Damage {
 
   private calcValue = (defensePowerValue: number) => {
     const { attackPower, remainingAmmoModifier } = this
-    return Math.floor((attackPower - defensePowerValue) * remainingAmmoModifier)
+    const value = Math.floor((attackPower - defensePowerValue) * remainingAmmoModifier)
+    return Math.max(0, value)
   }
 
   public get min() {
@@ -26,6 +27,15 @@ export default class Damage {
 
   public get max() {
     return this.calcValue(this.defensePower.min)
+  }
+
+  public get values() {
+    const { defensePower, calcValue } = this
+    return defensePower.values.map(calcValue)
+  }
+
+  public get scratchDamageProbability() {
+    return this.values.filter(value => value <= 0).length / this.values.length
   }
 
   public random = () => {

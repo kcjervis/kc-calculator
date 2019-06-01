@@ -14,6 +14,8 @@ export type FormationModifiers = {
 
 export type ShellingType = 'Shelling' | 'CarrierShelling'
 
+export type InstallationType = 'None' | 'SoftSkinned' | 'Pillbox' | 'SupplyDepot' | 'IsolatedIsland'
+
 export type AntiInstallationModifiers = {
   shipTypeAdditive: number
   additive: number
@@ -38,6 +40,7 @@ export type ShellingPowerPreCapModifiers = {
 }
 
 export type ShellingPowerPostCapModifiers = {
+  antiSupplyDepotPostCapModifier: number
   specialMultiplicative: number
 
   specialAttackModifier: number

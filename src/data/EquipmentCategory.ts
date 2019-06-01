@@ -1,6 +1,8 @@
 import { api_mst_slotitem_equiptype } from '@jervis/data'
 import EquipmentCategoryId from './EquipmentCategoryId'
 
+export type EquipmentCategoryKey = keyof typeof EquipmentCategoryId
+
 export default class EquipmentCategory {
   public static readonly all = api_mst_slotitem_equiptype.map(
     ({ api_id, api_name }) => new EquipmentCategory(api_id, api_name)
@@ -18,11 +20,11 @@ export default class EquipmentCategory {
 
   private constructor(public readonly id: EquipmentCategoryId, public readonly name: string) {}
 
-  public is = (key: keyof typeof EquipmentCategoryId) => {
+  public is = (key: EquipmentCategoryKey) => {
     return this.id === EquipmentCategoryId[key]
   }
 
-  public either = (...keys: Array<keyof typeof EquipmentCategoryId>) => {
+  public either = (...keys: EquipmentCategoryKey[]) => {
     return keys.some(this.is)
   }
 
