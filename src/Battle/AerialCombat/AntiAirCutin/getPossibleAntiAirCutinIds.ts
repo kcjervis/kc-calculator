@@ -231,7 +231,7 @@ export default (ship: IShip) => {
       possibleAntiAirCutinIds.push(24)
     }
 
-    // (天龍改二 または Gotland改) かつ 高角砲を3つ以上装備
+    // (天龍改二|Gotland改) かつ 高角砲を3つ以上装備
     if (['天龍改二', 'Gotland改'].includes(ship.name) && ship.countEquipment(isHighAngleMount) >= 3) {
       possibleAntiAirCutinIds.push(30)
     }

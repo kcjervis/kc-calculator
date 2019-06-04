@@ -11,6 +11,8 @@ export interface IShipBattleInformation {
 }
 
 export interface IBattleFleet {
+  name: string
+
   side: Side
   fleetType: FleetTypeName
   formation: Formation
@@ -29,6 +31,8 @@ export interface IBattleFleet {
 
 export default class BattleFleet implements IBattleFleet {
   public formation: Formation = Formation.LineAhead
+
+  public name = ''
 
   constructor(
     public readonly side: Side,
