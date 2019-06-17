@@ -29,33 +29,37 @@ export const calcPreCapPower = (basicPower: number, modifiers: ShellingPowerPreC
   } = modifiers
 
   const { shipTypeAdditive, multiplicative, additive } = antiInstallationModifiers
-  const modified = (basicPower + shipTypeAdditive) * multiplicative + additive
+  const antiInstallationModified = (basicPower + shipTypeAdditive) * multiplicative + additive
 
-  return modified * formationModifier * engagementModifier * healthModifier + cruiserFitBonus
+  return antiInstallationModified * formationModifier * engagementModifier * healthModifier + cruiserFitBonus
 }
 
 export const calcPower = (cappedPower: number, modifiers: ShellingPowerPostCapModifiers) => {
   const {
-    antiSupplyDepotPostCapModifier,
-    specialMultiplicative,
+    effectivenessMultiplicative,
+    effectivenessAdditive,
     specialAttackModifier,
     apShellModifier,
     criticalModifier,
-    proficiencyModifier
+    proficiencyModifier,
+    eventMapModifier
   } = modifiers
 
   let postCap = Math.floor(cappedPower) * specialAttackModifier
-  const a6 = antiSupplyDepotPostCapModifier * specialMultiplicative
-  if (a6 > 1) {
-    postCap = Math.floor(postCap * a6)
+
+  if (effectivenessMultiplicative > 1 || effectivenessAdditive > 0) {
+    postCap = Math.floor(postCap * effectivenessMultiplicative) + effectivenessAdditive
   }
+
+  // 要修正
   if (apShellModifier > 1) {
     postCap = Math.floor(postCap * apShellModifier)
   }
+
   if (criticalModifier > 1) {
     postCap = Math.floor(postCap * criticalModifier * proficiencyModifier)
   }
-  return postCap
+  return postCap * eventMapModifier
 }
 
 export default class ShellingPower implements ShellingPowerInformation {
@@ -73,12 +77,14 @@ export default class ShellingPower implements ShellingPowerInformation {
   public healthModifier = 1
   public cruiserFitBonus = 0
 
-  public antiSupplyDepotPostCapModifier = 1
-  public specialMultiplicative = 1
+  public effectivenessMultiplicative = 1
+  public effectivenessAdditive = 0
   public specialAttackModifier = 1
   public apShellModifier = 1
   public criticalModifier = 1
   public proficiencyModifier = 1
+
+  public eventMapModifier = 1
 
   public antiInstallationModifiers: AntiInstallationModifiers = {
     shipTypeAdditive: 0,
@@ -103,7 +109,7 @@ export default class ShellingPower implements ShellingPowerInformation {
   }
 
   get isCapped() {
-    return this.preCapPower > 180
+    return this.preCapPower > ShellingPower.cap
   }
 
   get value() {

@@ -27,7 +27,7 @@ export default class Shelling implements ShellingInformation {
     public specialAttack?: DayCombatSpecialAttack,
     public isCritical = false,
 
-    public specialMultiplicative = 1,
+    public eventMapModifier = 1,
     public remainingAmmoModifier = 1,
     public manualInstallationType?: InstallationType
   ) {}
@@ -113,7 +113,7 @@ export default class Shelling implements ShellingInformation {
       attackerShellingStatus,
       engagement,
       combinedFleetFactors,
-      specialMultiplicative,
+      eventMapModifier,
       specialAttack,
       isArmorPiercing,
       isCritical
@@ -128,7 +128,7 @@ export default class Shelling implements ShellingInformation {
       formation,
       engagement,
       combinedFleetFactor,
-      specialMultiplicative,
+      eventMapModifier,
       specialAttack,
       isArmorPiercing,
       installationType,

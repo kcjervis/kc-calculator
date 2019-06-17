@@ -4,7 +4,7 @@ import { sumBy } from 'lodash-es'
 import DayCombatSpecialAttack from './DayCombatSpecialAttack'
 import { ShipRole, ShellingType, ShellingPowerFactors } from '../../types'
 import ShellingPower from './ShellingPower'
-import ShipAntiInstallationStatus from './ShipAntiInstallationStatus'
+import ShipAntiInstallationStatus from '../ShipAntiInstallationStatus'
 
 type AttackModifiers = { power: number; accuracy: number }
 
@@ -15,11 +15,11 @@ type ShipShellingPowerOptions = Partial<{
   formation: Formation
   engagement: Engagement
   combinedFleetFactor: number
-  specialMultiplicative: number
   specialAttack: DayCombatSpecialAttack
   isArmorPiercing: boolean
   installationType: InstallationType
   isCritical: boolean
+  eventMapModifier: number
 }>
 
 /**
@@ -29,7 +29,7 @@ type ShipShellingPowerOptions = Partial<{
  * @see https://github.com/Nishisonic/UnexpectedDamage/blob/develop/攻撃力資料/キャップ前攻撃力.md#軽巡軽量砲補正
  * @see https://github.com/Nishisonic/UnexpectedDamage/blob/develop/攻撃力資料/キャップ前攻撃力.md#伊重巡フィット砲補正
  */
-const calcCruiserFitBonus = (ship: IShip) => {
+export const calcCruiserFitBonus = (ship: IShip) => {
   let fitBonus = 0
   if (ship.shipType.either('LightCruiser', 'TorpedoCruiser', 'TrainingCruiser')) {
     const singleGunCount = ship.countEquipment(equip => [4, 11].includes(equip.masterId))
@@ -74,7 +74,7 @@ const getApShellModifiers = (ship: IShip): AttackModifiers => {
  * 熟練度補正
  * 戦爆連合は適当
  */
-const getProficiencyModifier = (ship: IShip, specialAttack?: DayCombatSpecialAttack) => {
+export const getProficiencyModifier = (ship: IShip, specialAttack?: DayCombatSpecialAttack) => {
   const modifier = { power: 1 }
   if (specialAttack && specialAttack.isCarrierSpecialAttack) {
     const planes = ship.planes.filter(plane => plane.slotSize > 0 && plane.category.isCarrierShellingAircraft)
@@ -188,7 +188,7 @@ export default class ShipShellingStatus {
       formation = Formation.LineAhead,
       engagement = Engagement.Parallel,
       combinedFleetFactor = 0,
-      specialMultiplicative = 1,
+      eventMapModifier = 1,
       specialAttack,
       isArmorPiercing = false,
       installationType = 'None'
@@ -209,11 +209,14 @@ export default class ShipShellingStatus {
 
     const effectiveBombing = isAntiInstallationWarfare ? this.antiInstallationStatus.bombing : bombing
 
+    const effectivenessMultiplicative = antiInstallationModifiers.postCapMultiplicative
+    const effectivenessAdditive = 0
+
     const factors: ShellingPowerFactors = {
       shellingType,
       combinedFleetFactor,
       firepower,
-      torpedo: isAntiInstallationWarfare ? torpedo : 0,
+      torpedo: isAntiInstallationWarfare ? 0 : torpedo,
       bombing: effectiveBombing,
       improvementModifier,
 
@@ -223,12 +226,13 @@ export default class ShipShellingStatus {
       healthModifier,
       cruiserFitBonus,
 
-      antiSupplyDepotPostCapModifier: antiInstallationModifiers.postCapMultiplicative,
-      specialMultiplicative,
+      effectivenessMultiplicative,
+      effectivenessAdditive,
       specialAttackModifier,
       apShellModifier,
       criticalModifier,
-      proficiencyModifier: getProficiencyModifier(this.ship, specialAttack).power
+      proficiencyModifier: getProficiencyModifier(this.ship, specialAttack).power,
+      eventMapModifier
     }
 
     return new ShellingPower(factors)

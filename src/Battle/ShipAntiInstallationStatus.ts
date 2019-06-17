@@ -1,7 +1,7 @@
-import { IShip } from '../../objects'
+import { IShip } from '../objects'
 import { sumBy } from 'lodash-es'
-import { nonNullable } from '../../utils'
-import { InstallationType } from '../../types'
+import { nonNullable } from '../utils'
+import { InstallationType } from '../types'
 
 export default class ShipAntiInstallationStatus {
   constructor(private ship: IShip) {}
@@ -22,6 +22,10 @@ export default class ShipAntiInstallationStatus {
     return this.ship.hasEquipmentCategory
   }
 
+  private get wgCount() {
+    return this.countEquipmentCategory('AntiGroundEquipment')
+  }
+
   /**
    * 対地艦爆
    * id60 零式艦戦62型(爆戦)
@@ -37,14 +41,6 @@ export default class ShipAntiInstallationStatus {
       this.items.filter(item => [60, 64, 148, 233, 277, 305, 306, 316, 319].includes(item.masterId)),
       item => item.bombing
     )
-  }
-
-  private get wgCount() {
-    return this.countEquipmentCategory('AntiGroundEquipment')
-  }
-
-  private get landingCrafts() {
-    return this.items.filter(item => item.category.is('LandingCraft'))
   }
 
   // WG42加算補正 共通

@@ -11,9 +11,9 @@ import ShipStats from './ShipStats'
 
 export interface IShipDataObject {
   masterId: number
-  level: number
-  slots: number[]
-  equipments: Array<IEquipmentDataObject | undefined>
+  level?: number
+  slots?: number[]
+  equipments?: Array<IEquipmentDataObject | undefined>
 
   nowHp?: number
   morale?: number
@@ -28,13 +28,13 @@ export default class ShipFactory {
       return undefined
     }
 
-    const { masterId, level, increased, equipments: equipObjs, morale: moraleValue } = obj
+    const { masterId, level = 1, increased, morale: moraleValue } = obj
     const foundMaster = this.masters.find(master => master.id === masterId)
     if (!foundMaster) {
       return undefined
     }
 
-    const equipments = equipObjs.map(this.equipmentFactory.create)
+    const equipments = obj.equipments ? obj.equipments.map(this.equipmentFactory.create) : []
 
     const nakedStats = new ShipNakedStats(foundMaster, level, increased)
     const stats = new ShipStats(nakedStats, equipments)
@@ -43,7 +43,7 @@ export default class ShipFactory {
     const health = new Health(stats.hp, nowHp)
     const morale = new Morale(moraleValue)
 
-    const slots = obj.slots.concat()
+    const slots = obj.slots ? obj.slots.concat() : foundMaster.slotCapacities.concat()
 
     const planes = createPlanes(slots, equipments)
     const ship = new Ship(foundMaster, stats, nakedStats, health, morale, slots, equipments, planes)

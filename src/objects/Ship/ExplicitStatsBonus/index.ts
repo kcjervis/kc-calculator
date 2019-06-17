@@ -1,9 +1,6 @@
 import { IShip } from '../Ship'
 import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
-import 大口径主砲 from './大口径主砲'
-import mediumCaliberMainGun from './mediumCaliberMainGun'
-
 import createBonus104 from './104'
 import createBonus15 from './15'
 import createBonus174 from './174'
@@ -28,15 +25,15 @@ import createBonus67 from './67'
 import antiAirShell from './antiAirShell'
 import armor from './armor'
 import createBonusBL16InchMkI from './BL16InchMkI'
-import createBonusJu87CKai2KMX from './Ju87CKai2KMX'
 import radar from './radar'
 import searchlightBonusCreators from './searchlight'
 import smallCaliberMainGunBonusCreators from './smallCaliberMainGun'
 import sonar from './sonar'
-import createBonusSuisei from './Suisei'
 import torpedo from './torpedo'
 import createBonusType97TorpedoBomber931AirGroup from './Type97TorpedoBomber931AirGroup'
 
+import 中口径主砲 from './中口径主砲'
+import 大口径主砲 from './大口径主砲'
 import 艦上戦闘機 from './艦上戦闘機'
 import 艦上攻撃機 from './艦上攻撃機'
 import 艦上爆撃機 from './艦上爆撃機'
@@ -46,6 +43,7 @@ import SeaplaneBomber from './SeaplaneBomber'
 import Autogyro from './Autogyro'
 
 export const statsBonusCreators: StatsBonusCreator[] = [
+  ...中口径主砲,
   ...大口径主砲,
   ...艦上戦闘機,
   ...艦上攻撃機,
@@ -54,7 +52,6 @@ export const statsBonusCreators: StatsBonusCreator[] = [
 
   ...antiAirShell,
   ...armor,
-  ...mediumCaliberMainGun,
   ...searchlightBonusCreators,
   ...smallCaliberMainGunBonusCreators,
   ...torpedo,
@@ -86,8 +83,6 @@ export const statsBonusCreators: StatsBonusCreator[] = [
   createBonus63,
   createBonus67,
   createBonusBL16InchMkI,
-  createBonusJu87CKai2KMX,
-  createBonusSuisei,
   createBonusType97TorpedoBomber931AirGroup
 ]
 

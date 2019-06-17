@@ -1,3 +1,5 @@
+export type Modifiers<T extends string> = { [K in T]: number }
+
 export type WarfareModifiers = {
   power: number
   accuracy: number
@@ -40,13 +42,14 @@ export type ShellingPowerPreCapModifiers = {
 }
 
 export type ShellingPowerPostCapModifiers = {
-  antiSupplyDepotPostCapModifier: number
-  specialMultiplicative: number
+  effectivenessMultiplicative: number
+  effectivenessAdditive: number
 
   specialAttackModifier: number
   apShellModifier: number
   criticalModifier: number
   proficiencyModifier: number
+  eventMapModifier: number
 }
 
 export type ShellingPowerFactors = ShellingBasicPowerFactors &
@@ -87,3 +90,34 @@ export type ShellingInformation = {
   power: ShellingPowerInformation
   accuracy: ShellingAccuracyInformation
 }
+
+export type NightAttackType = 'NightAttack' | 'SwordfishAttack' | 'NightAerialAttack'
+
+export type NightAttackBasicPowerFactors = {
+  nightAttackType: NightAttackType
+  firepower: number
+  torpedo: number
+  improvementModifier: number
+  nightAerialAttackPower: number
+  nightContactModifier: number
+}
+
+export type NightAttackPowerPreCapModifiers = {
+  formationModifier: number
+  healthModifier: number
+  specialAttackModifier: number
+  cruiserFitBonus: number
+  antiInstallationModifiers: AntiInstallationModifiers
+}
+
+export type NightAttackPowerPostCapModifiers = {
+  effectivenessMultiplicative: number
+  effectivenessAdditive: number
+  criticalModifier: number
+  proficiencyModifier: number
+  eventMapModifier: number
+}
+
+export type NightAttackPowerFactors = NightAttackBasicPowerFactors &
+  NightAttackPowerPreCapModifiers &
+  NightAttackPowerPostCapModifiers

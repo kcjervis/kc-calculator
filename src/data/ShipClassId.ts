@@ -273,7 +273,7 @@ enum ShipClassId {
   FletcherClass = 91,
 
   /** L.d.S.D.d.Abruzzi級 */
-  AbruzziClass = 92,
+  DucaDegliAbruzziClass = 92,
 
   /** Colorado級 */
   ColoradoClass = 93
