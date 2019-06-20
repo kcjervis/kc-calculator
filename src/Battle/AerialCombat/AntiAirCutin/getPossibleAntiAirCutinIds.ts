@@ -186,7 +186,11 @@ export default (ship: IShip) => {
     }
 
     // Gotland改 かつ 高角砲を装備 かつ 対空機銃を装備
-    if (ship.name === 'Gotland改' && ship.hasEquipment(isHighAngleMount) && ship.hasEquipment(isNormalAAGun)) {
+    if (
+      ship.name === 'Gotland改' &&
+      ship.hasEquipment(isHighAngleMount) &&
+      ship.hasEquipment(equip => equip.category.is('AntiAircraftGun') && equip.antiAir >= 3)
+    ) {
       possibleAntiAirCutinIds.push(33)
     }
 

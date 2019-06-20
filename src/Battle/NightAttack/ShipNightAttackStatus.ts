@@ -5,29 +5,17 @@ import { Formation } from '../../constants'
 import NightAttackPower from './NightAttackPower'
 import ShipAntiInstallationStatus from '../ShipAntiInstallationStatus'
 import { calcCruiserFitBonus, getProficiencyModifier } from '../Shelling/ShipShellingStatus'
+import NightBattleSpecialAttack, { isNightAerialAttackShip } from './NightBattleSpecialAttack'
 
 type ShipNightAttackPowerOptions = Partial<{
   role: ShipRole
   formation: Formation
   nightContactModifier: number
   installationType: InstallationType
+  specialAttack: NightBattleSpecialAttack
   isCritical: boolean
   eventMapModifier: number
 }>
-
-const isNightAerialAttackShip = (ship: IShip) => {
-  if (!ship.shipType.isAircraftCarrierClass) {
-    return false
-  }
-
-  // Saratoga Mk.II | 夜間作戦航空要員
-  const hasNoap = ship.masterId === 345 || ship.hasEquipment(equip => [258, 259].includes(equip.masterId))
-  if (!hasNoap) {
-    return false
-  }
-
-  return ship.planes.some(plane => plane.slotSize > 0 && plane.isNightPlane)
-}
 
 export default class ShipNightAttackStatus {
   constructor(private ship: IShip) {}
@@ -82,30 +70,45 @@ export default class ShipNightAttackStatus {
     })
   }
 
-  get nightAerialAttackPower() {
+  public calcNightAerialAttackPower(isAntiInstallationWarfare?: boolean) {
     const { ship, nightAttackType } = this
     if (nightAttackType !== 'NightAerialAttack') {
       return 0
     }
 
-    return ship.nakedStats.firepower + sumBy(ship.planes, plane => plane.nightAerialAttackPower)
+    return (
+      ship.nakedStats.firepower +
+      sumBy(ship.planes, plane => plane.calcNightAerialAttackPower(isAntiInstallationWarfare))
+    )
   }
 
   public calcPower = (options: ShipNightAttackPowerOptions) => {
     const {
       role = 'Main',
       nightContactModifier = 0,
-      isCritical = false,
       formation = Formation.LineAhead,
       eventMapModifier = 1,
-      installationType = 'None'
+      installationType = 'None',
+      specialAttack,
+      isCritical = false
     } = options
-    const { ship, nightAttackType, firepower, torpedo, improvementModifier, nightAerialAttackPower } = this
+    const { ship, nightAttackType, firepower, torpedo, improvementModifier } = this
+
+    const isAntiInstallationWarfare = installationType !== 'None'
+    const nightAerialAttackPower = this.calcNightAerialAttackPower(isAntiInstallationWarfare)
 
     const formationModifier = formation.getModifiersWithRole(role).nightBattle.power
     const healthModifier = ship.health.nightAttackPowerModifire
     const antiInstallationModifiers = new ShipAntiInstallationStatus(ship).getModifiersFromType(installationType)
-    const specialAttackModifier = 1
+
+    let specialAttackModifier = 1
+    if (specialAttack) {
+      specialAttackModifier = specialAttack.powerModifier
+      if (specialAttack.isDestroyerCutin && ship.hasEquipment(267)) {
+        specialAttackModifier *= 1.25
+      }
+    }
+
     const cruiserFitBonus = calcCruiserFitBonus(ship)
 
     const effectivenessMultiplicative = antiInstallationModifiers.postCapMultiplicative
@@ -116,7 +119,7 @@ export default class ShipNightAttackStatus {
     const factors: NightAttackPowerFactors = {
       nightAttackType,
       firepower,
-      torpedo,
+      torpedo: isAntiInstallationWarfare ? 0 : torpedo,
       improvementModifier,
       nightAerialAttackPower,
       nightContactModifier,

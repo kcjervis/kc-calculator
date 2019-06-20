@@ -20,9 +20,11 @@ export interface IPlane {
   fleetLosModifier: number
 
   isSwordfish: boolean
+  isNightFighter: boolean
+  isNightAttacker: boolean
   isNightPlane: boolean
   isNightAircraft: boolean
-  nightAerialAttackPower: number
+  calcNightAerialAttackPower: (isAntiInstallation?: boolean) => number
 
   shotdown: (value: number) => void
 }
@@ -88,11 +90,19 @@ export default class Plane implements IPlane {
     return this.equipment.name.includes('Swordfish')
   }
 
+  get isNightFighter() {
+    return this.equipment.iconId === 45
+  }
+
+  get isNightAttacker() {
+    return this.equipment.iconId === 46
+  }
+
   /**
    * 夜戦夜攻
    */
   get isNightPlane() {
-    return [45, 46].includes(this.equipment.iconId)
+    return this.isNightFighter || this.isNightAttacker
   }
 
   /**
@@ -106,7 +116,7 @@ export default class Plane implements IPlane {
     return isNightPlane || isSwordfish || [154, 320].includes(equipment.masterId)
   }
 
-  get nightAerialAttackPower() {
+  public calcNightAerialAttackPower(isAntiInstallation: boolean = false) {
     const { isNightPlane, isNightAircraft, equipment, slotSize } = this
     if (!isNightAircraft) {
       return 0
@@ -123,7 +133,7 @@ export default class Plane implements IPlane {
     const improvementModifier = Math.sqrt(equipment.improvement.value)
     return (
       firepower +
-      torpedo +
+      (isAntiInstallation ? 0 : torpedo) +
       nightAircraftModifierA * slotSize +
       nightAircraftModifierB * (firepower + torpedo + asw + bombing) * Math.sqrt(slotSize) +
       improvementModifier

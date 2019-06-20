@@ -17,7 +17,7 @@ const calcNightAttackBasicPower = (factors: NightAttackBasicPowerFactors) => {
     nightAerialAttackPower,
     nightContactModifier
   } = factors
-  if (nightAttackType === 'NightAttack') {
+  if (nightAttackType === 'NightAerialAttack') {
     return nightAerialAttackPower + nightContactModifier
   }
   return firepower + torpedo + improvementModifier + nightContactModifier
@@ -51,7 +51,10 @@ const calcNightAttackPower = (cappedPower: number, modifiers: NightAttackPowerPo
   if (effectivenessMultiplicative > 1 || effectivenessAdditive > 0) {
     value = Math.floor(value * effectivenessMultiplicative + effectivenessAdditive)
   }
-  return Math.floor(value * criticalModifier * proficiencyModifier * eventMapModifier)
+  if (criticalModifier > 1) {
+    value = Math.floor(value * criticalModifier * proficiencyModifier)
+  }
+  return Math.floor(value * eventMapModifier)
 }
 
 export default class NightAttackPower implements NightAttackPowerFactors {
