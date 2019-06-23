@@ -1,19 +1,15 @@
 import DefensePower from './DefensePower'
 
 export default class Damage {
-  public static calc = (attackPower = 0, baseArmor = 0, remainingAmmoModifier = 1) => {
+  public static calc = (attackPower = 0, baseArmor: DefensePower, remainingAmmoModifier = 1) => {
     return new Damage(attackPower, baseArmor, remainingAmmoModifier).random()
   }
 
   constructor(
     private readonly attackPower = 0,
-    private readonly baseArmor = 0,
+    private readonly defensePower: DefensePower,
     private readonly remainingAmmoModifier = 1
   ) {}
-
-  private get defensePower() {
-    return new DefensePower(this.baseArmor)
-  }
 
   private calcValue = (defensePowerValue: number) => {
     const { attackPower, remainingAmmoModifier } = this

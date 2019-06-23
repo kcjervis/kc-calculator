@@ -15,6 +15,7 @@ import ShellingAccuracy from './ShellingAccuracy'
 import ShipShellingStatus from './ShipShellingStatus'
 import getCombinedFleetFactor from './getCombinedFleetFactor'
 import Damage from '../Damage'
+import DefensePower from '../DefensePower'
 
 type AttackModifiers = { power: number; accuracy: number }
 
@@ -165,6 +166,10 @@ export default class Shelling implements ShellingInformation {
 
   get damage() {
     const { power, defender, remainingAmmoModifier } = this
-    return new Damage(power.value, defender.ship.stats.armor, remainingAmmoModifier)
+    const defensePower = new DefensePower(
+      defender.ship.stats.armor,
+      defender.ship.totalEquipmentStats(equip => equip.improvement.defensePowerModifier)
+    )
+    return new Damage(power.value, defensePower, remainingAmmoModifier)
   }
 }

@@ -1,7 +1,12 @@
 import { random, range } from 'lodash-es'
+import { IShip } from '../objects'
 
 export default class DefensePower {
-  constructor(public baseArmor: number) {}
+  constructor(private armor: number, private improvementModifier: number) {}
+
+  private get baseArmor() {
+    return this.armor + this.improvementModifier
+  }
 
   get min() {
     const baseArmor = Math.max(this.baseArmor, 1)

@@ -14,6 +14,7 @@ export interface IImprovement {
   shellingAccuracyModifier: number
 
   effectiveLosModifier: number
+  defensePowerModifier: number
 }
 
 export default class Improvement implements IImprovement {
@@ -182,5 +183,16 @@ export default class Improvement implements IImprovement {
       multiplier = 1.15
     }
     return multiplier * Math.sqrt(this.value)
+  }
+
+  get defensePowerModifier() {
+    const { category } = this.master
+    if (category.is('MediumExtraArmor')) {
+      return 0.2 * this.value
+    }
+    if (category.is('LargeExtraArmor')) {
+      return 0.3 * this.value
+    }
+    return 0
   }
 }

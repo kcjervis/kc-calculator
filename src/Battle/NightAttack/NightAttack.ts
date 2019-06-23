@@ -6,6 +6,7 @@ import { ShipInformation, InstallationType } from '../../types'
 
 import ShipNightAttackStatus from './ShipNightAttackStatus'
 import Damage from '../Damage'
+import DefensePower from '../DefensePower'
 
 type AttackModifiers = { power: number; accuracy: number }
 
@@ -70,6 +71,10 @@ export default class NightAttack {
 
   get damage() {
     const { power, defender, remainingAmmoModifier } = this
-    return new Damage(power.value, defender.ship.stats.armor, remainingAmmoModifier)
+    const defensePower = new DefensePower(
+      defender.ship.stats.armor,
+      defender.ship.totalEquipmentStats(equip => equip.improvement.defensePowerModifier)
+    )
+    return new Damage(power.value, defensePower, remainingAmmoModifier)
   }
 }
