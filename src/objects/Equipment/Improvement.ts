@@ -118,6 +118,10 @@ export default class Improvement implements IImprovement {
       return 0
     }
 
+    if (category.is('CarrierBasedTorpedoBomber')) {
+      return 0.2 * this.value
+    }
+
     if ([10, 66, 220, 275].includes(masterId)) {
       return 0.2 * this.value
     }
