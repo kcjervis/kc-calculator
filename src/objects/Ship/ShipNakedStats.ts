@@ -76,16 +76,12 @@ export const calcHpAtLevel = (hp: [number, number], level: number) => {
 export default class ShipNakedStats implements IShipNakedStats {
   constructor(private readonly master: MasterShip, public level: number, private increased?: Partial<IBaseStats>) {}
 
-  private getIncreasedStat(statKey: keyof IBaseStats) {
+  private getIncreasedStat(statKey: keyof IBaseStats): number {
     const { increased } = this
     if (!increased) {
       return 0
     }
-    const value = increased[statKey]
-    if (!value) {
-      return 0
-    }
-    return value
+    return increased[statKey] || 0
   }
 
   get hp() {

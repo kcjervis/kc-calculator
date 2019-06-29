@@ -14,7 +14,7 @@ const createBonus: StatsBonusCreator = ship => {
   if (/^(Nelson改|長門改二|陸奥改二)$/.test(ship.name)) {
     bonus.add({ multiplier, firepower: 2 })
   }
-  if (/^(長門改?|陸奥改?|Colorado改)$/.test(ship.name)) {
+  if (/^(長門改?|陸奥改?|Colorado)$/.test(ship.name)) {
     bonus.add({ multiplier, firepower: 1 })
   }
 

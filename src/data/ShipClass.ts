@@ -133,7 +133,8 @@ export default class ShipClass {
       'IowaClass',
       'LexingtonClass',
       'EssexClass',
-      'CasablancaClass'
+      'CasablancaClass',
+      'ColoradoClass'
     )
   }
 

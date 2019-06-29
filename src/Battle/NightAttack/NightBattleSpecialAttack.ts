@@ -99,12 +99,11 @@ export default class NightBattleSpecialAttack {
       const nightFighterCount = planes.filter(plane => plane.isNightFighter).length
       const nightAttackerCount = planes.filter(plane => plane.isNightAttacker).length
       const nightPlaneCount = nightAttackerCount + nightAttackerCount
-      const otherNightAircraftCount = planes.filter(plane => plane.isNightAircraft && !plane.isNightPlane).length
+      const semiNightPlaneCount = planes.filter(plane => plane.isNightAircraft && !plane.isNightPlane).length
 
       const hasNightFighter = nightFighterCount >= 1
       const hasNightAttacker = nightAttackerCount >= 1
       const hasNightPlane = nightPlaneCount >= 1
-      const hasOtherNightAircraft = otherNightAircraftCount >= 1
       const hasFuzeBomber = planes.some(plane => plane.equipment.masterId === 320)
 
       if (nightFighterCount >= 2 && hasNightAttacker) {
@@ -117,14 +116,10 @@ export default class NightBattleSpecialAttack {
       if (!hasNightFighter) {
         return possibleSpecialAttacks
       }
-
-      if (
-        nightFighterCount >= 3 ||
-        (nightPlaneCount >= 2 && hasOtherNightAircraft) ||
-        (hasNightFighter && otherNightAircraftCount >= 2)
-      ) {
+      if (nightFighterCount >= 3 || nightAttackerCount + semiNightPlaneCount >= 2) {
         possibleSpecialAttacks.push(NightBattleSpecialAttack.AerialAttack3)
       }
+
       return possibleSpecialAttacks
     }
 

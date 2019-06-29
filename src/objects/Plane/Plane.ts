@@ -134,6 +134,7 @@ export default class Plane implements IPlane {
     return (
       firepower +
       (isAntiInstallation ? 0 : torpedo) +
+      bombing +
       nightAircraftModifierA * slotSize +
       nightAircraftModifierB * (firepower + torpedo + asw + bombing) * Math.sqrt(slotSize) +
       improvementModifier

@@ -39,7 +39,7 @@ const createBonus: StatsBonusCreator = ship => {
       antiAir: 1,
       evasion: 2
     })
-  } else if (shipName === '江風改二') {
+  } else if (['江風改二', '海風改二'].includes(shipName)) {
     bonus.add({
       multiplier: count,
       evasion: 2
