@@ -98,7 +98,7 @@ export default class NightBattleSpecialAttack {
       const planes = ship.planes.filter(plane => plane.slotSize > 0)
       const nightFighterCount = planes.filter(plane => plane.isNightFighter).length
       const nightAttackerCount = planes.filter(plane => plane.isNightAttacker).length
-      const nightPlaneCount = nightAttackerCount + nightAttackerCount
+      const nightPlaneCount = planes.filter(plane => plane.isNightPlane).length
       const semiNightPlaneCount = planes.filter(plane => plane.isNightAircraft && !plane.isNightPlane).length
 
       const hasNightFighter = nightFighterCount >= 1
