@@ -1,6 +1,22 @@
 import { ShipRole, WarfareModifiers, FormationModifiers } from '../types'
+
+const keys = [
+  'LineAhead',
+  'DoubleLine',
+  'Diamond',
+  'Echelon',
+  'LineAbreast',
+  'Vanguard',
+  'CruisingFormation1',
+  'CruisingFormation2',
+  'CruisingFormation3',
+  'CruisingFormation4'
+] as const
+
 /** 陣形 */
 export default class Formation {
+  public static keys = keys.concat()
+
   public static values: Formation[] = []
 
   public static readonly LineAhead = new Formation(1, '単縦陣', {

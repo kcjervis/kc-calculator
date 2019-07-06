@@ -25,4 +25,4 @@ export * from './Battle'
 
 export * from './types'
 
-export { nonNullable, softcap } from './utils'
+export * from './utils'

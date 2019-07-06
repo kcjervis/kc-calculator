@@ -25,7 +25,7 @@ export const calcShipAdjustedAntiAir = (ship: IShip, side: Side) => {
 
   const totalEquipAdjustedAA = totalEquipmentStats(calcEquipmentAdjustedAntiAir)
   if (side === Side.Enemy) {
-    return Math.floor(2 * Math.sqrt(stats.antiAir) + totalEquipAdjustedAA)
+    return Math.floor(Math.floor(Math.sqrt(stats.antiAir)) * 2 + totalEquipAdjustedAA)
   }
 
   const preFloor = nakedStats.antiAir + totalEquipAdjustedAA

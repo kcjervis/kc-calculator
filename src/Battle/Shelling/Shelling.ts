@@ -30,7 +30,8 @@ export default class Shelling implements ShellingInformation {
 
     public eventMapModifier = 1,
     public remainingAmmoModifier = 1,
-    public manualInstallationType?: InstallationType
+    public manualInstallationType?: InstallationType,
+    public fitGunBonus = 0
   ) {}
 
   get shellingType(): ShellingType {
@@ -72,14 +73,6 @@ export default class Shelling implements ShellingInformation {
       return attacker.ship.planes.some(plane => plane.slotSize > 0 && plane.category.isCarrierShellingAircraft)
     }
     return true
-  }
-
-  private get specialAttackModifiers(): AttackModifiers {
-    const { specialAttack } = this
-    if (!specialAttack) {
-      return { power: 1, accuracy: 1 }
-    }
-    return { power: specialAttack.modifier.power, accuracy: 1 }
   }
 
   get criticalModifier() {
@@ -138,30 +131,17 @@ export default class Shelling implements ShellingInformation {
   }
 
   get accuracy() {
-    const { attacker, combinedFleetFactors, specialAttackModifiers } = this
+    const { attacker, combinedFleetFactors, attackerShellingStatus, isArmorPiercing, specialAttack, fitGunBonus } = this
+    const { role, formation } = attacker
 
-    const { level, stats, totalEquipmentStats } = attacker.ship
-
-    // 仮置き
-    const fitGunBonus = 0
-    const apShellModifier = 1
-    const formationModifier = 1
-
-    const factors: ShellingAccuracyFactors = {
-      combinedFleetFactor: combinedFleetFactors.accuracy,
-      level,
-      luck: stats.luck,
-      equipmentAccuracy: totalEquipmentStats('accuracy'),
-      improvementModifier: totalEquipmentStats(equip => equip.improvement.shellingAccuracyModifier),
-
-      moraleModifier: 1,
-      formationModifier,
+    return attackerShellingStatus.calcAccuracy({
       fitGunBonus,
-      specialAttackModifier: specialAttackModifiers.accuracy,
-      apShellModifier
-    }
-
-    return new ShellingAccuracy(factors)
+      combinedFleetFactor: combinedFleetFactors.accuracy,
+      role,
+      formation,
+      isArmorPiercing,
+      specialAttack
+    })
   }
 
   get damage() {

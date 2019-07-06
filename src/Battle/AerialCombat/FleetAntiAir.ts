@@ -49,24 +49,7 @@ export default class FleetAntiAir {
 
   public static calcFleetAntiAir = calcFleetAntiAir
 
-  constructor(
-    private ships: IShip[],
-    private side: Side,
-    private formationModifier: number,
-    private battleType: BattleType,
-    private fleetRole: FleetRole
-  ) {}
-
-  get combinedFleetModifier() {
-    const { fleetRole, battleType } = this
-    if (fleetRole === FleetRole.EscortFleet) {
-      return 0.48
-    }
-    if (battleType === BattleType.AirDefenseBattle) {
-      return 0.72
-    }
-    return 0.8
-  }
+  constructor(private ships: IShip[], private side: Side, private formationModifier: number) {}
 
   get fleetAntiAir() {
     const { ships, side, formationModifier } = this

@@ -1,3 +1,6 @@
+import { IShip } from '../objects'
+import DefensePower from '../Battle/DefensePower'
+
 export const nonNullable = <T>(item: T): item is NonNullable<T> => item !== undefined && item !== null
 
 export const merge = <T>(target: T, ...sources: Array<Partial<T>>) => {
@@ -17,3 +20,13 @@ export const softcap = (cap: number, value: number) => (value <= cap ? value : c
 export const shipNameIsKai = (name: string) => /改$/.test(name)
 
 export const shipNameIsKai2 = (name: string) => /(改二|Верный)(?!丙)/.test(name)
+
+export const calcDeadlyPower = (ship: IShip) => {
+  const { nowHp } = ship.health
+  const { armor } = ship.stats
+  const defensePower = new DefensePower(
+    armor,
+    ship.totalEquipmentStats(equip => equip.improvement.defensePowerModifier)
+  )
+  return nowHp + defensePower.max
+}

@@ -3,7 +3,8 @@ import { random } from 'lodash-es'
 import { AirControlState, Side } from '../../constants'
 import { IPlane, IShip } from '../../objects'
 import { ICombatInformation } from '../CombatInformation'
-import { fixedShotdownNumber, getCombinedFleetModifier, proportionalShotdownRate } from './antiAir'
+import ShipAntiAir from './ShipAntiAir'
+import FleetAntiAir from './FleetAntiAir'
 import AntiAirCutin from './AntiAirCutin'
 
 export default abstract class AerialCombat {
@@ -51,26 +52,22 @@ export default abstract class AerialCombat {
 
   private shipAntiAirDefense = (ship: IShip, airstrikePlane: IPlane, antiAirCutin?: AntiAirCutin) => {
     const { battleType } = this.combatInformation
-    const { side: shipSide, fleetType, fleetRole, fleetAntiAir } = this.combatInformation.getShipInformation(ship)
-    const combinedFleetModifier = getCombinedFleetModifier(battleType, fleetRole)
+    const { side: shipSide, fleetRole, fleetAntiAir } = this.combatInformation.getShipInformation(ship)
+    const combinedFleetModifier = FleetAntiAir.getCombinedFleetModifier(fleetRole, battleType)
+    const shipAntiAir = new ShipAntiAir(ship, shipSide, fleetAntiAir, combinedFleetModifier, antiAirCutin)
+    const { proportionalShotdownRate, fixedShotdownNumber, minimumBonus } = shipAntiAir
 
-    let shotdownNumber = 0
+    let shotdownNumber = minimumBonus
     // 割合撃墜
     if (Math.random() > 0.5) {
-      const proportional = proportionalShotdownRate(ship, shipSide, combinedFleetModifier)
-      shotdownNumber += Math.floor(airstrikePlane.slotSize * proportional)
+      shotdownNumber += Math.floor(airstrikePlane.slotSize * proportionalShotdownRate)
     }
     // 固定撃墜
     if (Math.random() > 0.5) {
-      shotdownNumber += fixedShotdownNumber(ship, shipSide, fleetAntiAir, combinedFleetModifier)
+      shotdownNumber += fixedShotdownNumber
     }
 
-    if (antiAirCutin) {
-      shotdownNumber += antiAirCutin.minimumBonus
-    } else if (shipSide === Side.Player) {
-      // 味方最低保証1
-      shotdownNumber += 1
-    }
+    shotdownNumber += minimumBonus
 
     airstrikePlane.shotdown(shotdownNumber)
   }

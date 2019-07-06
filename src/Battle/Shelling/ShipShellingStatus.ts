@@ -2,13 +2,12 @@ import { Formation, Engagement } from '../../constants'
 import { IShip } from '../../objects'
 import { sumBy } from 'lodash-es'
 import DayCombatSpecialAttack from './DayCombatSpecialAttack'
-import { ShipRole, ShellingType, ShellingPowerFactors } from '../../types'
+import { ShipRole, ShellingType, ShellingPowerFactors, ShellingAccuracyFactors, InstallationType } from '../../types'
 import ShellingPower from './ShellingPower'
 import ShipAntiInstallationStatus from '../ShipAntiInstallationStatus'
+import ShellingAccuracy from './ShellingAccuracy'
 
 type AttackModifiers = { power: number; accuracy: number }
-
-type InstallationType = 'None' | 'SoftSkinned' | 'Pillbox' | 'SupplyDepot' | 'IsolatedIsland'
 
 type ShipShellingPowerOptions = Partial<{
   role: ShipRole
@@ -236,5 +235,39 @@ export default class ShipShellingStatus {
     }
 
     return new ShellingPower(factors)
+  }
+
+  public calcAccuracy = (options: {
+    fitGunBonus: number
+    combinedFleetFactor: number
+    role: ShipRole
+    formation: Formation
+    isArmorPiercing: boolean
+    specialAttack?: DayCombatSpecialAttack
+  }) => {
+    const { ship } = this
+    const { level, stats } = ship
+    const { luck } = stats
+    const { fitGunBonus, combinedFleetFactor, formation, role, specialAttack, isArmorPiercing } = options
+    const equipmentAccuracy = ship.totalEquipmentStats('accuracy')
+    const improvementModifier = ship.totalEquipmentStats(equip => equip.improvement.shellingAccuracyModifier)
+
+    const moraleModifier = ship.morale.shellingAccuracyModifier
+    const formationModifier = formation.getModifiersWithRole(role).shelling.accuracy
+    const specialAttackModifier = specialAttack ? specialAttack.modifier.accuracy : 1
+    const apShellModifier = isArmorPiercing ? this.apShellModifiers.accuracy : 1
+    const factors: ShellingAccuracyFactors = {
+      combinedFleetFactor,
+      level,
+      luck,
+      equipmentAccuracy,
+      improvementModifier,
+      moraleModifier,
+      formationModifier,
+      fitGunBonus,
+      specialAttackModifier,
+      apShellModifier
+    }
+    return new ShellingAccuracy(factors)
   }
 }

@@ -35,7 +35,7 @@ export default class Improvement implements IImprovement {
       return 0
     }
     if (category.either('CarrierBasedReconnaissanceAircraft', 'CarrierBasedReconnaissanceAircraft2')) {
-      if (los === 8) {
+      if (los === 7) {
         // 二式艦偵 [0.25, 3) または√☆
         return 0.25 * value
       }
@@ -108,6 +108,10 @@ export default class Improvement implements IImprovement {
 
     const isDepthCharge = [226, 227].includes(masterId)
 
+    if (category.is('CarrierBasedTorpedoBomber')) {
+      return 0.2 * this.value
+    }
+
     if (
       isDepthCharge ||
       category.isRadar ||
@@ -116,10 +120,6 @@ export default class Improvement implements IImprovement {
       category.either('Torpedo', 'MidgetSubmarine', 'EngineImprovement', 'CombatRation')
     ) {
       return 0
-    }
-
-    if (category.is('CarrierBasedTorpedoBomber')) {
-      return 0.2 * this.value
     }
 
     if ([10, 66, 220, 275].includes(masterId)) {

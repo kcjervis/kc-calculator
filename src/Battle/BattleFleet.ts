@@ -1,5 +1,6 @@
 import { FleetRole, FleetTypeName, Formation, Side } from '../constants'
 import { IFleet, ILandBasedAirCorps, IShip } from '../objects'
+import { FleetAntiAir } from './AerialCombat'
 
 export interface IShipBattleInformation {
   side: Side
@@ -46,10 +47,6 @@ export default class BattleFleet implements IBattleFleet {
     }
   }
 
-  get fleetAntiAir() {
-    return 1
-  }
-
   get allShips() {
     const { mainFleet, escortFleet } = this
     const ships = mainFleet.nonNullableShips.concat()
@@ -58,6 +55,12 @@ export default class BattleFleet implements IBattleFleet {
     }
 
     return ships.concat(escortFleet.nonNullableShips)
+  }
+
+  get fleetAntiAir() {
+    const { allShips, side, formation } = this
+    const fleetAntiAir = new FleetAntiAir(allShips, side, formation.fleetAntiAirModifier)
+    return fleetAntiAir.fleetAntiAir
   }
 
   get isCombinedFleet() {
