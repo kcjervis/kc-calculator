@@ -150,22 +150,26 @@ export default class Improvement implements IImprovement {
     const isLargeRadar = category.is('LargeRadar') || category.is('LargeRadar2')
     const isSurfaceRadar = category.isRadar && accuracy > 2
 
-    let multiplier = 0
     if (isLargeRadar || isSurfaceRadar) {
-      multiplier = 1.7
+      return 1.7 * Math.sqrt(this.value)
     } else if (
-      category.is('Sonar') ||
-      category.is('LargeSonar') ||
-      category.is('DepthCharge') ||
+      category.isRadar ||
+      category.isMainGun ||
       category.isArmor ||
-      category.is('AntiAircraftGun')
+      category.either(
+        'SecondaryGun',
+        'Sonar',
+        'LargeSonar',
+        'DepthCharge',
+        'ArmorPiercingShell',
+        'AntiAircraftGun',
+        'AntiAircraftFireDirector'
+      )
     ) {
-      multiplier = 1
-    } else {
-      return 0
+      return Math.sqrt(this.value)
     }
 
-    return multiplier * Math.floor(this.value)
+    return 0
   }
 
   get effectiveLosModifier() {

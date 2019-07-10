@@ -1,24 +1,25 @@
 import { Formation } from '../constants'
 import { IShip } from '../objects'
 
-type Modifier<T> = number | ((preModifier: number, target?: T) => number)
-type ShipModifier = Modifier<IShip>
-
-const calcEvasionValue = (ship: IShip, formationModifier: number, postCapModifier: ShipModifier) => {
-  const base = ship.stats.evasion + Math.sqrt(2 * ship.stats.luck)
-  const preCap = Math.floor(base * formationModifier)
-
-  let postCap = preCap
-  if (preCap >= 65) {
-    postCap = Math.floor(55 + 2 * Math.sqrt(preCap - 65))
-  } else if (preCap >= 40) {
-    postCap = Math.floor(40 + 3 * Math.sqrt(preCap - 40))
-  }
-
-  if (typeof postCapModifier === 'number') {
-    return Math.floor(postCap + postCapModifier)
-  }
-  return Math.floor(postCapModifier(postCap, ship))
+type BasicEvasionFactors = {
+  evasion: number
+  luck: number
+  formationModifier: number
 }
 
-export { calcEvasionValue }
+const calcBasicEvasion = ({ evasion, luck, formationModifier }: BasicEvasionFactors) =>
+  Math.floor((evasion + Math.sqrt(2 * luck)) * formationModifier)
+
+export const calcEvasionValue = (ship: IShip, formationModifier: number, postCapModifier = 0) => {
+  const { evasion, luck } = ship.stats
+  const basicEvasion = calcBasicEvasion({ evasion, luck, formationModifier })
+
+  let postCap = basicEvasion
+  if (basicEvasion >= 65) {
+    postCap = Math.floor(55 + 2 * Math.sqrt(basicEvasion - 65))
+  } else if (basicEvasion >= 40) {
+    postCap = Math.floor(40 + 3 * Math.sqrt(basicEvasion - 40))
+  }
+
+  return Math.floor(postCap + postCapModifier)
+}

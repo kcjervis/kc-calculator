@@ -16,6 +16,7 @@ import ShipShellingStatus from './ShipShellingStatus'
 import getCombinedFleetFactor from './getCombinedFleetFactor'
 import Damage from '../Damage'
 import DefensePower from '../DefensePower'
+import { calcEvasionValue } from '../Evasion'
 
 type AttackModifiers = { power: number; accuracy: number }
 
@@ -142,6 +143,26 @@ export default class Shelling implements ShellingInformation {
       isArmorPiercing,
       specialAttack
     })
+  }
+
+  get defenderEvasionValue() {
+    const { ship, formation, role } = this.defender
+    const formationModifier = formation.getModifiersWithRole(role).shelling.evasion
+    return calcEvasionValue(ship, formationModifier)
+  }
+
+  get hitRate() {
+    const { accuracy, defender, defenderEvasionValue, attackerShellingStatus } = this
+    const proficiencyModifier = attackerShellingStatus.proficiencyModifier.hitRate
+    const moraleModifier = defender.ship.morale.evasionModifier
+    let basicRate = (accuracy.value - defenderEvasionValue) * moraleModifier
+    if (basicRate < 10) {
+      basicRate = 10
+    }
+    if (basicRate > 96) {
+      basicRate = 96
+    }
+    return (basicRate + proficiencyModifier + 1) / 100
   }
 
   get damage() {

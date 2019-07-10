@@ -4,6 +4,7 @@ import CombatInformation from './CombatInformation'
 import * as DayCombat from './DayCombat'
 
 import Damage from './Damage'
+export * from './Evasion'
 export * from './Airstrike'
 export * from './DayCombat'
 

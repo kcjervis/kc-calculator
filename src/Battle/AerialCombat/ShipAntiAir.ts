@@ -86,9 +86,7 @@ export default class ShipAntiAir {
     if (!count) {
       return 0
     }
-    const equipmentBonus = 40 + 30 * count
-    const shipClassBonus = ship.shipClass.is('IseClass') ? 70 : 0
-    const numerator = 400 - (48 + equipmentBonus + shipClassBonus)
-    return (adjustedAntiAir + 0.9 * ship.stats.luck) / numerator
+    const shipClassBonus = ship.shipClass.is('IseClass') ? 0.25 : 0
+    return (adjustedAntiAir + 0.9 * ship.stats.luck) / 281 + (count - 1) * 0.15 + shipClassBonus
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "kc-calculator",
   "sideEffects": false,
-  "version": "0.1.18",
+  "version": "0.1.19",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "madono (https://github.com/MadonoHaru)",
@@ -25,14 +25,14 @@
     }
   },
   "dependencies": {
-    "fp-ts": "^1.19.3",
+    "fp-ts": "^2.0.1",
     "lodash-es": "^4.17.11"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",
     "@types/lodash-es": "^4.17.3",
     "@types/nedb": "^1.8.7",
-    "@types/node": "^12.0.10",
+    "@types/node": "^12.0.12",
     "@typescript-eslint/eslint-plugin": "^1.11.0",
     "@typescript-eslint/parser": "^1.11.0",
     "babel-jest": "^24.8.0",
