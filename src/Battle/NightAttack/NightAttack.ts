@@ -7,15 +7,14 @@ import { ShipInformation, InstallationType } from '../../types'
 import ShipNightAttackStatus from './ShipNightAttackStatus'
 import Damage from '../Damage'
 import DefensePower from '../DefensePower'
-
-type AttackModifiers = { power: number; accuracy: number }
+import NightAttackAccuracy from './NightAttackAccuracy'
 
 export default class NightAttack {
   constructor(
     public attacker: ShipInformation,
     public defender: ShipInformation,
     public specialAttack?: NightBattleSpecialAttack,
-    public isCritical = false,
+    public isCritical?: boolean,
 
     public nightContactModifier = 0,
     public eventMapModifier = 1,
@@ -27,36 +26,41 @@ export default class NightAttack {
     return new ShipNightAttackStatus(this.attacker.ship)
   }
 
-  get defenderInstallationType(): InstallationType {
-    const { ship } = this.defender
-    if (!ship.isInstallation) {
-      return 'None'
-    }
-    if (ship.name.includes('砲台子鬼')) {
-      return 'Pillbox'
-    }
-    if (ship.name.includes('離島') || ship.name.includes('離島')) {
-      return 'IsolatedIsland'
-    }
-    if (ship.name.includes('集積')) {
-      return 'SupplyDepot'
-    }
-    return 'SoftSkinned'
+  get accuracy() {
+    const { attacker, attackerNightAttackStatus, specialAttack } = this
+    const { formation, role } = attacker
+    const { stats, level, totalEquipmentStats, morale } = attacker.ship
+
+    const specialAttackModifier = specialAttack ? specialAttack.accuracyModifier : 0
+
+    const searchlightModifier = 0
+
+    return new NightAttackAccuracy({
+      level,
+      luck: stats.luck,
+      equipmentAccuracy: totalEquipmentStats('accuracy'),
+      improvementModifier: attackerNightAttackStatus.improvementAccuracyModifier,
+
+      formationModifier: formation.getModifiersWithRole(role).nightBattle.accuracy,
+      moraleModifier: morale.nightBattleAccuracyModifier,
+      fitGunBonus: 0,
+      specialAttackModifier,
+      searchlightModifier
+    })
   }
 
   get power() {
     const {
+      isCritical,
       manualInstallationType,
-      defenderInstallationType,
       attackerNightAttackStatus,
       specialAttack,
       nightContactModifier,
-      isCritical,
       eventMapModifier
     } = this
     const { role, formation } = this.attacker
 
-    const installationType = manualInstallationType || defenderInstallationType
+    const installationType = manualInstallationType || this.defender.ship.installationType
 
     return attackerNightAttackStatus.calcPower({
       role,
@@ -69,12 +73,17 @@ export default class NightAttack {
     })
   }
 
-  get damage() {
-    const { power, defender, remainingAmmoModifier } = this
+  get defensePower() {
+    const { stats, totalEquipmentStats } = this.defender.ship
     const defensePower = new DefensePower(
-      defender.ship.stats.armor,
-      defender.ship.totalEquipmentStats(equip => equip.improvement.defensePowerModifier)
+      stats.armor,
+      totalEquipmentStats(equip => equip.improvement.defensePowerModifier)
     )
-    return new Damage(power.value, defensePower, remainingAmmoModifier)
+    return defensePower
+  }
+
+  get damage() {
+    const { power, defensePower, remainingAmmoModifier, defender } = this
+    return new Damage(power.value, defensePower, defender.ship.health.nowHp, remainingAmmoModifier)
   }
 }

@@ -52,16 +52,21 @@ export default class ShipAntiAir {
     return calcShipAdjustedAntiAir(ship, side)
   }
 
-  get proportionalShotdownRate() {
+  public calcProportionalShotdownRate = (adjustedAntiAirModifier = 1) => {
     const { adjustedAntiAir, combinedFleetModifier } = this
-    return adjustedAntiAir * combinedFleetModifier * 0.5 * 0.25 * 0.02
+    return adjustedAntiAir * combinedFleetModifier * 0.5 * 0.25 * 0.02 * adjustedAntiAirModifier
   }
 
-  get fixedShotdownNumber() {
+  public calcFixedShotdownNumber = (adjustedAntiAirModifier = 1, fleetAntiAirModifier = 1) => {
     const { adjustedAntiAir, fleetAntiAir, side, antiAirCutin, combinedFleetModifier } = this
     // 敵味方補正
     const campMod = side === Side.Player ? 0.8 : 0.75
-    let preFloor = (adjustedAntiAir + fleetAntiAir) * 0.5 * 0.25 * campMod * combinedFleetModifier
+    let preFloor =
+      (adjustedAntiAir * adjustedAntiAirModifier + fleetAntiAir * fleetAntiAirModifier) *
+      0.5 *
+      0.25 *
+      campMod *
+      combinedFleetModifier
     if (antiAirCutin) {
       preFloor *= antiAirCutin.fixedAirDefenseModifier
     }

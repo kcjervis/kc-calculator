@@ -2,13 +2,7 @@ import { Formation, Engagement, FleetType, Side } from '../../constants'
 import { IShip } from '../../objects'
 import { sumBy } from 'lodash-es'
 import DayCombatSpecialAttack from './DayCombatSpecialAttack'
-import {
-  ShipInformation,
-  ShellingType,
-  ShellingInformation,
-  ShellingAccuracyFactors,
-  InstallationType
-} from '../../types'
+import { ShipInformation, ShellingType, ShellingAccuracyFactors, InstallationType, BattleState } from '../../types'
 
 import ShellingPower from './ShellingPower'
 import ShellingAccuracy from './ShellingAccuracy'
@@ -18,16 +12,15 @@ import Damage from '../Damage'
 import DefensePower from '../DefensePower'
 import { calcEvasionValue } from '../Evasion'
 
-type AttackModifiers = { power: number; accuracy: number }
-
-export default class Shelling implements ShellingInformation {
+export default class Shelling {
   public static getCombinedFleetFactor = getCombinedFleetFactor
   constructor(
+    public battleState: BattleState,
     public attacker: ShipInformation,
     public defender: ShipInformation,
-    public engagement: Engagement,
+
     public specialAttack?: DayCombatSpecialAttack,
-    public isCritical = false,
+    public isCritical?: boolean,
 
     public eventMapModifier = 1,
     public remainingAmmoModifier = 1,
@@ -76,47 +69,28 @@ export default class Shelling implements ShellingInformation {
     return true
   }
 
-  get criticalModifier() {
-    return this.isCritical ? 1.5 : 1
-  }
-
   get attackerShellingStatus() {
     return new ShipShellingStatus(this.attacker.ship)
   }
 
-  get defenderInstallationType(): InstallationType {
-    const { ship } = this.defender
-    if (!ship.isInstallation) {
-      return 'None'
-    }
-    if (ship.name.includes('砲台子鬼')) {
-      return 'Pillbox'
-    }
-    if (ship.name.includes('離島') || ship.name.includes('離島')) {
-      return 'IsolatedIsland'
-    }
-    if (ship.name.includes('集積')) {
-      return 'SupplyDepot'
-    }
-    return 'SoftSkinned'
-  }
-
   get power() {
     const {
+      battleState,
+      attacker,
+      defender,
+      isCritical,
       manualInstallationType,
-      defenderInstallationType,
       attackerShellingStatus,
-      engagement,
       combinedFleetFactors,
       eventMapModifier,
       specialAttack,
-      isArmorPiercing,
-      isCritical
+      isArmorPiercing
     } = this
-    const { role, formation } = this.attacker
+    const { engagement } = battleState
+    const { role, formation } = attacker
     const combinedFleetFactor = combinedFleetFactors.power
 
-    const installationType = manualInstallationType || defenderInstallationType
+    const installationType = manualInstallationType || defender.ship.installationType
 
     return attackerShellingStatus.calcPower({
       role,
@@ -165,12 +139,17 @@ export default class Shelling implements ShellingInformation {
     return (basicRate + proficiencyModifier + 1) / 100
   }
 
+  get defensePower() {
+    const { stats, totalEquipmentStats } = this.defender.ship
+    return new DefensePower(stats.armor, totalEquipmentStats(equip => equip.improvement.defensePowerModifier))
+  }
+
   get damage() {
     const { power, defender, remainingAmmoModifier } = this
     const defensePower = new DefensePower(
       defender.ship.stats.armor,
       defender.ship.totalEquipmentStats(equip => equip.improvement.defensePowerModifier)
     )
-    return new Damage(power.value, defensePower, remainingAmmoModifier)
+    return new Damage(power.value, defensePower, defender.ship.health.nowHp, remainingAmmoModifier)
   }
 }

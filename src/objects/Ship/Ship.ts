@@ -12,6 +12,7 @@ import { nonNullable, shipNameIsKai2 } from '../../utils'
 import { IEquipment } from '../Equipment'
 import { IPlane } from '../Plane'
 import { EquipmentCategoryKey } from '../../data/EquipmentCategory'
+import { InstallationType } from '../../types'
 
 type EquipmentIterator<R> = ListIterator<IEquipment, R>
 type EquipmentIteratee<R, S> = EquipmentIterator<R> | S
@@ -39,6 +40,7 @@ export interface IShip {
 
   fighterPower: number
 
+  installationType: InstallationType
   isInstallation: boolean
 
   canEquip: (equipment: IEquipment, slotIndex: number) => boolean
@@ -99,6 +101,23 @@ export default class Ship implements IShip {
 
   get isInstallation() {
     return this.nakedStats.speed === 0
+  }
+
+  get installationType() {
+    const { isInstallation, name } = this
+    if (!isInstallation) {
+      return 'None'
+    }
+    if (name.includes('砲台')) {
+      return 'Pillbox'
+    }
+    if (name.includes('離島') || name.includes('中枢')) {
+      return 'IsolatedIsland'
+    }
+    if (name.includes('集積')) {
+      return 'SupplyDepot'
+    }
+    return 'SoftSkinned'
   }
 
   get nonNullableEquipments() {

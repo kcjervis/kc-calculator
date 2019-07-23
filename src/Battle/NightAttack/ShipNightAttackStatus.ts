@@ -28,17 +28,9 @@ export default class ShipNightAttackStatus {
     return 'NightAttack'
   }
 
-  private get firepower() {
-    return this.ship.stats.firepower
-  }
-
-  private get torpedo() {
-    return this.ship.stats.torpedo
-  }
-
-  private get improvementModifier() {
-    return this.ship.totalEquipmentStats(equip => {
-      const { masterId, improvement, category } = equip
+  private get improvementPowerModifier() {
+    return this.ship.totalEquipmentStats(gear => {
+      const { masterId, improvement, category } = gear
 
       // 12.7cm 連装高角砲、8cm 高角砲、8cm 高角砲改＋増設機銃、10cm 連装高角砲改＋増設機銃
       if ([10, 66, 220, 275].includes(masterId)) {
@@ -70,6 +62,25 @@ export default class ShipNightAttackStatus {
     })
   }
 
+  get improvementAccuracyModifier() {
+    return this.ship.totalEquipmentStats(gear => {
+      const { improvement, category, isSurfaceRadar } = gear
+
+      if (isSurfaceRadar) {
+        return 1.6 * Math.sqrt(improvement.value)
+      }
+
+      if (
+        category.isArmor ||
+        category.either('AntiAircraftGun', 'Sonar', 'LargeSonar', 'DepthCharge', 'EngineImprovement')
+      ) {
+        return 0
+      }
+
+      return Math.sqrt(improvement.value)
+    })
+  }
+
   public calcNightAerialAttackPower(isAntiInstallationWarfare?: boolean) {
     const { ship, nightAttackType } = this
     if (nightAttackType !== 'NightAerialAttack') {
@@ -92,7 +103,8 @@ export default class ShipNightAttackStatus {
       specialAttack,
       isCritical = false
     } = options
-    const { ship, nightAttackType, firepower, torpedo, improvementModifier } = this
+    const { ship, nightAttackType, improvementPowerModifier } = this
+    const { firepower, torpedo } = ship.stats
 
     const isAntiInstallationWarfare = installationType !== 'None'
     const nightAerialAttackPower = this.calcNightAerialAttackPower(isAntiInstallationWarfare)
@@ -120,7 +132,7 @@ export default class ShipNightAttackStatus {
       nightAttackType,
       firepower,
       torpedo: isAntiInstallationWarfare ? 0 : torpedo,
-      improvementModifier,
+      improvementModifier: improvementPowerModifier,
       nightAerialAttackPower,
       nightContactModifier,
 

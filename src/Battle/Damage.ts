@@ -8,6 +8,7 @@ export default class Damage {
   constructor(
     private readonly attackPower = 0,
     private readonly defensePower: DefensePower,
+    private readonly defenderNowHp: number,
     private readonly remainingAmmoModifier = 1
   ) {}
 
@@ -15,6 +16,10 @@ export default class Damage {
     const { attackPower, remainingAmmoModifier } = this
     const value = Math.floor((attackPower - defensePowerValue) * remainingAmmoModifier)
     return Math.max(0, value)
+  }
+
+  public random = () => {
+    return this.calcValue(this.defensePower.random())
   }
 
   public get min() {
@@ -30,11 +35,13 @@ export default class Damage {
     return defensePower.values.map(calcValue)
   }
 
-  public get scratchDamageProbability() {
-    return this.values.filter(value => value <= 0).length / this.values.length
+  public get isDeadly() {
+    const { min, defenderNowHp } = this
+    return defenderNowHp <= min
   }
 
-  public random = () => {
-    return this.calcValue(this.defensePower.random())
+  public get scratchDamageProbability() {
+    const { values } = this
+    return values.filter(value => value <= 0).length / values.length
   }
 }

@@ -1,4 +1,4 @@
-export type Modifiers<T extends string> = { [K in T]: number }
+export type Factors<T extends string> = { [K in T]: number }
 
 export type WarfareModifiers = {
   power: number
@@ -84,11 +84,6 @@ export type ShellingAccuracyFactors = ShellingBasicAccuracyFactors & ShellingAcc
 export type ShellingAccuracyInformation = ShellingAccuracyFactors & {
   basicAccuracy: number
   value: number
-}
-
-export type ShellingInformation = {
-  power: ShellingPowerInformation
-  accuracy: ShellingAccuracyInformation
 }
 
 export type NightAttackType = 'NightAttack' | 'SwordfishAttack' | 'NightAerialAttack'

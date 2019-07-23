@@ -55,19 +55,18 @@ export default abstract class AerialCombat {
     const { side: shipSide, fleetRole, fleetAntiAir } = this.combatInformation.getShipInformation(ship)
     const combinedFleetModifier = FleetAntiAir.getCombinedFleetModifier(fleetRole, battleType)
     const shipAntiAir = new ShipAntiAir(ship, shipSide, fleetAntiAir, combinedFleetModifier, antiAirCutin)
-    const { proportionalShotdownRate, fixedShotdownNumber, minimumBonus } = shipAntiAir
 
-    let shotdownNumber = minimumBonus
+    let shotdownNumber = 0
     // 割合撃墜
     if (Math.random() > 0.5) {
-      shotdownNumber += Math.floor(airstrikePlane.slotSize * proportionalShotdownRate)
+      shotdownNumber += Math.floor(airstrikePlane.slotSize * shipAntiAir.calcProportionalShotdownRate())
     }
     // 固定撃墜
     if (Math.random() > 0.5) {
-      shotdownNumber += fixedShotdownNumber
+      shotdownNumber += shipAntiAir.calcFixedShotdownNumber()
     }
-
-    shotdownNumber += minimumBonus
+    // 最低保証
+    shotdownNumber += shipAntiAir.minimumBonus
 
     airstrikePlane.shotdown(shotdownNumber)
   }

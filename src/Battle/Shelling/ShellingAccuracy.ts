@@ -6,17 +6,17 @@ import {
   ShellingAccuracyInformation
 } from '../../types'
 
-export const calcBasicAccuracy = (factors: ShellingBasicAccuracyFactors) => {
+export const calcShellingBasicAccuracy = (factors: ShellingBasicAccuracyFactors) => {
   const { combinedFleetFactor, level, luck, equipmentAccuracy, improvementModifier } = factors
   return Math.floor(
     90 + combinedFleetFactor + 2 * Math.sqrt(level) + 1.5 * Math.sqrt(luck) + equipmentAccuracy + improvementModifier
   )
 }
 
-export const calcAccuracy = (basicAccuracy: number, modifiers: ShellingAccuracyModifiers) => {
-  const { moraleModifier, formationModifier, fitGunBonus, specialAttackModifier, apShellModifier } = modifiers
+export const calcShellingAccuracy = (basicAccuracy: number, modifiers: ShellingAccuracyModifiers) => {
+  const { formationModifier, moraleModifier, fitGunBonus, specialAttackModifier, apShellModifier } = modifiers
   return Math.floor(
-    (basicAccuracy * moraleModifier * formationModifier + fitGunBonus) * specialAttackModifier * apShellModifier
+    (basicAccuracy * formationModifier * moraleModifier + fitGunBonus) * specialAttackModifier * apShellModifier
   )
 }
 
@@ -28,8 +28,8 @@ export default class ShellingAccuracy implements ShellingAccuracyInformation {
   public equipmentAccuracy = 0
   public improvementModifier = 0
 
-  public moraleModifier = 1
   public formationModifier = 1
+  public moraleModifier = 1
   public fitGunBonus = 0
   public specialAttackModifier = 1
   public apShellModifier = 1
@@ -39,10 +39,10 @@ export default class ShellingAccuracy implements ShellingAccuracyInformation {
   }
 
   get basicAccuracy() {
-    return calcBasicAccuracy(this)
+    return calcShellingBasicAccuracy(this)
   }
 
   get value() {
-    return calcAccuracy(this.basicAccuracy, this)
+    return calcShellingAccuracy(this.basicAccuracy, this)
   }
 }
