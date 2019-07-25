@@ -1,16 +1,12 @@
-import { Formation, Engagement, FleetType, Side } from '../../constants'
-import { IShip } from '../../objects'
-import { sumBy } from 'lodash-es'
 import DayCombatSpecialAttack from './DayCombatSpecialAttack'
-import { ShipInformation, ShellingType, ShellingAccuracyFactors, InstallationType, BattleState } from '../../types'
+import { ShipInformation, ShellingType, InstallationType, BattleState } from '../../types'
 
-import ShellingPower from './ShellingPower'
-import ShellingAccuracy from './ShellingAccuracy'
 import ShipShellingStatus from './ShipShellingStatus'
 import getCombinedFleetFactor from './getCombinedFleetFactor'
 import Damage from '../Damage'
 import DefensePower from '../DefensePower'
 import { calcEvasionValue } from '../Evasion'
+import { calcHitRate } from '../Hit'
 
 export default class Shelling {
   public static getCombinedFleetFactor = getCombinedFleetFactor
@@ -58,7 +54,7 @@ export default class Shelling {
     const { attacker, defender } = this
     const power = getCombinedFleetFactor(attacker, defender)
     // accuracy 仮置き
-    return { power, accuracy: 1 }
+    return { power, accuracy: 0 }
   }
 
   get canParticipate() {
@@ -129,14 +125,8 @@ export default class Shelling {
     const { accuracy, defender, defenderEvasionValue, attackerShellingStatus } = this
     const proficiencyModifier = attackerShellingStatus.proficiencyModifier.hitRate
     const moraleModifier = defender.ship.morale.evasionModifier
-    let basicRate = (accuracy.value - defenderEvasionValue) * moraleModifier
-    if (basicRate < 10) {
-      basicRate = 10
-    }
-    if (basicRate > 96) {
-      basicRate = 96
-    }
-    return (basicRate + proficiencyModifier + 1) / 100
+
+    return calcHitRate(accuracy.value, defenderEvasionValue, moraleModifier, proficiencyModifier)
   }
 
   get defensePower() {

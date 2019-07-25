@@ -7,7 +7,7 @@ interface INightContactState {
   criticalHitRateModifier: number
 }
 
-export interface ISidedNightBattleState {
+export interface ISidedNightCombatState {
   side: Side
   formation: Formation
   searchlight: boolean

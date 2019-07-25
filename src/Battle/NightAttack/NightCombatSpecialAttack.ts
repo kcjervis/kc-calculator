@@ -21,7 +21,7 @@ type NightContactState = {
   criticalHitRateModifier: number
 }
 
-export type SidedNightBattleState = {
+export type SidedNightCombatState = {
   side: Side
   formation: Formation
   searchlight: boolean
@@ -42,8 +42,8 @@ const calcPreModifierValue = (ship: IShip) => {
 const calcBaseValue = (
   ship: IShip,
   isFlagship: boolean,
-  attackerSideState: SidedNightBattleState,
-  defenderSideState: SidedNightBattleState
+  attackerSideState: SidedNightCombatState,
+  defenderSideState: SidedNightCombatState
 ) => {
   let baseValue = calcPreModifierValue(ship)
   if (isFlagship) {
@@ -72,27 +72,27 @@ const calcBaseValue = (
   return baseValue
 }
 
-export default class NightBattleSpecialAttack {
-  public static DoubleAttack = new NightBattleSpecialAttack(1, '連撃', 110, 1.2, 1.1)
-  public static MainTorp = new NightBattleSpecialAttack(2, '主魚', 115, 1.3, 1.5)
-  public static TorpTorp = new NightBattleSpecialAttack(3, '魚雷', 122, 1.5, 1.6)
+export default class NightCombatSpecialAttack {
+  public static DoubleAttack = new NightCombatSpecialAttack(1, '連撃', 110, { power: 1.2, accuracy: 1.1 })
+  public static MainTorp = new NightCombatSpecialAttack(2, '主魚', 115, { power: 1.3, accuracy: 1.5 })
+  public static TorpTorp = new NightCombatSpecialAttack(3, '魚雷', 122, { power: 1.5, accuracy: 1.6 })
 
-  public static SubmarineTorpTorp = new NightBattleSpecialAttack(3.1, '潜水魚雷', 110, 1.65)
-  public static SubmarineRadarTorp = new NightBattleSpecialAttack(3.2, '潜水電探', 102, 1.75)
+  public static SubmarineTorpTorp = new NightCombatSpecialAttack(3.1, '潜水魚雷', 110, { power: 1.65, accuracy: 1 })
+  public static SubmarineRadarTorp = new NightCombatSpecialAttack(3.2, '潜水電探', 102, { power: 1.75, accuracy: 1 })
 
-  public static MainMainSecond = new NightBattleSpecialAttack(4, '主副', 130, 1.75, 1.65)
-  public static MainMainMain = new NightBattleSpecialAttack(5, '主砲', 140, 2, 1.5)
+  public static MainMainSecond = new NightCombatSpecialAttack(4, '主副', 130, { power: 1.75, accuracy: 1.65 })
+  public static MainMainMain = new NightCombatSpecialAttack(5, '主砲', 140, { power: 2, accuracy: 1.5 })
 
-  public static AerialAttack1 = new NightBattleSpecialAttack(6.1, '夜襲1.25', Infinity, 1.25)
-  public static AerialAttack2 = new NightBattleSpecialAttack(6.2, '夜襲1.20', Infinity, 1.2)
-  public static AerialAttack3 = new NightBattleSpecialAttack(6.3, '夜襲1.18', Infinity, 1.18)
+  public static AerialAttack1 = new NightCombatSpecialAttack(6.1, '夜襲1.25', Infinity, { power: 1.25, accuracy: 1 })
+  public static AerialAttack2 = new NightCombatSpecialAttack(6.2, '夜襲1.20', Infinity, { power: 1.2, accuracy: 1 })
+  public static AerialAttack3 = new NightCombatSpecialAttack(6.3, '夜襲1.18', Infinity, { power: 1.18, accuracy: 1 })
 
-  public static MainTorpRadar = new NightBattleSpecialAttack(7, '主魚電', 130, 1.3)
-  public static TorpRadarLookout = new NightBattleSpecialAttack(8, '魚見電', 150, 1.2)
+  public static MainTorpRadar = new NightCombatSpecialAttack(7, '主魚電', 130, { power: 1.3, accuracy: 1 })
+  public static TorpRadarLookout = new NightCombatSpecialAttack(8, '魚見電', 150, { power: 1.2, accuracy: 1 })
 
   public static getPossibleSpecialAttacks = (ship: IShip) => {
     const { shipType, hasEquipment, countEquipment } = ship
-    const possibleSpecialAttacks = new Array<NightBattleSpecialAttack>()
+    const possibleSpecialAttacks = new Array<NightCombatSpecialAttack>()
 
     if (isNightAerialAttackShip(ship)) {
       const planes = ship.planes.filter(plane => plane.slotSize > 0)
@@ -107,17 +107,17 @@ export default class NightBattleSpecialAttack {
       const hasFuzeBomber = planes.some(plane => plane.equipment.masterId === 320)
 
       if (nightFighterCount >= 2 && hasNightAttacker) {
-        possibleSpecialAttacks.push(NightBattleSpecialAttack.AerialAttack1)
+        possibleSpecialAttacks.push(NightCombatSpecialAttack.AerialAttack1)
       }
       if ((hasNightFighter && hasNightAttacker) || (hasNightPlane && hasFuzeBomber)) {
-        possibleSpecialAttacks.push(NightBattleSpecialAttack.AerialAttack2)
+        possibleSpecialAttacks.push(NightCombatSpecialAttack.AerialAttack2)
       }
 
       if (!hasNightFighter) {
         return possibleSpecialAttacks
       }
       if (nightFighterCount >= 3 || nightAttackerCount + semiNightPlaneCount >= 2) {
-        possibleSpecialAttacks.push(NightBattleSpecialAttack.AerialAttack3)
+        possibleSpecialAttacks.push(NightCombatSpecialAttack.AerialAttack3)
       }
 
       return possibleSpecialAttacks
@@ -133,10 +133,10 @@ export default class NightBattleSpecialAttack {
     // 駆逐カットイン
     if (shipType.is('Destroyer') && hasEquipment(equip => equip.isSurfaceRadar) && torpedoCount >= 1) {
       if (hasEquipment(equip => equip.category.is('SmallCaliberMainGun'))) {
-        possibleSpecialAttacks.push(NightBattleSpecialAttack.MainTorpRadar)
+        possibleSpecialAttacks.push(NightCombatSpecialAttack.MainTorpRadar)
       }
       if (hasEquipment(Lookout)) {
-        possibleSpecialAttacks.push(NightBattleSpecialAttack.TorpRadarLookout)
+        possibleSpecialAttacks.push(NightCombatSpecialAttack.TorpRadarLookout)
       }
     }
 
@@ -145,20 +145,20 @@ export default class NightBattleSpecialAttack {
 
     // 潜水カットイン
     if (submarineTorpedoCount >= 1 && hasEquipment(equip => equip.category.is('SubmarineEquipment'))) {
-      possibleSpecialAttacks.push(NightBattleSpecialAttack.SubmarineRadarTorp)
+      possibleSpecialAttacks.push(NightCombatSpecialAttack.SubmarineRadarTorp)
     } else if (submarineTorpedoCount >= 2) {
-      possibleSpecialAttacks.push(NightBattleSpecialAttack.SubmarineTorpTorp)
+      possibleSpecialAttacks.push(NightCombatSpecialAttack.SubmarineTorpTorp)
     } else if (mainGunCount >= 3) {
       // 以降汎用カットイン
-      possibleSpecialAttacks.push(NightBattleSpecialAttack.MainMainMain)
+      possibleSpecialAttacks.push(NightCombatSpecialAttack.MainMainMain)
     } else if (mainGunCount >= 2 && secondaryGunCount >= 1) {
-      possibleSpecialAttacks.push(NightBattleSpecialAttack.MainMainSecond)
+      possibleSpecialAttacks.push(NightCombatSpecialAttack.MainMainSecond)
     } else if (torpedoCount >= 2) {
-      possibleSpecialAttacks.push(NightBattleSpecialAttack.TorpTorp)
+      possibleSpecialAttacks.push(NightCombatSpecialAttack.TorpTorp)
     } else if (mainGunCount >= 1 && torpedoCount >= 1) {
-      possibleSpecialAttacks.push(NightBattleSpecialAttack.MainTorp)
+      possibleSpecialAttacks.push(NightCombatSpecialAttack.MainTorp)
     } else if (mainGunCount + secondaryGunCount >= 2) {
-      possibleSpecialAttacks.push(NightBattleSpecialAttack.DoubleAttack)
+      possibleSpecialAttacks.push(NightCombatSpecialAttack.DoubleAttack)
     }
 
     return possibleSpecialAttacks
@@ -168,17 +168,12 @@ export default class NightBattleSpecialAttack {
 
   public static calcBaseValue = calcBaseValue
 
-  public accuracyModifier: number
-
   constructor(
     public readonly id: number,
     public readonly name: string,
     public readonly typeFactor: number,
-    public readonly powerModifier: number,
-    accuracyModifier?: number
-  ) {
-    this.accuracyModifier = accuracyModifier ? accuracyModifier : 1.1
-  }
+    public readonly modifier: { power: number; accuracy: number }
+  ) {}
 
   get api() {
     return Math.floor(this.id)
@@ -189,7 +184,7 @@ export default class NightBattleSpecialAttack {
   }
 
   public calcRate = (baseValue: number) => {
-    if (this === NightBattleSpecialAttack.DoubleAttack) {
+    if (this === NightCombatSpecialAttack.DoubleAttack) {
       return 109 / 110
     }
     return Math.ceil(baseValue) / this.typeFactor

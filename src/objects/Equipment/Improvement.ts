@@ -162,7 +162,6 @@ export default class Improvement implements IImprovement {
         'LargeSonar',
         'DepthCharge',
         'ArmorPiercingShell',
-        'AntiAircraftGun',
         'AntiAircraftFireDirector'
       )
     ) {

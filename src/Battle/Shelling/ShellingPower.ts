@@ -9,13 +9,20 @@ import {
   ShellingPowerInformation
 } from '../../types'
 
+const calcCarrierShellingBasicPower = (basicPower: number, factors: ShellingBasicPowerFactors) => {
+  const { bombing, torpedo } = factors
+  const airPower = basicPower + Math.floor(Math.floor(1.3 * bombing) + torpedo) + 15
+  return 25 + Math.floor(1.5 * airPower)
+}
+
 export const calcBasicPower = (factors: ShellingBasicPowerFactors) => {
-  const { shellingType, firepower, combinedFleetFactor, improvementModifier, bombing, torpedo } = factors
-  let basicPower = 5 + firepower + combinedFleetFactor + improvementModifier
+  const { shellingType, firepower, combinedFleetFactor, improvementModifier } = factors
+  const basicPower = 5 + firepower + combinedFleetFactor + improvementModifier
+
   if (shellingType === 'CarrierShelling') {
-    basicPower += Math.floor(Math.floor(1.3 * bombing) + torpedo) + 15
-    basicPower = 25 + Math.floor(1.5 * basicPower)
+    return calcCarrierShellingBasicPower(basicPower, factors)
   }
+
   return basicPower
 }
 

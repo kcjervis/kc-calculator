@@ -5,14 +5,14 @@ import { Formation } from '../../constants'
 import NightAttackPower from './NightAttackPower'
 import ShipAntiInstallationStatus from '../ShipAntiInstallationStatus'
 import { calcCruiserFitBonus, getProficiencyModifier } from '../Shelling/ShipShellingStatus'
-import NightBattleSpecialAttack, { isNightAerialAttackShip } from './NightBattleSpecialAttack'
+import NightCombatSpecialAttack, { isNightAerialAttackShip } from './NightCombatSpecialAttack'
 
 type ShipNightAttackPowerOptions = Partial<{
   role: ShipRole
   formation: Formation
   nightContactModifier: number
   installationType: InstallationType
-  specialAttack: NightBattleSpecialAttack
+  specialAttack: NightCombatSpecialAttack
   isCritical: boolean
   eventMapModifier: number
 }>
@@ -115,7 +115,7 @@ export default class ShipNightAttackStatus {
 
     let specialAttackModifier = 1
     if (specialAttack) {
-      specialAttackModifier = specialAttack.powerModifier
+      specialAttackModifier = specialAttack.modifier.power
       if (specialAttack.isDestroyerCutin && ship.hasEquipment(267)) {
         specialAttackModifier *= 1.25
       }

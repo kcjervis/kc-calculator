@@ -129,7 +129,25 @@ export default class DayCombatSpecialAttack {
       return acc + currentRate
     }, 0)
 
-    return { baseValue, attacks, rateMap, total }
+    const normalAttackRate = 1 - total
+    const isSpecialAttackOnly = normalAttackRate <= 0
+
+    type DayCombatAttack = DayCombatSpecialAttack | undefined
+    const dayCombatAttacks: DayCombatAttack[] = attacks.concat()
+    if (!isSpecialAttackOnly) {
+      dayCombatAttacks.unshift(undefined)
+    }
+
+    const getAttackRate = (attack: DayCombatAttack) => {
+      if (!attack) {
+        return normalAttackRate
+      }
+      return rateMap.get(attack) || 0
+    }
+
+    const entries = () => dayCombatAttacks.map(attack => [attack, getAttackRate(attack)] as const)
+
+    return { baseValue, attacks, rateMap, total, dayCombatAttacks, getAttackRate, entries }
   }
 
   public static try = (
