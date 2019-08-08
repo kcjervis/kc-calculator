@@ -28,20 +28,26 @@ export default class NightAttack {
     return new ShipNightAttackStatus(this.attacker.ship)
   }
 
+  get contactModifier() {
+    if (this.nightContactModifier === 5) {
+      return { power: 5, accuracy: 1.1, criticalRate: 1.57 }
+    }
+    return { power: 0, accuracy: 1, criticalRate: 1 }
+  }
+
   get accuracy() {
-    const { attacker, attackerNightAttackStatus, specialAttack } = this
+    const { attacker, attackerNightAttackStatus, specialAttack, contactModifier } = this
     const { formation, role } = attacker
     const { stats, level, totalEquipmentStats, morale } = attacker.ship
 
     const starshellModifier = undefined
-    const contactModifier = undefined
 
     const specialAttackModifier = specialAttack && specialAttack.modifier.accuracy
     const searchlightModifier = undefined
 
     return new NightAttackAccuracy({
       starshellModifier,
-      contactModifier,
+      contactModifier: contactModifier.accuracy,
       level,
       luck: stats.luck,
       equipmentAccuracy: totalEquipmentStats('accuracy'),
@@ -56,21 +62,14 @@ export default class NightAttack {
   }
 
   get power() {
-    const {
-      isCritical,
-      manualInstallationType,
-      attackerNightAttackStatus,
-      specialAttack,
-      nightContactModifier,
-      eventMapModifier
-    } = this
+    const { isCritical, manualInstallationType, attackerNightAttackStatus, specialAttack, eventMapModifier } = this
     const { role, formation } = this.attacker
 
     const installationType = manualInstallationType || this.defender.ship.installationType
 
     return attackerNightAttackStatus.calcPower({
       role,
-      nightContactModifier,
+      nightContactModifier: this.contactModifier.power,
       formation,
       installationType,
       specialAttack,
