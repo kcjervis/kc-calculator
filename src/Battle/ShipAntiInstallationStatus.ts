@@ -23,24 +23,12 @@ export default class ShipAntiInstallationStatus {
   }
 
   private get wgCount() {
-    return this.countEquipmentCategory('AntiGroundEquipment')
+    return this.countEquipment(126)
   }
 
-  /**
-   * 対地艦爆
-   * id60 零式艦戦62型(爆戦)
-   * id64 Ju87C改
-   * id148 試製南山
-   * id305 Ju87C改二(KMX搭載機)
-   * id306 Ju87C改二(KMX搭載機/熟練)
-   * id233 F4U-1D
-   * id277 FM-2
-   */
   get bombing() {
-    return sumBy(
-      this.items.filter(item => [60, 64, 148, 233, 277, 305, 306, 316, 319].includes(item.masterId)),
-      item => item.bombing
-    )
+    const antiInstallationBombers = this.items.filter(item => item.isAntiInstallationBomber)
+    return sumBy(antiInstallationBombers, item => item.bombing)
   }
 
   // WG42加算補正 共通

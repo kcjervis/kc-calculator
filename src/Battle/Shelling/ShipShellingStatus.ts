@@ -74,7 +74,7 @@ const getApShellModifiers = (ship: IShip): AttackModifiers => {
  * 戦爆連合は適当
  */
 export const getProficiencyModifier = (ship: IShip, specialAttack?: DayCombatSpecialAttack) => {
-  const modifier = { power: 1, hitRate: 1 }
+  const modifier = { power: 1, hitRate: 0, criticalRate: 0 }
   if (specialAttack && specialAttack.isCarrierSpecialAttack) {
     const planes = ship.planes.filter(plane => plane.slotSize > 0 && plane.category.isCarrierShellingAircraft)
     if (planes.some(plane => plane.index === 0)) {
@@ -123,6 +123,15 @@ export const getProficiencyModifier = (ship: IShip, specialAttack?: DayCombatSpe
     averageModifierB = 9
   }
   modifier.hitRate = averageModifierA + averageModifierB
+
+  modifier.criticalRate = sumBy(planes, plane => {
+    const { internal, level } = plane.equipment.proficiency
+    let levelBonus = 0
+    if (level === 7) {
+      levelBonus = 3
+    }
+    return (Math.sqrt(Math.sqrt(0.1 * internal)) + levelBonus) / 100
+  })
 
   return modifier
 }
@@ -201,10 +210,6 @@ export default class ShipShellingStatus {
       return { power: 1.1, accuracy: 1.25 }
     }
     return { power: 1.08, accuracy: 1.1 }
-  }
-
-  get proficiencyModifier() {
-    return getProficiencyModifier(this.ship)
   }
 
   public calcPower = (options: ShipShellingPowerOptions) => {

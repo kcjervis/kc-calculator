@@ -20,7 +20,7 @@ export default class DefensePower {
 
   get values() {
     const { min, baseArmor } = this
-    return range(Math.floor(baseArmor)).map(value => min + value)
+    return range(Math.floor(baseArmor)).map(value => min + value * 0.6)
   }
 
   public random = () => {

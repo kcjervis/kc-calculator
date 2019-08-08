@@ -28,6 +28,14 @@ export default class ShipNightAttackStatus {
     return 'NightAttack'
   }
 
+  get proficiencyModifier() {
+    const { ship, nightAttackType } = this
+    if (nightAttackType === 'NightAttack') {
+      return { power: 1, hitRate: 0, criticalRate: 0 }
+    }
+    return getProficiencyModifier(ship)
+  }
+
   private get improvementPowerModifier() {
     return this.ship.totalEquipmentStats(gear => {
       const { masterId, improvement, category } = gear
@@ -103,7 +111,7 @@ export default class ShipNightAttackStatus {
       specialAttack,
       isCritical = false
     } = options
-    const { ship, nightAttackType, improvementPowerModifier } = this
+    const { ship, nightAttackType, improvementPowerModifier, proficiencyModifier } = this
     const { firepower, torpedo } = ship.stats
 
     const isAntiInstallationWarfare = installationType !== 'None'
@@ -126,7 +134,6 @@ export default class ShipNightAttackStatus {
     const effectivenessMultiplicative = antiInstallationModifiers.postCapMultiplicative
     const effectivenessAdditive = 0
     const criticalModifier = isCritical ? 1.5 : 1
-    const proficiencyModifier = getProficiencyModifier(ship).power
 
     const factors: NightAttackPowerFactors = {
       nightAttackType,
@@ -145,7 +152,7 @@ export default class ShipNightAttackStatus {
       effectivenessMultiplicative,
       effectivenessAdditive,
       criticalModifier,
-      proficiencyModifier,
+      proficiencyModifier: proficiencyModifier.power,
       eventMapModifier
     }
     return new NightAttackPower(factors)

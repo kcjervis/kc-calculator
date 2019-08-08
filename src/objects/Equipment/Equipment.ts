@@ -40,6 +40,8 @@ export interface IEquipment extends IEquipmentStats {
   isSurfaceRadar: boolean
 
   isAntiAirRadar: boolean
+
+  isAntiInstallationBomber: boolean
 }
 
 export default class Equipment implements IEquipment {
@@ -145,5 +147,19 @@ export default class Equipment implements IEquipment {
   get isAntiAirRadar() {
     const { category, antiAir } = this
     return category.isRadar && antiAir >= 2
+  }
+
+  /**
+   * 対地艦爆
+   * id60 零式艦戦62型(爆戦)
+   * id64 Ju87C改
+   * id148 試製南山
+   * id305 Ju87C改二(KMX搭載機)
+   * id306 Ju87C改二(KMX搭載機/熟練)
+   * id233 F4U-1D
+   * id277 FM-2
+   */
+  get isAntiInstallationBomber() {
+    return [60, 64, 148, 233, 277, 305, 306, 316, 319].includes(this.masterId)
   }
 }

@@ -91,7 +91,7 @@ export default class NightCombatSpecialAttack {
   public static TorpRadarLookout = new NightCombatSpecialAttack(8, '魚見電', 150, { power: 1.2, accuracy: 1 })
 
   public static getPossibleSpecialAttacks = (ship: IShip) => {
-    const { shipType, hasEquipment, countEquipment } = ship
+    const { shipType, hasEquipment, countEquipment, countEquipmentCategory } = ship
     const possibleSpecialAttacks = new Array<NightCombatSpecialAttack>()
 
     if (isNightAerialAttackShip(ship)) {
@@ -127,8 +127,8 @@ export default class NightCombatSpecialAttack {
       return possibleSpecialAttacks
     }
 
-    const submarineTorpedoCount = countEquipment(equip => equip.category.is('SubmarineTorpedo'))
-    const torpedoCount = countEquipment(equip => equip.category.is('Torpedo')) + submarineTorpedoCount
+    const submarineTorpedoCount = countEquipment(213) + countEquipment(214)
+    const torpedoCount = countEquipmentCategory('Torpedo', 'SubmarineTorpedo')
 
     // 駆逐カットイン
     if (shipType.is('Destroyer') && hasEquipment(equip => equip.isSurfaceRadar) && torpedoCount >= 1) {
