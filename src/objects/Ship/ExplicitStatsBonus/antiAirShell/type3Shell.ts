@@ -2,7 +2,7 @@ import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
 
 const bonusCreator: StatsBonusCreator = ship => {
   // 三式弾
-  const count = ship.countEquipment(35)
+  const count = ship.countGear(35)
   if (count === 0) {
     return undefined
   }

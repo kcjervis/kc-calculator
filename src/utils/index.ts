@@ -17,16 +17,13 @@ export const merge = <T>(target: T, ...sources: Array<Partial<T>>) => {
 
 export const softcap = (cap: number, value: number) => (value <= cap ? value : cap + Math.sqrt(value - cap))
 
-export const shipNameIsKai = (name: string) => /改$/.test(name)
+export const shipNameIsKai = (name: string) => name.endsWith("改")
 
 export const shipNameIsKai2 = (name: string) => /(改二|Верный)(?!丙)/.test(name)
 
 export const calcDeadlyPower = (ship: IShip) => {
   const { nowHp } = ship.health
   const { armor } = ship.stats
-  const defensePower = new DefensePower(
-    armor,
-    ship.totalEquipmentStats(equip => equip.improvement.defensePowerModifier)
-  )
+  const defensePower = new DefensePower(armor, ship.totalEquipmentStats(gear => gear.improvement.defensePowerModifier))
   return nowHp + defensePower.max
 }

@@ -1,5 +1,5 @@
 import { MasterShip } from '../../data'
-import { EquipmentFactory, IEquipmentDataObject } from '../Equipment'
+import { GearFactory, IGearDataObject } from '../Gear'
 import { createPlanes } from '../Plane'
 
 import { createExplicitStatsBonus } from './ExplicitStatsBonus'
@@ -13,7 +13,7 @@ export interface IShipDataObject {
   masterId: number
   level?: number
   slots?: number[]
-  equipments?: Array<IEquipmentDataObject | undefined>
+  equipments?: Array<IGearDataObject | undefined>
 
   nowHp?: number
   morale?: number
@@ -21,7 +21,7 @@ export interface IShipDataObject {
 }
 
 export default class ShipFactory {
-  constructor(private readonly masters: MasterShip[], private readonly equipmentFactory: EquipmentFactory) {}
+  constructor(private readonly masters: MasterShip[], private readonly gearFactory: GearFactory) {}
 
   public create = (obj?: IShipDataObject): IShip | undefined => {
     if (!obj) {
@@ -34,10 +34,10 @@ export default class ShipFactory {
       return undefined
     }
 
-    const equipments = obj.equipments ? obj.equipments.map(this.equipmentFactory.create) : []
+    const gears = obj.equipments ? obj.equipments.map(this.gearFactory.create) : []
 
     const nakedStats = new ShipNakedStats(foundMaster, level, increased)
-    const stats = new ShipStats(nakedStats, equipments)
+    const stats = new ShipStats(nakedStats, gears)
 
     const { nowHp = stats.hp } = obj
     const health = new Health(stats.hp, nowHp)
@@ -45,8 +45,8 @@ export default class ShipFactory {
 
     const slots = obj.slots ? obj.slots.concat() : foundMaster.slotCapacities.concat()
 
-    const planes = createPlanes(slots, equipments)
-    const ship = new Ship(foundMaster, stats, nakedStats, health, morale, slots, equipments, planes)
+    const planes = createPlanes(slots, gears)
+    const ship = new Ship(foundMaster, stats, nakedStats, health, morale, slots, gears, planes)
 
     // 装備ボーナスを適応
     ship.stats.statsBonus = createExplicitStatsBonus(ship)

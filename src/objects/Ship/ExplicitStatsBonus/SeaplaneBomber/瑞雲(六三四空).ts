@@ -3,7 +3,7 @@ import { shipNameIsKai2 } from '../../../../utils'
 
 const createBonus: StatsBonusCreator = ship => {
   // 瑞雲(六三四空) 瑞雲12型(六三四空)
-  const count = ship.countEquipment(79) + ship.countEquipment(81)
+  const count = ship.countGear(79) + ship.countGear(81)
   if (count === 0) {
     return undefined
   }

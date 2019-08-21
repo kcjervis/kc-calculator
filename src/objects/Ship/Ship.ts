@@ -7,17 +7,17 @@ import { IMorale } from './Morale'
 import { IShipNakedStats } from './ShipNakedStats'
 import { IShipStats } from './ShipStats'
 
-import { MasterShip, ShipClass, ShipType, EquipmentCategory } from '../../data'
+import { MasterShip, ShipClass, ShipType, GearCategory } from '../../data'
 import { nonNullable, shipNameIsKai2 } from '../../utils'
-import { IEquipment } from '../Equipment'
+import { IGear } from '../Gear'
 import { IPlane } from '../Plane'
-import { EquipmentCategoryKey } from '../../data/EquipmentCategory'
+import { GearCategoryKey } from '../../data/GearCategory'
 import { InstallationType } from '../../types'
 
-type EquipmentIterator<R> = ListIterator<IEquipment, R>
-type EquipmentIteratee<R, S> = EquipmentIterator<R> | S
+type GearIterator<R> = ListIterator<IGear, R>
+type GearIteratee<R, S> = GearIterator<R> | S
 
-type EquipmentCategoryIteratee = ListIterator<EquipmentCategory, boolean> | EquipmentCategoryKey
+type GearCategoryIteratee = ListIterator<GearCategory, boolean> | GearCategoryKey
 
 export interface IShip {
   masterId: number
@@ -35,7 +35,7 @@ export interface IShip {
 
   slots: number[]
   slotCapacities: number[]
-  equipments: Array<IEquipment | undefined>
+  gears: Array<IGear | undefined>
   planes: IPlane[]
 
   fighterPower: number
@@ -43,17 +43,20 @@ export interface IShip {
   installationType: InstallationType
   isInstallation: boolean
 
-  canEquip: (equipment: IEquipment, slotIndex: number) => boolean
+  canEquip: (gear: IGear, slotIndex: number) => boolean
 
-  hasEquipment: (iteratee: EquipmentIteratee<boolean, number>) => boolean
-  countEquipment: (iteratee?: EquipmentIteratee<boolean, number>) => number
+  hasGear: (iteratee: GearIteratee<boolean, number>) => boolean
+  countGear: (iteratee?: GearIteratee<boolean, number>) => number
 
-  hasEquipmentCategory: (...args: EquipmentCategoryIteratee[]) => boolean
-  countEquipmentCategory: (...args: EquipmentCategoryIteratee[]) => number
+  hasGearCategory: (...args: GearCategoryIteratee[]) => boolean
+  countGearCategory: (...args: GearCategoryIteratee[]) => number
 
-  totalEquipmentStats: (iteratee: ((equip: IEquipment) => number) | keyof IEquipment) => number
+  totalEquipmentStats: (iteratee: ((gear: IGear) => number) | keyof IGear) => number
 
   canNightAttack: boolean
+
+  /** 廃止予定 */
+  equipments: Array<IGear | undefined>
 }
 
 export default class Ship implements IShip {
@@ -66,10 +69,15 @@ export default class Ship implements IShip {
     public readonly health: IHealth,
     public readonly morale: IMorale,
     public readonly slots: number[],
-    public readonly equipments: Array<IEquipment | undefined>,
+    public readonly gears: Array<IGear | undefined>,
     public readonly planes: IPlane[]
   ) {
     this.slotCapacities = master.slotCapacities.concat()
+  }
+
+  /** 廃止予定 */
+  get equipments() {
+    return this.gears
   }
 
   get masterId() {
@@ -120,13 +128,13 @@ export default class Ship implements IShip {
     return 'SoftSkinned'
   }
 
-  get nonNullableEquipments() {
-    return this.equipments.filter(nonNullable)
+  get nonNullableGears() {
+    return this.gears.filter(nonNullable)
   }
 
-  public canEquip = (equipment: IEquipment, slotIndex: number) => {
+  public canEquip = (gear: IGear, slotIndex: number) => {
     const { equippable, isAbyssal } = this.master
-    const { masterId, category } = equipment
+    const { masterId, category } = gear
 
     if (isAbyssal) {
       return true
@@ -152,27 +160,26 @@ export default class Ship implements IShip {
     return true
   }
 
-  public hasEquipment = (iteratee: EquipmentIteratee<boolean, number>) => {
+  public hasGear = (iteratee: GearIteratee<boolean, number>) => {
     if (typeof iteratee === 'number') {
-      return this.nonNullableEquipments.some(({ masterId }) => masterId === iteratee)
+      return this.nonNullableGears.some(({ masterId }) => masterId === iteratee)
     }
-    return this.nonNullableEquipments.some(iteratee)
+    return this.nonNullableGears.some(iteratee)
   }
 
-  public countEquipment = (iteratee?: EquipmentIteratee<boolean, number>) => {
-    const { nonNullableEquipments } = this
+  public countGear = (iteratee?: GearIteratee<boolean, number>) => {
+    const { nonNullableGears } = this
     if (iteratee === undefined) {
-      return nonNullableEquipments.length
+      return nonNullableGears.length
     }
     if (typeof iteratee === 'number') {
-      return nonNullableEquipments.filter(({ masterId }) => masterId === iteratee).length
+      return nonNullableGears.filter(({ masterId }) => masterId === iteratee).length
     }
-    return nonNullableEquipments.filter(iteratee).length
+    return nonNullableGears.filter(iteratee).length
   }
 
-  public countEquipmentCategory = (...args: EquipmentCategoryIteratee[]) => {
-    const categories = this.nonNullableEquipments.map(({ category }) => category)
-    let count = 0
+  public countGearCategory = (...args: GearCategoryIteratee[]) => {
+    const categories = this.nonNullableGears.map(({ category }) => category)
     return sumBy(args, arg => {
       if (typeof arg === 'string') {
         return categories.filter(category => category.is(arg)).length
@@ -181,12 +188,12 @@ export default class Ship implements IShip {
     })
   }
 
-  public hasEquipmentCategory = (...args: EquipmentCategoryIteratee[]) => {
-    return this.countEquipmentCategory(...args) > 0
+  public hasGearCategory = (...args: GearCategoryIteratee[]) => {
+    return this.countGearCategory(...args) > 0
   }
 
-  public totalEquipmentStats = (iteratee: ((equip: IEquipment) => number) | keyof IEquipment) => {
-    return sumBy(this.nonNullableEquipments, iteratee)
+  public totalEquipmentStats = (iteratee: ((gear: IGear) => number) | keyof IGear) => {
+    return sumBy(this.nonNullableGears, iteratee)
   }
 
   get canNightAttack() {

@@ -1,8 +1,8 @@
 import { MstEquipment } from '@jervis/data'
-import EquipmentCategory from './EquipmentCategory'
-import EquipmentCategoryId from './EquipmentCategoryId'
+import GearCategory from './GearCategory'
+import GearCategoryId from './GearCategoryId'
 
-interface IEquipmentData {
+interface IGearData {
   id: number
   name: string
   typeIds: Readonly<number[]>
@@ -22,7 +22,7 @@ interface IEquipmentData {
   radius?: number
 }
 
-export default class MasterEquipment implements IEquipmentData {
+export default class MasterGear implements IGearData {
   public static readonly abyssalIdFrom = 500
 
   public readonly id: number
@@ -49,7 +49,7 @@ export default class MasterEquipment implements IEquipmentData {
 
   public readonly radius: number = 0
 
-  constructor(raw: MstEquipment, public readonly category: EquipmentCategory, public readonly improvable: boolean) {
+  constructor(raw: MstEquipment, public readonly category: GearCategory, public readonly improvable: boolean) {
     this.id = raw.api_id
     this.name = raw.api_name
 
@@ -74,7 +74,7 @@ export default class MasterEquipment implements IEquipmentData {
     this.evasion = 0
     this.antiBomber = 0
     this.interception = 0
-    if (this.typeIds[2] === EquipmentCategoryId.LandBasedFighter) {
+    if (this.typeIds[2] === GearCategoryId.LandBasedFighter) {
       this.antiBomber = accuracy
       this.interception = evasion
     } else {

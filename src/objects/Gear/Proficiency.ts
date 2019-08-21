@@ -1,4 +1,4 @@
-import { MasterEquipment } from '../../data'
+import { MasterGear } from '../../data'
 import { maxBy } from 'lodash-es'
 
 type LevelBonus = { level: number; value: number }
@@ -47,7 +47,7 @@ export default class Proficiency implements IProficiency {
     return Proficiency.internalBounds.filter(bound => bound <= internal).length - 1
   }
 
-  constructor(public internal = 0, private readonly master: MasterEquipment) {}
+  constructor(public internal = 0, private readonly master: MasterGear) {}
 
   get level() {
     return Proficiency.internalToLevel(this.internal)

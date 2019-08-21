@@ -31,12 +31,12 @@ type ShipShellingPowerOptions = Partial<{
 export const calcCruiserFitBonus = (ship: IShip) => {
   let fitBonus = 0
   if (ship.shipType.either('LightCruiser', 'TorpedoCruiser', 'TrainingCruiser')) {
-    const singleGunCount = ship.countEquipment(equip => [4, 11].includes(equip.masterId))
-    const twinGunCount = ship.countEquipment(equip => [65, 119, 139].includes(equip.masterId))
+    const singleGunCount = ship.countGear(gear => [4, 11].includes(gear.masterId))
+    const twinGunCount = ship.countGear(gear => [65, 119, 139].includes(gear.masterId))
     fitBonus += Math.sqrt(singleGunCount) + 2 * Math.sqrt(twinGunCount)
   }
   if (ship.shipClass.is('ZaraClass')) {
-    fitBonus += Math.sqrt(ship.countEquipment(162))
+    fitBonus += Math.sqrt(ship.countGear(162))
   }
   return fitBonus
 }
@@ -45,17 +45,14 @@ export const calcCruiserFitBonus = (ship: IShip) => {
  * 徹甲弾補正
  */
 const getApShellModifiers = (ship: IShip): AttackModifiers => {
-  const { hasEquipment } = ship
+  const { hasGear } = ship
   const modifier = { power: 1, accuracy: 1 }
-  if (
-    !hasEquipment(equip => equip.category.is('ArmorPiercingShell')) ||
-    !hasEquipment(equip => equip.category.isMainGun)
-  ) {
+  if (!hasGear(gear => gear.category.is('ArmorPiercingShell')) || !hasGear(gear => gear.category.isMainGun)) {
     return modifier
   }
 
-  const hasSecondaryGun = hasEquipment(equip => equip.category.is('SecondaryGun'))
-  const hasRader = hasEquipment(equip => equip.category.isRadar)
+  const hasSecondaryGun = hasGear(gear => gear.category.is('SecondaryGun'))
+  const hasRader = hasGear(gear => gear.category.isRadar)
 
   if (hasSecondaryGun && hasRader) {
     return { power: 1.15, accuracy: 1.3 }
@@ -93,12 +90,12 @@ export const getProficiencyModifier = (ship: IShip, specialAttack?: DayCombatSpe
     1 +
     sumBy(planes, plane => {
       if (plane.index === 0) {
-        return plane.equipment.proficiency.criticalPowerModifier / 100
+        return plane.gear.proficiency.criticalPowerModifier / 100
       }
-      return plane.equipment.proficiency.criticalPowerModifier / 200
+      return plane.gear.proficiency.criticalPowerModifier / 200
     })
 
-  const average = sumBy(planes, plane => plane.equipment.proficiency.internal) / planes.length
+  const average = sumBy(planes, plane => plane.gear.proficiency.internal) / planes.length
   let averageModifierA = 0
   let averageModifierB = 0
   if (average >= 10) {
@@ -125,7 +122,7 @@ export const getProficiencyModifier = (ship: IShip, specialAttack?: DayCombatSpe
   modifier.hitRate = averageModifierA + averageModifierB
 
   modifier.criticalRate = sumBy(planes, plane => {
-    const { internal, level } = plane.equipment.proficiency
+    const { internal, level } = plane.gear.proficiency
     let levelBonus = 0
     if (level === 7) {
       levelBonus = 3
@@ -144,7 +141,7 @@ export default class ShipShellingStatus {
   }
 
   get shellingType(): ShellingType {
-    const { shipType, shipClass, isInstallation, hasEquipment } = this.ship
+    const { shipType, shipClass, isInstallation, hasGear } = this.ship
     if (shipType.isAircraftCarrierClass) {
       return 'CarrierShelling'
     }
@@ -153,7 +150,7 @@ export default class ShipShellingStatus {
       return 'Shelling'
     }
 
-    if (hasEquipment(equip => equip.category.isAerialCombatAircraft)) {
+    if (hasGear(gear => gear.category.isAerialCombatAircraft)) {
       return 'CarrierShelling'
     }
 
@@ -173,7 +170,7 @@ export default class ShipShellingStatus {
   }
 
   get improvementModifier() {
-    return this.ship.totalEquipmentStats(equip => equip.improvement.shellingPowerModifier)
+    return this.ship.totalEquipmentStats(gear => gear.improvement.shellingPowerModifier)
   }
 
   get cruiserFitBonus() {
@@ -188,17 +185,14 @@ export default class ShipShellingStatus {
     const { ship } = this
     const modifier = { power: 1, accuracy: 1 }
 
-    const { hasEquipment } = ship
+    const { hasGear } = ship
 
-    if (
-      !hasEquipment(equip => equip.category.is('ArmorPiercingShell')) ||
-      !hasEquipment(equip => equip.category.isMainGun)
-    ) {
+    if (!hasGear(gear => gear.category.is('ArmorPiercingShell')) || !hasGear(gear => gear.category.isMainGun)) {
       return modifier
     }
 
-    const hasSecondaryGun = hasEquipment(equip => equip.category.is('SecondaryGun'))
-    const hasRader = hasEquipment(equip => equip.category.isRadar)
+    const hasSecondaryGun = hasGear(gear => gear.category.is('SecondaryGun'))
+    const hasRader = hasGear(gear => gear.category.isRadar)
 
     if (hasSecondaryGun && hasRader) {
       return { power: 1.15, accuracy: 1.3 }
@@ -282,7 +276,7 @@ export default class ShipShellingStatus {
     const { luck } = stats
     const { fitGunBonus, combinedFleetFactor, formation, role, specialAttack, isArmorPiercing } = options
     const equipmentAccuracy = ship.totalEquipmentStats('accuracy')
-    const improvementModifier = ship.totalEquipmentStats(equip => equip.improvement.shellingAccuracyModifier)
+    const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.shellingAccuracyModifier)
 
     const moraleModifier = ship.morale.shellingAccuracyModifier
     const formationModifier = formation.getModifiersWithRole(role).shelling.accuracy

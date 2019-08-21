@@ -8,9 +8,9 @@ const createBonus: StatsBonusCreator = ship => {
     return undefined
   }
 
-  const model22634AirGroup = ship.countEquipment(291)
-  const model22634AirGroupSkilled = ship.countEquipment(292)
-  const otherSuiseiCount = ship.countEquipment(24) + ship.countEquipment(57) + ship.countEquipment(111)
+  const model22634AirGroup = ship.countGear(291)
+  const model22634AirGroupSkilled = ship.countGear(292)
+  const otherSuiseiCount = ship.countGear(24) + ship.countGear(57) + ship.countGear(111)
   const bonus = new StatsBonus()
 
   if (model22634AirGroup) {

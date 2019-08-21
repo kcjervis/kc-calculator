@@ -1,5 +1,4 @@
 import { Formation, Side } from '../../constants'
-import { IEquipment } from '../../objects'
 
 interface INightContactState {
   powerModifier: number

@@ -32,11 +32,11 @@ export default class Airstrike {
       let stat = 0
       let planeTypeModifier = 1
       if (plane.category.isTorpedoBomber) {
-        stat = plane.equipment.torpedo
+        stat = plane.gear.torpedo
         planeTypeModifier = torpedoBomberModifier
       }
       if (plane.category.isDiveBomber) {
-        stat = plane.equipment.bombing
+        stat = plane.gear.bombing
         planeTypeModifier = 1
       }
       if (plane.category.is('JetPoweredFighterBomber')) {

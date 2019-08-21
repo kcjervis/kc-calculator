@@ -1,12 +1,12 @@
-import { equipmentFighterPower, equipmentInterceptionPower } from '../../Battle/AerialCombat/fighterCombat'
+import { gearFighterPower, gearInterceptionPower } from '../../Battle/AerialCombat/fighterCombat'
 import { AirControlState } from '../../constants'
-import { EquipmentCategory } from '../../data'
-import { IEquipment } from '../Equipment'
+import { GearCategory } from '../../data'
+import { IGear } from '../Gear'
 
 export interface IPlane {
-  equipment: IEquipment
+  gear: IGear
   index: number
-  category: EquipmentCategory
+  category: GearCategory
   slotSize: number
   fighterPower: number
   interceptionPower: number
@@ -30,10 +30,10 @@ export interface IPlane {
 }
 
 export default class Plane implements IPlane {
-  constructor(public readonly equipment: IEquipment, private readonly slots: number[], public readonly index: number) {}
+  constructor(public readonly gear: IGear, private readonly slots: number[], public readonly index: number) {}
 
   get category() {
-    return this.equipment.category
+    return this.gear.category
   }
 
   get slotSize() {
@@ -46,13 +46,13 @@ export default class Plane implements IPlane {
   }
 
   get fighterPower() {
-    const { equipment, slotSize } = this
-    return equipmentFighterPower(equipment, slotSize)
+    const { gear, slotSize } = this
+    return gearFighterPower(gear, slotSize)
   }
 
   get interceptionPower() {
-    const { equipment, slotSize } = this
-    return equipmentInterceptionPower(equipment, slotSize)
+    const { gear, slotSize } = this
+    return gearInterceptionPower(gear, slotSize)
   }
 
   get canContact() {
@@ -61,12 +61,12 @@ export default class Plane implements IPlane {
   }
 
   get contactTriggerFactor() {
-    const { equipment, slotSize } = this
-    return Math.floor(equipment.los * Math.sqrt(slotSize))
+    const { gear, slotSize } = this
+    return Math.floor(gear.los * Math.sqrt(slotSize))
   }
 
   public contactSelectionRate = (state: AirControlState) => {
-    const { los, improvement } = this.equipment
+    const { los, improvement } = this.gear
     return Math.ceil(los + improvement.contactSelectionModifier) / (20 - 2 * state.contactMultiplier)
   }
 
@@ -79,23 +79,23 @@ export default class Plane implements IPlane {
   }
 
   get fleetLosModifier() {
-    const { category, equipment, slotSize } = this
+    const { category, gear, slotSize } = this
     if (!category.isObservationPlane) {
       return 0
     }
-    return equipment.los * Math.floor(Math.sqrt(slotSize))
+    return gear.los * Math.floor(Math.sqrt(slotSize))
   }
 
   get isSwordfish() {
-    return this.equipment.name.includes('Swordfish')
+    return this.gear.name.includes('Swordfish')
   }
 
   get isNightFighter() {
-    return this.equipment.iconId === 45
+    return this.gear.iconId === 45
   }
 
   get isNightAttacker() {
-    return this.equipment.iconId === 46
+    return this.gear.iconId === 46
   }
 
   /**
@@ -112,17 +112,17 @@ export default class Plane implements IPlane {
    * 彗星一二型(三一号光電管爆弾搭載機)
    */
   get isNightAircraft() {
-    const { isNightPlane, isSwordfish, equipment } = this
-    return isNightPlane || isSwordfish || [154, 320].includes(equipment.masterId)
+    const { isNightPlane, isSwordfish, gear } = this
+    return isNightPlane || isSwordfish || [154, 320].includes(gear.masterId)
   }
 
-  public calcNightAerialAttackPower(isAntiInstallation: boolean = false) {
-    const { isNightPlane, isNightAircraft, equipment, slotSize } = this
+  public calcNightAerialAttackPower = (isAntiInstallation = false) => {
+    const { isNightPlane, isNightAircraft, gear, slotSize } = this
     if (!isNightAircraft) {
       return 0
     }
 
-    const { firepower, torpedo, asw, bombing } = equipment
+    const { firepower, torpedo, asw, bombing } = gear
     let nightAircraftModifierA = 0
     let nightAircraftModifierB = 0.3
     if (isNightPlane) {
@@ -130,7 +130,7 @@ export default class Plane implements IPlane {
       nightAircraftModifierB = 0.45
     }
 
-    const improvementModifier = Math.sqrt(equipment.improvement.value)
+    const improvementModifier = Math.sqrt(gear.improvement.value)
     return (
       firepower +
       (isAntiInstallation ? 0 : torpedo) +
@@ -141,7 +141,7 @@ export default class Plane implements IPlane {
     )
   }
 
-  public shotdown(value: number) {
+  public shotdown = (value: number) => {
     this.slotSize -= value
     if (this.slotSize < 0) {
       this.slotSize = 0

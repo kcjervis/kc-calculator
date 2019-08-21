@@ -1,29 +1,28 @@
-import { IShip, IEquipment } from '../../objects'
+import { IShip, IGear } from '../../objects'
 
-const nameIs = (name: string) => (gear: IEquipment) => gear.name === name
+const nameIs = (name: string) => (gear: IGear) => gear.name === name
 
 const calcFitGunBonus = (ship: IShip) => {
   let bonus = 0
   const marriageModifier = ship.level >= 100 ? 0.6 : 1
 
-  const { shipClass, countEquipment } = ship
-  const count51cmGroup = countEquipment(128) + countEquipment(281)
-  const count46cm3Kai = countEquipment(276)
-  const count46cm3 = countEquipment(9)
-  const countPrototype46cm2 = countEquipment(117)
-  const count41cm2Kai2 = countEquipment(318)
-  const count41cmGroup = countEquipment(8) + countEquipment(105) + countEquipment(236) + countEquipment(290)
-  const count16inchMk7Gfcs = countEquipment(183)
-  const count16inchMk7 = countEquipment(161)
-  const count16inchMk1FcrType284 = countEquipment(300)
-  const count16inchMk1AfctKai = countEquipment(299)
-  const count16inchMk1 = countEquipment(298)
-  const count381mm50Group = countEquipment(133) + countEquipment(137)
-  const count38cm4Group = countEquipment(245) + countEquipment(246)
-  const count35_6cmGroup =
-    countEquipment(equip => equip.name.includes('35.6cm')) + countEquipment(76) + countEquipment(114)
-  const count38_1cmMk1Group = countEquipment(190) + countEquipment(192)
-  const count30_5cm3Group = countEquipment(231) + countEquipment(232)
+  const { shipClass, countGear } = ship
+  const count51cmGroup = countGear(128) + countGear(281)
+  const count46cm3Kai = countGear(276)
+  const count46cm3 = countGear(9)
+  const countPrototype46cm2 = countGear(117)
+  const count41cm2Kai2 = countGear(318)
+  const count41cmGroup = countGear(8) + countGear(105) + countGear(236) + countGear(290)
+  const count16inchMk7Gfcs = countGear(183)
+  const count16inchMk7 = countGear(161)
+  const count16inchMk1FcrType284 = countGear(300)
+  const count16inchMk1AfctKai = countGear(299)
+  const count16inchMk1 = countGear(298)
+  const count381mm50Group = countGear(133) + countGear(137)
+  const count38cm4Group = countGear(245) + countGear(246)
+  const count35_6cmGroup = countGear(gear => gear.name.includes('35.6cm')) + countGear(76) + countGear(114)
+  const count38_1cmMk1Group = countGear(190) + countGear(192)
+  const count30_5cm3Group = countGear(231) + countGear(232)
 
   if (shipClass.is('GangutClass')) {
     bonus += -18 * Math.sqrt(count46cm3)

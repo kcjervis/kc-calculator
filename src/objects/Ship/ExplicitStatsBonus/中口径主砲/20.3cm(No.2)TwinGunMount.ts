@@ -3,7 +3,7 @@ import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
 
 const bonusCreator: StatsBonusCreator = ship => {
   // 20.3cm(2号)連装砲
-  const count = ship.countEquipment(90)
+  const count = ship.countGear(90)
   if (count === 0) {
     return undefined
   }
@@ -24,13 +24,13 @@ const bonusCreator: StatsBonusCreator = ship => {
   }
 
   // 相互シナジーボーナス
-  if (ship.hasEquipment(equip => equip.isSurfaceRadar)) {
+  if (ship.hasGear(gear => gear.isSurfaceRadar)) {
     if (shipClass.is('FurutakaClass') || shipClass.is('AobaClass')) {
       bonus.add({ firepower: 3, torpedo: 2, evasion: 2 })
     }
   }
 
-  if (ship.hasEquipment(equip => equip.isAntiAirRadar)) {
+  if (ship.hasGear(gear => gear.isAntiAirRadar)) {
     if (isAoba) {
       bonus.add({ antiAir: 5, evasion: 2 })
     }

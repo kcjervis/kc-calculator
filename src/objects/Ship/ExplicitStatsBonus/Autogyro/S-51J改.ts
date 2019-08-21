@@ -1,7 +1,7 @@
 import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
-  const multiplier = ship.countEquipment(327)
+  const multiplier = ship.countGear(327)
   if (multiplier === 0) {
     return undefined
   }

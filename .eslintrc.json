@@ -1,7 +1,9 @@
 {
   "extends": [
     "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:prettier/recommended",
     "prettier/@typescript-eslint"
   ],
@@ -18,14 +20,17 @@
     "no-console": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/array-type": ["error", "array-simple"],
+    "@typescript-eslint/array-type": [
+      "error",
+      {
+        "default": "array-simple"
+      }
+    ],
     "@typescript-eslint/prefer-interface": "off",
 
     "@typescript-eslint/camelcase": "off",
     
     "@typescript-eslint/no-unused-vars": "off",
-    "@typescript-eslint/interface-name-prefix": "off",
-    "@typescript-eslint/no-parameter-properties": "off",
-    "@typescript-eslint/explicit-member-accessibility": "off"
+    "@typescript-eslint/interface-name-prefix": "off"
   }
 }

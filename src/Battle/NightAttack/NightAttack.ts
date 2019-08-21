@@ -96,7 +96,7 @@ export default class NightAttack {
     const { stats, totalEquipmentStats } = this.defender.ship
     const defensePower = new DefensePower(
       stats.armor,
-      totalEquipmentStats(equip => equip.improvement.defensePowerModifier)
+      totalEquipmentStats(gear => gear.improvement.defensePowerModifier)
     )
     return defensePower
   }

@@ -124,7 +124,7 @@ export default class ShipNightAttackStatus {
     let specialAttackModifier = 1
     if (specialAttack) {
       specialAttackModifier = specialAttack.modifier.power
-      if (specialAttack.isDestroyerCutin && ship.hasEquipment(267)) {
+      if (specialAttack.isDestroyerCutin && ship.hasGear(267)) {
         specialAttackModifier *= 1.25
       }
     }

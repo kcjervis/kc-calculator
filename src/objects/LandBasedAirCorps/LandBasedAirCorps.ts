@@ -1,12 +1,12 @@
 import { sumBy } from 'lodash-es'
 
 import { nonNullable } from '../../utils'
-import { IEquipment } from '../Equipment'
+import { IGear } from '../Gear'
 import { createPlanes, IPlane } from '../Plane'
 
 // 陸偵出撃制空補正
-const getReconnaissanceFighterPowerModifier = (equip: IEquipment) => {
-  const { category, los } = equip
+const getReconnaissanceFighterPowerModifier = (gear: IGear) => {
+  const { category, los } = gear
   if (!category.is('LandBasedReconnaissanceAircraft')) {
     return 1
   }
@@ -18,8 +18,8 @@ const getReconnaissanceFighterPowerModifier = (equip: IEquipment) => {
   return 1.18
 }
 
-const getReconnaissanceInterceptionPowerModifier = (equip: IEquipment) => {
-  const { category, los } = equip
+const getReconnaissanceInterceptionPowerModifier = (gear: IGear) => {
+  const { category, los } = gear
   if (category.is('CarrierBasedReconnaissanceAircraft') || category.is('CarrierBasedReconnaissanceAircraft2')) {
     if (los <= 7) {
       return 1.2
@@ -45,7 +45,7 @@ const getReconnaissanceInterceptionPowerModifier = (equip: IEquipment) => {
 
 export interface ILandBasedAirCorps {
   slots: number[]
-  equipments: Array<IEquipment | undefined>
+  gears: Array<IGear | undefined>
   planes: IPlane[]
 
   fighterPower: number
@@ -53,20 +53,28 @@ export interface ILandBasedAirCorps {
 
   minCombatRadius: number
   combatRadius: number
+
+  /** 廃止予定 */
+  equipments: Array<IGear | undefined>
 }
 
 export default class LandBasedAirCorps implements ILandBasedAirCorps {
   public readonly planes: IPlane[]
-  constructor(public slots: number[], public readonly equipments: Array<IEquipment | undefined>) {
-    this.planes = createPlanes(slots, equipments)
+  constructor(public slots: number[], public readonly gears: Array<IGear | undefined>) {
+    this.planes = createPlanes(slots, gears)
   }
 
-  get nonNullableEquipments() {
-    return this.equipments.filter(nonNullable)
+  /** 廃止予定 */
+  get equipments() {
+    return this.gears
+  }
+
+  get nonNullableGears() {
+    return this.gears.filter(nonNullable)
   }
 
   private get hasPlanes() {
-    return this.nonNullableEquipments.length > 0
+    return this.nonNullableGears.length > 0
   }
 
   get fighterPower() {
@@ -74,7 +82,7 @@ export default class LandBasedAirCorps implements ILandBasedAirCorps {
       return 0
     }
     const total = sumBy(this.planes, plane => plane.fighterPower)
-    const reconnaissanceModifier = Math.max(...this.nonNullableEquipments.map(getReconnaissanceFighterPowerModifier))
+    const reconnaissanceModifier = Math.max(...this.nonNullableGears.map(getReconnaissanceFighterPowerModifier))
     return Math.floor(total * reconnaissanceModifier)
   }
 
@@ -83,9 +91,7 @@ export default class LandBasedAirCorps implements ILandBasedAirCorps {
       return 0
     }
     const total = sumBy(this.planes, plane => plane.interceptionPower)
-    const reconnaissanceModifier = Math.max(
-      ...this.nonNullableEquipments.map(getReconnaissanceInterceptionPowerModifier)
-    )
+    const reconnaissanceModifier = Math.max(...this.nonNullableGears.map(getReconnaissanceInterceptionPowerModifier))
     return Math.floor(total * reconnaissanceModifier)
   }
 
@@ -93,16 +99,16 @@ export default class LandBasedAirCorps implements ILandBasedAirCorps {
     if (!this.hasPlanes) {
       return 0
     }
-    return Math.min(...this.nonNullableEquipments.map(equip => equip.radius))
+    return Math.min(...this.nonNullableGears.map(gear => gear.radius))
   }
 
   get combatRadius() {
     if (!this.hasPlanes) {
       return 0
     }
-    const { minCombatRadius, nonNullableEquipments } = this
+    const { minCombatRadius, nonNullableGears } = this
     const maxReconRadius = Math.max(
-      ...nonNullableEquipments.map(({ radius, category }) => {
+      ...nonNullableGears.map(({ radius, category }) => {
         if (category.isReconnaissanceAircraft) {
           return radius
         }

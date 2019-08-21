@@ -1,10 +1,10 @@
-import { IEquipment, IShip } from '../../objects'
+import { IGear, IShip } from '../../objects'
 import { Side } from '../../constants'
 import AntiAirCutin from './AntiAirCutin'
 import { ShipType } from '../../data'
 
-export const calcEquipmentAdjustedAntiAir = (equipment: IEquipment) => {
-  const { antiAir, category, improvement, isHighAngleMount } = equipment
+export const calcGearAdjustedAntiAir = (gear: IGear) => {
+  const { antiAir, category, improvement, isHighAngleMount } = gear
   if (antiAir === 0) {
     return 0
   }
@@ -23,13 +23,13 @@ export const calcEquipmentAdjustedAntiAir = (equipment: IEquipment) => {
 export const calcShipAdjustedAntiAir = (ship: IShip, side: Side) => {
   const { stats, nakedStats, totalEquipmentStats } = ship
 
-  const totalEquipAdjustedAA = totalEquipmentStats(calcEquipmentAdjustedAntiAir)
+  const totalEquipAdjustedAA = totalEquipmentStats(calcGearAdjustedAntiAir)
   if (side === Side.Enemy) {
     return Math.floor(Math.floor(Math.sqrt(stats.antiAir)) * 2 + totalEquipAdjustedAA)
   }
 
   const preFloor = nakedStats.antiAir + totalEquipAdjustedAA
-  if (ship.countEquipment() === 0) {
+  if (ship.countGear() === 0) {
     return preFloor
   }
   return 2 * Math.floor(preFloor / 2)
@@ -87,7 +87,7 @@ export default class ShipAntiAir {
     if (!isPropellantBarrageShipType(shipType)) {
       return 0
     }
-    const count = ship.countEquipment(274)
+    const count = ship.countGear(274)
     if (!count) {
       return 0
     }

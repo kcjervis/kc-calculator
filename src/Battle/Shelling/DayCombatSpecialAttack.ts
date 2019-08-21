@@ -43,14 +43,14 @@ export default class DayCombatSpecialAttack {
     const attacks = new Array<DayCombatSpecialAttack>()
 
     const hasObservationPlane = ship.planes.some(plane => plane.category.isObservationPlane && plane.slotSize > 0)
-    const mainGunCount = ship.countEquipment(({ category }) => category.isMainGun)
+    const mainGunCount = ship.countGear(({ category }) => category.isMainGun)
     if (!hasObservationPlane || mainGunCount === 0) {
       return attacks
     }
 
-    const hasApShell = ship.hasEquipment(equip => equip.category.is('ArmorPiercingShell'))
-    const hasSecondaryGun = ship.hasEquipment(equip => equip.category.is('SecondaryGun'))
-    const hasRader = ship.hasEquipment(equip => equip.category.isRadar)
+    const hasApShell = ship.hasGear(gear => gear.category.is('ArmorPiercingShell'))
+    const hasSecondaryGun = ship.hasGear(gear => gear.category.is('SecondaryGun'))
+    const hasRader = ship.hasGear(gear => gear.category.isRadar)
 
     if (mainGunCount >= 2) {
       attacks.push(DayCombatSpecialAttack.DoubleAttack)
@@ -99,12 +99,12 @@ export default class DayCombatSpecialAttack {
   ) => {
     const { luck } = ship.stats
     const luckFactor = Math.floor(Math.sqrt(luck) + 10)
-    const equipmentsFactor = ship.totalEquipmentStats('los')
+    const equipmentLos = ship.totalEquipmentStats('los')
     const flagshipFactor = isFlagship ? 15 : 0
     if (airControlState === AirControlState.AirSupremacy) {
-      return Math.floor(luckFactor + 0.7 * (fleetLosModifier + 1.6 * equipmentsFactor) + 10) + flagshipFactor
+      return Math.floor(luckFactor + 0.7 * (fleetLosModifier + 1.6 * equipmentLos) + 10) + flagshipFactor
     } else if (airControlState === AirControlState.AirSuperiority) {
-      return Math.floor(luckFactor + 0.6 * (fleetLosModifier + 1.2 * equipmentsFactor)) + flagshipFactor
+      return Math.floor(luckFactor + 0.6 * (fleetLosModifier + 1.2 * equipmentLos)) + flagshipFactor
     }
     return 0
   }

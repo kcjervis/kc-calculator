@@ -3,7 +3,7 @@ import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
   // Ju87C改二(KMX搭載機) Ju87C改二(KMX搭載機／熟練)
-  const multiplier = ship.countEquipment(305) + ship.countEquipment(306)
+  const multiplier = ship.countGear(305) + ship.countGear(306)
   if (multiplier === 0) {
     return undefined
   }

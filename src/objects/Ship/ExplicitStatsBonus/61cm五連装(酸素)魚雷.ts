@@ -2,7 +2,7 @@ import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
   // 61cm五連装(酸素)魚雷
-  const count = ship.countEquipment(58)
+  const count = ship.countGear(58)
   if (count === 0) {
     return undefined
   }

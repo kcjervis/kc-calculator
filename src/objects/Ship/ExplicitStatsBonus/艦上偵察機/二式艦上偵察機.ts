@@ -1,11 +1,11 @@
 import { maxBy } from 'lodash-es'
-import { IEquipment } from '../../../Equipment'
+import { IGear } from '../../../Gear'
 import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
   // 二式艦上偵察機
-  const type2Recons = ship.equipments.filter((equip): equip is IEquipment => (equip ? equip.masterId === 61 : false))
-  const type2Recon = maxBy(type2Recons, equip => equip.improvement.value)
+  const type2Recons = ship.gears.filter((gear): gear is IGear => (gear ? gear.masterId === 61 : false))
+  const type2Recon = maxBy(type2Recons, gear => gear.improvement.value)
   if (!type2Recon) {
     return undefined
   }

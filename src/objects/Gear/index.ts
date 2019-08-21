@@ -1,8 +1,8 @@
-import { IEquipment, IEquipmentStats } from './Equipment'
+import { IGear, IGearStats } from './Gear'
 
-export type EquipmentStatKey = keyof IEquipmentStats
+export type GearStatKey = keyof IGearStats
 
-const equipmentStatKeys: EquipmentStatKey[] = [
+const gearStatKeys: GearStatKey[] = [
   'armor',
   'firepower',
   'torpedo',
@@ -19,7 +19,7 @@ const equipmentStatKeys: EquipmentStatKey[] = [
   'radius'
 ]
 
-export { IEquipment, equipmentStatKeys }
+export { IGear, gearStatKeys }
 export { default as Proficiency, IProficiency } from './Proficiency'
 export { default as Improvement, IImprovement } from './Improvement'
-export { default as EquipmentFactory, IEquipmentDataObject } from './EquipmentFactory'
+export { default as GearFactory, IGearDataObject } from './GearFactory'

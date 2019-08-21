@@ -2,7 +2,7 @@ import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
   // Bofors15.2cm連装砲 Model1930
-  const count = ship.countEquipment(303)
+  const count = ship.countGear(303)
   if (count === 0) {
     return undefined
   }

@@ -1,8 +1,8 @@
-import EquipmentCategory from '../src/data/EquipmentCategory'
+import GearCategory from '../src/data/GearCategory'
 
-describe('EquipmentCategory', () => {
+describe('GearCategory', () => {
   it('SmallCaliberMainGun', () => {
-    const category = EquipmentCategory.fromId(1)
+    const category = GearCategory.fromId(1)
     expect(category.id).toBe(1)
     expect(category.name).toBe('小口径主砲')
     expect(category.is('SmallCaliberMainGun')).toBeTruthy()

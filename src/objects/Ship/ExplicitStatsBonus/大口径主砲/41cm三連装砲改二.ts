@@ -3,7 +3,7 @@ import { shipNameIsKai2, shipNameIsKai } from '../../../../utils'
 
 const createBonus: StatsBonusCreator = ship => {
   // 41cm三連装砲改二
-  const multiplier = ship.countEquipment(290)
+  const multiplier = ship.countGear(290)
   if (multiplier === 0) {
     return undefined
   }
@@ -28,7 +28,7 @@ const createBonus: StatsBonusCreator = ship => {
 
   // 相互シナジーボーナス
   // 対空電探
-  if (ship.hasEquipment(equip => equip.isAntiAirRadar)) {
+  if (ship.hasGear(gear => gear.isAntiAirRadar)) {
     if (shipClass.is('IseClass') && isKai2) {
       bonus.add({ antiAir: 2, evasion: 3 })
     }

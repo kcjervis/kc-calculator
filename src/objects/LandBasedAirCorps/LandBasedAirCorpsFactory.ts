@@ -1,19 +1,19 @@
-import { EquipmentFactory, IEquipmentDataObject } from '../Equipment'
+import { GearFactory, IGearDataObject } from '../Gear'
 import LandBasedAirCorps from './LandBasedAirCorps'
 
 export interface ILandBasedAirCorpsDataObject {
-  equipments: Array<IEquipmentDataObject | undefined>
+  equipments: Array<IGearDataObject | undefined>
   slots: number[]
 }
 
 export default class LandBasedAirCorpsFactory {
-  constructor(private readonly equipmentFactory: EquipmentFactory) {}
+  constructor(private readonly gearFactory: GearFactory) {}
 
   public create = (obj: ILandBasedAirCorpsDataObject) => {
     const { equipments: equipObjs } = obj
     const slots = obj.slots.concat()
-    const equipments = equipObjs.map(this.equipmentFactory.create)
-    const airCorps = new LandBasedAirCorps(slots, equipments)
+    const gears = equipObjs.map(this.gearFactory.create)
+    const airCorps = new LandBasedAirCorps(slots, gears)
 
     return airCorps
   }

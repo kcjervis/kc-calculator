@@ -2,7 +2,7 @@ import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
   // 12cm単装砲改二
-  const count293 = ship.countEquipment(293)
+  const count293 = ship.countGear(293)
   if (count293 === 0) {
     return undefined
   }
@@ -34,7 +34,7 @@ const createBonus: StatsBonusCreator = ship => {
 
   // 相互シナジーボーナス
   // 水上電探
-  if (ship.hasEquipment(equip => equip.isSurfaceRadar)) {
+  if (ship.hasGear(gear => gear.isSurfaceRadar)) {
     if (isKamikazeClass || isMutsukiClass) {
       bonus.add({
         firepower: 2,
@@ -51,7 +51,7 @@ const createBonus: StatsBonusCreator = ship => {
   }
 
   // 53cm連装魚雷
-  const count174 = ship.countEquipment(174)
+  const count174 = ship.countGear(174)
   if (count174 === 1) {
     bonus.add({
       firepower: 2,

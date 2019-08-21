@@ -2,7 +2,7 @@ import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
   // Re.2001 OR改
-  const multiplier = ship.countEquipment(184)
+  const multiplier = ship.countGear(184)
   if (multiplier === 0) {
     return undefined
   }

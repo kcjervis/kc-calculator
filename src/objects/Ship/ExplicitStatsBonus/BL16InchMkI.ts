@@ -3,7 +3,7 @@ import { shipNameIsKai2 } from '../../../utils'
 
 const createBonus: StatsBonusCreator = ship => {
   // 16inch Mk.I三連装砲 AFCT改 FCR type284
-  const count = ship.countEquipment(298) + ship.countEquipment(299) + ship.countEquipment(300)
+  const count = ship.countGear(298) + ship.countGear(299) + ship.countGear(300)
   if (count === 0) {
     return undefined
   }

@@ -2,7 +2,7 @@ import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
   // 12.7cm連装砲B型改二
-  const count = ship.countEquipment(63)
+  const count = ship.countGear(63)
   if (count === 0) {
     return undefined
   }

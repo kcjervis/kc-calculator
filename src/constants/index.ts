@@ -8,4 +8,4 @@ export { default as FleetType } from './FleetType'
 export { default as Speed } from './Speed'
 export { default as BattleType } from './BattleType'
 
-export { default as EquipmentStatNames, EquipmentStatName } from './EquipmentStatNames'
+export { default as GearStatNames, GearStatName } from './GearStatNames'

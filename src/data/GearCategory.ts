@@ -1,30 +1,30 @@
 import { api_mst_slotitem_equiptype } from '@jervis/data'
-import EquipmentCategoryId from './EquipmentCategoryId'
+import GearCategoryId from './GearCategoryId'
 
-export type EquipmentCategoryKey = keyof typeof EquipmentCategoryId
+export type GearCategoryKey = keyof typeof GearCategoryId
 
-export default class EquipmentCategory {
+export default class GearCategory {
   public static readonly all = api_mst_slotitem_equiptype.map(
-    ({ api_id, api_name }) => new EquipmentCategory(api_id, api_name)
+    ({ api_id, api_name }) => new GearCategory(api_id, api_name)
   )
 
-  public static fromId(id: EquipmentCategoryId) {
-    const found = EquipmentCategory.all.find(category => category.id === id)
+  public static fromId(id: GearCategoryId) {
+    const found = GearCategory.all.find(category => category.id === id)
     if (found) {
       return found
     }
-    const newCategory = new EquipmentCategory(id, '')
+    const newCategory = new GearCategory(id, '')
     this.all.push(newCategory)
     return newCategory
   }
 
-  private constructor(public readonly id: EquipmentCategoryId, public readonly name: string) {}
+  private constructor(public readonly id: GearCategoryId, public readonly name: string) {}
 
-  public is = (key: EquipmentCategoryKey) => {
-    return this.id === EquipmentCategoryId[key]
+  public is = (key: GearCategoryKey) => {
+    return this.id === GearCategoryId[key]
   }
 
-  public either = (...keys: EquipmentCategoryKey[]) => {
+  public either = (...keys: GearCategoryKey[]) => {
     return keys.some(this.is)
   }
 

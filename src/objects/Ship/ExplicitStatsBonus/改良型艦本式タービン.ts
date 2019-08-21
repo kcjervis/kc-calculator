@@ -3,13 +3,13 @@ import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
   // 改良型艦本式タービン
-  if (!ship.hasEquipment(33)) {
+  if (!ship.hasGear(33)) {
     return undefined
   }
 
   const speedGroup = Speed.getSpeedGroup(ship)
-  const enhancedBoilerCount = ship.countEquipment(34)
-  const newModelBoilerCount = ship.countEquipment(87)
+  const enhancedBoilerCount = ship.countGear(34)
+  const newModelBoilerCount = ship.countGear(87)
   const speedIncrement = Speed.getSpeedIncrement(speedGroup, enhancedBoilerCount, newModelBoilerCount)
 
   if (speedIncrement > 0) {

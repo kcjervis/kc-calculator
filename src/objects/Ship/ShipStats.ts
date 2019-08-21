@@ -1,6 +1,6 @@
 import { maxBy, sumBy } from 'lodash-es'
 
-import { IEquipment } from '../Equipment'
+import { IGear } from '../Gear'
 
 import { nonNullable } from '../../utils'
 import ShipNakedStats, { IBaseStats } from './ShipNakedStats'
@@ -14,17 +14,17 @@ export interface IShipStats extends IBaseStats {
 export default class ShipStats implements IShipStats {
   constructor(
     private readonly nakedStats: ShipNakedStats,
-    private readonly equipments: Array<IEquipment | undefined>,
+    private readonly gears: Array<IGear | undefined>,
     public statsBonus?: IBaseStats
   ) {}
 
   private getStat(statKey: keyof Omit<IBaseStats, 'luck' | 'hp'>) {
-    const { nakedStats, equipments, statsBonus } = this
+    const { nakedStats, gears, statsBonus } = this
     let bonus = 0
     if (statsBonus !== undefined) {
       bonus = statsBonus[statKey]
     }
-    return nakedStats[statKey] + sumBy(equipments.filter(nonNullable), statKey) + bonus
+    return nakedStats[statKey] + sumBy(gears.filter(nonNullable), statKey) + bonus
   }
 
   get hp() {
@@ -68,9 +68,9 @@ export default class ShipStats implements IShipStats {
   }
 
   get range() {
-    const { nakedStats, equipments, statsBonus } = this
+    const { nakedStats, gears, statsBonus } = this
     const nakedRange = nakedStats.range
-    const longest = maxBy(equipments, 'range')
+    const longest = maxBy(gears, 'range')
     const range = longest && longest.range > nakedRange ? longest.range : nakedRange
 
     if (statsBonus === undefined) {

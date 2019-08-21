@@ -1,4 +1,4 @@
-export type EquipmentStatName =
+export type GearStatName =
   | 'hp'
   | 'armor'
   | 'firepower'
@@ -16,7 +16,7 @@ export type EquipmentStatName =
   | 'range'
   | 'radius'
 
-const EquipmentStatNames: EquipmentStatName[] = [
+const GearStatNames: GearStatName[] = [
   'hp',
   'armor',
   'firepower',
@@ -35,4 +35,4 @@ const EquipmentStatNames: EquipmentStatName[] = [
   'radius'
 ]
 
-export default EquipmentStatNames
+export default GearStatNames

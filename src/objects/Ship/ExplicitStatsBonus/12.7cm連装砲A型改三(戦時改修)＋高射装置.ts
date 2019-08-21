@@ -2,7 +2,7 @@ import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
   // 12.7cm連装砲A型改三(戦時改修)＋高射装置
-  const count295 = ship.countEquipment(295)
+  const count295 = ship.countGear(295)
   if (count295 === 0) {
     return undefined
   }
@@ -18,7 +18,7 @@ const createBonus: StatsBonusCreator = ship => {
 
     // 相互シナジーボーナス
     // 水上電探
-    if (ship.hasEquipment(equip => equip.isSurfaceRadar)) {
+    if (ship.hasGear(gear => gear.isSurfaceRadar)) {
       bonus.add({
         firepower: 3,
         torpedo: 1,
@@ -27,16 +27,16 @@ const createBonus: StatsBonusCreator = ship => {
     }
 
     // 対空電探
-    if (ship.hasEquipment(equip => equip.isAntiAirRadar)) {
+    if (ship.hasGear(gear => gear.isAntiAirRadar)) {
       bonus.add({
         antiAir: 6
       })
     }
 
     // 61cm三連装(酸素)魚雷後期型
-    const tripleTorpedoLateModelCount = ship.countEquipment(285)
+    const tripleTorpedoLateModelCount = ship.countGear(285)
     // 61cm三連装魚雷系の数
-    const tripleTorpedoCount = ship.countEquipment(13) + ship.countEquipment(125) + tripleTorpedoLateModelCount
+    const tripleTorpedoCount = ship.countGear(13) + ship.countGear(125) + tripleTorpedoLateModelCount
 
     if (tripleTorpedoCount >= 1) {
       bonus.add({

@@ -2,7 +2,7 @@ import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
   // 35.6cm三連装砲改(ダズル迷彩仕様)
-  const count289 = ship.countEquipment(289)
+  const count289 = ship.countGear(289)
   if (count289 === 0) {
     return undefined
   }
@@ -33,7 +33,7 @@ const createBonus: StatsBonusCreator = ship => {
 
   // 相互シナジーボーナス
   // 水上電探
-  if (ship.hasEquipment(equip => equip.isSurfaceRadar)) {
+  if (ship.hasGear(gear => gear.isSurfaceRadar)) {
     if (shipName === '金剛改二' || shipName === '榛名改二') {
       bonus.add({
         firepower: 2,

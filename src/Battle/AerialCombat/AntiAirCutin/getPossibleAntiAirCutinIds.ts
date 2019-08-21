@@ -1,5 +1,4 @@
-import { IEquipment, IShip } from '../../../objects'
-import { shipNameIsKai2 } from '../../../utils'
+import { IGear, IShip } from '../../../objects'
 
 export default (ship: IShip) => {
   enum MasterShipId {
@@ -21,56 +20,56 @@ export default (ship: IShip) => {
 
   const shipIs = (masterId: MasterShipId) => ship.masterId === masterId
 
-  type EquipmentIteratee = (equip: IEquipment) => boolean
+  type GearIteratee = (gear: IGear) => boolean
 
   /** 高角砲 */
-  const isHighAngleMount: EquipmentIteratee = equip => equip.isHighAngleMount
+  const isHighAngleMount: GearIteratee = gear => gear.isHighAngleMount
   /** 特殊高角砲 */
-  const isBuiltinHighAngleMount: EquipmentIteratee = equip => isHighAngleMount(equip) && equip.antiAir >= 8
+  const isBuiltinHighAngleMount: GearIteratee = gear => isHighAngleMount(gear) && gear.antiAir >= 8
   /** 標準高角砲 */
-  const isNormalHighAngleMount: EquipmentIteratee = equip => isHighAngleMount(equip) && equip.antiAir < 8
+  const isNormalHighAngleMount: GearIteratee = gear => isHighAngleMount(gear) && gear.antiAir < 8
 
-  const isRadar: EquipmentIteratee = equip => equip.category.isRadar
+  const isRadar: GearIteratee = gear => gear.category.isRadar
   /** 対空電探 */
-  const isAARadar: EquipmentIteratee = equip => isRadar(equip) && equip.antiAir >= 2
+  const isAARadar: GearIteratee = gear => isRadar(gear) && gear.antiAir >= 2
 
-  const isAAGun: EquipmentIteratee = equip => equip.category.is('AntiAircraftGun')
+  const isAAGun: GearIteratee = gear => gear.category.is('AntiAircraftGun')
   /** 特殊機銃 */
-  const isCDMG: EquipmentIteratee = equip => isAAGun(equip) && equip.antiAir >= 9
+  const isCDMG: GearIteratee = gear => isAAGun(gear) && gear.antiAir >= 9
   /** 標準機銃 */
-  const isNormalAAGun: EquipmentIteratee = equip => isAAGun(equip) && equip.antiAir >= 3 && equip.antiAir < 9
+  const isNormalAAGun: GearIteratee = gear => isAAGun(gear) && gear.antiAir >= 3 && gear.antiAir < 9
 
-  const is12cm30tubeRocketLauncherKai2: EquipmentIteratee = equip => equip.masterId === 274
+  const is12cm30tubeRocketLauncherKai2: GearIteratee = gear => gear.masterId === 274
 
-  const is10cmTwinHighAngleMountKaiAMG: EquipmentIteratee = equip => equip.masterId === 275
+  const is10cmTwinHighAngleMountKaiAMG: GearIteratee = gear => gear.masterId === 275
 
-  const isAAShell: EquipmentIteratee = equip => equip.category.is('AntiAircraftShell')
+  const isAAShell: GearIteratee = gear => gear.category.is('AntiAircraftShell')
 
   /** 高射装置 */
-  const isAAFD: EquipmentIteratee = equip => equip.category.is('AntiAircraftFireDirector')
+  const isAAFD: GearIteratee = gear => gear.category.is('AntiAircraftFireDirector')
 
-  const isLargeCaliberMainGun: EquipmentIteratee = equip =>
-    equip.category.either('LargeCaliberMainGun', 'LargeCaliberMainGun2')
+  const isLargeCaliberMainGun: GearIteratee = gear =>
+    gear.category.either('LargeCaliberMainGun', 'LargeCaliberMainGun2')
 
-  const hasAtLeast = (callback: EquipmentIteratee, count: number) => ship.countEquipment(callback) >= count
-  const hasSome = (callback: EquipmentIteratee) => ship.hasEquipment(callback)
+  const hasAtLeast = (callback: GearIteratee, count: number) => ship.countGear(callback) >= count
+  const hasSome = (callback: GearIteratee) => ship.hasGear(callback)
 
   const possibleAntiAirCutinIds: number[] = []
 
   if (ship.shipClass.is('FletcherClass')) {
     // 5inch単装砲 Mk.30改＋GFCS Mk.37 2本
-    if (ship.countEquipment(308) >= 2) {
+    if (ship.countGear(308) >= 2) {
       possibleAntiAirCutinIds.push(34)
     }
     // 5inch単装砲 Mk.30改＋GFCS Mk.37 & 5inch単装砲 Mk.30改
-    if (ship.hasEquipment(308) && ship.hasEquipment(313)) {
+    if (ship.hasGear(308) && ship.hasGear(313)) {
       possibleAntiAirCutinIds.push(35)
     }
 
     // 5inch単装砲 Mk.30改 2本
-    if (ship.countEquipment(313) >= 2) {
+    if (ship.countGear(313) >= 2) {
       // GFCS Mk.37
-      if (ship.hasEquipment(307)) {
+      if (ship.hasGear(307)) {
         possibleAntiAirCutinIds.push(36)
       }
       possibleAntiAirCutinIds.push(37)
@@ -188,8 +187,8 @@ export default (ship: IShip) => {
     // Gotland改 かつ 高角砲を装備 かつ 対空機銃を装備
     if (
       ship.name === 'Gotland改' &&
-      ship.hasEquipment(isHighAngleMount) &&
-      ship.hasEquipment(equip => equip.category.is('AntiAircraftGun') && equip.antiAir >= 3)
+      ship.hasGear(isHighAngleMount) &&
+      ship.hasGear(gear => gear.category.is('AntiAircraftGun') && gear.antiAir >= 3)
     ) {
       possibleAntiAirCutinIds.push(33)
     }
@@ -198,7 +197,7 @@ export default (ship: IShip) => {
     if (
       hasSome(isCDMG) &&
       hasSome(isAARadar) &&
-      ship.countEquipment(equip => equip.category.is('AntiAircraftGun') && equip.antiAir >= 3) >= 2
+      ship.countGear(gear => gear.category.is('AntiAircraftGun') && gear.antiAir >= 3) >= 2
     ) {
       possibleAntiAirCutinIds.push(12)
     }
@@ -236,20 +235,20 @@ export default (ship: IShip) => {
     }
 
     // (天龍改二|Gotland改) かつ 高角砲を3つ以上装備
-    if (['天龍改二', 'Gotland改'].includes(ship.name) && ship.countEquipment(isHighAngleMount) >= 3) {
+    if (['天龍改二', 'Gotland改'].includes(ship.name) && ship.countGear(isHighAngleMount) >= 3) {
       possibleAntiAirCutinIds.push(30)
     }
 
     // 天龍改二 かつ 高角砲を2つ以上装備
-    if (ship.name === '天龍改二' && ship.countEquipment(isHighAngleMount) >= 2) {
+    if (ship.name === '天龍改二' && ship.countGear(isHighAngleMount) >= 2) {
       possibleAntiAirCutinIds.push(31)
     }
 
     if (ship.shipClass.isRoyalNavy || (ship.shipClass.is('KongouClass') && ship.name.includes('改二'))) {
       if (
-        ship.countEquipment(301) >= 2 ||
-        (ship.hasEquipment(301) && ship.hasEquipment(191)) ||
-        (ship.hasEquipment(300) && ship.hasEquipment(191))
+        ship.countGear(301) >= 2 ||
+        (ship.hasGear(301) && ship.hasGear(191)) ||
+        (ship.hasGear(300) && ship.hasGear(191))
       ) {
         possibleAntiAirCutinIds.push(32)
       }

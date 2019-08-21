@@ -1,4 +1,4 @@
-import { EquipmentCategoryId, MasterEquipment } from '../../data'
+import { GearCategoryId, MasterGear } from '../../data'
 
 export interface IImprovement {
   /** 改修値 */
@@ -19,7 +19,7 @@ export interface IImprovement {
 
 export default class Improvement implements IImprovement {
   public value: number
-  constructor(value: number | undefined, private readonly master: MasterEquipment) {
+  constructor(value: number | undefined, private readonly master: MasterGear) {
     this.value = value ? value : 0
   }
 
@@ -79,10 +79,10 @@ export default class Improvement implements IImprovement {
     }
 
     let multiplier = 0
-    if (category.id === EquipmentCategoryId.AntiAircraftGun) {
+    if (category.id === GearCategoryId.AntiAircraftGun) {
       // https://twitter.com/CitrusJ9N/status/1056224720712921088
       multiplier = antiAir <= 7 ? 4 : 6
-    } else if (category.id === EquipmentCategoryId.AntiAircraftFireDirector || isHighAngleMount) {
+    } else if (category.id === GearCategoryId.AntiAircraftFireDirector || isHighAngleMount) {
       multiplier = antiAir <= 7 ? 2 : 3
     }
     return multiplier * Math.sqrt(this.value)
@@ -95,7 +95,7 @@ export default class Improvement implements IImprovement {
     }
     // 装備定数B
     let multiplier = 0
-    if (category.id === EquipmentCategoryId.AntiAircraftFireDirector || isHighAngleMount) {
+    if (category.id === GearCategoryId.AntiAircraftFireDirector || isHighAngleMount) {
       multiplier = antiAir <= 7 ? 2 : 3
     } else if (category.isRadar && antiAir >= 2) {
       multiplier = 1.5

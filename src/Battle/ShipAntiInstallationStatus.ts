@@ -6,29 +6,29 @@ import { InstallationType } from '../types'
 export default class ShipAntiInstallationStatus {
   constructor(private ship: IShip) {}
 
-  private get items() {
-    return this.ship.equipments.filter(nonNullable)
+  private get gears() {
+    return this.ship.gears.filter(nonNullable)
   }
 
-  private get countEquipment() {
-    return this.ship.countEquipment
+  private get countGear() {
+    return this.ship.countGear
   }
 
-  private get countEquipmentCategory() {
-    return this.ship.countEquipmentCategory
+  private get countGearCategory() {
+    return this.ship.countGearCategory
   }
 
-  private get hasEquipmentCategory() {
-    return this.ship.hasEquipmentCategory
+  private get hasGearCategory() {
+    return this.ship.hasGearCategory
   }
 
   private get wgCount() {
-    return this.countEquipment(126)
+    return this.countGear(126)
   }
 
   get bombing() {
-    const antiInstallationBombers = this.items.filter(item => item.isAntiInstallationBomber)
-    return sumBy(antiInstallationBombers, item => item.bombing)
+    const antiInstallationBombers = this.gears.filter(gear => gear.isAntiInstallationBomber)
+    return sumBy(antiInstallationBombers, gear => gear.bombing)
   }
 
   // WG42加算補正 共通
@@ -51,28 +51,28 @@ export default class ShipAntiInstallationStatus {
 
   // 大発改修補正 共通
   get landingCraftsImprovementMultiplicative() {
-    const landingCrafts = this.items.filter(item => item.category.is('LandingCraft'))
+    const landingCrafts = this.gears.filter(gear => gear.category.is('LandingCraft'))
     if (landingCrafts.length === 0) {
       return 1
     }
 
-    const average = sumBy(landingCrafts, item => item.improvement.value) / landingCrafts.length
+    const average = sumBy(landingCrafts, gear => gear.improvement.value) / landingCrafts.length
     return 1 + average / 50
   }
 
   // 内火艇改修補正 共通
   get specialAmphibiousTanksImprovementMultiplicative() {
-    const tanks = this.items.filter(item => item.category.is('SpecialAmphibiousTank'))
+    const tanks = this.gears.filter(gear => gear.category.is('SpecialAmphibiousTank'))
     if (tanks.length === 0) {
       return 1
     }
-    const average = sumBy(tanks, item => item.improvement.value) / tanks.length
+    const average = sumBy(tanks, gear => gear.improvement.value) / tanks.length
     return 1 + average / 30
   }
 
   // 特大発 共通
   get tokuDaihatsuMultiplicative() {
-    if (this.ship.hasEquipment(193)) {
+    if (this.ship.hasGear(193)) {
       return 1.15
     }
     return 1
@@ -80,7 +80,7 @@ export default class ShipAntiInstallationStatus {
 
   // 特大発動艇＋戦車第11連隊 共通
   get shikonModifiers() {
-    const count230 = this.countEquipment(230)
+    const count230 = this.countGear(230)
     if (count230 >= 1) {
       return { additive: 25, multiplicative: 1.8 }
     }
@@ -117,11 +117,12 @@ export default class ShipAntiInstallationStatus {
   }
 
   get antiSoftSkinnedModifiers() {
-    const { wgCount, commonModifiers, countEquipment, countEquipmentCategory, hasEquipmentCategory } = this
+    const { wgCount, commonModifiers, countGear, countGearCategory, hasGearCategory } = this
 
-    let { shipTypeAdditive, multiplicative, additive } = commonModifiers
+    let { multiplicative } = commonModifiers
+    const { shipTypeAdditive, additive } = commonModifiers
 
-    if (hasEquipmentCategory('AntiAircraftShell')) {
+    if (hasGearCategory('AntiAircraftShell')) {
       multiplicative *= 2.5
     }
 
@@ -132,16 +133,16 @@ export default class ShipAntiInstallationStatus {
       multiplicative *= 1.4
     }
 
-    if (hasEquipmentCategory('SeaplaneBomber', 'SeaplaneFighter')) {
+    if (hasGearCategory('SeaplaneBomber', 'SeaplaneFighter')) {
       multiplicative *= 1.2
     }
 
-    if (hasEquipmentCategory('LandingCraft')) {
+    if (hasGearCategory('LandingCraft')) {
       multiplicative *= 1.4
     }
 
     // 大発動艇(八九式中戦車＆陸戦隊)
-    const count166 = countEquipment(166)
+    const count166 = countGear(166)
     if (count166 >= 1) {
       multiplicative *= 1.5
     }
@@ -150,7 +151,7 @@ export default class ShipAntiInstallationStatus {
     }
 
     // 内火艇
-    const countSpecialAmphibiousTank = countEquipmentCategory('SpecialAmphibiousTank')
+    const countSpecialAmphibiousTank = countGearCategory('SpecialAmphibiousTank')
     if (countSpecialAmphibiousTank >= 1) {
       multiplicative *= 1.5
     }
@@ -162,12 +163,13 @@ export default class ShipAntiInstallationStatus {
   }
 
   get antiPillboxModifiers() {
-    const { ship, wgCount, commonModifiers, countEquipment, hasEquipmentCategory, countEquipmentCategory } = this
+    const { ship, wgCount, commonModifiers, countGear, hasGearCategory, countGearCategory } = this
     const { shipType } = ship
 
-    let { shipTypeAdditive, multiplicative, additive } = commonModifiers
+    let { multiplicative } = commonModifiers
+    const { shipTypeAdditive, additive } = commonModifiers
 
-    if (hasEquipmentCategory('ArmorPiercingShell')) {
+    if (hasGearCategory('ArmorPiercingShell')) {
       multiplicative *= 1.85
     }
 
@@ -178,16 +180,16 @@ export default class ShipAntiInstallationStatus {
       multiplicative *= 1.7
     }
 
-    if (hasEquipmentCategory('SeaplaneBomber', 'SeaplaneFighter', 'CarrierBasedDiveBomber')) {
+    if (hasGearCategory('SeaplaneBomber', 'SeaplaneFighter', 'CarrierBasedDiveBomber')) {
       multiplicative *= 1.5
     }
 
-    if (hasEquipmentCategory('LandingCraft')) {
+    if (hasGearCategory('LandingCraft')) {
       multiplicative *= 1.8
     }
 
     // 大発動艇(八九式中戦車＆陸戦隊)
-    const count166 = countEquipment(166)
+    const count166 = countGear(166)
     if (count166 >= 1) {
       multiplicative *= 1.5
     }
@@ -196,7 +198,7 @@ export default class ShipAntiInstallationStatus {
     }
 
     // 内火艇
-    const countSpecialAmphibiousTank = countEquipmentCategory('SpecialAmphibiousTank')
+    const countSpecialAmphibiousTank = countGearCategory('SpecialAmphibiousTank')
     if (countSpecialAmphibiousTank >= 1) {
       multiplicative *= 2.4
     }
@@ -212,11 +214,12 @@ export default class ShipAntiInstallationStatus {
   }
 
   get antiIsolatedIslandModifiers() {
-    const { wgCount, commonModifiers, countEquipment, hasEquipmentCategory, countEquipmentCategory } = this
+    const { wgCount, commonModifiers, countGear, hasGearCategory, countGearCategory } = this
 
-    let { shipTypeAdditive, multiplicative, additive } = commonModifiers
+    let { multiplicative } = commonModifiers
+    const { shipTypeAdditive, additive } = commonModifiers
 
-    if (hasEquipmentCategory('AntiAircraftShell')) {
+    if (hasGearCategory('AntiAircraftShell')) {
       multiplicative *= 1.75
     }
 
@@ -227,16 +230,16 @@ export default class ShipAntiInstallationStatus {
       multiplicative *= 1.5
     }
 
-    if (hasEquipmentCategory('CarrierBasedDiveBomber')) {
+    if (hasGearCategory('CarrierBasedDiveBomber')) {
       multiplicative *= 1.4
     }
 
-    if (hasEquipmentCategory('LandingCraft')) {
+    if (hasGearCategory('LandingCraft')) {
       multiplicative *= 1.8
     }
 
     // 大発動艇(八九式中戦車＆陸戦隊)
-    const count166 = countEquipment(166)
+    const count166 = countGear(166)
     if (count166 >= 1) {
       multiplicative *= 1.2
     }
@@ -245,7 +248,7 @@ export default class ShipAntiInstallationStatus {
     }
 
     // 内火艇
-    const countSpecialAmphibiousTank = countEquipmentCategory('SpecialAmphibiousTank')
+    const countSpecialAmphibiousTank = countGearCategory('SpecialAmphibiousTank')
     if (countSpecialAmphibiousTank >= 1) {
       multiplicative *= 2.4
     }
@@ -261,9 +264,9 @@ export default class ShipAntiInstallationStatus {
       wgCount,
       landingCraftsImprovementMultiplicative,
       specialAmphibiousTanksImprovementMultiplicative,
-      countEquipment,
-      hasEquipmentCategory,
-      countEquipmentCategory
+      countGear,
+      hasGearCategory,
+      countGearCategory
     } = this
     let multiplicative = 1
 
@@ -274,19 +277,19 @@ export default class ShipAntiInstallationStatus {
       multiplicative *= 1.3
     }
 
-    if (hasEquipmentCategory('LandingCraft')) {
+    if (hasGearCategory('LandingCraft')) {
       multiplicative *= 1.7
     }
 
     // 特大発
-    if (countEquipment(193) >= 1) {
+    if (countGear(193) >= 1) {
       multiplicative *= 1.2
     }
 
     multiplicative *= landingCraftsImprovementMultiplicative
 
     // 大発動艇(八九式中戦車＆陸戦隊)
-    const count166 = countEquipment(166)
+    const count166 = countGear(166)
     if (count166 >= 1) {
       multiplicative *= 1.3 * landingCraftsImprovementMultiplicative
     }
@@ -294,7 +297,7 @@ export default class ShipAntiInstallationStatus {
       multiplicative *= 1.6
     }
 
-    const countSpecialAmphibiousTank = countEquipmentCategory('SpecialAmphibiousTank')
+    const countSpecialAmphibiousTank = countGearCategory('SpecialAmphibiousTank')
     if (countSpecialAmphibiousTank >= 1) {
       multiplicative *= 1.7
     }

@@ -2,7 +2,7 @@ import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
 
 // 北方迷彩(＋北方装備)
 const createBonus268: StatsBonusCreator = ship => {
-  if (!ship.hasEquipment(268)) {
+  if (!ship.hasGear(268)) {
     return undefined
   }
   if (!['多摩改', '多摩改二', '木曾改', '木曾改二'].includes(ship.name)) {

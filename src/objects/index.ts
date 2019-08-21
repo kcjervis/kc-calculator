@@ -1,4 +1,4 @@
-export { IEquipment, IEquipmentDataObject, equipmentStatKeys, EquipmentStatKey } from './Equipment'
+export { IGear, IGearDataObject, gearStatKeys, GearStatKey } from './Gear'
 export { IShip, IShipDataObject, shipStatKeys, ShipStatKey } from './Ship'
 export { IFleet, IFleetDataObject } from './Fleet'
 export { ILandBasedAirCorps, ILandBasedAirCorpsDataObject } from './LandBasedAirCorps'

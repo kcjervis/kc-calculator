@@ -2,7 +2,7 @@ import StatsBonus, { StatsBonusCreator } from './StatsBonus'
 
 const createBonus: StatsBonusCreator = ship => {
   // 20連装7inch UP Rocket Launchers
-  const count = ship.countEquipment(301)
+  const count = ship.countGear(301)
   if (count === 0) {
     return undefined
   }

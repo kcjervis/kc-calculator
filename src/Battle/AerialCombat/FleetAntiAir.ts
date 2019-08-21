@@ -1,9 +1,9 @@
-import { IEquipment, IFleet, IShip } from '../../objects'
+import { IGear, IFleet, IShip } from '../../objects'
 import { BattleType, FleetRole, Side } from '../../constants'
 import { sumBy } from 'lodash-es'
 
-export const equipmentFleetAntiAir = (equipment: IEquipment) => {
-  const { name, antiAir, category, isHighAngleMount, improvement } = equipment
+export const gearFleetAntiAir = (gear: IGear) => {
+  const { name, antiAir, category, isHighAngleMount, improvement } = gear
   if (antiAir === 0) {
     return 0
   }
@@ -23,7 +23,7 @@ export const equipmentFleetAntiAir = (equipment: IEquipment) => {
   return multiplier * antiAir + improvement.fleetAntiAirModifier
 }
 
-export const shipFleetAntiAir = (ship: IShip) => Math.floor(ship.totalEquipmentStats(equipmentFleetAntiAir))
+export const shipFleetAntiAir = (ship: IShip) => Math.floor(ship.totalEquipmentStats(gearFleetAntiAir))
 
 export const calcFleetAntiAir = (fleet: IFleet, side: Side, formationModifier: number) => {
   const { totalShipStats } = fleet

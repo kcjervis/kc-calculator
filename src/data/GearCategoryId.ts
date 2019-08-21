@@ -1,4 +1,4 @@
-enum EquipmentCategoryId {
+enum GearCategoryId {
   /** 小口径主砲 */
   SmallCaliberMainGun = 1,
 
@@ -171,4 +171,4 @@ enum EquipmentCategoryId {
   CarrierBasedReconnaissanceAircraft2 = 94
 }
 
-export default EquipmentCategoryId
+export default GearCategoryId

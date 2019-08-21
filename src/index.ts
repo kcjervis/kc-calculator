@@ -4,20 +4,20 @@ export {
   IFleet,
   ILandBasedAirCorps,
   IShip,
-  IEquipment,
-  IEquipmentDataObject,
+  IGear,
+  IGearDataObject,
   IFleetDataObject,
   ILandBasedAirCorpsDataObject,
   IOperationDataObject,
   IShipDataObject,
   IPlane,
-  EquipmentStatKey,
-  equipmentStatKeys,
+  GearStatKey,
+  gearStatKeys,
   ShipStatKey,
   shipStatKeys
 } from './objects'
 
-export { MasterData, ShipClass, ShipType, EquipmentCategory, MasterEquipment, MasterShip } from './data'
+export { MasterData, ShipClass, ShipType, GearCategory, MasterGear, MasterShip } from './data'
 
 export * from './constants'
 

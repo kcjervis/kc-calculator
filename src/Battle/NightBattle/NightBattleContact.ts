@@ -3,10 +3,10 @@ import { flatMap, random } from 'lodash-es'
 import { AirControlState } from '../../constants'
 import { IPlane, IShip } from '../../objects'
 
-const isNightRecon = (plane: IPlane) => plane.slotSize > 0 && plane.equipment.name.includes('夜偵')
+const isNightRecon = (plane: IPlane) => plane.slotSize > 0 && plane.gear.name.includes('夜偵')
 
 const shipToNightCombatContactPlane = (ship: IShip) =>
-  ship.planes.filter(isNightRecon).filter(plane => Math.floor(plane.equipment.los * Math.sqrt(ship.level)) > random(24))
+  ship.planes.filter(isNightRecon).filter(plane => Math.floor(plane.gear.los * Math.sqrt(ship.level)) > random(24))
 
 const getNightCombatContactPlane = (ships: IShip[], airControlState: AirControlState) => {
   if (airControlState.contactMultiplier === 0) {

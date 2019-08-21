@@ -1,29 +1,29 @@
-import { IEquipment } from '../../objects'
+import { IGear } from '../../objects'
 
-export const equipmentFighterPowerMultiplier = (equipment: IEquipment) => {
-  const { antiAir, interception, improvement } = equipment
+export const gearFighterPowerMultiplier = (gear: IGear) => {
+  const { antiAir, interception, improvement } = gear
   return antiAir + 1.5 * interception + improvement.fighterPowerModifier
 }
 
-export const equipmentInterceptionPowerMultiplier = (equipment: IEquipment) => {
-  const { antiAir, interception, antiBomber, improvement } = equipment
+export const gearInterceptionPowerMultiplier = (gear: IGear) => {
+  const { antiAir, interception, antiBomber, improvement } = gear
   return antiAir + interception + 2 * antiBomber + improvement.fighterPowerModifier
 }
 
-export const equipmentFighterPower = (equipment: IEquipment, slotSize: number) => {
+export const gearFighterPower = (gear: IGear, slotSize: number) => {
   if (slotSize === 0) {
     return 0
   }
-  const { proficiency } = equipment
-  const multiplier = equipmentFighterPowerMultiplier(equipment)
+  const { proficiency } = gear
+  const multiplier = gearFighterPowerMultiplier(gear)
   return Math.floor(multiplier * Math.sqrt(slotSize) + proficiency.fighterPowerBonus)
 }
 
-export const equipmentInterceptionPower = (equipment: IEquipment, slotSize: number) => {
+export const gearInterceptionPower = (gear: IGear, slotSize: number) => {
   if (slotSize === 0) {
     return 0
   }
-  const { proficiency } = equipment
-  const multiplier = equipmentInterceptionPowerMultiplier(equipment)
+  const { proficiency } = gear
+  const multiplier = gearInterceptionPowerMultiplier(gear)
   return Math.floor(multiplier * Math.sqrt(slotSize) + proficiency.fighterPowerBonus)
 }

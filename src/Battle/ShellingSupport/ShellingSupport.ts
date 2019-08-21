@@ -130,7 +130,7 @@ export default class ShellingSupport {
     const { power, defender, remainingAmmoModifier } = this
     const defensePower = new DefensePower(
       defender.ship.stats.armor,
-      defender.ship.totalEquipmentStats(equip => equip.improvement.defensePowerModifier)
+      defender.ship.totalEquipmentStats(gear => gear.improvement.defensePowerModifier)
     )
     return new Damage(power.value, defensePower, defender.ship.health.nowHp, remainingAmmoModifier)
   }

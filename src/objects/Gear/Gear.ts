@@ -1,8 +1,8 @@
-import { EquipmentCategory, MasterEquipment } from '../../data'
+import { GearCategory, MasterGear } from '../../data'
 import { IImprovement } from './Improvement'
 import { IProficiency } from './Proficiency'
 
-export interface IEquipmentStats {
+export interface IGearStats {
   hp: number
   armor: number
   firepower: number
@@ -21,12 +21,12 @@ export interface IEquipmentStats {
   radius: number
 }
 
-export interface IEquipment extends IEquipmentStats {
+export interface IGear extends IGearStats {
   /** 装備ID */
   masterId: number
   name: string
 
-  category: EquipmentCategory
+  category: GearCategory
   iconId: number
 
   /** 改修度 */
@@ -44,9 +44,9 @@ export interface IEquipment extends IEquipmentStats {
   isAntiInstallationBomber: boolean
 }
 
-export default class Equipment implements IEquipment {
+export default class Gear implements IGear {
   constructor(
-    private readonly master: MasterEquipment,
+    private readonly master: MasterGear,
     public readonly improvement: IImprovement,
     public readonly proficiency: IProficiency
   ) {}

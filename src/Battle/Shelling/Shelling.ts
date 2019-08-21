@@ -127,14 +127,14 @@ export default class Shelling {
 
   get defensePower() {
     const { stats, totalEquipmentStats } = this.defender.ship
-    return new DefensePower(stats.armor, totalEquipmentStats(equip => equip.improvement.defensePowerModifier))
+    return new DefensePower(stats.armor, totalEquipmentStats(gear => gear.improvement.defensePowerModifier))
   }
 
   get damage() {
     const { power, defender, remainingAmmoModifier } = this
     const defensePower = new DefensePower(
       defender.ship.stats.armor,
-      defender.ship.totalEquipmentStats(equip => equip.improvement.defensePowerModifier)
+      defender.ship.totalEquipmentStats(gear => gear.improvement.defensePowerModifier)
     )
     return new Damage(power.value, defensePower, defender.ship.health.nowHp, remainingAmmoModifier)
   }
@@ -205,7 +205,7 @@ export default class Shelling {
 
       if (
         defenderIsInstallation &&
-        planes.some(plane => plane.category.isDiveBomber && !plane.equipment.isAntiInstallationBomber)
+        planes.some(plane => plane.category.isDiveBomber && !plane.gear.isAntiInstallationBomber)
       ) {
         return false
       }
@@ -214,7 +214,7 @@ export default class Shelling {
     }
 
     if (ship.shipType.isSubmarineClass && defenderIsInstallation) {
-      return ship.hasEquipmentCategory('SpecialAmphibiousTank')
+      return ship.hasGearCategory('SpecialAmphibiousTank')
     }
 
     return true

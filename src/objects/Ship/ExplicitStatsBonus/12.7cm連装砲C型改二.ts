@@ -3,7 +3,7 @@ import { shipNameIsKai2 } from '../../../utils'
 
 const createBonus: StatsBonusCreator = ship => {
   // 12.7cm連装砲C型改二
-  const count266 = ship.countEquipment(266)
+  const count266 = ship.countGear(266)
   if (count266 === 0) {
     return undefined
   }
@@ -46,7 +46,7 @@ const createBonus: StatsBonusCreator = ship => {
 
   // 相互シナジーボーナス
   // 水上電探
-  if (ship.hasEquipment(equip => equip.isSurfaceRadar)) {
+  if (ship.hasGear(gear => gear.isSurfaceRadar)) {
     if (isShiratsuyuClass || isAsashioClass) {
       bonus.add({
         firepower: 1,
