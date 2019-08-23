@@ -1,26 +1,26 @@
-import { IShip, IFleet } from '../../objects'
-import { AirControlState } from '../../constants'
-import { sumBy, random } from 'lodash-es'
+import { IShip, IFleet } from "../../objects"
+import { AirControlState } from "../../constants"
+import { sumBy, random } from "lodash-es"
 
 export default class DayCombatSpecialAttack {
   public static all: DayCombatSpecialAttack[] = []
 
-  public static MainMain = new DayCombatSpecialAttack(6, '主主', 150, { power: 1.5, accuracy: 1.2 })
-  public static MainApShell = new DayCombatSpecialAttack(5, '主徹', 140, { power: 1.3, accuracy: 1.3 })
-  public static MainRader = new DayCombatSpecialAttack(4, '主電', 130, { power: 1.2, accuracy: 1.5 })
-  public static MainSecond = new DayCombatSpecialAttack(3, '主副', 120, { power: 1.1, accuracy: 1.3 })
-  public static DoubleAttack = new DayCombatSpecialAttack(2, '連撃', 130, { power: 1.2, accuracy: 1.1 })
+  public static MainMain = new DayCombatSpecialAttack(6, "主主", 150, { power: 1.5, accuracy: 1.2 })
+  public static MainApShell = new DayCombatSpecialAttack(5, "主徹", 140, { power: 1.3, accuracy: 1.3 })
+  public static MainRader = new DayCombatSpecialAttack(4, "主電", 130, { power: 1.2, accuracy: 1.5 })
+  public static MainSecond = new DayCombatSpecialAttack(3, "主副", 120, { power: 1.1, accuracy: 1.3 })
+  public static DoubleAttack = new DayCombatSpecialAttack(2, "連撃", 130, { power: 1.2, accuracy: 1.1 })
 
-  public static FighterBomberAttacker = new DayCombatSpecialAttack(7.1, 'FBA', 125, { power: 1.25, accuracy: 1 })
-  public static BomberBomberAttacker = new DayCombatSpecialAttack(7.2, 'BBA', 140, { power: 1.2, accuracy: 1 })
-  public static BomberAttacker = new DayCombatSpecialAttack(7.3, 'BA', 155, { power: 1.15, accuracy: 1 })
+  public static FighterBomberAttacker = new DayCombatSpecialAttack(7.1, "FBA", 125, { power: 1.25, accuracy: 1 })
+  public static BomberBomberAttacker = new DayCombatSpecialAttack(7.2, "BBA", 140, { power: 1.2, accuracy: 1 })
+  public static BomberAttacker = new DayCombatSpecialAttack(7.3, "BA", 155, { power: 1.15, accuracy: 1 })
 
   private static getPossibleAircraftCarrierCutins = (ship: IShip) => {
     const cutins = new Array<DayCombatSpecialAttack>()
 
     const planes = ship.planes.filter(({ slotSize }) => slotSize > 0)
-    const bomberCount = planes.filter(plane => plane.category.is('CarrierBasedDiveBomber')).length
-    const hasTorpedoBomber = planes.some(plane => plane.category.is('CarrierBasedTorpedoBomber'))
+    const bomberCount = planes.filter(plane => plane.category.is("CarrierBasedDiveBomber")).length
+    const hasTorpedoBomber = planes.some(plane => plane.category.is("CarrierBasedTorpedoBomber"))
 
     if (bomberCount === 0 || !hasTorpedoBomber) {
       return cutins
@@ -31,7 +31,7 @@ export default class DayCombatSpecialAttack {
       cutins.push(DayCombatSpecialAttack.BomberBomberAttacker)
     }
 
-    const hasFighter = planes.some(plane => plane.category.is('CarrierBasedFighterAircraft'))
+    const hasFighter = planes.some(plane => plane.category.is("CarrierBasedFighterAircraft"))
     if (hasFighter) {
       cutins.push(DayCombatSpecialAttack.FighterBomberAttacker)
     }
@@ -48,8 +48,8 @@ export default class DayCombatSpecialAttack {
       return attacks
     }
 
-    const hasApShell = ship.hasGear(gear => gear.category.is('ArmorPiercingShell'))
-    const hasSecondaryGun = ship.hasGear(gear => gear.category.is('SecondaryGun'))
+    const hasApShell = ship.hasGear(gear => gear.category.is("ArmorPiercingShell"))
+    const hasSecondaryGun = ship.hasGear(gear => gear.category.is("SecondaryGun"))
     const hasRader = ship.hasGear(gear => gear.category.isRadar)
 
     if (mainGunCount >= 2) {
@@ -73,7 +73,7 @@ export default class DayCombatSpecialAttack {
   }
 
   public static getPossibleAttacks = (ship: IShip): DayCombatSpecialAttack[] => {
-    if (ship.health.damage === 'Heavy') {
+    if (ship.health.damage === "Heavy") {
       return []
     }
 
@@ -99,7 +99,7 @@ export default class DayCombatSpecialAttack {
   ) => {
     const { luck } = ship.stats
     const luckFactor = Math.floor(Math.sqrt(luck) + 10)
-    const equipmentLos = ship.totalEquipmentStats('los')
+    const equipmentLos = ship.totalEquipmentStats("los")
     const flagshipFactor = isFlagship ? 15 : 0
     if (airControlState === AirControlState.AirSupremacy) {
       return Math.floor(luckFactor + 0.7 * (fleetLosModifier + 1.6 * equipmentLos) + 10) + flagshipFactor

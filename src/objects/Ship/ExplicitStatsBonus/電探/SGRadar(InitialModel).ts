@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const bonusCreator: StatsBonusCreator = ship => {
   // SG レーダー(初期型)
@@ -11,7 +11,7 @@ const bonusCreator: StatsBonusCreator = ship => {
   const { shipClass } = ship
 
   // 単体ボーナス
-  if (shipClass.either('JohnCButlerClass', 'FletcherClass')) {
+  if (shipClass.either("JohnCButlerClass", "FletcherClass")) {
     bonus.add({ multiplier, firepower: 3, evasion: 3, los: 4 })
     bonus.add({ range: 1 })
   } else if (shipClass.isUsNavy) {

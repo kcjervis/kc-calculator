@@ -3,19 +3,19 @@
  */
 enum BattleType {
   /** 通常戦 */
-  NormalBattle = 'NormalBattle',
+  NormalBattle = "NormalBattle",
 
   /** 夜戦 */
-  NightBattle = 'NightBattle',
+  NightBattle = "NightBattle",
 
   /** 払暁戦 */
-  NightToDayBattle = 'NightToDayBattle',
+  NightToDayBattle = "NightToDayBattle",
 
   /** 航空戦 例:1-6 */
-  AerialBattle = 'AerialBattle',
+  AerialBattle = "AerialBattle",
 
   /** 長距離空襲戦 */
-  AirDefenseBattle = 'AirDefenseBattle'
+  AirDefenseBattle = "AirDefenseBattle"
 }
 
 export default BattleType

@@ -1,11 +1,11 @@
-import { nonNullable } from '../../../../utils'
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
-import 二式艦上偵察機 from './二式艦上偵察機'
+import { nonNullable } from "../../../../utils"
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
+import 二式艦上偵察機 from "./二式艦上偵察機"
 
 const improvementBonus: StatsBonusCreator = ship => {
   const improvements = ship.gears
     .filter(nonNullable)
-    .filter(gear => gear.category.either('CarrierBasedReconnaissanceAircraft', 'CarrierBasedReconnaissanceAircraft2'))
+    .filter(gear => gear.category.either("CarrierBasedReconnaissanceAircraft", "CarrierBasedReconnaissanceAircraft2"))
     .map(recon => recon.improvement.value)
 
   if (improvements.length === 0) {

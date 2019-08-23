@@ -14,23 +14,16 @@
   "env": { "browser": true, "node": true, "es6": true, "jest": true },
   "parserOptions": {
     "sourceType": "module",
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.eslint.json"
   },
   "rules": {
     "no-console": "off",
+    "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/array-type": [
-      "error",
-      {
-        "default": "array-simple"
-      }
-    ],
-    "@typescript-eslint/prefer-interface": "off",
+    "@typescript-eslint/array-type": ["error", { "default": "array-simple" }],
 
-    "@typescript-eslint/camelcase": "off",
-    
-    "@typescript-eslint/no-unused-vars": "off",
-    "@typescript-eslint/interface-name-prefix": "off"
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/camelcase": "off"
   }
 }

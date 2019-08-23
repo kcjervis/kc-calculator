@@ -1,18 +1,18 @@
-import { sumBy } from 'lodash-es'
-import { IGear, IFleet, IShip } from './objects'
-import carrierBasedReconnaissanceAircraftBonus from './objects/Ship/ExplicitStatsBonus/艦上偵察機'
+import { sumBy } from "lodash-es"
+import { IGear, IFleet, IShip } from "./objects"
+import carrierBasedReconnaissanceAircraftBonus from "./objects/Ship/ExplicitStatsBonus/艦上偵察機"
 
 const gearEffectiveLos = (gear: IGear) => {
   const { category, los, improvement } = gear
 
   let multiplier = 0.6
-  if (category.is('CarrierBasedTorpedoBomber')) {
+  if (category.is("CarrierBasedTorpedoBomber")) {
     multiplier = 0.8
-  } else if (category.either('CarrierBasedReconnaissanceAircraft', 'CarrierBasedReconnaissanceAircraft2')) {
+  } else if (category.either("CarrierBasedReconnaissanceAircraft", "CarrierBasedReconnaissanceAircraft2")) {
     multiplier = 1
-  } else if (category.is('ReconnaissanceSeaplane')) {
+  } else if (category.is("ReconnaissanceSeaplane")) {
     multiplier = 1.2
-  } else if (category.is('SeaplaneBomber')) {
+  } else if (category.is("SeaplaneBomber")) {
     multiplier = 1.1
   }
 

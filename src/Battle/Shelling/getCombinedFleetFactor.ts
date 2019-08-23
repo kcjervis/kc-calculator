@@ -1,5 +1,5 @@
-import { Side, FleetType } from '../../constants'
-import { ShipInformation } from '../../types'
+import { Side, FleetType } from "../../constants"
+import { ShipInformation } from "../../types"
 
 const playerAttackMatchers = [
   {
@@ -57,7 +57,7 @@ const enemyAttackMatchers = [
   }
 ]
 
-type ShipFleetState = Pick<ShipInformation, 'side' | 'fleetType' | 'formation' | 'role'>
+type ShipFleetState = Pick<ShipInformation, "side" | "fleetType" | "formation" | "role">
 
 const getCombinedFleetFactor = (attacker: ShipFleetState, defender: ShipFleetState) => {
   // 通常vs通常
@@ -65,7 +65,7 @@ const getCombinedFleetFactor = (attacker: ShipFleetState, defender: ShipFleetSta
     return 0
   }
 
-  const factorIndex = attacker.role === 'Main' ? 0 : 1
+  const factorIndex = attacker.role === "Main" ? 0 : 1
 
   // 攻撃側[自軍]
   if (attacker.side === Side.Player) {

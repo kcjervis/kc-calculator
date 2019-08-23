@@ -1,5 +1,5 @@
-import { Formation } from '../../constants'
-import { IShip } from './Ship'
+import { Formation } from "../../constants"
+import { IShip } from "./Ship"
 
 export interface IEvasionValue {
   toNumber: () => number

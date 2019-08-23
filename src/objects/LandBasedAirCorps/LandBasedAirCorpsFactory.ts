@@ -1,5 +1,5 @@
-import { GearFactory, IGearDataObject } from '../Gear'
-import LandBasedAirCorps from './LandBasedAirCorps'
+import { GearFactory, IGearDataObject } from "../Gear"
+import LandBasedAirCorps from "./LandBasedAirCorps"
 
 export interface ILandBasedAirCorpsDataObject {
   equipments: Array<IGearDataObject | undefined>

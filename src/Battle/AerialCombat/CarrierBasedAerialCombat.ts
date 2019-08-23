@@ -1,10 +1,10 @@
-import { flatMap } from 'lodash-es'
+import { flatMap } from "lodash-es"
 
-import { IShip } from '../../objects'
-import { ICombatInformation } from '../CombatInformation'
+import { IShip } from "../../objects"
+import { ICombatInformation } from "../CombatInformation"
 
-import AerialCombat from './AerialCombat'
-import AntiAirCutin from './AntiAirCutin'
+import AerialCombat from "./AerialCombat"
+import AntiAirCutin from "./AntiAirCutin"
 
 /**
  * 艦隊同士の航空戦

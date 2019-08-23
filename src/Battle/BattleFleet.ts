@@ -1,6 +1,6 @@
-import { FleetRole, FleetTypeName, Formation, Side } from '../constants'
-import { IFleet, ILandBasedAirCorps, IShip } from '../objects'
-import { FleetAntiAir } from './AerialCombat'
+import { FleetRole, FleetTypeName, Formation, Side } from "../constants"
+import { IFleet, ILandBasedAirCorps, IShip } from "../objects"
+import { FleetAntiAir } from "./AerialCombat"
 
 export interface IShipBattleInformation {
   side: Side
@@ -33,7 +33,7 @@ export interface IBattleFleet {
 export default class BattleFleet implements IBattleFleet {
   public formation: Formation = Formation.LineAhead
 
-  public name = ''
+  public name = ""
 
   constructor(
     public readonly side: Side,

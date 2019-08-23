@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const bonusCreator: StatsBonusCreator = ship => {
   // GFCS Mk.37

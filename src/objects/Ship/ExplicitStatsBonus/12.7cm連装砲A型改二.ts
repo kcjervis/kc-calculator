@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from './StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "./StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // 12.7cm連装砲A型改二

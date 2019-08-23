@@ -14,9 +14,9 @@ export type FormationModifiers = {
   nightBattle: WarfareModifiers
 }
 
-export type ShellingType = 'Shelling' | 'CarrierShelling'
+export type ShellingType = "Shelling" | "CarrierShelling"
 
-export type InstallationType = 'None' | 'SoftSkinned' | 'Pillbox' | 'SupplyDepot' | 'IsolatedIsland'
+export type InstallationType = "None" | "SoftSkinned" | "Pillbox" | "SupplyDepot" | "IsolatedIsland"
 
 export type AntiInstallationModifiers = {
   shipTypeAdditive: number
@@ -86,7 +86,7 @@ export type ShellingAccuracyInformation = ShellingAccuracyFactors & {
   value: number
 }
 
-export type NightAttackType = 'NightAttack' | 'SwordfishAttack' | 'NightAerialAttack'
+export type NightAttackType = "NightAttack" | "SwordfishAttack" | "NightAerialAttack"
 
 export type NightAttackBasicPowerFactors = {
   nightAttackType: NightAttackType

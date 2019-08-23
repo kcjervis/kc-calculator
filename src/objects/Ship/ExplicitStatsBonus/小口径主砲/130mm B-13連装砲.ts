@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 /** 130mm B-13連装砲 */
 const bonusCreator: StatsBonusCreator = ship => {
@@ -8,9 +8,9 @@ const bonusCreator: StatsBonusCreator = ship => {
   }
   const bonus = new StatsBonus()
 
-  const isTashkent = ship.name.includes('Ташкент')
-  const isVerniy = ship.name.includes('Верный')
-  const isYuubari = ship.name.includes('夕張')
+  const isTashkent = ship.name.includes("Ташкент")
+  const isVerniy = ship.name.includes("Верный")
+  const isYuubari = ship.name.includes("夕張")
 
   // 単体ボーナス
   if (isTashkent || isVerniy || isYuubari) {

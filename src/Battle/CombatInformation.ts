@@ -1,7 +1,7 @@
-import { IShip } from '../objects'
+import { IShip } from "../objects"
 
-import BattleType from '../constants/BattleType'
-import { IBattleFleet, IShipBattleInformation } from './BattleFleet'
+import BattleType from "../constants/BattleType"
+import { IBattleFleet, IShipBattleInformation } from "./BattleFleet"
 
 export interface ICombatInformation {
   player: IBattleFleet
@@ -30,6 +30,6 @@ export default class CombatInformation implements ICombatInformation {
     if (enemyInfo) {
       return enemyInfo
     }
-    throw console.error('ship info is not found')
+    throw console.error("ship info is not found")
   }
 }

@@ -1,10 +1,10 @@
-import { merge } from '../../utils'
+import { merge } from "../../utils"
 import {
   ShellingBasicAccuracyFactors,
   ShellingAccuracyModifiers,
   ShellingAccuracyFactors,
   ShellingAccuracyInformation
-} from '../../types'
+} from "../../types"
 
 export const calcShellingBasicAccuracy = (factors: ShellingBasicAccuracyFactors) => {
   const { combinedFleetFactor, level, luck, equipmentAccuracy, improvementModifier } = factors

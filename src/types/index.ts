@@ -1,2 +1,2 @@
-export * from './battle'
-export * from './warfare'
+export * from "./battle"
+export * from "./warfare"

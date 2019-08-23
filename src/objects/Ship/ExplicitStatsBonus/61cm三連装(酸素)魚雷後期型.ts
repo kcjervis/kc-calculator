@@ -1,5 +1,5 @@
-import { nonNullable, shipNameIsKai2 } from '../../../utils'
-import StatsBonus, { StatsBonusCreator } from './StatsBonus'
+import { nonNullable, shipNameIsKai2 } from "../../../utils"
+import StatsBonus, { StatsBonusCreator } from "./StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // 61cm三連装(酸素)魚雷後期型
@@ -15,7 +15,7 @@ const createBonus: StatsBonusCreator = ship => {
   const isKai2 = shipNameIsKai2(ship.name)
 
   const isSpecialTypeDDKai2 = shipClass.isSpecialTypeDD && isKai2
-  const isHatsuharuClassKai2 = shipClass.is('HatsuharuClass') && isKai2
+  const isHatsuharuClassKai2 = shipClass.is("HatsuharuClass") && isKai2
 
   // 単体ボーナス
   if (isSpecialTypeDDKai2 || isHatsuharuClassKai2) {

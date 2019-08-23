@@ -1,13 +1,13 @@
-import { MasterShip } from '../../data'
-import { GearFactory, IGearDataObject } from '../Gear'
-import { createPlanes } from '../Plane'
+import { MasterShip } from "../../data"
+import { GearFactory, IGearDataObject } from "../Gear"
+import { createPlanes } from "../Plane"
 
-import { createExplicitStatsBonus } from './ExplicitStatsBonus'
-import Health from './Health'
-import Morale from './Morale'
-import Ship, { IShip } from './Ship'
-import ShipNakedStats, { IBaseStats } from './ShipNakedStats'
-import ShipStats from './ShipStats'
+import { createExplicitStatsBonus } from "./ExplicitStatsBonus"
+import Health from "./Health"
+import Morale from "./Morale"
+import Ship, { IShip } from "./Ship"
+import ShipNakedStats, { IBaseStats } from "./ShipNakedStats"
+import ShipStats from "./ShipStats"
 
 export interface IShipDataObject {
   masterId: number

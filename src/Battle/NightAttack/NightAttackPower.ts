@@ -5,8 +5,8 @@ import {
   NightAttackPowerPreCapModifiers,
   NightAttackPowerPostCapModifiers,
   NightAttackPowerFactors
-} from '../../types'
-import { softcap, merge } from '../../utils'
+} from "../../types"
+import { softcap, merge } from "../../utils"
 
 const calcNightAttackBasicPower = (factors: NightAttackBasicPowerFactors) => {
   const {
@@ -17,7 +17,7 @@ const calcNightAttackBasicPower = (factors: NightAttackBasicPowerFactors) => {
     nightAerialAttackPower,
     nightContactModifier
   } = factors
-  if (nightAttackType === 'NightAerialAttack') {
+  if (nightAttackType === "NightAerialAttack") {
     return nightAerialAttackPower + nightContactModifier
   }
   return firepower + torpedo + improvementModifier + nightContactModifier
@@ -60,7 +60,7 @@ const calcNightAttackPower = (cappedPower: number, modifiers: NightAttackPowerPo
 export default class NightAttackPower implements NightAttackPowerFactors {
   public static cap = 300
 
-  public nightAttackType: NightAttackType = 'NightAttack'
+  public nightAttackType: NightAttackType = "NightAttack"
 
   public firepower = 0
   public torpedo = 0

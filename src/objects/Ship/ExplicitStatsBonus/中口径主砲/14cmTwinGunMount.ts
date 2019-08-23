@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const bonusCreator: StatsBonusCreator = ship => {
   // 14cm連装砲
@@ -11,14 +11,14 @@ const bonusCreator: StatsBonusCreator = ship => {
   const { shipClass } = ship
 
   // 単体ボーナス
-  if (shipClass.either('KatoriClass', 'YuubariClass')) {
+  if (shipClass.either("KatoriClass", "YuubariClass")) {
     bonus.add({
       multiplier: count,
       firepower: 1
     })
   }
 
-  if (shipClass.is('NisshinClass')) {
+  if (shipClass.is("NisshinClass")) {
     bonus.add({
       multiplier: count,
       firepower: 2,

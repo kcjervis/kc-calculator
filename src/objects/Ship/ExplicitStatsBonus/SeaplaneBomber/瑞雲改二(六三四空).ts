@@ -1,5 +1,5 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
-import { shipNameIsKai2 } from '../../../../utils'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
+import { shipNameIsKai2 } from "../../../../utils"
 
 const createBonus: StatsBonusCreator = ship => {
   const count322 = ship.countGear(322)
@@ -9,7 +9,7 @@ const createBonus: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
   const { shipClass } = ship
 
-  if (shipClass.is('IseClass') && shipNameIsKai2(ship.name)) {
+  if (shipClass.is("IseClass") && shipNameIsKai2(ship.name)) {
     bonus.add({
       multiplier: count322,
       firepower: 5,

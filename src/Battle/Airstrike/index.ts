@@ -1,1 +1,1 @@
-export { default as Airstrike } from './Airstrike'
+export { default as Airstrike } from "./Airstrike"

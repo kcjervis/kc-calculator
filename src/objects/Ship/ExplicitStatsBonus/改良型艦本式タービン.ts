@@ -1,5 +1,5 @@
-import { Speed } from '../../../constants'
-import StatsBonus, { StatsBonusCreator } from './StatsBonus'
+import { Speed } from "../../../constants"
+import StatsBonus, { StatsBonusCreator } from "./StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // 改良型艦本式タービン

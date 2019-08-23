@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   const count = ship.countGear(144)
@@ -7,7 +7,7 @@ const createBonus: StatsBonusCreator = ship => {
   }
   const bonus = new StatsBonus()
 
-  if (/^赤城改/.test(ship.name)) {
+  if (ship.name.startsWith("赤城改")) {
     bonus.add({ firepower: 3 })
   }
   if (/^翔鶴改二甲?/.test(ship.name)) {

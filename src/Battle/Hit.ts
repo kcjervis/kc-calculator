@@ -1,4 +1,4 @@
-import { ShipInformation } from '../types'
+import { ShipInformation } from "../types"
 
 type AttackAccuracy = {
   value: number

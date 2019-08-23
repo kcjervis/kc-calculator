@@ -1,5 +1,5 @@
-import { IShip } from '../objects'
-import DefensePower from '../Battle/DefensePower'
+import { IShip } from "../objects"
+import DefensePower from "../Battle/DefensePower"
 
 export const nonNullable = <T>(item: T): item is NonNullable<T> => item !== undefined && item !== null
 

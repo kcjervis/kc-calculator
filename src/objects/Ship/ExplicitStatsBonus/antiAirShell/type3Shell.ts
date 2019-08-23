@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const bonusCreator: StatsBonusCreator = ship => {
   // 三式弾
@@ -9,13 +9,13 @@ const bonusCreator: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
 
   // 単体ボーナス
-  if (ship.name === '金剛改二' || ship.name === '金剛改二丙') {
+  if (ship.name === "金剛改二" || ship.name === "金剛改二丙") {
     bonus.add({ firepower: 1, antiAir: 1 })
-  } else if (ship.name === '比叡改二') {
+  } else if (ship.name === "比叡改二") {
     bonus.add({ antiAir: 1 })
-  } else if (ship.name === '榛名改二') {
+  } else if (ship.name === "榛名改二") {
     bonus.add({ antiAir: 1, evasion: 1 })
-  } else if (ship.name === '霧島改二') {
+  } else if (ship.name === "霧島改二") {
     bonus.add({ firepower: 1 })
   }
   return bonus

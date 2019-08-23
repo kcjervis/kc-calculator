@@ -1,4 +1,4 @@
-import { IShip, IGear } from '../../objects'
+import { IShip, IGear } from "../../objects"
 
 const nameIs = (name: string) => (gear: IGear) => gear.name === name
 
@@ -20,11 +20,11 @@ const calcFitGunBonus = (ship: IShip) => {
   const count16inchMk1 = countGear(298)
   const count381mm50Group = countGear(133) + countGear(137)
   const count38cm4Group = countGear(245) + countGear(246)
-  const count35_6cmGroup = countGear(gear => gear.name.includes('35.6cm')) + countGear(76) + countGear(114)
+  const count35_6cmGroup = countGear(gear => gear.name.includes("35.6cm")) + countGear(76) + countGear(114)
   const count38_1cmMk1Group = countGear(190) + countGear(192)
   const count30_5cm3Group = countGear(231) + countGear(232)
 
-  if (shipClass.is('GangutClass')) {
+  if (shipClass.is("GangutClass")) {
     bonus += -18 * Math.sqrt(count46cm3)
     bonus += -7 * Math.sqrt(countPrototype46cm2)
     bonus += -10 * Math.sqrt(count41cmGroup)
@@ -39,7 +39,7 @@ const calcFitGunBonus = (ship: IShip) => {
     bonus += 10 * Math.sqrt(count30_5cm3Group)
   }
 
-  if (shipClass.is('KongouClass')) {
+  if (shipClass.is("KongouClass")) {
     bonus += -10 * Math.sqrt(count46cm3Kai)
     bonus += -10 * Math.sqrt(count46cm3)
     bonus += -7 * Math.sqrt(countPrototype46cm2)

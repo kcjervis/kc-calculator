@@ -4,19 +4,19 @@
  */
 enum FleetTypeName {
   /** 通常 */
-  Single = 'Single',
+  Single = "Single",
 
   /** 空母機動部隊 */
-  CarrierTaskForce = 'CarrierTaskForce',
+  CarrierTaskForce = "CarrierTaskForce",
 
   /** 水上打撃部隊 */
-  SurfaceTaskForce = 'SurfaceTaskForce',
+  SurfaceTaskForce = "SurfaceTaskForce",
 
   /** 輸送護衛部隊 */
-  TransportEscort = 'TransportEscort',
+  TransportEscort = "TransportEscort",
 
   /** 敵連合 */
-  Combined = 'Combined'
+  Combined = "Combined"
 }
 
 export default FleetTypeName

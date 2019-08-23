@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // Re.2001 G改
@@ -9,7 +9,7 @@ const createBonus: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
 
   // 単体ボーナス
-  if (ship.shipClass.is('AquilaClass')) {
+  if (ship.shipClass.is("AquilaClass")) {
     bonus.add({ multiplier, firepower: 3, antiAir: 1, evasion: 1 })
   }
 

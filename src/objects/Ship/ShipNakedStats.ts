@@ -1,4 +1,4 @@
-import { MasterShip } from '../../data'
+import { MasterShip } from "../../data"
 
 export interface IBaseStats {
   hp: number
@@ -21,22 +21,22 @@ export interface IBaseStats {
 export type ShipStatKey = keyof IBaseStats
 
 export const shipStatKeys: ShipStatKey[] = [
-  'hp',
-  'firepower',
+  "hp",
+  "firepower",
 
-  'armor',
-  'torpedo',
+  "armor",
+  "torpedo",
 
-  'evasion',
-  'antiAir',
+  "evasion",
+  "antiAir",
 
-  'asw',
+  "asw",
 
-  'speed',
-  'los',
+  "speed",
+  "los",
 
-  'range',
-  'luck'
+  "range",
+  "luck"
 ]
 
 export interface IShipNakedStats extends IBaseStats {
@@ -85,44 +85,44 @@ export default class ShipNakedStats implements IShipNakedStats {
   }
 
   get hp() {
-    return calcHpAtLevel(this.master.hp, this.level) + this.getIncreasedStat('hp')
+    return calcHpAtLevel(this.master.hp, this.level) + this.getIncreasedStat("hp")
   }
 
   get firepower() {
-    return this.master.firepower[1] + this.getIncreasedStat('firepower')
+    return this.master.firepower[1] + this.getIncreasedStat("firepower")
   }
   get torpedo() {
-    return this.master.torpedo[1] + this.getIncreasedStat('torpedo')
+    return this.master.torpedo[1] + this.getIncreasedStat("torpedo")
   }
 
   get antiAir() {
-    return this.master.antiAir[1] + this.getIncreasedStat('antiAir')
+    return this.master.antiAir[1] + this.getIncreasedStat("antiAir")
   }
 
   get armor() {
-    return this.master.armor[1] + this.getIncreasedStat('armor')
+    return this.master.armor[1] + this.getIncreasedStat("armor")
   }
 
   get los() {
-    return calcStatAtLevel(this.master.los, this.level) + this.getIncreasedStat('los')
+    return calcStatAtLevel(this.master.los, this.level) + this.getIncreasedStat("los")
   }
   get asw() {
-    return calcStatAtLevel(this.master.asw, this.level) + this.getIncreasedStat('asw')
+    return calcStatAtLevel(this.master.asw, this.level) + this.getIncreasedStat("asw")
   }
   get evasion() {
-    return calcStatAtLevel(this.master.evasion, this.level) + this.getIncreasedStat('evasion')
+    return calcStatAtLevel(this.master.evasion, this.level) + this.getIncreasedStat("evasion")
   }
 
   get luck() {
     // とりあえず初期値
-    return this.master.luck[0] + this.getIncreasedStat('luck')
+    return this.master.luck[0] + this.getIncreasedStat("luck")
   }
 
   get speed() {
-    return this.master.speed + this.getIncreasedStat('speed')
+    return this.master.speed + this.getIncreasedStat("speed")
   }
 
   get range() {
-    return this.master.range + this.getIncreasedStat('range')
+    return this.master.range + this.getIncreasedStat("range")
   }
 }

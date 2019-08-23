@@ -1,7 +1,7 @@
-import { IShip } from '../../objects'
-import { getAirstrikePower } from './AirstrikePower'
-import { sumBy } from 'lodash-es'
-import { getProficiencyModifier } from '../Shelling/ShipShellingStatus'
+import { IShip } from "../../objects"
+import { getAirstrikePower } from "./AirstrikePower"
+import { sumBy } from "lodash-es"
+import { getProficiencyModifier } from "../Shelling/ShipShellingStatus"
 
 export default class Airstrike {
   constructor(
@@ -39,7 +39,7 @@ export default class Airstrike {
         stat = plane.gear.bombing
         planeTypeModifier = 1
       }
-      if (plane.category.is('JetPoweredFighterBomber')) {
+      if (plane.category.is("JetPoweredFighterBomber")) {
         planeTypeModifier = 1 / Math.sqrt(2)
       }
       getAirstrikePower({

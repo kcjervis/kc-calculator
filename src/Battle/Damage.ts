@@ -1,5 +1,5 @@
-import DefensePower from './DefensePower'
-import { range } from 'lodash-es'
+import DefensePower from "./DefensePower"
+import { range } from "lodash-es"
 
 export default class Damage {
   public static calc = (attackPower = 0, baseArmor: DefensePower, remainingAmmoModifier = 1) => {

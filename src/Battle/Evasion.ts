@@ -1,5 +1,5 @@
-import { Formation } from '../constants'
-import { IShip } from '../objects'
+import { Formation } from "../constants"
+import { IShip } from "../objects"
 
 type BasicEvasionFactors = {
   evasion: number

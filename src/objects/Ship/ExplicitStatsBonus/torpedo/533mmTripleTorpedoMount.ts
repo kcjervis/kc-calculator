@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 /** 533mm 三連装魚雷 */
 const createBonus: StatsBonusCreator = ship => {
@@ -8,8 +8,8 @@ const createBonus: StatsBonusCreator = ship => {
   }
   const bonus = new StatsBonus()
 
-  const isTashkent = ship.name.includes('Ташкент')
-  const isVerniy = ship.name.includes('Верный')
+  const isTashkent = ship.name.includes("Ташкент")
+  const isVerniy = ship.name.includes("Верный")
 
   // 単体ボーナス
   if (isTashkent || isVerniy) {

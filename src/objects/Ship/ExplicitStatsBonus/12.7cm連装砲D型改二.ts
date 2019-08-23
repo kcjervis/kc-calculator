@@ -1,5 +1,5 @@
-import StatsBonus, { StatsBonusCreator } from './StatsBonus'
-import { shipNameIsKai2 } from '../../../utils'
+import StatsBonus, { StatsBonusCreator } from "./StatsBonus"
+import { shipNameIsKai2 } from "../../../utils"
 
 const createBonus: StatsBonusCreator = ship => {
   // 12.7cm連装砲D型改二
@@ -12,9 +12,9 @@ const createBonus: StatsBonusCreator = ship => {
   const shipName = ship.name
   const className = ship.shipClass.name
 
-  const isKagerouClass = className === '陽炎型'
-  const isYuugumoClass = className === '夕雲型'
-  const isShimakazeClass = className === '島風型'
+  const isKagerouClass = className === "陽炎型"
+  const isYuugumoClass = className === "夕雲型"
+  const isShimakazeClass = className === "島風型"
 
   const isKai2 = shipNameIsKai2(shipName)
 
@@ -71,7 +71,7 @@ const createBonus: StatsBonusCreator = ship => {
         torpedo: 3,
         evasion: 1
       })
-    } else if (shipName === '島風改') {
+    } else if (shipName === "島風改") {
       bonus.add({
         firepower: 1,
         torpedo: 3,

@@ -1,8 +1,8 @@
-import { MasterGear } from '../../data'
+import { MasterGear } from "../../data"
 
-import Gear, { IGear } from './Gear'
-import Improvement from './Improvement'
-import Proficiency from './Proficiency'
+import Gear, { IGear } from "./Gear"
+import Improvement from "./Improvement"
+import Proficiency from "./Proficiency"
 
 export interface IGearDataObject {
   masterId: number

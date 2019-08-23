@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const bonusCreator: StatsBonusCreator = ship => {
   // 5inch単装砲 Mk.30改
@@ -11,7 +11,7 @@ const bonusCreator: StatsBonusCreator = ship => {
   const { shipClass, shipType } = ship
 
   // 単体ボーナス
-  if (shipClass.isUsNavy && shipType.is('Destroyer')) {
+  if (shipClass.isUsNavy && shipType.is("Destroyer")) {
     bonus.add({
       multiplier: count,
       firepower: 2,

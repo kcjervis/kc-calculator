@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from './StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "./StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // 12.7cm連装砲A型改三(戦時改修)＋高射装置
@@ -27,7 +27,7 @@ const createBonus: StatsBonusCreator = ship => {
     }
 
     // 対空電探
-    if (ship.hasGear(gear => gear.isAntiAirRadar)) {
+    if (ship.hasGear(gear => gear.isAirRadar)) {
       bonus.add({
         antiAir: 6
       })

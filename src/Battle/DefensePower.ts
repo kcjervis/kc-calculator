@@ -1,5 +1,5 @@
-import { random, range } from 'lodash-es'
-import { IShip } from '../objects'
+import { random, range } from "lodash-es"
+import { IShip } from "../objects"
 
 export default class DefensePower {
   constructor(private armor: number, private improvementModifier: number) {}

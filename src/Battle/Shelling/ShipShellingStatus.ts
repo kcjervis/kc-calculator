@@ -1,11 +1,11 @@
-import { Formation, Engagement } from '../../constants'
-import { IShip } from '../../objects'
-import { sumBy } from 'lodash-es'
-import DayCombatSpecialAttack from './DayCombatSpecialAttack'
-import { ShipRole, ShellingType, ShellingPowerFactors, ShellingAccuracyFactors, InstallationType } from '../../types'
-import ShellingPower from './ShellingPower'
-import ShipAntiInstallationStatus from '../ShipAntiInstallationStatus'
-import ShellingAccuracy from './ShellingAccuracy'
+import { Formation, Engagement } from "../../constants"
+import { IShip } from "../../objects"
+import { sumBy } from "lodash-es"
+import DayCombatSpecialAttack from "./DayCombatSpecialAttack"
+import { ShipRole, ShellingType, ShellingPowerFactors, ShellingAccuracyFactors, InstallationType } from "../../types"
+import ShellingPower from "./ShellingPower"
+import ShipAntiInstallationStatus from "../ShipAntiInstallationStatus"
+import ShellingAccuracy from "./ShellingAccuracy"
 
 type AttackModifiers = { power: number; accuracy: number }
 
@@ -30,12 +30,12 @@ type ShipShellingPowerOptions = Partial<{
  */
 export const calcCruiserFitBonus = (ship: IShip) => {
   let fitBonus = 0
-  if (ship.shipType.either('LightCruiser', 'TorpedoCruiser', 'TrainingCruiser')) {
+  if (ship.shipType.either("LightCruiser", "TorpedoCruiser", "TrainingCruiser")) {
     const singleGunCount = ship.countGear(gear => [4, 11].includes(gear.masterId))
     const twinGunCount = ship.countGear(gear => [65, 119, 139].includes(gear.masterId))
     fitBonus += Math.sqrt(singleGunCount) + 2 * Math.sqrt(twinGunCount)
   }
-  if (ship.shipClass.is('ZaraClass')) {
+  if (ship.shipClass.is("ZaraClass")) {
     fitBonus += Math.sqrt(ship.countGear(162))
   }
   return fitBonus
@@ -47,11 +47,11 @@ export const calcCruiserFitBonus = (ship: IShip) => {
 const getApShellModifiers = (ship: IShip): AttackModifiers => {
   const { hasGear } = ship
   const modifier = { power: 1, accuracy: 1 }
-  if (!hasGear(gear => gear.category.is('ArmorPiercingShell')) || !hasGear(gear => gear.category.isMainGun)) {
+  if (!hasGear(gear => gear.category.is("ArmorPiercingShell")) || !hasGear(gear => gear.category.isMainGun)) {
     return modifier
   }
 
-  const hasSecondaryGun = hasGear(gear => gear.category.is('SecondaryGun'))
+  const hasSecondaryGun = hasGear(gear => gear.category.is("SecondaryGun"))
   const hasRader = hasGear(gear => gear.category.isRadar)
 
   if (hasSecondaryGun && hasRader) {
@@ -84,7 +84,7 @@ export const getProficiencyModifier = (ship: IShip, specialAttack?: DayCombatSpe
 
   const planes = ship.planes.filter(
     ({ slotSize, category }) =>
-      slotSize > 0 && (category.isDiveBomber || category.isTorpedoBomber || category.is('LargeFlyingBoat'))
+      slotSize > 0 && (category.isDiveBomber || category.isTorpedoBomber || category.is("LargeFlyingBoat"))
   )
   modifier.power =
     1 +
@@ -143,18 +143,18 @@ export default class ShipShellingStatus {
   get shellingType(): ShellingType {
     const { shipType, shipClass, isInstallation, hasGear } = this.ship
     if (shipType.isAircraftCarrierClass) {
-      return 'CarrierShelling'
+      return "CarrierShelling"
     }
 
-    if (!shipClass.is('RevisedKazahayaClass') && !isInstallation) {
-      return 'Shelling'
+    if (!shipClass.is("RevisedKazahayaClass") && !isInstallation) {
+      return "Shelling"
     }
 
     if (hasGear(gear => gear.category.isAerialCombatAircraft)) {
-      return 'CarrierShelling'
+      return "CarrierShelling"
     }
 
-    return 'Shelling'
+    return "Shelling"
   }
 
   get firepower() {
@@ -166,7 +166,7 @@ export default class ShipShellingStatus {
   }
 
   get bombing() {
-    return this.ship.totalEquipmentStats('bombing')
+    return this.ship.totalEquipmentStats("bombing")
   }
 
   get improvementModifier() {
@@ -187,11 +187,11 @@ export default class ShipShellingStatus {
 
     const { hasGear } = ship
 
-    if (!hasGear(gear => gear.category.is('ArmorPiercingShell')) || !hasGear(gear => gear.category.isMainGun)) {
+    if (!hasGear(gear => gear.category.is("ArmorPiercingShell")) || !hasGear(gear => gear.category.isMainGun)) {
       return modifier
     }
 
-    const hasSecondaryGun = hasGear(gear => gear.category.is('SecondaryGun'))
+    const hasSecondaryGun = hasGear(gear => gear.category.is("SecondaryGun"))
     const hasRader = hasGear(gear => gear.category.isRadar)
 
     if (hasSecondaryGun && hasRader) {
@@ -208,7 +208,7 @@ export default class ShipShellingStatus {
 
   public calcPower = (options: ShipShellingPowerOptions) => {
     const {
-      role = 'Main',
+      role = "Main",
       isCritical = false,
       formation = Formation.LineAhead,
       engagement = Engagement.Parallel,
@@ -216,7 +216,7 @@ export default class ShipShellingStatus {
       eventMapModifier = 1,
       specialAttack,
       isArmorPiercing = false,
-      installationType = 'None'
+      installationType = "None"
     } = options
 
     const { shellingType, firepower, torpedo, bombing, improvementModifier, cruiserFitBonus, healthModifier } = this
@@ -230,7 +230,7 @@ export default class ShipShellingStatus {
     const apShellModifier = isArmorPiercing ? this.apShellModifiers.power : 1
 
     const antiInstallationModifiers = this.antiInstallationStatus.getModifiersFromType(installationType)
-    const isAntiInstallationWarfare = installationType !== 'None'
+    const isAntiInstallationWarfare = installationType !== "None"
 
     const effectiveBombing = isAntiInstallationWarfare ? this.antiInstallationStatus.bombing : bombing
 
@@ -275,7 +275,7 @@ export default class ShipShellingStatus {
     const { level, stats } = ship
     const { luck } = stats
     const { fitGunBonus, combinedFleetFactor, formation, role, specialAttack, isArmorPiercing } = options
-    const equipmentAccuracy = ship.totalEquipmentStats('accuracy')
+    const equipmentAccuracy = ship.totalEquipmentStats("accuracy")
     const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.shellingAccuracyModifier)
 
     const moraleModifier = ship.morale.shellingAccuracyModifier

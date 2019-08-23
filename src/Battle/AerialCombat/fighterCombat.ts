@@ -1,4 +1,4 @@
-import { IGear } from '../../objects'
+import { IGear } from "../../objects"
 
 export const gearFighterPowerMultiplier = (gear: IGear) => {
   const { antiAir, interception, improvement } = gear

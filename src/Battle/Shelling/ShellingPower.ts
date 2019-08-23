@@ -1,4 +1,4 @@
-import { softcap, merge } from '../../utils'
+import { softcap, merge } from "../../utils"
 import {
   AntiInstallationModifiers,
   ShellingType,
@@ -7,7 +7,7 @@ import {
   ShellingPowerPostCapModifiers,
   ShellingPowerFactors,
   ShellingPowerInformation
-} from '../../types'
+} from "../../types"
 
 const calcCarrierShellingBasicPower = (basicPower: number, factors: ShellingBasicPowerFactors) => {
   const { bombing, torpedo } = factors
@@ -19,7 +19,7 @@ export const calcBasicPower = (factors: ShellingBasicPowerFactors) => {
   const { shellingType, firepower, combinedFleetFactor, improvementModifier } = factors
   const basicPower = 5 + firepower + combinedFleetFactor + improvementModifier
 
-  if (shellingType === 'CarrierShelling') {
+  if (shellingType === "CarrierShelling") {
     return calcCarrierShellingBasicPower(basicPower, factors)
   }
 
@@ -72,7 +72,7 @@ export const calcPower = (cappedPower: number, modifiers: ShellingPowerPostCapMo
 export default class ShellingPower implements ShellingPowerInformation {
   public static readonly cap = 180
 
-  public shellingType: ShellingType = 'Shelling'
+  public shellingType: ShellingType = "Shelling"
   public firepower = 0
   public torpedo = 0
   public bombing = 0

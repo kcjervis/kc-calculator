@@ -5,7 +5,7 @@
  * Heavy 大破
  * Lost 轟沈
  */
-type HealthDamage = 'Less' | 'Minor' | 'Moderate' | 'Heavy' | 'Lost'
+type HealthDamage = "Less" | "Minor" | "Moderate" | "Heavy" | "Lost"
 
 export interface IHealth {
   maxHp: number
@@ -25,27 +25,27 @@ export default class Health implements IHealth {
   get damage() {
     const rate = this.nowHp / this.maxHp
     if (rate <= 0) {
-      return 'Lost'
+      return "Lost"
     } else if (rate <= 0.25) {
-      return 'Heavy'
+      return "Heavy"
     } else if (rate <= 0.5) {
-      return 'Moderate'
+      return "Moderate"
     } else if (rate <= 0.75) {
-      return 'Minor'
+      return "Minor"
     }
-    return 'Less'
+    return "Less"
   }
 
   public gte = (damage: HealthDamage) => {
     const rate = this.nowHp / this.maxHp
     switch (damage) {
-      case 'Less':
+      case "Less":
         return rate >= 1
-      case 'Minor':
+      case "Minor":
         return rate >= 0.75
-      case 'Moderate':
+      case "Moderate":
         return rate >= 0.5
-      case 'Heavy':
+      case "Heavy":
         return rate >= 0.25
     }
     return true
@@ -55,12 +55,12 @@ export default class Health implements IHealth {
 
   get shellingPowerModifier() {
     switch (this.damage) {
-      case 'Less':
-      case 'Minor':
+      case "Less":
+      case "Minor":
         return 1
-      case 'Moderate':
+      case "Moderate":
         return 0.7
-      case 'Heavy':
+      case "Heavy":
         return 0.4
     }
     return 0
@@ -68,17 +68,17 @@ export default class Health implements IHealth {
 
   get torpedoPowerModifire() {
     switch (this.damage) {
-      case 'Less':
-      case 'Minor':
+      case "Less":
+      case "Minor":
         return 1
-      case 'Moderate':
+      case "Moderate":
         return 0.8
     }
     return 0
   }
 
   get nightAttackPowerModifire() {
-    if (this.lte('Heavy')) {
+    if (this.lte("Heavy")) {
       return 0
     }
     return this.shellingPowerModifier

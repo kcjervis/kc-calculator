@@ -1,7 +1,7 @@
-import { IShip } from '../objects'
-import { sumBy } from 'lodash-es'
-import { nonNullable } from '../utils'
-import { InstallationType } from '../types'
+import { IShip } from "../objects"
+import { sumBy } from "lodash-es"
+import { nonNullable } from "../utils"
+import { InstallationType } from "../types"
 
 export default class ShipAntiInstallationStatus {
   constructor(private ship: IShip) {}
@@ -51,7 +51,7 @@ export default class ShipAntiInstallationStatus {
 
   // 大発改修補正 共通
   get landingCraftsImprovementMultiplicative() {
-    const landingCrafts = this.gears.filter(gear => gear.category.is('LandingCraft'))
+    const landingCrafts = this.gears.filter(gear => gear.category.is("LandingCraft"))
     if (landingCrafts.length === 0) {
       return 1
     }
@@ -62,7 +62,7 @@ export default class ShipAntiInstallationStatus {
 
   // 内火艇改修補正 共通
   get specialAmphibiousTanksImprovementMultiplicative() {
-    const tanks = this.gears.filter(gear => gear.category.is('SpecialAmphibiousTank'))
+    const tanks = this.gears.filter(gear => gear.category.is("SpecialAmphibiousTank"))
     if (tanks.length === 0) {
       return 1
     }
@@ -122,7 +122,7 @@ export default class ShipAntiInstallationStatus {
     let { multiplicative } = commonModifiers
     const { shipTypeAdditive, additive } = commonModifiers
 
-    if (hasGearCategory('AntiAircraftShell')) {
+    if (hasGearCategory("AntiAircraftShell")) {
       multiplicative *= 2.5
     }
 
@@ -133,11 +133,11 @@ export default class ShipAntiInstallationStatus {
       multiplicative *= 1.4
     }
 
-    if (hasGearCategory('SeaplaneBomber', 'SeaplaneFighter')) {
+    if (hasGearCategory("SeaplaneBomber", "SeaplaneFighter")) {
       multiplicative *= 1.2
     }
 
-    if (hasGearCategory('LandingCraft')) {
+    if (hasGearCategory("LandingCraft")) {
       multiplicative *= 1.4
     }
 
@@ -151,7 +151,7 @@ export default class ShipAntiInstallationStatus {
     }
 
     // 内火艇
-    const countSpecialAmphibiousTank = countGearCategory('SpecialAmphibiousTank')
+    const countSpecialAmphibiousTank = countGearCategory("SpecialAmphibiousTank")
     if (countSpecialAmphibiousTank >= 1) {
       multiplicative *= 1.5
     }
@@ -169,7 +169,7 @@ export default class ShipAntiInstallationStatus {
     let { multiplicative } = commonModifiers
     const { shipTypeAdditive, additive } = commonModifiers
 
-    if (hasGearCategory('ArmorPiercingShell')) {
+    if (hasGearCategory("ArmorPiercingShell")) {
       multiplicative *= 1.85
     }
 
@@ -180,11 +180,11 @@ export default class ShipAntiInstallationStatus {
       multiplicative *= 1.7
     }
 
-    if (hasGearCategory('SeaplaneBomber', 'SeaplaneFighter', 'CarrierBasedDiveBomber')) {
+    if (hasGearCategory("SeaplaneBomber", "SeaplaneFighter", "CarrierBasedDiveBomber")) {
       multiplicative *= 1.5
     }
 
-    if (hasGearCategory('LandingCraft')) {
+    if (hasGearCategory("LandingCraft")) {
       multiplicative *= 1.8
     }
 
@@ -198,7 +198,7 @@ export default class ShipAntiInstallationStatus {
     }
 
     // 内火艇
-    const countSpecialAmphibiousTank = countGearCategory('SpecialAmphibiousTank')
+    const countSpecialAmphibiousTank = countGearCategory("SpecialAmphibiousTank")
     if (countSpecialAmphibiousTank >= 1) {
       multiplicative *= 2.4
     }
@@ -219,7 +219,7 @@ export default class ShipAntiInstallationStatus {
     let { multiplicative } = commonModifiers
     const { shipTypeAdditive, additive } = commonModifiers
 
-    if (hasGearCategory('AntiAircraftShell')) {
+    if (hasGearCategory("AntiAircraftShell")) {
       multiplicative *= 1.75
     }
 
@@ -230,11 +230,11 @@ export default class ShipAntiInstallationStatus {
       multiplicative *= 1.5
     }
 
-    if (hasGearCategory('CarrierBasedDiveBomber')) {
+    if (hasGearCategory("CarrierBasedDiveBomber")) {
       multiplicative *= 1.4
     }
 
-    if (hasGearCategory('LandingCraft')) {
+    if (hasGearCategory("LandingCraft")) {
       multiplicative *= 1.8
     }
 
@@ -248,7 +248,7 @@ export default class ShipAntiInstallationStatus {
     }
 
     // 内火艇
-    const countSpecialAmphibiousTank = countGearCategory('SpecialAmphibiousTank')
+    const countSpecialAmphibiousTank = countGearCategory("SpecialAmphibiousTank")
     if (countSpecialAmphibiousTank >= 1) {
       multiplicative *= 2.4
     }
@@ -277,7 +277,7 @@ export default class ShipAntiInstallationStatus {
       multiplicative *= 1.3
     }
 
-    if (hasGearCategory('LandingCraft')) {
+    if (hasGearCategory("LandingCraft")) {
       multiplicative *= 1.7
     }
 
@@ -297,7 +297,7 @@ export default class ShipAntiInstallationStatus {
       multiplicative *= 1.6
     }
 
-    const countSpecialAmphibiousTank = countGearCategory('SpecialAmphibiousTank')
+    const countSpecialAmphibiousTank = countGearCategory("SpecialAmphibiousTank")
     if (countSpecialAmphibiousTank >= 1) {
       multiplicative *= 1.7
     }
@@ -312,13 +312,13 @@ export default class ShipAntiInstallationStatus {
   public getModifiersFromType = (type: InstallationType) => {
     const modifiers = { shipTypeAdditive: 0, multiplicative: 1, additive: 0, postCapMultiplicative: 1 }
     switch (type) {
-      case 'SoftSkinned':
+      case "SoftSkinned":
         return { ...modifiers, ...this.antiSoftSkinnedModifiers }
-      case 'Pillbox':
+      case "Pillbox":
         return { ...modifiers, ...this.antiPillboxModifiers }
-      case 'IsolatedIsland':
+      case "IsolatedIsland":
         return { ...modifiers, ...this.antiIsolatedIslandModifiers }
-      case 'SupplyDepot':
+      case "SupplyDepot":
         return {
           ...modifiers,
           ...this.antiSoftSkinnedModifiers,

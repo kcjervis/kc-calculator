@@ -1,5 +1,5 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
-import { shipNameIsKai2, shipNameIsKai } from '../../../../utils'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
+import { shipNameIsKai2, shipNameIsKai } from "../../../../utils"
 
 const createBonus: StatsBonusCreator = ship => {
   const multiplier = ship.countGear(329)
@@ -10,8 +10,8 @@ const createBonus: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
 
   // 単体ボーナス
-  if (shipClass.is('KongouClass')) {
-    if (ship.name === '金剛改二丙') {
+  if (shipClass.is("KongouClass")) {
+    if (ship.name === "金剛改二丙") {
       bonus.add({ multiplier, firepower: 4, torpedo: 2, antiAir: 1, evasion: 1 })
     } else if (shipNameIsKai2(ship.name)) {
       bonus.add({ multiplier, firepower: 3, antiAir: 1, evasion: 1 })
@@ -22,7 +22,7 @@ const createBonus: StatsBonusCreator = ship => {
     }
   }
 
-  if (shipClass.either('FusouClass', 'IseClass')) {
+  if (shipClass.either("FusouClass", "IseClass")) {
     bonus.add({ multiplier, firepower: 1 })
   }
 

@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   const multiplier = ship.countGear(341)
@@ -9,10 +9,10 @@ const createBonus: StatsBonusCreator = ship => {
   const { shipClass } = ship
 
   // 単体ボーナス
-  if (shipClass.is('DucaDegliAbruzziClass')) {
+  if (shipClass.is("DucaDegliAbruzziClass")) {
     bonus.add({ multiplier, firepower: 2, antiAir: 1, evasion: 1 })
   }
-  if (shipClass.is('GotlandClass')) {
+  if (shipClass.is("GotlandClass")) {
     bonus.add({ multiplier, firepower: 1, antiAir: 1, evasion: 1 })
   }
 

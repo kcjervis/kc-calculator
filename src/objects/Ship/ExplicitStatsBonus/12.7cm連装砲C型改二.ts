@@ -1,5 +1,5 @@
-import StatsBonus, { StatsBonusCreator } from './StatsBonus'
-import { shipNameIsKai2 } from '../../../utils'
+import StatsBonus, { StatsBonusCreator } from "./StatsBonus"
+import { shipNameIsKai2 } from "../../../utils"
 
 const createBonus: StatsBonusCreator = ship => {
   // 12.7cm連装砲C型改二
@@ -12,9 +12,9 @@ const createBonus: StatsBonusCreator = ship => {
   const shipName = ship.name
   const { shipClass } = ship
 
-  const isShiratsuyuClass = shipClass.is('ShiratsuyuClass')
-  const isAsashioClass = shipClass.is('AsashioClass')
-  const isKagerouClass = shipClass.is('KagerouClass')
+  const isShiratsuyuClass = shipClass.is("ShiratsuyuClass")
+  const isAsashioClass = shipClass.is("AsashioClass")
+  const isKagerouClass = shipClass.is("KagerouClass")
 
   // 単体ボーナス
   if (isKagerouClass && shipNameIsKai2(shipName)) {
@@ -31,7 +31,7 @@ const createBonus: StatsBonusCreator = ship => {
         firepower: 6
       })
     }
-  } else if (shipName === '雪風改' || shipName === '磯風乙改' || shipName === '時雨改二') {
+  } else if (shipName === "雪風改" || shipName === "磯風乙改" || shipName === "時雨改二") {
     bonus.add({
       multiplier: count266,
       firepower: 1,

@@ -1,4 +1,4 @@
-import { IGear, IShip } from '../../../objects'
+import { IGear, IShip } from "../../../objects"
 
 export default (ship: IShip) => {
   enum MasterShipId {
@@ -33,7 +33,7 @@ export default (ship: IShip) => {
   /** 対空電探 */
   const isAARadar: GearIteratee = gear => isRadar(gear) && gear.antiAir >= 2
 
-  const isAAGun: GearIteratee = gear => gear.category.is('AntiAircraftGun')
+  const isAAGun: GearIteratee = gear => gear.category.is("AntiAircraftGun")
   /** 特殊機銃 */
   const isCDMG: GearIteratee = gear => isAAGun(gear) && gear.antiAir >= 9
   /** 標準機銃 */
@@ -43,20 +43,20 @@ export default (ship: IShip) => {
 
   const is10cmTwinHighAngleMountKaiAMG: GearIteratee = gear => gear.masterId === 275
 
-  const isAAShell: GearIteratee = gear => gear.category.is('AntiAircraftShell')
+  const isAAShell: GearIteratee = gear => gear.category.is("AntiAircraftShell")
 
   /** 高射装置 */
-  const isAAFD: GearIteratee = gear => gear.category.is('AntiAircraftFireDirector')
+  const isAAFD: GearIteratee = gear => gear.category.is("AntiAircraftFireDirector")
 
   const isLargeCaliberMainGun: GearIteratee = gear =>
-    gear.category.either('LargeCaliberMainGun', 'LargeCaliberMainGun2')
+    gear.category.either("LargeCaliberMainGun", "LargeCaliberMainGun2")
 
   const hasAtLeast = (callback: GearIteratee, count: number) => ship.countGear(callback) >= count
   const hasSome = (callback: GearIteratee) => ship.hasGear(callback)
 
   const possibleAntiAirCutinIds: number[] = []
 
-  if (ship.shipClass.is('FletcherClass')) {
+  if (ship.shipClass.is("FletcherClass")) {
     // 5inch単装砲 Mk.30改＋GFCS Mk.37 2本
     if (ship.countGear(308) >= 2) {
       possibleAntiAirCutinIds.push(34)
@@ -77,7 +77,7 @@ export default (ship: IShip) => {
   }
 
   // 秋月型 かつ 高角砲を装備
-  if (ship.shipClass.is('AkizukiClass') && hasSome(isHighAngleMount)) {
+  if (ship.shipClass.is("AkizukiClass") && hasSome(isHighAngleMount)) {
     // 高角砲を2つ以上装備 かつ 電探を装備
     if (hasAtLeast(isHighAngleMount, 2) && hasSome(isRadar)) {
       possibleAntiAirCutinIds.push(1)
@@ -122,8 +122,8 @@ export default (ship: IShip) => {
 
       // 伊勢型航空戦艦 かつ 12㎝30連装噴進砲改二を装備 かつ 対空強化弾(三式弾)を装備 かつ 対空電探を装備
     } else if (
-      ship.shipClass.is('IseClass') &&
-      ship.shipType.is('AviationBattleship') &&
+      ship.shipClass.is("IseClass") &&
+      ship.shipType.is("AviationBattleship") &&
       hasSome(is12cm30tubeRocketLauncherKai2) &&
       hasSome(isAAShell) &&
       hasSome(isAARadar)
@@ -163,7 +163,7 @@ export default (ship: IShip) => {
 
     // (伊勢型航空戦艦|武蔵改|武蔵改二) かつ 12㎝30連装噴進砲改二を装備 かつ 対空電探を装備
     if (
-      (ship.shipClass.is('IseClass') && ship.shipType.is('AviationBattleship')) ||
+      (ship.shipClass.is("IseClass") && ship.shipType.is("AviationBattleship")) ||
       shipIs(MasterShipId.MusashiKai) ||
       shipIs(MasterShipId.MusashiKai2)
     ) {
@@ -186,9 +186,9 @@ export default (ship: IShip) => {
 
     // Gotland改 かつ 高角砲を装備 かつ 対空機銃を装備
     if (
-      ship.name === 'Gotland改' &&
+      ship.name === "Gotland改" &&
       ship.hasGear(isHighAngleMount) &&
-      ship.hasGear(gear => gear.category.is('AntiAircraftGun') && gear.antiAir >= 3)
+      ship.hasGear(gear => gear.category.is("AntiAircraftGun") && gear.antiAir >= 3)
     ) {
       possibleAntiAirCutinIds.push(33)
     }
@@ -197,7 +197,7 @@ export default (ship: IShip) => {
     if (
       hasSome(isCDMG) &&
       hasSome(isAARadar) &&
-      ship.countGear(gear => gear.category.is('AntiAircraftGun') && gear.antiAir >= 3) >= 2
+      ship.countGear(gear => gear.category.is("AntiAircraftGun") && gear.antiAir >= 3) >= 2
     ) {
       possibleAntiAirCutinIds.push(12)
     }
@@ -230,21 +230,21 @@ export default (ship: IShip) => {
     }
 
     // (龍田改二|天龍改二) かつ 高角砲を装備 かつ 標準機銃を装備
-    if (['龍田改二', '天龍改二'].includes(ship.name) && hasSome(isHighAngleMount) && hasSome(isNormalAAGun)) {
+    if (["龍田改二", "天龍改二"].includes(ship.name) && hasSome(isHighAngleMount) && hasSome(isNormalAAGun)) {
       possibleAntiAirCutinIds.push(24)
     }
 
     // (天龍改二|Gotland改) かつ 高角砲を3つ以上装備
-    if (['天龍改二', 'Gotland改'].includes(ship.name) && ship.countGear(isHighAngleMount) >= 3) {
+    if (["天龍改二", "Gotland改"].includes(ship.name) && ship.countGear(isHighAngleMount) >= 3) {
       possibleAntiAirCutinIds.push(30)
     }
 
     // 天龍改二 かつ 高角砲を2つ以上装備
-    if (ship.name === '天龍改二' && ship.countGear(isHighAngleMount) >= 2) {
+    if (ship.name === "天龍改二" && ship.countGear(isHighAngleMount) >= 2) {
       possibleAntiAirCutinIds.push(31)
     }
 
-    if (ship.shipClass.isRoyalNavy || (ship.shipClass.is('KongouClass') && ship.name.includes('改二'))) {
+    if (ship.shipClass.isRoyalNavy || (ship.shipClass.is("KongouClass") && ship.name.includes("改二"))) {
       if (
         ship.countGear(301) >= 2 ||
         (ship.hasGear(301) && ship.hasGear(191)) ||

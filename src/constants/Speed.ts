@@ -1,4 +1,4 @@
-import { IShip } from '../objects'
+import { IShip } from "../objects"
 
 type SpeedValue = 0 | 5 | 10 | 15 | 20
 
@@ -16,11 +16,11 @@ export enum SpeedGroup {
  * 速力
  */
 export default class Speed {
-  public static readonly Land = new Speed(0, '陸上')
-  public static readonly Slow = new Speed(5, '低速')
-  public static readonly Fast = new Speed(10, '高速')
-  public static readonly FastPlus = new Speed(15, '高速+')
-  public static readonly Fastest = new Speed(20, '最速')
+  public static readonly Land = new Speed(0, "陸上")
+  public static readonly Slow = new Speed(5, "低速")
+  public static readonly Fast = new Speed(10, "高速")
+  public static readonly FastPlus = new Speed(15, "高速+")
+  public static readonly Fastest = new Speed(20, "最速")
 
   public static fromNumber = (value: number): Speed => {
     const found = [Speed.Land, Speed.Slow, Speed.Fast, Speed.FastPlus, Speed.Fastest].find(
@@ -36,21 +36,21 @@ export default class Speed {
   public static getSpeedGroup(ship: IShip) {
     const { shipType, shipClass } = ship
 
-    const isFastAV = Speed.fromNumber(ship.nakedStats.speed) === Speed.Fast && shipType.is('SeaplaneTender')
+    const isFastAV = Speed.fromNumber(ship.nakedStats.speed) === Speed.Fast && shipType.is("SeaplaneTender")
 
     if (
       isFastAV ||
       shipType.isSubmarineClass ||
-      ['加賀型', '夕張型', '特種船丙型', '工作艦', '改風早型'].includes(shipClass.name)
+      ["加賀型", "夕張型", "特種船丙型", "工作艦", "改風早型"].includes(shipClass.name)
     ) {
       return SpeedGroup.OtherC
     }
 
-    if (['島風型', 'Ташкент級', '大鳳型', '翔鶴型', '利根型', '最上型'].includes(shipClass.name)) {
+    if (["島風型", "Ташкент級", "大鳳型", "翔鶴型", "利根型", "最上型"].includes(shipClass.name)) {
       return SpeedGroup.FastA
     }
 
-    if (['阿賀野型', '蒼龍型', '飛龍型', '金剛型', '大和型', 'Iowa級'].includes(shipClass.name)) {
+    if (["阿賀野型", "蒼龍型", "飛龍型", "金剛型", "大和型", "Iowa級"].includes(shipClass.name)) {
       return SpeedGroup.FastB1SlowA
     }
     // 天津風

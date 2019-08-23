@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from './StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "./StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // S9 Osprey
@@ -11,10 +11,10 @@ const createBonus: StatsBonusCreator = ship => {
   const { shipClass } = ship
 
   if (
-    shipClass.is('KumaClass') ||
-    shipClass.is('NagaraClass') ||
-    shipClass.is('SendaiClass') ||
-    shipClass.is('AganoClass')
+    shipClass.is("KumaClass") ||
+    shipClass.is("NagaraClass") ||
+    shipClass.is("SendaiClass") ||
+    shipClass.is("AganoClass")
   ) {
     bonus.add({
       multiplier: count,
@@ -22,7 +22,7 @@ const createBonus: StatsBonusCreator = ship => {
       evasion: 1,
       asw: 1
     })
-  } else if (shipClass.is('GotlandClass')) {
+  } else if (shipClass.is("GotlandClass")) {
     bonus.add({
       multiplier: count,
       firepower: 1,

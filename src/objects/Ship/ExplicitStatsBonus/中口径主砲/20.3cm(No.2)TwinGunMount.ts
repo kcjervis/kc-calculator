@@ -1,5 +1,5 @@
-import MasterShipId from '../../../../data/MasterShipId'
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import MasterShipId from "../../../../data/MasterShipId"
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const bonusCreator: StatsBonusCreator = ship => {
   // 20.3cm(2号)連装砲
@@ -10,7 +10,7 @@ const bonusCreator: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
 
   const { shipClass, name } = ship
-  const isAoba = name.includes('青葉')
+  const isAoba = name.includes("青葉")
 
   // 単体ボーナス
   if ([MasterShipId.FurutakaKai2, MasterShipId.KakoKai2, MasterShipId.KinugasaKai].includes(ship.masterId)) {
@@ -25,12 +25,12 @@ const bonusCreator: StatsBonusCreator = ship => {
 
   // 相互シナジーボーナス
   if (ship.hasGear(gear => gear.isSurfaceRadar)) {
-    if (shipClass.is('FurutakaClass') || shipClass.is('AobaClass')) {
+    if (shipClass.is("FurutakaClass") || shipClass.is("AobaClass")) {
       bonus.add({ firepower: 3, torpedo: 2, evasion: 2 })
     }
   }
 
-  if (ship.hasGear(gear => gear.isAntiAirRadar)) {
+  if (ship.hasGear(gear => gear.isAirRadar)) {
     if (isAoba) {
       bonus.add({ antiAir: 5, evasion: 2 })
     }

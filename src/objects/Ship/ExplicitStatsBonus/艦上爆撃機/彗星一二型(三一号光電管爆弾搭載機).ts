@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   const count = ship.countGear(320)
@@ -12,7 +12,7 @@ const createBonus: StatsBonusCreator = ship => {
   if (/^(鈴谷航改二|熊野航改二|日向改二)$/.test(ship.name)) {
     bonus.add({ firepower: 4 })
   }
-  if (ship.name === '伊勢改二') {
+  if (ship.name === "伊勢改二") {
     bonus.add({ firepower: 2 })
   }
   return bonus

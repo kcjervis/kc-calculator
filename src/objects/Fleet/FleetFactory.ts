@@ -1,6 +1,6 @@
-import { IShipDataObject, ShipFactory } from '../Ship'
+import { IShipDataObject, ShipFactory } from "../Ship"
 
-import Fleet from './Fleet'
+import Fleet from "./Fleet"
 
 export interface IFleetDataObject {
   ships: Array<IShipDataObject | undefined>

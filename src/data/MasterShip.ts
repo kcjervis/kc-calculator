@@ -1,11 +1,11 @@
-import { ShipData, ShipStat } from '@jervis/data'
-import ShipClass from './ShipClass'
-import ShipType from './ShipType'
+import { ShipData, ShipStat } from "@jervis/data"
+import ShipClass from "./ShipClass"
+import ShipType from "./ShipType"
 
 type StatRange = [number, number]
 
 const conversionStat = (stat: ShipStat): StatRange => {
-  if (typeof stat === 'number') {
+  if (typeof stat === "number") {
     return [stat, stat]
   }
   return stat

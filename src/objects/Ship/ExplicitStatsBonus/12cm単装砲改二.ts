@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from './StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "./StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // 12cm単装砲改二
@@ -10,10 +10,10 @@ const createBonus: StatsBonusCreator = ship => {
 
   const className = ship.shipClass.name
 
-  const isShimushuClass = className === '占守型'
-  const isEtorofuClass = className === '択捉型'
-  const isKamikazeClass = className === '神風型'
-  const isMutsukiClass = className === '睦月型'
+  const isShimushuClass = className === "占守型"
+  const isEtorofuClass = className === "択捉型"
+  const isKamikazeClass = className === "神風型"
+  const isMutsukiClass = className === "睦月型"
 
   // 単体ボーナス
   if (isKamikazeClass || isMutsukiClass) {

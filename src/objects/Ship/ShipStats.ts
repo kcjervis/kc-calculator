@@ -1,9 +1,9 @@
-import { maxBy, sumBy } from 'lodash-es'
+import { maxBy, sumBy } from "lodash-es"
 
-import { IGear } from '../Gear'
+import { IGear } from "../Gear"
 
-import { nonNullable } from '../../utils'
-import ShipNakedStats, { IBaseStats } from './ShipNakedStats'
+import { nonNullable } from "../../utils"
+import ShipNakedStats, { IBaseStats } from "./ShipNakedStats"
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
@@ -18,7 +18,7 @@ export default class ShipStats implements IShipStats {
     public statsBonus?: IBaseStats
   ) {}
 
-  private getStat(statKey: keyof Omit<IBaseStats, 'luck' | 'hp'>) {
+  private getStat(statKey: keyof Omit<IBaseStats, "luck" | "hp">) {
     const { nakedStats, gears, statsBonus } = this
     let bonus = 0
     if (statsBonus !== undefined) {
@@ -32,31 +32,31 @@ export default class ShipStats implements IShipStats {
   }
 
   get firepower() {
-    return this.getStat('firepower')
+    return this.getStat("firepower")
   }
 
   get torpedo() {
-    return this.getStat('torpedo')
+    return this.getStat("torpedo")
   }
 
   get antiAir() {
-    return this.getStat('antiAir')
+    return this.getStat("antiAir")
   }
 
   get armor() {
-    return this.getStat('armor')
+    return this.getStat("armor")
   }
 
   get los() {
-    return this.getStat('los')
+    return this.getStat("los")
   }
 
   get asw() {
-    return this.getStat('asw')
+    return this.getStat("asw")
   }
 
   get evasion() {
-    return this.getStat('evasion')
+    return this.getStat("evasion")
   }
 
   get luck() {
@@ -64,13 +64,13 @@ export default class ShipStats implements IShipStats {
   }
 
   get speed() {
-    return this.getStat('speed')
+    return this.getStat("speed")
   }
 
   get range() {
     const { nakedStats, gears, statsBonus } = this
     const nakedRange = nakedStats.range
-    const longest = maxBy(gears, 'range')
+    const longest = maxBy(gears, "range")
     const range = longest && longest.range > nakedRange ? longest.range : nakedRange
 
     if (statsBonus === undefined) {

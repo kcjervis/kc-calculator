@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from './StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "./StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // 53cm連装魚雷
@@ -12,10 +12,10 @@ const createBonus: StatsBonusCreator = ship => {
   const { shipClass } = ship
 
   // 単体ボーナス
-  if (shipClass.is('KamikazeClass')) {
+  if (shipClass.is("KamikazeClass")) {
     bonus.add({ multiplier: count, torpedo: 1, evasion: 2 })
   }
-  if (shipClass.is('KongouClass')) {
+  if (shipClass.is("KongouClass")) {
     bonus.add({ multiplier: count, torpedo: 6, evasion: 3 })
   }
 

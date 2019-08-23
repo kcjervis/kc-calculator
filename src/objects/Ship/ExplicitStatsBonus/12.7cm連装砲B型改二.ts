@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from './StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "./StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // 12.7cm連装砲B型改二
@@ -11,9 +11,9 @@ const createBonus: StatsBonusCreator = ship => {
   const shipName = ship.name
   const className = ship.shipClass.name
 
-  const isAyanamiClass = className === '綾波型'
-  const isAkatsukiClass = className === '暁型'
-  const isHatsuharuClass = className === '初春型'
+  const isAyanamiClass = className === "綾波型"
+  const isAkatsukiClass = className === "暁型"
+  const isHatsuharuClass = className === "初春型"
 
   // 単体ボーナス
   if (isAyanamiClass || isAkatsukiClass || isHatsuharuClass) {
@@ -21,17 +21,17 @@ const createBonus: StatsBonusCreator = ship => {
       multiplier: count,
       antiAir: 1
     })
-  } else if (['白露改', '白露改二', '村雨改二'].includes(shipName)) {
+  } else if (["白露改", "白露改二", "村雨改二"].includes(shipName)) {
     bonus.add({
       multiplier: count,
       evasion: 1
     })
-  } else if (shipName === '時雨改二') {
+  } else if (shipName === "時雨改二") {
     bonus.add({
       multiplier: count,
       firepower: 1
     })
-  } else if (shipName === '夕立改二') {
+  } else if (shipName === "夕立改二") {
     bonus.add({
       multiplier: count,
       firepower: 1,
@@ -39,7 +39,7 @@ const createBonus: StatsBonusCreator = ship => {
       antiAir: 1,
       evasion: 2
     })
-  } else if (['江風改二', '海風改二'].includes(shipName)) {
+  } else if (["江風改二", "海風改二"].includes(shipName)) {
     bonus.add({
       multiplier: count,
       evasion: 2

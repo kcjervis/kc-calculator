@@ -1,5 +1,5 @@
-import MasterShipId from '../../../data/MasterShipId'
-import StatsBonus, { StatsBonusCreator } from './StatsBonus'
+import MasterShipId from "../../../data/MasterShipId"
+import StatsBonus, { StatsBonusCreator } from "./StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // 35.6cm連装砲(ダズル迷彩)

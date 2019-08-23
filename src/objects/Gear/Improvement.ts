@@ -1,4 +1,4 @@
-import { GearCategoryId, MasterGear } from '../../data'
+import { MasterGear } from "../../data"
 
 export interface IImprovement {
   /** 改修値 */
@@ -34,7 +34,7 @@ export default class Improvement implements IImprovement {
     if (!category.isReconnaissanceAircraft) {
       return 0
     }
-    if (category.either('CarrierBasedReconnaissanceAircraft', 'CarrierBasedReconnaissanceAircraft2')) {
+    if (category.either("CarrierBasedReconnaissanceAircraft", "CarrierBasedReconnaissanceAircraft2")) {
       if (los === 7) {
         // 二式艦偵 [0.25, 3) または√☆
         return 0.25 * value
@@ -66,7 +66,7 @@ export default class Improvement implements IImprovement {
     const { category } = master
     if (category.isFighter) {
       return 0.2 * value
-    } else if (category.is('CarrierBasedDiveBomber')) {
+    } else if (category.is("CarrierBasedDiveBomber")) {
       return 0.25 * value
     }
     return 0
@@ -79,10 +79,10 @@ export default class Improvement implements IImprovement {
     }
 
     let multiplier = 0
-    if (category.id === GearCategoryId.AntiAircraftGun) {
+    if (category.is("AntiAircraftGun")) {
       // https://twitter.com/CitrusJ9N/status/1056224720712921088
       multiplier = antiAir <= 7 ? 4 : 6
-    } else if (category.id === GearCategoryId.AntiAircraftFireDirector || isHighAngleMount) {
+    } else if (category.is("AntiAircraftFireDirector") || isHighAngleMount) {
       multiplier = antiAir <= 7 ? 2 : 3
     }
     return multiplier * Math.sqrt(this.value)
@@ -95,7 +95,7 @@ export default class Improvement implements IImprovement {
     }
     // 装備定数B
     let multiplier = 0
-    if (category.id === GearCategoryId.AntiAircraftFireDirector || isHighAngleMount) {
+    if (category.is("AntiAircraftFireDirector") || isHighAngleMount) {
       multiplier = antiAir <= 7 ? 2 : 3
     } else if (category.isRadar && antiAir >= 2) {
       multiplier = 1.5
@@ -108,7 +108,7 @@ export default class Improvement implements IImprovement {
 
     const isDepthCharge = [226, 227].includes(masterId)
 
-    if (category.is('CarrierBasedTorpedoBomber')) {
+    if (category.is("CarrierBasedTorpedoBomber")) {
       return 0.2 * this.value
     }
 
@@ -117,7 +117,7 @@ export default class Improvement implements IImprovement {
       category.isRadar ||
       category.isArmor ||
       category.isAircraft ||
-      category.either('Torpedo', 'MidgetSubmarine', 'EngineImprovement', 'CombatRation')
+      category.either("Torpedo", "MidgetSubmarine", "EngineImprovement", "CombatRation")
     ) {
       return 0
     }
@@ -133,7 +133,7 @@ export default class Improvement implements IImprovement {
 
     if (firepower > 12) {
       multiplier = 1.5
-    } else if (category.either('Sonar', 'LargeSonar', 'DepthCharge')) {
+    } else if (category.either("Sonar", "LargeSonar", "DepthCharge")) {
       multiplier = 0.75
     }
 
@@ -143,11 +143,11 @@ export default class Improvement implements IImprovement {
   get shellingAccuracyModifier() {
     const { accuracy, category } = this.master
 
-    if (category.is('Torpedo')) {
+    if (category.is("Torpedo")) {
       return 0
     }
 
-    const isLargeRadar = category.is('LargeRadar') || category.is('LargeRadar2')
+    const isLargeRadar = category.is("LargeRadar") || category.is("LargeRadar2")
     const isSurfaceRadar = category.isRadar && accuracy > 2
 
     if (isLargeRadar || isSurfaceRadar) {
@@ -157,12 +157,12 @@ export default class Improvement implements IImprovement {
       category.isMainGun ||
       category.isArmor ||
       category.either(
-        'SecondaryGun',
-        'Sonar',
-        'LargeSonar',
-        'DepthCharge',
-        'ArmorPiercingShell',
-        'AntiAircraftFireDirector'
+        "SecondaryGun",
+        "Sonar",
+        "LargeSonar",
+        "DepthCharge",
+        "ArmorPiercingShell",
+        "AntiAircraftFireDirector"
       )
     ) {
       return Math.sqrt(this.value)
@@ -174,19 +174,19 @@ export default class Improvement implements IImprovement {
   get effectiveLosModifier() {
     let multiplier = 0
     const { category } = this.master
-    if (category.is('SmallRadar')) {
+    if (category.is("SmallRadar")) {
       multiplier = 1.25
-    } else if (category.either('LargeRadar', 'LargeRadar2')) {
+    } else if (category.either("LargeRadar", "LargeRadar2")) {
       multiplier = 1.4
     } else if (
       category.either(
-        'CarrierBasedReconnaissanceAircraft',
-        'CarrierBasedReconnaissanceAircraft2',
-        'ReconnaissanceSeaplane'
+        "CarrierBasedReconnaissanceAircraft",
+        "CarrierBasedReconnaissanceAircraft2",
+        "ReconnaissanceSeaplane"
       )
     ) {
       multiplier = 1.2
-    } else if (category.is('SeaplaneBomber')) {
+    } else if (category.is("SeaplaneBomber")) {
       multiplier = 1.15
     }
     return multiplier * Math.sqrt(this.value)
@@ -194,10 +194,10 @@ export default class Improvement implements IImprovement {
 
   get defensePowerModifier() {
     const { category } = this.master
-    if (category.is('MediumExtraArmor')) {
+    if (category.is("MediumExtraArmor")) {
       return 0.2 * this.value
     }
-    if (category.is('LargeExtraArmor')) {
+    if (category.is("LargeExtraArmor")) {
       return 0.3 * this.value
     }
     return 0

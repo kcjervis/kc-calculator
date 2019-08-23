@@ -1,7 +1,7 @@
-import { IShip } from '../../../objects'
-import { nonNullable } from '../../../utils'
-import getPossibleAntiAirCutinIds from './getPossibleAntiAirCutinIds'
-import tryAntiAirCutin from './tryAntiAirCutin'
+import { IShip } from "../../../objects"
+import { nonNullable } from "../../../utils"
+import getPossibleAntiAirCutinIds from "./getPossibleAntiAirCutinIds"
+import tryAntiAirCutin from "./tryAntiAirCutin"
 
 const data: Array<[number, number, number, number]> = [
   [1, 8, 1.7, 65],

@@ -1,6 +1,6 @@
 export interface IMorale {
   value: number
-  state: 'Sparkling' | 'Normal' | 'Orange' | 'Red'
+  state: "Sparkling" | "Normal" | "Orange" | "Red"
   shellingAccuracyModifier: number
   nightBattleAccuracyModifier: number
   evasionModifier: number
@@ -12,24 +12,24 @@ export default class Morale implements IMorale {
   get state() {
     const { value } = this
     if (value >= 50) {
-      return 'Sparkling'
+      return "Sparkling"
     } else if (value >= 30) {
-      return 'Normal'
+      return "Normal"
     } else if (value >= 20) {
-      return 'Orange'
+      return "Orange"
     }
-    return 'Red'
+    return "Red"
   }
 
   get shellingAccuracyModifier() {
     switch (this.state) {
-      case 'Sparkling':
+      case "Sparkling":
         return 1.2
-      case 'Normal':
+      case "Normal":
         return 1
-      case 'Orange':
+      case "Orange":
         return 0.8
-      case 'Red':
+      case "Red":
         return 0.5
     }
     return 0
@@ -41,13 +41,13 @@ export default class Morale implements IMorale {
 
   get evasionModifier() {
     switch (this.state) {
-      case 'Sparkling':
+      case "Sparkling":
         return 0.7
-      case 'Normal':
+      case "Normal":
         return 1
-      case 'Orange':
+      case "Orange":
         return 1.2
-      case 'Red':
+      case "Red":
         return 1.4
     }
     return 0

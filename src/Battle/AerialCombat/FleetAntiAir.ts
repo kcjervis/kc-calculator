@@ -1,6 +1,6 @@
-import { IGear, IFleet, IShip } from '../../objects'
-import { BattleType, FleetRole, Side } from '../../constants'
-import { sumBy } from 'lodash-es'
+import { IGear, IFleet, IShip } from "../../objects"
+import { BattleType, FleetRole, Side } from "../../constants"
+import { sumBy } from "lodash-es"
 
 export const gearFleetAntiAir = (gear: IGear) => {
   const { name, antiAir, category, isHighAngleMount, improvement } = gear
@@ -9,13 +9,13 @@ export const gearFleetAntiAir = (gear: IGear) => {
   }
 
   let multiplier = 0
-  if (category.is('AntiAircraftFireDirector') || isHighAngleMount) {
+  if (category.is("AntiAircraftFireDirector") || isHighAngleMount) {
     multiplier = 0.35
-  } else if (category.is('AntiAircraftShell')) {
+  } else if (category.is("AntiAircraftShell")) {
     multiplier = 0.6
   } else if (category.isRadar) {
     multiplier = 0.4
-  } else if (name === '46cm三連装砲') {
+  } else if (name === "46cm三連装砲") {
     multiplier = 0.25
   } else {
     multiplier = 0.2

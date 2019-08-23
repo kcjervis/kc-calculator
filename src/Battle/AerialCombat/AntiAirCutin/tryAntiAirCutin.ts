@@ -1,6 +1,6 @@
-import { maxBy, random } from 'lodash-es'
-import { IShip } from '../../../objects'
-import AntiAirCutin from './AntiAirCutin'
+import { maxBy, random } from "lodash-es"
+import { IShip } from "../../../objects"
+import AntiAirCutin from "./AntiAirCutin"
 
 const tryAntiAirCutin = (arg: IShip | IShip[]): AntiAirCutin | undefined => {
   if (Array.isArray(arg)) {

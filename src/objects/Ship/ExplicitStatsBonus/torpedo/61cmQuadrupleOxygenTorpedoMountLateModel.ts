@@ -1,5 +1,5 @@
-import { nonNullable, shipNameIsKai2 } from '../../../../utils'
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import { nonNullable, shipNameIsKai2 } from "../../../../utils"
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // 61cm四連装(酸素)魚雷後期型
@@ -19,7 +19,7 @@ const createBonus: StatsBonusCreator = ship => {
   }
 
   // 単体ボーナス
-  if (shipClass.either('ShiratsuyuClass', 'AsashioClass', 'KagerouClass', 'YuugumoClass')) {
+  if (shipClass.either("ShiratsuyuClass", "AsashioClass", "KagerouClass", "YuugumoClass")) {
     bonus.add({
       multiplier: Math.min(count, 2),
       torpedo: 2,
@@ -30,7 +30,7 @@ const createBonus: StatsBonusCreator = ship => {
       firepower: 1
     })
 
-    if (shipClass.is('KagerouClass')) {
+    if (shipClass.is("KagerouClass")) {
       bonus.add({
         multiplier: Math.min(improved5Count, 2),
         torpedo: 1

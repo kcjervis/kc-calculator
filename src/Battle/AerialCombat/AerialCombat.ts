@@ -1,11 +1,11 @@
-import { random } from 'lodash-es'
+import { random } from "lodash-es"
 
-import { AirControlState, Side } from '../../constants'
-import { IPlane, IShip } from '../../objects'
-import { ICombatInformation } from '../CombatInformation'
-import ShipAntiAir from './ShipAntiAir'
-import FleetAntiAir from './FleetAntiAir'
-import AntiAirCutin from './AntiAirCutin'
+import { AirControlState, Side } from "../../constants"
+import { IPlane, IShip } from "../../objects"
+import { ICombatInformation } from "../CombatInformation"
+import ShipAntiAir from "./ShipAntiAir"
+import FleetAntiAir from "./FleetAntiAir"
+import AntiAirCutin from "./AntiAirCutin"
 
 export default abstract class AerialCombat {
   constructor(readonly combatInformation: ICombatInformation) {}

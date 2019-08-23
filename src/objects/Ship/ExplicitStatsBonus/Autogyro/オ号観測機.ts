@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // オ号観測機改 オ号観測機改二
@@ -9,10 +9,10 @@ const createBonus: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
 
   // 単体ボーナス
-  if (ship.name === '伊勢改二') {
+  if (ship.name === "伊勢改二") {
     bonus.add({ multiplier, antiAir: 1, evasion: 1 })
   }
-  if (ship.name === '日向改二') {
+  if (ship.name === "日向改二") {
     bonus.add({ multiplier, antiAir: 2, evasion: 1 })
   }
 

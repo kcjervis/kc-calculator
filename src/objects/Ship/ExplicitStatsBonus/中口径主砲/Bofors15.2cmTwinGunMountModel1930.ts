@@ -1,4 +1,4 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // Bofors15.2cm連装砲 Model1930
@@ -10,9 +10,9 @@ const createBonus: StatsBonusCreator = ship => {
   const { shipClass } = ship
 
   // 単体ボーナス
-  if (shipClass.either('KumaClass', 'NagaraClass', 'SendaiClass', 'AganoClass')) {
+  if (shipClass.either("KumaClass", "NagaraClass", "SendaiClass", "AganoClass")) {
     bonus.add({ multiplier: count, firepower: 1, antiAir: 1 })
-  } else if (shipClass.is('GotlandClass')) {
+  } else if (shipClass.is("GotlandClass")) {
     bonus.add({ multiplier: count, firepower: 1, antiAir: 2, evasion: 1 })
   }
 

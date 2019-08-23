@@ -1,6 +1,6 @@
-import { FleetTypeName, Side } from '../../constants'
-import { IFleet } from '../Fleet'
-import { ILandBasedAirCorps } from '../LandBasedAirCorps'
+import { FleetTypeName, Side } from "../../constants"
+import { IFleet } from "../Fleet"
+import { ILandBasedAirCorps } from "../LandBasedAirCorps"
 
 export interface IOperation {
   side: Side

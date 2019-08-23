@@ -1,7 +1,7 @@
-import { gearFighterPower, gearInterceptionPower } from '../../Battle/AerialCombat/fighterCombat'
-import { AirControlState } from '../../constants'
-import { GearCategory } from '../../data'
-import { IGear } from '../Gear'
+import { gearFighterPower, gearInterceptionPower } from "../../Battle/AerialCombat/fighterCombat"
+import { AirControlState } from "../../constants"
+import { GearCategory } from "../../data"
+import { IGear } from "../Gear"
 
 export interface IPlane {
   gear: IGear
@@ -87,7 +87,7 @@ export default class Plane implements IPlane {
   }
 
   get isSwordfish() {
-    return this.gear.name.includes('Swordfish')
+    return this.gear.name.includes("Swordfish")
   }
 
   get isNightFighter() {

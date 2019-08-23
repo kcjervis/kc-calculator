@@ -1,5 +1,5 @@
-import { api_mst_stype } from '@jervis/data'
-import ShipTypeId from './ShipTypeId'
+import { api_mst_stype } from "@jervis/data"
+import ShipTypeId from "./ShipTypeId"
 
 /** 艦種 */
 export default class ShipType {
@@ -15,7 +15,7 @@ export default class ShipType {
     if (found) {
       return found
     }
-    const newShipType = new ShipType(id, '', [])
+    const newShipType = new ShipType(id, "", [])
     ShipType.all.push(newShipType)
     return newShipType
   }
@@ -26,7 +26,7 @@ export default class ShipType {
     public readonly equippableCategoryIds: number[]
   ) {
     if (id === ShipTypeId.Battlecruiser) {
-      this.name = '巡洋戦艦'
+      this.name = "巡洋戦艦"
     }
   }
 
@@ -50,7 +50,7 @@ export default class ShipType {
    * 軽巡,雷巡,練巡
    */
   get isLightCruiserClass() {
-    return this.either('LightCruiser', 'TorpedoCruiser', 'TrainingCruiser')
+    return this.either("LightCruiser", "TorpedoCruiser", "TrainingCruiser")
   }
 
   /**
@@ -58,7 +58,7 @@ export default class ShipType {
    * 重巡,航巡
    */
   get isHeavyCruiserClass() {
-    return this.either('HeavyCruiser', 'AviationCruiser')
+    return this.either("HeavyCruiser", "AviationCruiser")
   }
 
   /**
@@ -66,7 +66,7 @@ export default class ShipType {
    * 戦艦,巡洋戦艦,航空戦艦,超弩級戦艦
    */
   get isBattleshipClass() {
-    return this.either('Battlecruiser', 'Battleship', 'AviationBattleship', 'SuperDreadnoughts')
+    return this.either("Battlecruiser", "Battleship", "AviationBattleship", "SuperDreadnoughts")
   }
 
   /**
@@ -74,7 +74,7 @@ export default class ShipType {
    * 軽空母,正規空母,装甲空母
    */
   get isAircraftCarrierClass() {
-    return this.either('LightAircraftCarrier', 'AircraftCarrier', 'ArmoredAircraftCarrier')
+    return this.either("LightAircraftCarrier", "AircraftCarrier", "ArmoredAircraftCarrier")
   }
 
   /**

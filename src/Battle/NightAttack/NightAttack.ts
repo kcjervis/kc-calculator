@@ -1,15 +1,15 @@
-import { Formation, Engagement, FleetType, Side } from '../../constants'
-import { IShip } from '../../objects'
-import { sumBy } from 'lodash-es'
-import NightCombatSpecialAttack from './NightCombatSpecialAttack'
-import { ShipInformation, InstallationType } from '../../types'
+import { Formation, Engagement, FleetType, Side } from "../../constants"
+import { IShip } from "../../objects"
+import { sumBy } from "lodash-es"
+import NightCombatSpecialAttack from "./NightCombatSpecialAttack"
+import { ShipInformation, InstallationType } from "../../types"
 
-import ShipNightAttackStatus from './ShipNightAttackStatus'
-import Damage from '../Damage'
-import DefensePower from '../DefensePower'
-import NightAttackAccuracy from './NightAttackAccuracy'
-import { calcHitRate } from '../Hit'
-import { calcEvasionValue } from '../Evasion'
+import ShipNightAttackStatus from "./ShipNightAttackStatus"
+import Damage from "../Damage"
+import DefensePower from "../DefensePower"
+import NightAttackAccuracy from "./NightAttackAccuracy"
+import { calcHitRate } from "../Hit"
+import { calcEvasionValue } from "../Evasion"
 
 export default class NightAttack {
   constructor(
@@ -50,7 +50,7 @@ export default class NightAttack {
       contactModifier: contactModifier.accuracy,
       level,
       luck: stats.luck,
-      equipmentAccuracy: totalEquipmentStats('accuracy'),
+      equipmentAccuracy: totalEquipmentStats("accuracy"),
       improvementModifier: attackerNightAttackStatus.improvementAccuracyModifier,
 
       formationModifier: formation.getModifiersWithRole(role).nightBattle.accuracy,

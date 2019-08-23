@@ -1,13 +1,13 @@
-import DayCombatSpecialAttack from './DayCombatSpecialAttack'
-import { ShipInformation, ShellingType, InstallationType, BattleState } from '../../types'
+import DayCombatSpecialAttack from "./DayCombatSpecialAttack"
+import { ShipInformation, ShellingType, InstallationType, BattleState } from "../../types"
 
-import ShipShellingStatus, { getProficiencyModifier } from './ShipShellingStatus'
-import getCombinedFleetFactor from './getCombinedFleetFactor'
-import Damage from '../Damage'
-import DefensePower from '../DefensePower'
-import { calcEvasionValue } from '../Evasion'
-import { calcHitRate } from '../Hit'
-import { Side } from '../../constants'
+import ShipShellingStatus, { getProficiencyModifier } from "./ShipShellingStatus"
+import getCombinedFleetFactor from "./getCombinedFleetFactor"
+import Damage from "../Damage"
+import DefensePower from "../DefensePower"
+import { calcEvasionValue } from "../Evasion"
+import { calcHitRate } from "../Hit"
+import { Side } from "../../constants"
 
 export default class Shelling {
   public static getCombinedFleetFactor = getCombinedFleetFactor
@@ -30,7 +30,7 @@ export default class Shelling {
     return (
       defenderType.isBattleshipClass ||
       defenderType.isHeavyCruiserClass ||
-      defenderType.either('AircraftCarrier', 'ArmoredAircraftCarrier')
+      defenderType.either("AircraftCarrier", "ArmoredAircraftCarrier")
     )
   }
 
@@ -51,7 +51,7 @@ export default class Shelling {
 
   get proficiencyModifier() {
     const { attacker, shellingType, specialAttack } = this
-    if (shellingType === 'Shelling') {
+    if (shellingType === "Shelling") {
       return { power: 1, hitRate: 0, criticalRate: 0 }
     }
     return getProficiencyModifier(attacker.ship, specialAttack)
@@ -184,7 +184,7 @@ export default class Shelling {
 
     const { ship } = attacker
 
-    if (ship.health.damage === 'Lost') {
+    if (ship.health.damage === "Lost") {
       return false
     }
 
@@ -192,12 +192,12 @@ export default class Shelling {
       return false
     }
 
-    if (shellingType === 'CarrierShelling') {
-      if (ship.health.lte('Heavy')) {
+    if (shellingType === "CarrierShelling") {
+      if (ship.health.lte("Heavy")) {
         return false
       }
 
-      if (!ship.shipType.is('ArmoredAircraftCarrier') && ship.health.lte('Moderate')) {
+      if (!ship.shipType.is("ArmoredAircraftCarrier") && ship.health.lte("Moderate")) {
         return false
       }
 
@@ -214,7 +214,7 @@ export default class Shelling {
     }
 
     if (ship.shipType.isSubmarineClass && defenderIsInstallation) {
-      return ship.hasGearCategory('SpecialAmphibiousTank')
+      return ship.hasGearCategory("SpecialAmphibiousTank")
     }
 
     return true

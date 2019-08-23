@@ -1,5 +1,5 @@
-import { IGear } from '../Gear'
-import Plane, { IPlane } from './Plane'
+import { IGear } from "../Gear"
+import Plane, { IPlane } from "./Plane"
 
 export { Plane, IPlane }
 

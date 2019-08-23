@@ -1,10 +1,10 @@
-import { flatMap } from 'lodash-es'
+import { flatMap } from "lodash-es"
 
-import { AirControlState, Side } from '../../constants'
-import { ILandBasedAirCorps } from '../../objects'
-import { ICombatInformation } from '../CombatInformation'
+import { AirControlState, Side } from "../../constants"
+import { ILandBasedAirCorps } from "../../objects"
+import { ICombatInformation } from "../CombatInformation"
 
-import AerialCombat from './AerialCombat'
+import AerialCombat from "./AerialCombat"
 
 export default class LandBaseAerialSupport extends AerialCombat {
   constructor(combatInformation: ICombatInformation, private readonly landBasedAirCorps: ILandBasedAirCorps) {

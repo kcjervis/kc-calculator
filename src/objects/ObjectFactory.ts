@@ -1,9 +1,9 @@
-import { MasterData } from '../data'
-import { GearFactory, IGearDataObject } from './Gear'
-import { FleetFactory, IFleetDataObject } from './Fleet'
-import { ILandBasedAirCorpsDataObject, LandBasedAirCorpsFactory } from './LandBasedAirCorps'
-import { IOperationDataObject, OperationFactory } from './Operation'
-import { IShipDataObject, ShipFactory } from './Ship'
+import { MasterData } from "../data"
+import { GearFactory, IGearDataObject } from "./Gear"
+import { FleetFactory, IFleetDataObject } from "./Fleet"
+import { ILandBasedAirCorpsDataObject, LandBasedAirCorpsFactory } from "./LandBasedAirCorps"
+import { IOperationDataObject, OperationFactory } from "./Operation"
+import { IShipDataObject, ShipFactory } from "./Ship"
 
 export default class ObjectFactory {
   private readonly gearFactory: GearFactory

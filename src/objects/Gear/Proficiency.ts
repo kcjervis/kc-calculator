@@ -1,10 +1,10 @@
-import { MasterGear } from '../../data'
-import { maxBy } from 'lodash-es'
+import { MasterGear } from "../../data"
+import { maxBy } from "lodash-es"
 
 type LevelBonus = { level: number; value: number }
 
 export const getLevelBonusValue = (bonuses: LevelBonus[], level: number) => {
-  const maxBonus = maxBy(bonuses.filter(bonus => bonus.level <= level), 'value')
+  const maxBonus = maxBy(bonuses.filter(bonus => bonus.level <= level), "value")
   return maxBonus ? maxBonus.value : 0
 }
 
@@ -67,7 +67,7 @@ export default class Proficiency implements IProficiency {
 
     if (master.category.isFighter) {
       bonuses = Proficiency.fighterPowerLevelBonuses.fighter
-    } else if (master.category.is('SeaplaneBomber')) {
+    } else if (master.category.is("SeaplaneBomber")) {
       bonuses = Proficiency.fighterPowerLevelBonuses.seaplaneBomber
     }
 

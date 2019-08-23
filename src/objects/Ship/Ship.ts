@@ -1,18 +1,18 @@
-import { api_mst_equip_exslot } from '@jervis/data'
-import { ListIterator } from 'lodash'
-import { sumBy } from 'lodash-es'
+import { api_mst_equip_exslot } from "@jervis/data"
+import { ListIterator } from "lodash"
+import { sumBy } from "lodash-es"
 
-import { IHealth } from './Health'
-import { IMorale } from './Morale'
-import { IShipNakedStats } from './ShipNakedStats'
-import { IShipStats } from './ShipStats'
+import { IHealth } from "./Health"
+import { IMorale } from "./Morale"
+import { IShipNakedStats } from "./ShipNakedStats"
+import { IShipStats } from "./ShipStats"
 
-import { MasterShip, ShipClass, ShipType, GearCategory } from '../../data'
-import { nonNullable, shipNameIsKai2 } from '../../utils'
-import { IGear } from '../Gear'
-import { IPlane } from '../Plane'
-import { GearCategoryKey } from '../../data/GearCategory'
-import { InstallationType } from '../../types'
+import { MasterShip, ShipClass, ShipType, GearCategory } from "../../data"
+import { nonNullable, shipNameIsKai2 } from "../../utils"
+import { IGear } from "../Gear"
+import { IPlane } from "../Plane"
+import { GearCategoryKey } from "../../data/GearCategory"
+import { InstallationType } from "../../types"
 
 type GearIterator<R> = ListIterator<IGear, R>
 type GearIteratee<R, S> = GearIterator<R> | S
@@ -103,7 +103,7 @@ export default class Ship implements IShip {
   get fighterPower() {
     return sumBy(
       this.planes.filter(({ category }) => category.isFighter || category.isTorpedoBomber || category.isDiveBomber),
-      'fighterPower'
+      "fighterPower"
     )
   }
 
@@ -114,18 +114,18 @@ export default class Ship implements IShip {
   get installationType() {
     const { isInstallation, name } = this
     if (!isInstallation) {
-      return 'None'
+      return "None"
     }
-    if (name.includes('砲台')) {
-      return 'Pillbox'
+    if (name.includes("砲台")) {
+      return "Pillbox"
     }
-    if (name.includes('離島') || name.includes('中枢')) {
-      return 'IsolatedIsland'
+    if (name.includes("離島") || name.includes("中枢")) {
+      return "IsolatedIsland"
     }
-    if (name.includes('集積')) {
-      return 'SupplyDepot'
+    if (name.includes("集積")) {
+      return "SupplyDepot"
     }
-    return 'SoftSkinned'
+    return "SoftSkinned"
   }
 
   get nonNullableGears() {
@@ -153,7 +153,7 @@ export default class Ship implements IShip {
       )
     }
 
-    if (this.shipClass.is('IseClass') && shipNameIsKai2(this.name)) {
+    if (this.shipClass.is("IseClass") && shipNameIsKai2(this.name)) {
       return !(slotIndex > 1 && category.isMainGun)
     }
 
@@ -161,7 +161,7 @@ export default class Ship implements IShip {
   }
 
   public hasGear = (iteratee: GearIteratee<boolean, number>) => {
-    if (typeof iteratee === 'number') {
+    if (typeof iteratee === "number") {
       return this.nonNullableGears.some(({ masterId }) => masterId === iteratee)
     }
     return this.nonNullableGears.some(iteratee)
@@ -172,7 +172,7 @@ export default class Ship implements IShip {
     if (iteratee === undefined) {
       return nonNullableGears.length
     }
-    if (typeof iteratee === 'number') {
+    if (typeof iteratee === "number") {
       return nonNullableGears.filter(({ masterId }) => masterId === iteratee).length
     }
     return nonNullableGears.filter(iteratee).length
@@ -181,7 +181,7 @@ export default class Ship implements IShip {
   public countGearCategory = (...args: GearCategoryIteratee[]) => {
     const categories = this.nonNullableGears.map(({ category }) => category)
     return sumBy(args, arg => {
-      if (typeof arg === 'string') {
+      if (typeof arg === "string") {
         return categories.filter(category => category.is(arg)).length
       }
       return categories.filter(arg).length
@@ -198,12 +198,12 @@ export default class Ship implements IShip {
 
   get canNightAttack() {
     const { shipClass, shipType, health, master } = this
-    if (health.lte('Heavy')) {
+    if (health.lte("Heavy")) {
       return false
     }
 
-    if (shipClass.is('ArkRoyalClass')) {
-      return health.damage !== 'Moderate' && this.planes.some(plane => plane.isSwordfish)
+    if (shipClass.is("ArkRoyalClass")) {
+      return health.damage !== "Moderate" && this.planes.some(plane => plane.isSwordfish)
     }
     return master.firepower[0] > 0
   }

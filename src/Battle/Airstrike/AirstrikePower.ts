@@ -1,4 +1,4 @@
-import { softcap } from '../../utils'
+import { softcap } from "../../utils"
 
 type AirstrikeBasicPowerFactors = {
   stat: number

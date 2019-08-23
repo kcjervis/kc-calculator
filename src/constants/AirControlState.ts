@@ -2,11 +2,11 @@
 export default class AirControlState {
   public static readonly values: AirControlState[] = []
 
-  public static readonly AirSupremacy = new AirControlState(1, '制空権確保', 1)
-  public static readonly AirSuperiority = new AirControlState(2, '航空優勢', 3)
-  public static readonly AirParity = new AirControlState(0, '制空均衡', 5)
-  public static readonly AirDenial = new AirControlState(3, '航空劣勢', 7)
-  public static readonly AirIncapability = new AirControlState(4, '制空権喪失', 10)
+  public static readonly AirSupremacy = new AirControlState(1, "制空権確保", 1)
+  public static readonly AirSuperiority = new AirControlState(2, "航空優勢", 3)
+  public static readonly AirParity = new AirControlState(0, "制空均衡", 5)
+  public static readonly AirDenial = new AirControlState(3, "航空劣勢", 7)
+  public static readonly AirIncapability = new AirControlState(4, "制空権喪失", 10)
 
   public static fromFighterPower(allied: number, enemy: number) {
     if (allied >= 3 * enemy) {

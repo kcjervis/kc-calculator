@@ -1,5 +1,5 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
-import { shipNameIsKai2 } from '../../../../utils'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
+import { shipNameIsKai2 } from "../../../../utils"
 
 const bonusCreator: StatsBonusCreator = ship => {
   // 三式弾
@@ -10,17 +10,17 @@ const bonusCreator: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
 
   // 単体ボーナス
-  if (ship.name === '金剛改二' || ship.name === '金剛改二丙') {
+  if (ship.name === "金剛改二" || ship.name === "金剛改二丙") {
     bonus.add({ firepower: 3, antiAir: 3 })
-  } else if (ship.name === '比叡改二') {
+  } else if (ship.name === "比叡改二") {
     bonus.add({ firepower: 2, antiAir: 2 })
-  } else if (ship.name === '榛名改二' || ship.name === '陸奥改二') {
+  } else if (ship.name === "榛名改二" || ship.name === "陸奥改二") {
     bonus.add({ firepower: 2, antiAir: 2, evasion: 1 })
-  } else if (ship.name === '霧島改二') {
+  } else if (ship.name === "霧島改二") {
     bonus.add({ firepower: 3, antiAir: 2 })
-  } else if (ship.name === '長門改二') {
+  } else if (ship.name === "長門改二") {
     bonus.add({ firepower: 1, antiAir: 2 })
-  } else if (ship.shipClass.is('KongouClass')) {
+  } else if (ship.shipClass.is("KongouClass")) {
     bonus.add({ firepower: 1, antiAir: 1 })
   }
 

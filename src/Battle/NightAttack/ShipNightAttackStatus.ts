@@ -1,11 +1,11 @@
-import { IShip } from '../../objects'
-import { NightAttackType, ShipRole, InstallationType, NightAttackPowerFactors } from '../../types'
-import { sumBy } from 'lodash-es'
-import { Formation } from '../../constants'
-import NightAttackPower from './NightAttackPower'
-import ShipAntiInstallationStatus from '../ShipAntiInstallationStatus'
-import { calcCruiserFitBonus, getProficiencyModifier } from '../Shelling/ShipShellingStatus'
-import NightCombatSpecialAttack, { isNightAerialAttackShip } from './NightCombatSpecialAttack'
+import { IShip } from "../../objects"
+import { NightAttackType, ShipRole, InstallationType, NightAttackPowerFactors } from "../../types"
+import { sumBy } from "lodash-es"
+import { Formation } from "../../constants"
+import NightAttackPower from "./NightAttackPower"
+import ShipAntiInstallationStatus from "../ShipAntiInstallationStatus"
+import { calcCruiserFitBonus, getProficiencyModifier } from "../Shelling/ShipShellingStatus"
+import NightCombatSpecialAttack, { isNightAerialAttackShip } from "./NightCombatSpecialAttack"
 
 type ShipNightAttackPowerOptions = Partial<{
   role: ShipRole
@@ -23,14 +23,14 @@ export default class ShipNightAttackStatus {
   get nightAttackType(): NightAttackType {
     const { ship } = this
     if (isNightAerialAttackShip(ship)) {
-      return 'NightAerialAttack'
+      return "NightAerialAttack"
     }
-    return 'NightAttack'
+    return "NightAttack"
   }
 
   get proficiencyModifier() {
     const { ship, nightAttackType } = this
-    if (nightAttackType === 'NightAttack') {
+    if (nightAttackType === "NightAttack") {
       return { power: 1, hitRate: 0, criticalRate: 0 }
     }
     return getProficiencyModifier(ship)
@@ -52,15 +52,15 @@ export default class ShipNightAttackStatus {
       if (
         category.isMainGun ||
         category.either(
-          'SecondaryGun',
-          'ArmorPiercingShell',
-          'AntiAircraftShell',
-          'AntiAircraftFireDirector',
-          'Searchlight',
-          'Torpedo',
-          'LandingCraft',
-          'SpecialAmphibiousTank',
-          'MidgetSubmarine'
+          "SecondaryGun",
+          "ArmorPiercingShell",
+          "AntiAircraftShell",
+          "AntiAircraftFireDirector",
+          "Searchlight",
+          "Torpedo",
+          "LandingCraft",
+          "SpecialAmphibiousTank",
+          "MidgetSubmarine"
         )
       ) {
         return Math.sqrt(improvement.value)
@@ -80,7 +80,7 @@ export default class ShipNightAttackStatus {
 
       if (
         category.isArmor ||
-        category.either('AntiAircraftGun', 'Sonar', 'LargeSonar', 'DepthCharge', 'EngineImprovement')
+        category.either("AntiAircraftGun", "Sonar", "LargeSonar", "DepthCharge", "EngineImprovement")
       ) {
         return 0
       }
@@ -91,7 +91,7 @@ export default class ShipNightAttackStatus {
 
   public calcNightAerialAttackPower(isAntiInstallationWarfare?: boolean) {
     const { ship, nightAttackType } = this
-    if (nightAttackType !== 'NightAerialAttack') {
+    if (nightAttackType !== "NightAerialAttack") {
       return 0
     }
 
@@ -103,18 +103,18 @@ export default class ShipNightAttackStatus {
 
   public calcPower = (options: ShipNightAttackPowerOptions) => {
     const {
-      role = 'Main',
+      role = "Main",
       nightContactModifier = 0,
       formation = Formation.LineAhead,
       eventMapModifier = 1,
-      installationType = 'None',
+      installationType = "None",
       specialAttack,
       isCritical = false
     } = options
     const { ship, nightAttackType, improvementPowerModifier, proficiencyModifier } = this
     const { firepower, torpedo } = ship.stats
 
-    const isAntiInstallationWarfare = installationType !== 'None'
+    const isAntiInstallationWarfare = installationType !== "None"
     const nightAerialAttackPower = this.calcNightAerialAttackPower(isAntiInstallationWarfare)
 
     const formationModifier = formation.getModifiersWithRole(role).nightBattle.power

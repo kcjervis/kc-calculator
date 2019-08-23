@@ -1,5 +1,5 @@
-import { IShip } from '../../objects'
-import { Formation, Side } from '../../constants'
+import { IShip } from "../../objects"
+import { Formation, Side } from "../../constants"
 
 export const isNightAerialAttackShip = (ship: IShip) => {
   if (!ship.shipType.isAircraftCarrierClass) {
@@ -49,7 +49,7 @@ const calcBaseValue = (
   if (isFlagship) {
     baseValue += 15
   }
-  if (ship.health.damage === 'Moderate') {
+  if (ship.health.damage === "Moderate") {
     baseValue += 18
   }
   if (ship.hasGear(Lookout)) {
@@ -73,22 +73,22 @@ const calcBaseValue = (
 }
 
 export default class NightCombatSpecialAttack {
-  public static DoubleAttack = new NightCombatSpecialAttack(1, '連撃', 110, { power: 1.2, accuracy: 1.1 })
-  public static MainTorp = new NightCombatSpecialAttack(2, '主魚', 115, { power: 1.3, accuracy: 1.5 })
-  public static TorpTorp = new NightCombatSpecialAttack(3, '魚雷', 122, { power: 1.5, accuracy: 1.6 })
+  public static DoubleAttack = new NightCombatSpecialAttack(1, "連撃", 110, { power: 1.2, accuracy: 1.1 })
+  public static MainTorp = new NightCombatSpecialAttack(2, "主魚", 115, { power: 1.3, accuracy: 1.5 })
+  public static TorpTorp = new NightCombatSpecialAttack(3, "魚雷", 122, { power: 1.5, accuracy: 1.6 })
 
-  public static SubmarineTorpTorp = new NightCombatSpecialAttack(3.1, '潜水魚雷', 110, { power: 1.65, accuracy: 1 })
-  public static SubmarineRadarTorp = new NightCombatSpecialAttack(3.2, '潜水電探', 102, { power: 1.75, accuracy: 1 })
+  public static SubmarineTorpTorp = new NightCombatSpecialAttack(3.1, "潜水魚雷", 110, { power: 1.65, accuracy: 1 })
+  public static SubmarineRadarTorp = new NightCombatSpecialAttack(3.2, "潜水電探", 102, { power: 1.75, accuracy: 1 })
 
-  public static MainMainSecond = new NightCombatSpecialAttack(4, '主副', 130, { power: 1.75, accuracy: 1.65 })
-  public static MainMainMain = new NightCombatSpecialAttack(5, '主砲', 140, { power: 2, accuracy: 1.5 })
+  public static MainMainSecond = new NightCombatSpecialAttack(4, "主副", 130, { power: 1.75, accuracy: 1.65 })
+  public static MainMainMain = new NightCombatSpecialAttack(5, "主砲", 140, { power: 2, accuracy: 1.5 })
 
-  public static AerialAttack1 = new NightCombatSpecialAttack(6.1, '夜襲1.25', Infinity, { power: 1.25, accuracy: 1 })
-  public static AerialAttack2 = new NightCombatSpecialAttack(6.2, '夜襲1.20', Infinity, { power: 1.2, accuracy: 1 })
-  public static AerialAttack3 = new NightCombatSpecialAttack(6.3, '夜襲1.18', Infinity, { power: 1.18, accuracy: 1 })
+  public static AerialAttack1 = new NightCombatSpecialAttack(6.1, "夜襲1.25", Infinity, { power: 1.25, accuracy: 1 })
+  public static AerialAttack2 = new NightCombatSpecialAttack(6.2, "夜襲1.20", Infinity, { power: 1.2, accuracy: 1 })
+  public static AerialAttack3 = new NightCombatSpecialAttack(6.3, "夜襲1.18", Infinity, { power: 1.18, accuracy: 1 })
 
-  public static MainTorpRadar = new NightCombatSpecialAttack(7, '主魚電', 130, { power: 1.3, accuracy: 1 })
-  public static TorpRadarLookout = new NightCombatSpecialAttack(8, '魚見電', 150, { power: 1.2, accuracy: 1 })
+  public static MainTorpRadar = new NightCombatSpecialAttack(7, "主魚電", 130, { power: 1.3, accuracy: 1 })
+  public static TorpRadarLookout = new NightCombatSpecialAttack(8, "魚見電", 150, { power: 1.2, accuracy: 1 })
 
   public static getPossibleSpecialAttacks = (ship: IShip) => {
     const { shipType, hasGear, countGear, countGearCategory } = ship
@@ -128,11 +128,11 @@ export default class NightCombatSpecialAttack {
     }
 
     const submarineTorpedoCount = countGear(213) + countGear(214)
-    const torpedoCount = countGearCategory('Torpedo', 'SubmarineTorpedo')
+    const torpedoCount = countGearCategory("Torpedo", "SubmarineTorpedo")
 
     // 駆逐カットイン
-    if (shipType.is('Destroyer') && hasGear(gear => gear.isSurfaceRadar) && torpedoCount >= 1) {
-      if (hasGear(gear => gear.category.is('SmallCaliberMainGun'))) {
+    if (shipType.is("Destroyer") && hasGear(gear => gear.isSurfaceRadar) && torpedoCount >= 1) {
+      if (hasGear(gear => gear.category.is("SmallCaliberMainGun"))) {
         possibleSpecialAttacks.push(NightCombatSpecialAttack.MainTorpRadar)
       }
       if (hasGear(Lookout)) {
@@ -141,10 +141,10 @@ export default class NightCombatSpecialAttack {
     }
 
     const mainGunCount = countGear(gear => gear.category.isMainGun)
-    const secondaryGunCount = countGear(gear => gear.category.is('SecondaryGun'))
+    const secondaryGunCount = countGear(gear => gear.category.is("SecondaryGun"))
 
     // 潜水カットイン
-    if (submarineTorpedoCount >= 1 && hasGear(gear => gear.category.is('SubmarineEquipment'))) {
+    if (submarineTorpedoCount >= 1 && hasGear(gear => gear.category.is("SubmarineEquipment"))) {
       possibleSpecialAttacks.push(NightCombatSpecialAttack.SubmarineRadarTorp)
     } else if (submarineTorpedoCount >= 2) {
       possibleSpecialAttacks.push(NightCombatSpecialAttack.SubmarineTorpTorp)

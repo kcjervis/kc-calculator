@@ -1,7 +1,7 @@
-import { IGear, IShip } from '../../objects'
-import { Side } from '../../constants'
-import AntiAirCutin from './AntiAirCutin'
-import { ShipType } from '../../data'
+import { IGear, IShip } from "../../objects"
+import { Side } from "../../constants"
+import AntiAirCutin from "./AntiAirCutin"
+import { ShipType } from "../../data"
 
 export const calcGearAdjustedAntiAir = (gear: IGear) => {
   const { antiAir, category, improvement, isHighAngleMount } = gear
@@ -10,9 +10,9 @@ export const calcGearAdjustedAntiAir = (gear: IGear) => {
   }
 
   let multiplier = 0
-  if (category.is('AntiAircraftGun')) {
+  if (category.is("AntiAircraftGun")) {
     multiplier = 6
-  } else if (category.is('AntiAircraftFireDirector') || isHighAngleMount) {
+  } else if (category.is("AntiAircraftFireDirector") || isHighAngleMount) {
     multiplier = 4
   } else if (category.isRadar) {
     multiplier = 3
@@ -36,7 +36,7 @@ export const calcShipAdjustedAntiAir = (ship: IShip, side: Side) => {
 }
 
 const isPropellantBarrageShipType = (type: ShipType) =>
-  type.isAircraftCarrierClass || type.either('AviationCruiser', 'AviationBattleship', 'SeaplaneTender')
+  type.isAircraftCarrierClass || type.either("AviationCruiser", "AviationBattleship", "SeaplaneTender")
 
 export default class ShipAntiAir {
   constructor(
@@ -91,7 +91,7 @@ export default class ShipAntiAir {
     if (!count) {
       return 0
     }
-    const shipClassBonus = ship.shipClass.is('IseClass') ? 0.25 : 0
+    const shipClassBonus = ship.shipClass.is("IseClass") ? 0.25 : 0
     return (adjustedAntiAir + 0.9 * ship.stats.luck) / 281 + (count - 1) * 0.15 + shipClassBonus
   }
 }

@@ -1,13 +1,13 @@
-import { ShipInformation, ShellingType, InstallationType, BattleState } from '../../types'
+import { ShipInformation, ShellingType, InstallationType, BattleState } from "../../types"
 
-import Damage from '../Damage'
-import DefensePower from '../DefensePower'
-import { calcEvasionValue } from '../Evasion'
-import { calcHitRate } from '../Hit'
-import { calcBasicPower, calcPreCapPower, calcPower } from '../Shelling/ShellingPower'
-import ShipShellingStatus from '../Shelling/ShipShellingStatus'
-import { softcap } from '../../utils'
-import { calcShellingBasicAccuracy, calcShellingAccuracy } from '../Shelling/ShellingAccuracy'
+import Damage from "../Damage"
+import DefensePower from "../DefensePower"
+import { calcEvasionValue } from "../Evasion"
+import { calcHitRate } from "../Hit"
+import { calcBasicPower, calcPreCapPower, calcPower } from "../Shelling/ShellingPower"
+import ShipShellingStatus from "../Shelling/ShipShellingStatus"
+import { softcap } from "../../utils"
+import { calcShellingBasicAccuracy, calcShellingAccuracy } from "../Shelling/ShellingAccuracy"
 
 type ShellingSupportPowerDef = {
   battleState: BattleState
@@ -93,7 +93,7 @@ export default class ShellingSupport {
     const formationModifier = formation.getModifiersWithRole(role).shelling.accuracy
     const moraleModifier = ship.morale.shellingAccuracyModifier
 
-    const equipmentAccuracy = totalEquipmentStats('accuracy')
+    const equipmentAccuracy = totalEquipmentStats("accuracy")
 
     const base = calcShellingBasicAccuracy({
       combinedFleetFactor: -26,

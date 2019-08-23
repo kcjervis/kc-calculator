@@ -1,9 +1,9 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
-import { shipNameIsKai2 } from '../../../../utils'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
+import { shipNameIsKai2 } from "../../../../utils"
 
 const createBonus: StatsBonusCreator = ship => {
   const isKai2 = shipNameIsKai2(ship.name)
-  const isIseClassKai2 = ship.shipClass.is('IseClass') && isKai2
+  const isIseClassKai2 = ship.shipClass.is("IseClass") && isKai2
   if (!isIseClassKai2) {
     return undefined
   }

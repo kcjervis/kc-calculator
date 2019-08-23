@@ -1,5 +1,5 @@
-import StatsBonus, { StatsBonusCreator } from '../StatsBonus'
-import { shipNameIsKai2 } from '../../../../utils'
+import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
+import { shipNameIsKai2 } from "../../../../utils"
 
 const createBonus: StatsBonusCreator = ship => {
   // 瑞雲(六三四空/熟練)
@@ -12,8 +12,8 @@ const createBonus: StatsBonusCreator = ship => {
   const isKai2 = shipNameIsKai2(ship.name)
   const { shipClass } = ship
 
-  const isIseClass = shipClass.is('IseClass')
-  const isFusouClassKai2 = shipClass.is('FusouClass') && isKai2
+  const isIseClass = shipClass.is("IseClass")
+  const isFusouClassKai2 = shipClass.is("FusouClass") && isKai2
 
   if (isIseClass && isKai2) {
     bonus.add({

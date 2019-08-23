@@ -1,5 +1,5 @@
-import StatsBonus, { StatsBonusCreator } from './StatsBonus'
-import { shipNameIsKai2 } from '../../../utils'
+import StatsBonus, { StatsBonusCreator } from "./StatsBonus"
+import { shipNameIsKai2 } from "../../../utils"
 
 const createBonus: StatsBonusCreator = ship => {
   // 16inch Mk.I三連装砲 AFCT改 FCR type284
@@ -11,20 +11,20 @@ const createBonus: StatsBonusCreator = ship => {
   const { shipClass } = ship
 
   // 単体ボーナス
-  if (shipClass.is('NelsonClass')) {
+  if (shipClass.is("NelsonClass")) {
     bonus.add({
       multiplier: count,
       firepower: 2,
       armor: 1
     })
-  } else if (shipClass.is('QueenElizabethClass')) {
+  } else if (shipClass.is("QueenElizabethClass")) {
     bonus.add({
       multiplier: count,
       firepower: 2,
       armor: 1,
       evasion: -2
     })
-  } else if (shipClass.is('KongouClass') && shipNameIsKai2(ship.name)) {
+  } else if (shipClass.is("KongouClass") && shipNameIsKai2(ship.name)) {
     bonus.add({
       multiplier: count,
       firepower: 1,

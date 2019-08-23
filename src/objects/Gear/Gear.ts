@@ -1,6 +1,25 @@
-import { GearCategory, MasterGear } from '../../data'
-import { IImprovement } from './Improvement'
-import { IProficiency } from './Proficiency'
+import { GearCategory, MasterGear } from "../../data"
+import { IImprovement } from "./Improvement"
+import { IProficiency } from "./Proficiency"
+
+type GearStats = {
+  hp: number
+  armor: number
+  firepower: number
+  torpedo: number
+  speed: number
+  bombing: number
+  antiAir: number
+  asw: number
+  los: number
+  accuracy: number
+  evasion: number
+  interception: number
+  antiBomber: number
+  luck: number
+  range: number
+  radius: number
+}
 
 export interface IGearStats {
   hp: number
@@ -21,7 +40,7 @@ export interface IGearStats {
   radius: number
 }
 
-export interface IGear extends IGearStats {
+export interface IGear extends GearStats {
   /** 装備ID */
   masterId: number
   name: string
@@ -39,7 +58,7 @@ export interface IGear extends IGearStats {
 
   isSurfaceRadar: boolean
 
-  isAntiAirRadar: boolean
+  isAirRadar: boolean
 
   isAntiInstallationBomber: boolean
 }
@@ -136,30 +155,18 @@ export default class Gear implements IGear {
   }
 
   get isHighAngleMount() {
-    return this.iconId === 16
+    return this.master.isHighAngleMount()
   }
 
   get isSurfaceRadar() {
-    const { category, los } = this
-    return category.isRadar && los >= 5
+    return this.master.isSurfaceRadar()
   }
 
-  get isAntiAirRadar() {
-    const { category, antiAir } = this
-    return category.isRadar && antiAir >= 2
+  get isAirRadar() {
+    return this.master.isAirRadar()
   }
 
-  /**
-   * 対地艦爆
-   * id60 零式艦戦62型(爆戦)
-   * id64 Ju87C改
-   * id148 試製南山
-   * id305 Ju87C改二(KMX搭載機)
-   * id306 Ju87C改二(KMX搭載機/熟練)
-   * id233 F4U-1D
-   * id277 FM-2
-   */
   get isAntiInstallationBomber() {
-    return [60, 64, 148, 233, 277, 305, 306, 316, 319].includes(this.masterId)
+    return this.master.isAntiInstallationBomber()
   }
 }
