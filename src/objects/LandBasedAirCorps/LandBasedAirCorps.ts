@@ -1,6 +1,6 @@
 import { sumBy } from "lodash-es"
 
-import { nonNullable } from "../../utils"
+import { isNonNullable } from "../../utils"
 import { IGear } from "../Gear"
 import { createPlanes, IPlane } from "../Plane"
 
@@ -70,7 +70,7 @@ export default class LandBasedAirCorps implements ILandBasedAirCorps {
   }
 
   get nonNullableGears() {
-    return this.gears.filter(nonNullable)
+    return this.gears.filter(isNonNullable)
   }
 
   private get hasPlanes() {

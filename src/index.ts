@@ -11,13 +11,11 @@ export {
   IOperationDataObject,
   IShipDataObject,
   IPlane,
-  GearStatKey,
-  gearStatKeys,
   ShipStatKey,
   shipStatKeys
 } from "./objects"
 
-export { MasterData, ShipClass, ShipType, GearCategory, MasterGear, MasterShip } from "./data"
+export * from "./data"
 
 export * from "./constants"
 

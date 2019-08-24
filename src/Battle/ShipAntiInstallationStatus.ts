@@ -1,13 +1,13 @@
 import { IShip } from "../objects"
 import { sumBy } from "lodash-es"
-import { nonNullable } from "../utils"
+import { isNonNullable } from "../utils"
 import { InstallationType } from "../types"
 
 export default class ShipAntiInstallationStatus {
   constructor(private ship: IShip) {}
 
   private get gears() {
-    return this.ship.gears.filter(nonNullable)
+    return this.ship.gears.filter(isNonNullable)
   }
 
   private get countGear() {

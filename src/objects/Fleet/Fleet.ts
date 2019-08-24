@@ -1,7 +1,7 @@
 import { flatMap, sumBy } from "lodash-es"
 
 import EffectiveLos from "../../EffectiveLos"
-import { nonNullable } from "../../utils"
+import { isNonNullable } from "../../utils"
 import { IPlane } from "../Plane"
 import { IShip } from "../Ship"
 
@@ -22,7 +22,7 @@ export default class Fleet implements IFleet {
   constructor(public readonly ships: Array<IShip | undefined>) {}
 
   get nonNullableShips() {
-    return this.ships.filter(nonNullable)
+    return this.ships.filter(isNonNullable)
   }
 
   public totalShipStats = (iteratee: ShipIterator<number>) => {

@@ -1,23 +1,23 @@
-import Speed, { SpeedGroup } from '../src/constants/Speed'
+import Speed, { SpeedGroup } from "../src/constants/Speed"
 
-describe('getSpeedIncrement', () => {
+describe("getSpeedIncrement", () => {
   const fastA = {
-    name: 'FastA',
+    name: "FastA",
     group: SpeedGroup.FastA,
     tests: [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2].map(num => num * 5)
   }
   const fastB1SlowA = {
-    name: 'FastB1SlowA',
+    name: "FastB1SlowA",
     group: SpeedGroup.FastB1SlowA,
     tests: [1, 1, 1, 1, 1, 2, 3, 3, 2, 3, 3, 3, 3, 3].map(num => num * 5)
   }
   const fastB2SlowB = {
-    name: 'FastB2SlowB',
+    name: "FastB2SlowB",
     group: SpeedGroup.FastB2SlowB,
     tests: [1, 1, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2].map(num => num * 5)
   }
   const otherC = {
-    name: 'OtherC',
+    name: "OtherC",
     group: SpeedGroup.OtherC,
     tests: new Array<number>(14).fill(1).map(num => num * 5)
   }
@@ -33,9 +33,7 @@ describe('getSpeedIncrement', () => {
 
       for (const testGroup of testGroups) {
         const result = testGroup.tests[count]
-        it(`name: ${
-          testGroup.name
-        }, enhancedBoiler: ${enhancedBoilerCount}, newModelBoiler: ${newModelBoilerCount}, toBe: ${result}`, () => {
+        it(`name: ${testGroup.name}, enhancedBoiler: ${enhancedBoilerCount}, newModelBoiler: ${newModelBoilerCount}, toBe: ${result}`, () => {
           expect(Speed.getSpeedIncrement(testGroup.group, enhancedBoilerCount, newModelBoilerCount)).toBe(result)
         })
       }

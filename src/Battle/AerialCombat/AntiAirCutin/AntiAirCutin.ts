@@ -1,5 +1,5 @@
 import { IShip } from "../../../objects"
-import { nonNullable } from "../../../utils"
+import { isNonNullable } from "../../../utils"
 import getPossibleAntiAirCutinIds from "./getPossibleAntiAirCutinIds"
 import tryAntiAirCutin from "./tryAntiAirCutin"
 
@@ -54,7 +54,7 @@ export default class AntiAirCutin {
   public static getPossibleAntiAirCutins = (ship: IShip) => {
     return getPossibleAntiAirCutinIds(ship)
       .map(id => AntiAirCutin.fromId(id))
-      .filter(nonNullable)
+      .filter(isNonNullable)
   }
 
   private constructor(

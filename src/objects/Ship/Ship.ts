@@ -8,7 +8,7 @@ import { IShipNakedStats } from "./ShipNakedStats"
 import { IShipStats } from "./ShipStats"
 
 import { MasterShip, ShipClass, ShipType, GearCategory } from "../../data"
-import { nonNullable, shipNameIsKai2 } from "../../utils"
+import { isNonNullable, shipNameIsKai2 } from "../../utils"
 import { IGear } from "../Gear"
 import { IPlane } from "../Plane"
 import { GearCategoryKey } from "../../data/GearCategory"
@@ -129,12 +129,13 @@ export default class Ship implements IShip {
   }
 
   get nonNullableGears() {
-    return this.gears.filter(nonNullable)
+    return this.gears.filter(isNonNullable)
   }
 
   public canEquip = (gear: IGear, slotIndex: number) => {
+    const shipId = this.masterId
     const { equippable, isAbyssal } = this.master
-    const { masterId, category } = gear
+    const { masterId: gearId, category } = gear
 
     if (isAbyssal) {
       return true
@@ -144,12 +145,16 @@ export default class Ship implements IShip {
       return false
     }
 
+    // Richelieu
+    if ([492, 392].includes(shipId) && category.is("SeaplaneBomber")) {
+      // Laté 298B
+      return gearId === 194
+    }
+
     if (this.slots.length <= slotIndex) {
       const turbine = 33
       return (
-        api_mst_equip_exslot.includes(category.id) ||
-        equippable.expantionSlot.includes(masterId) ||
-        masterId === turbine
+        api_mst_equip_exslot.includes(category.id) || equippable.expantionSlot.includes(gearId) || gearId === turbine
       )
     }
 

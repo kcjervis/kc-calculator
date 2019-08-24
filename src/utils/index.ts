@@ -1,15 +1,24 @@
 import { IShip } from "../objects"
 import DefensePower from "../Battle/DefensePower"
 
-export const nonNullable = <T>(item: T): item is NonNullable<T> => item !== undefined && item !== null
+export const isNonNullable = <T>(item: T): item is NonNullable<T> => item !== undefined && item !== null
+export const nonNullable = isNonNullable
+
+export const setProperties = <T, K extends keyof T>(target: T, keys: K[], source: Pick<T, K>) => {
+  for (const key of keys) {
+    const value = source[key]
+    target[key] = value
+  }
+}
 
 export const merge = <T>(target: T, ...sources: Array<Partial<T>>) => {
   for (const source of sources) {
     for (const key in source) {
       const value = source[key]
-      if (nonNullable(value)) {
-        target[key] = value
+      if (!isNonNullable(value)) {
+        return
       }
+      target[key] = value
     }
   }
   return target

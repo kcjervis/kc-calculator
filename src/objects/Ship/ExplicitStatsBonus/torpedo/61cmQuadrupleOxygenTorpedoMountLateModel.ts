@@ -1,9 +1,9 @@
-import { nonNullable, shipNameIsKai2 } from "../../../../utils"
+import { isNonNullable, shipNameIsKai2 } from "../../../../utils"
 import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // 61cm四連装(酸素)魚雷後期型
-  const qxygenTorpedoMountLateModels = ship.gears.filter(nonNullable).filter(gear => gear.masterId === 286)
+  const qxygenTorpedoMountLateModels = ship.gears.filter(isNonNullable).filter(gear => gear.masterId === 286)
   const count = qxygenTorpedoMountLateModels.length
   const improved5Count = qxygenTorpedoMountLateModels.filter(torpedo => torpedo.improvement.value >= 5).length
   const improved10Count = qxygenTorpedoMountLateModels.filter(torpedo => torpedo.improvement.value >= 10).length

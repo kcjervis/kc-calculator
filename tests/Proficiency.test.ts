@@ -1,7 +1,7 @@
-import Proficiency, { getLevelBonusValue } from '../src/objects/Gear/Proficiency'
+import Proficiency, { getLevelBonusValue } from "../src/objects/Gear/Proficiency"
 
-describe('Proficiency', () => {
-  it('getLevelBonusValue', () => {
+describe("Proficiency", () => {
+  it("getLevelBonusValue", () => {
     const getCriticalModifierLevelBonus = (level: number) =>
       getLevelBonusValue(Proficiency.criticalModifierLevelBonuses, level)
 

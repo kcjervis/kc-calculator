@@ -1,7 +1,6 @@
 import { api_mst_slotitem, improvableIds, ships as defaultShipsData } from "@jervis/data"
 
 import GearCategory from "./GearCategory"
-import GearCategoryId from "./GearCategoryId"
 import MasterGear from "./MasterGear"
 import MasterShip from "./MasterShip"
 import ShipClass from "./ShipClass"

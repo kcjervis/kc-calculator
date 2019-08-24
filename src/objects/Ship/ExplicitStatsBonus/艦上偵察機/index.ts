@@ -1,10 +1,10 @@
-import { nonNullable } from "../../../../utils"
+import { isNonNullable } from "../../../../utils"
 import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 import 二式艦上偵察機 from "./二式艦上偵察機"
 
 const improvementBonus: StatsBonusCreator = ship => {
   const improvements = ship.gears
-    .filter(nonNullable)
+    .filter(isNonNullable)
     .filter(gear => gear.category.either("CarrierBasedReconnaissanceAircraft", "CarrierBasedReconnaissanceAircraft2"))
     .map(recon => recon.improvement.value)
 

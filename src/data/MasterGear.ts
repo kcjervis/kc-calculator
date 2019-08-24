@@ -1,31 +1,53 @@
 import { MstEquipment } from "@jervis/data"
-import GearCategory, { GearCategoryKey } from "./GearCategory"
+import { PickByValue } from "utility-types"
+import GearCategory from "./GearCategory"
 
-interface IGearData {
-  id: number
-  name: string
+export type GearStats = {
+  category: GearCategory
+
   categoryId: number
   iconId: number
+  name: string
+
+  hp: number
+  firepower: number
+  armor: number
+  torpedo: number
+  antiAir: number
+  speed: number
+  bombing: number
+  asw: number
+  los: number
+  luck: number
+  range: number
+  accuracy: number
+  evasion: number
+  antiBomber: number
+  interception: number
+  radius: number
 
   improvable: boolean
-
-  hp?: number
-  armor?: number
-  firepower?: number
-  torpedo?: number
-  speed?: number
-  bombing?: number
-  antiAir?: number
-  asw?: number
-  accuracy?: number
-  evasion?: number
-  los?: number
-  luck?: number
-  range?: number
-  radius?: number
 }
+export type GearStatKey = keyof PickByValue<GearStats, number>
 
-export default class MasterGear implements IGearData {
+export const gearStatKeys: GearStatKey[] = [
+  "armor",
+  "firepower",
+  "torpedo",
+  "speed",
+  "bombing",
+  "antiAir",
+  "asw",
+  "los",
+  "accuracy",
+  "evasion",
+  "interception",
+  "antiBomber",
+  "range",
+  "radius"
+]
+
+export default class MasterGear implements GearStats {
   public static readonly abyssalIdFrom = 500
 
   public readonly id: number
@@ -89,6 +111,8 @@ export default class MasterGear implements IGearData {
     }
   }
 
+  public isAbyssal = () => MasterGear.abyssalIdFrom < this.id
+
   private categoryIn = this.category.either
 
   public isHighAngleMount = () => this.iconId === 16
@@ -111,4 +135,8 @@ export default class MasterGear implements IGearData {
    * id319 彗星一二型(六三四空/三号爆弾搭載機)
    */
   public isAntiInstallationBomber = () => [60, 64, 148, 233, 277, 305, 306, 319].includes(this.id)
+
+  /** 戦闘機 */
+  public isFighter = () =>
+    this.categoryIn("CarrierBasedFighterAircraft", "SeaplaneFighter", "LandBasedFighter", "JetPoweredFighter")
 }

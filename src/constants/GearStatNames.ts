@@ -1,22 +1,4 @@
-export type GearStatName =
-  | "hp"
-  | "armor"
-  | "firepower"
-  | "torpedo"
-  | "speed"
-  | "bombing"
-  | "antiAir"
-  | "asw"
-  | "accuracy"
-  | "interception"
-  | "evasion"
-  | "antiBomber"
-  | "los"
-  | "luck"
-  | "range"
-  | "radius"
-
-const GearStatNames: GearStatName[] = [
+const GearStatNames = [
   "hp",
   "armor",
   "firepower",
@@ -33,6 +15,8 @@ const GearStatNames: GearStatName[] = [
   "luck",
   "range",
   "radius"
-]
+] as const
+
+export type GearStatName = typeof GearStatNames[number]
 
 export default GearStatNames

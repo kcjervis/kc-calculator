@@ -1,4 +1,3 @@
-import { gearFighterPower, gearInterceptionPower } from "../../Battle/AerialCombat/fighterCombat"
 import { AirControlState } from "../../constants"
 import { GearCategory } from "../../data"
 import { IGear } from "../Gear"
@@ -47,12 +46,12 @@ export default class Plane implements IPlane {
 
   get fighterPower() {
     const { gear, slotSize } = this
-    return gearFighterPower(gear, slotSize)
+    return gear.calcFighterPower(slotSize)
   }
 
   get interceptionPower() {
     const { gear, slotSize } = this
-    return gearInterceptionPower(gear, slotSize)
+    return gear.calcFighterPower(slotSize, true)
   }
 
   get canContact() {

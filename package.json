@@ -1,7 +1,7 @@
 {
   "name": "kc-calculator",
   "sideEffects": false,
-  "version": "0.2.18",
+  "version": "0.3.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "madono (https://github.com/MadonoHaru)",
@@ -44,6 +44,7 @@
     "prettier": "^1.18.2",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "utility-types": "^3.7.0"
   }
 }

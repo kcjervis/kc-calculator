@@ -38,12 +38,24 @@ export default class NightAttack {
   get accuracy() {
     const { attacker, attackerNightAttackStatus, specialAttack, contactModifier } = this
     const { formation, role } = attacker
-    const { stats, level, totalEquipmentStats, morale } = attacker.ship
+    const { stats, level, totalEquipmentStats, morale, shipType, hasGear } = attacker.ship
 
     const starshellModifier = undefined
 
     const specialAttackModifier = specialAttack && specialAttack.modifier.accuracy
     const searchlightModifier = undefined
+
+    let heavyCruiserBonus = 0
+    if (shipType.isHeavyCruiserClass) {
+      // 20.3
+      if (hasGear(6)) {
+        heavyCruiserBonus = 10
+      }
+      // 2号砲3号砲補正
+      if (hasGear(90) || hasGear(50)) {
+        heavyCruiserBonus = 15
+      }
+    }
 
     return new NightAttackAccuracy({
       starshellModifier,
@@ -57,7 +69,7 @@ export default class NightAttack {
       moraleModifier: morale.nightBattleAccuracyModifier,
       specialAttackModifier,
       searchlightModifier,
-      fitGunBonus: 0
+      fitGunBonus: heavyCruiserBonus
     })
   }
 
@@ -81,7 +93,8 @@ export default class NightAttack {
   get defenderEvasionValue() {
     const { ship, formation, role } = this.defender
     const formationModifier = formation.getModifiersWithRole(role).nightBattle.evasion
-    return calcEvasionValue(ship, formationModifier)
+    const shipTypeMod = ship.shipType.isHeavyCruiserClass ? 5 : 0
+    return calcEvasionValue(ship, formationModifier, shipTypeMod)
   }
 
   get hitRate() {

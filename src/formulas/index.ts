@@ -1,0 +1,1 @@
+export { calcFighterPower } from "./fighterPower"

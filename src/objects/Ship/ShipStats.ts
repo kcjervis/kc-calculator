@@ -2,7 +2,7 @@ import { maxBy, sumBy } from "lodash-es"
 
 import { IGear } from "../Gear"
 
-import { nonNullable } from "../../utils"
+import { isNonNullable } from "../../utils"
 import ShipNakedStats, { IBaseStats } from "./ShipNakedStats"
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
@@ -24,7 +24,7 @@ export default class ShipStats implements IShipStats {
     if (statsBonus !== undefined) {
       bonus = statsBonus[statKey]
     }
-    return nakedStats[statKey] + sumBy(gears.filter(nonNullable), statKey) + bonus
+    return nakedStats[statKey] + sumBy(gears.filter(isNonNullable), statKey) + bonus
   }
 
   get hp() {
