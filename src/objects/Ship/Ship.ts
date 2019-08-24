@@ -212,4 +212,10 @@ export default class Ship implements IShip {
     }
     return master.firepower[0] > 0
   }
+
+  public getStat = (type: "hp") => {
+    const { level, master, totalEquipmentStats } = this
+    const [left, right] = master[type]
+    const equipment = totalEquipmentStats(type)
+  }
 }

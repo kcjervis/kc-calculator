@@ -82,10 +82,13 @@ export default class NightCombatSpecialAttack {
 
   public static MainMainSecond = new NightCombatSpecialAttack(4, "主副", 130, { power: 1.75, accuracy: 1.65 })
   public static MainMainMain = new NightCombatSpecialAttack(5, "主砲", 140, { power: 2, accuracy: 1.5 })
-
-  public static AerialAttack1 = new NightCombatSpecialAttack(6.1, "夜襲1.25", Infinity, { power: 1.25, accuracy: 1 })
-  public static AerialAttack2 = new NightCombatSpecialAttack(6.2, "夜襲1.20", Infinity, { power: 1.2, accuracy: 1 })
-  public static AerialAttack3 = new NightCombatSpecialAttack(6.3, "夜襲1.18", Infinity, { power: 1.18, accuracy: 1 })
+  /**
+   * @see https://twitter.com/MorimotoKou/status/1162347762945425410
+   */
+  public static AerialAttack1 = new NightCombatSpecialAttack(6.1, "夜襲1.25", 105, { power: 1.25, accuracy: 1 })
+  public static AerialAttack2 = new NightCombatSpecialAttack(6.2, "夜襲1.20", 115, { power: 1.2, accuracy: 1 })
+  public static AerialAttack3 = new NightCombatSpecialAttack(6.3, "夜襲1.18", 125, { power: 1.18, accuracy: 1 })
+  public static SuiseiAttack = new NightCombatSpecialAttack(6.4, "彗星夜襲", 115, { power: 1.18, accuracy: 1 })
 
   public static MainTorpRadar = new NightCombatSpecialAttack(7, "主魚電", 130, { power: 1.3, accuracy: 1 })
   public static TorpRadarLookout = new NightCombatSpecialAttack(8, "魚見電", 150, { power: 1.2, accuracy: 1 })
@@ -109,8 +112,11 @@ export default class NightCombatSpecialAttack {
       if (nightFighterCount >= 2 && hasNightAttacker) {
         possibleSpecialAttacks.push(NightCombatSpecialAttack.AerialAttack1)
       }
-      if ((hasNightFighter && hasNightAttacker) || (hasNightPlane && hasFuzeBomber)) {
+      if (hasNightFighter && hasNightAttacker) {
         possibleSpecialAttacks.push(NightCombatSpecialAttack.AerialAttack2)
+      }
+      if (hasNightPlane && hasFuzeBomber) {
+        possibleSpecialAttacks.push(NightCombatSpecialAttack.SuiseiAttack)
       }
 
       if (!hasNightFighter) {
