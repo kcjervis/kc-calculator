@@ -18,6 +18,19 @@ export type ShellingType = "Shelling" | "CarrierShelling"
 
 export type InstallationType = "None" | "SoftSkinned" | "Pillbox" | "SupplyDepot" | "IsolatedIsland"
 
+type AttackModifiers = { power: number; accuracy: number }
+
+export type ShipShellingStats = {
+  shellingType: ShellingType
+
+  improvementModifier: number
+  cruiserFitBonus: number
+  healthModifier: number
+  apShellModifiers: AttackModifiers
+
+  fitGunAccuracyBonus: number
+}
+
 export type AntiInstallationModifiers = {
   shipTypeAdditive: number
   additive: number

@@ -113,6 +113,13 @@ export default class Formation {
     return Formation.values.find(form => form.id === id)
   }
 
+  public static isIneffective = (attackForm: Formation, defenseForm: Formation) =>
+    [
+      [Formation.DoubleLine, Formation.LineAbreast],
+      [Formation.LineAbreast, Formation.Echelon],
+      [Formation.Echelon, Formation.LineAhead]
+    ].some(forms => forms[0] === attackForm && forms[1] === defenseForm)
+
   private constructor(
     public readonly id: number,
     public readonly name: string,

@@ -7,12 +7,11 @@ import { IMorale } from "./Morale"
 import { IShipNakedStats } from "./ShipNakedStats"
 import { IShipStats } from "./ShipStats"
 
-import { MasterShip, ShipClass, ShipType, GearCategory } from "../../data"
+import { MasterShip, ShipClass, ShipType, GearCategory, GearCategoryKey } from "../../data"
 import { isNonNullable, shipNameIsKai2 } from "../../utils"
 import { IGear } from "../Gear"
 import { IPlane } from "../Plane"
-import { GearCategoryKey } from "../../data/GearCategory"
-import { InstallationType } from "../../types"
+import { InstallationType, ShipShellingStats, ShellingType } from "../../types"
 
 type GearIterator<R> = ListIterator<IGear, R>
 type GearIteratee<R, S> = GearIterator<R> | S
@@ -54,6 +53,8 @@ export interface IShip {
   totalEquipmentStats: (iteratee: ((gear: IGear) => number) | keyof IGear) => number
 
   canNightAttack: boolean
+
+  getShellingStats: () => ShipShellingStats
 
   /** 廃止予定 */
   equipments: Array<IGear | undefined>
@@ -213,9 +214,160 @@ export default class Ship implements IShip {
     return master.firepower[0] > 0
   }
 
-  public getStat = (type: "hp") => {
-    const { level, master, totalEquipmentStats } = this
-    const [left, right] = master[type]
-    const equipment = totalEquipmentStats(type)
+  /**
+   * 巡洋艦砲フィット補正
+   *
+   * 軽巡軽量砲補正と伊重巡フィット砲補正
+   * @see https://github.com/Nishisonic/UnexpectedDamage/blob/develop/攻撃力資料/キャップ前攻撃力.md#軽巡軽量砲補正
+   * @see https://github.com/Nishisonic/UnexpectedDamage/blob/develop/攻撃力資料/キャップ前攻撃力.md#伊重巡フィット砲補正
+   */
+  private calcCruiserFitBonus = () => {
+    const { shipType, shipClass, countGear } = this
+    let fitBonus = 0
+    const isCruiser = shipType.either("LightCruiser", "TorpedoCruiser", "TrainingCruiser")
+    const isZaraClass = shipClass.is("ZaraClass")
+
+    if (isCruiser) {
+      const singleGunCount = countGear(gear => [4, 11].includes(gear.masterId))
+      const twinGunCount = countGear(gear => [65, 119, 139].includes(gear.masterId))
+      fitBonus += Math.sqrt(singleGunCount) + 2 * Math.sqrt(twinGunCount)
+    }
+    if (isZaraClass) {
+      fitBonus += Math.sqrt(countGear(162))
+    }
+    return fitBonus
+  }
+
+  private getRemainingPlanes = () => this.planes.filter(isNonNullable)
+
+  /**
+   * 熟練度補正
+   * 戦爆連合は適当
+   */
+  private getNormalProficiencyModifiers = () => {
+    const modifiers = { power: 1, hitRate: 0, criticalRate: 0 }
+
+    const planes = this.getRemainingPlanes().filter(
+      ({ category }) => category.isDiveBomber || category.isTorpedoBomber || category.is("LargeFlyingBoat")
+    )
+    modifiers.power =
+      1 +
+      sumBy(planes, plane => {
+        if (plane.index === 0) {
+          return plane.gear.proficiency.criticalPowerModifier / 100
+        }
+        return plane.gear.proficiency.criticalPowerModifier / 200
+      })
+
+    const average = sumBy(planes, plane => plane.gear.proficiency.internal) / planes.length
+    let averageModifierA = 0
+    let averageModifierB = 0
+    if (average >= 10) {
+      averageModifierA = Math.floor(Math.sqrt(0.1 * average))
+    }
+    if (average >= 25) {
+      averageModifierB = 1
+    }
+    if (average >= 40) {
+      averageModifierB = 2
+    }
+    if (average >= 55) {
+      averageModifierB = 3
+    }
+    if (average >= 70) {
+      averageModifierB = 4
+    }
+    if (average >= 80) {
+      averageModifierB = 6
+    }
+    if (average >= 100) {
+      averageModifierB = 9
+    }
+    modifiers.hitRate = averageModifierA + averageModifierB
+
+    modifiers.criticalRate = sumBy(planes, plane => {
+      const { internal, level } = plane.gear.proficiency
+      let levelBonus = 0
+      if (level === 7) {
+        levelBonus = 3
+      }
+      return (Math.sqrt(Math.sqrt(0.1 * internal)) + levelBonus) / 100
+    })
+
+    return modifiers
+  }
+
+  /**
+   * 戦爆熟練度補正
+   * 分からないから適当
+   */
+  private getSpecialProficiencyModifiers = () => {
+    const modifiers = { power: 1, hitRate: 0, criticalRate: 0 }
+    const shellingPlanes = this.getRemainingPlanes().filter(
+      plane => plane.category.isCarrierShellingAircraft && plane.gear.proficiency.internal === 120
+    )
+    if (shellingPlanes.some(plane => plane.index === 0)) {
+      modifiers.power = 1.25
+    } else {
+      modifiers.power = 1.106
+    }
+
+    return modifiers
+  }
+
+  private getShellingType(): ShellingType {
+    const { shipType, shipClass, isInstallation, hasGear } = this
+    if (shipType.isAircraftCarrierClass) {
+      return "CarrierShelling"
+    }
+
+    if (!shipClass.is("RevisedKazahayaClass") && !isInstallation) {
+      return "Shelling"
+    }
+
+    if (hasGear(gear => gear.category.isAerialCombatAircraft)) {
+      return "CarrierShelling"
+    }
+
+    return "Shelling"
+  }
+
+  /**
+   * 徹甲弾補正
+   */
+  private getApShellModifiers = () => {
+    const modifier = { power: 1, accuracy: 1 }
+
+    const { hasGear } = this
+
+    if (!hasGear(gear => gear.category.is("ArmorPiercingShell")) || !hasGear(gear => gear.category.isMainGun)) {
+      return modifier
+    }
+
+    const hasSecondaryGun = hasGear(gear => gear.category.is("SecondaryGun"))
+    const hasRader = hasGear(gear => gear.category.isRadar)
+
+    if (hasSecondaryGun && hasRader) {
+      return { power: 1.15, accuracy: 1.3 }
+    }
+    if (hasSecondaryGun) {
+      return { power: 1.15, accuracy: 1.2 }
+    }
+    if (hasRader) {
+      return { power: 1.1, accuracy: 1.25 }
+    }
+    return { power: 1.08, accuracy: 1.1 }
+  }
+
+  public getShellingStats = (): ShipShellingStats => {
+    return {
+      shellingType: this.getShellingType(),
+      improvementModifier: this.totalEquipmentStats(gear => gear.improvement.shellingPowerModifier),
+      cruiserFitBonus: this.calcCruiserFitBonus(),
+      healthModifier: this.health.shellingPowerModifier,
+      apShellModifiers: this.getApShellModifiers(),
+
+      fitGunAccuracyBonus: 0
+    }
   }
 }

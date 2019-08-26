@@ -1,4 +1,5 @@
 import { MasterShip } from "../../data"
+import { calcHpAtLevel, calcStatAtLevel } from "../../formulas"
 
 export interface IBaseStats {
   hp: number
@@ -41,36 +42,6 @@ export const shipStatKeys: ShipStatKey[] = [
 
 export interface IShipNakedStats extends IBaseStats {
   level: number
-}
-
-export const calcStatAtLevel = (stats: [number, number], level: number) => {
-  const min = stats[0]
-  const max = stats[1]
-  return Math.floor(((max - min) * level) / 99 + min)
-}
-
-export const calcHpAtLevel = (hp: [number, number], level: number) => {
-  let maxHp = hp[0]
-  const limitHp = hp[1]
-  if (level >= 100) {
-    const unmarriedHp = hp[0]
-    if (unmarriedHp >= 91) {
-      maxHp += 9
-    } else if (unmarriedHp >= 70) {
-      maxHp += 8
-    } else if (unmarriedHp >= 50) {
-      maxHp += 7
-    } else if (unmarriedHp >= 40) {
-      maxHp += 6
-    } else if (unmarriedHp >= 30) {
-      maxHp += 5
-    } else if (unmarriedHp >= 8) {
-      maxHp += 4
-    } else {
-      maxHp += 3
-    }
-  }
-  return Math.min(maxHp, limitHp)
 }
 
 export default class ShipNakedStats implements IShipNakedStats {

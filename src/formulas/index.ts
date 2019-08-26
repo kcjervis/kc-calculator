@@ -1,1 +1,2 @@
-export { calcFighterPower } from "./fighterPower"
+export * from "./fighterPower"
+export * from "./shipStat"

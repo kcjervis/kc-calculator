@@ -1,3 +1,6 @@
+import * as formulas from "./formulas"
+export { formulas }
+
 export {
   ObjectFactory,
   IOperation,

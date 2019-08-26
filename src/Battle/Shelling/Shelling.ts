@@ -7,7 +7,7 @@ import Damage from "../Damage"
 import DefensePower from "../DefensePower"
 import { calcEvasionValue } from "../Evasion"
 import { calcHitRate } from "../Hit"
-import { Side } from "../../constants"
+import { Side, Formation } from "../../constants"
 
 export default class Shelling {
   public static getCombinedFleetFactor = getCombinedFleetFactor
@@ -93,14 +93,25 @@ export default class Shelling {
   }
 
   get accuracy() {
-    const { attacker, combinedFleetFactors, attackerShellingStatus, isArmorPiercing, specialAttack, fitGunBonus } = this
-    const { role, formation } = attacker
+    const {
+      attacker,
+      defender,
+      combinedFleetFactors,
+      attackerShellingStatus,
+      isArmorPiercing,
+      specialAttack,
+      fitGunBonus
+    } = this
+
+    let formationModifier = attacker.formation.getModifiersWithRole(attacker.role).shelling.accuracy
+    if (Formation.isIneffective(attacker.formation, defender.formation)) {
+      formationModifier = 1
+    }
 
     return attackerShellingStatus.calcAccuracy({
       fitGunBonus,
       combinedFleetFactor: combinedFleetFactors.accuracy,
-      role,
-      formation,
+      formationModifier,
       isArmorPiercing,
       specialAttack
     })

@@ -21,6 +21,18 @@ type ShipShellingPowerOptions = Partial<{
   eventMapModifier: number
 }>
 
+type ShellingStats = {
+  shellingType: ShellingType
+
+  improvementModifier: number
+  cruiserFitBonus: number
+  healthModifier: number
+  apShellModifiers: AttackModifiers
+
+  fleetFactor: number
+  fitGunAccuracyBonus: number
+}
+
 /**
  * 巡洋艦砲フィット補正
  *
@@ -39,31 +51,6 @@ export const calcCruiserFitBonus = (ship: IShip) => {
     fitBonus += Math.sqrt(ship.countGear(162))
   }
   return fitBonus
-}
-
-/**
- * 徹甲弾補正
- */
-const getApShellModifiers = (ship: IShip): AttackModifiers => {
-  const { hasGear } = ship
-  const modifier = { power: 1, accuracy: 1 }
-  if (!hasGear(gear => gear.category.is("ArmorPiercingShell")) || !hasGear(gear => gear.category.isMainGun)) {
-    return modifier
-  }
-
-  const hasSecondaryGun = hasGear(gear => gear.category.is("SecondaryGun"))
-  const hasRader = hasGear(gear => gear.category.isRadar)
-
-  if (hasSecondaryGun && hasRader) {
-    return { power: 1.15, accuracy: 1.3 }
-  }
-  if (hasSecondaryGun) {
-    return { power: 1.15, accuracy: 1.2 }
-  }
-  if (hasRader) {
-    return { power: 1.1, accuracy: 1.25 }
-  }
-  return { power: 1.08, accuracy: 1.1 }
 }
 
 /**
@@ -266,20 +253,18 @@ export default class ShipShellingStatus {
   public calcAccuracy = (options: {
     fitGunBonus: number
     combinedFleetFactor: number
-    role: ShipRole
-    formation: Formation
+    formationModifier: number
     isArmorPiercing: boolean
     specialAttack?: DayCombatSpecialAttack
   }) => {
     const { ship } = this
     const { level, stats } = ship
     const { luck } = stats
-    const { fitGunBonus, combinedFleetFactor, formation, role, specialAttack, isArmorPiercing } = options
+    const { fitGunBonus, combinedFleetFactor, formationModifier, specialAttack, isArmorPiercing } = options
     const equipmentAccuracy = ship.totalEquipmentStats("accuracy")
     const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.shellingAccuracyModifier)
 
     const moraleModifier = ship.morale.shellingAccuracyModifier
-    const formationModifier = formation.getModifiersWithRole(role).shelling.accuracy
     const specialAttackModifier = specialAttack ? specialAttack.modifier.accuracy : 1
     const apShellModifier = isArmorPiercing ? this.apShellModifiers.accuracy : 1
     const factors: ShellingAccuracyFactors = {

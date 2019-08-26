@@ -3,7 +3,6 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:prettier/recommended",
     "prettier/@typescript-eslint"
   ],
@@ -13,8 +12,7 @@
   "parser": "@typescript-eslint/parser",
   "env": { "browser": true, "node": true, "es6": true, "jest": true },
   "parserOptions": {
-    "sourceType": "module",
-    "project": "./tsconfig.eslint.json"
+    "sourceType": "module"
   },
   "rules": {
     "no-console": "off",

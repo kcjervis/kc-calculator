@@ -15,10 +15,9 @@ export const merge = <T>(target: T, ...sources: Array<Partial<T>>) => {
   for (const source of sources) {
     for (const key in source) {
       const value = source[key]
-      if (!isNonNullable(value)) {
-        return
+      if (isNonNullable(value)) {
+        target[key] = value
       }
-      target[key] = value
     }
   }
   return target
