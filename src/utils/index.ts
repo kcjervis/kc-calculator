@@ -35,3 +35,5 @@ export const calcDeadlyPower = (ship: IShip) => {
   const defensePower = new DefensePower(armor, ship.totalEquipmentStats(gear => gear.improvement.defensePowerModifier))
   return nowHp + defensePower.max
 }
+
+export * from "./isMatch"

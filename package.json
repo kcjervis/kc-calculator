@@ -11,7 +11,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "build": "tsc -p tsconfig.build.json",
     "script": "yarn run ts-node --files scripts",
     "upload": "yarn build && yarn publish",

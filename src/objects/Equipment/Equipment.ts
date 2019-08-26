@@ -1,32 +1,31 @@
-import { ListIterator } from "lodash"
+import { sumBy } from "lodash-es"
+import { isNonNullable, isMatch, Condition } from "../../utils"
 import { PickByValue } from "utility-types"
-import { IGear } from "../Gear"
-import { GearCategory, GearCategoryKey } from "../../data"
-import { sumBy, map } from "lodash-es"
-import { isNonNullable } from "../../utils"
 
-type GearIteratee<R> = (gear: IGear, index?: GearIndex, slotSize?: number) => R
+type GearCondition<GearType extends { masterId: number }> = number | Condition<GearType>
 
-type IEquipment = {
-  forEach: (iteratee: GearIteratee<void>) => void
-  map: <T>(iteratee: GearIteratee<T>) => T[]
+type GearIteratee<GearType, R> = (gear: GearType, index?: GearIndex, slotSize?: number) => R
 
-  count: (iteratee?: GearIteratee<boolean>) => number
-  has: (iteratee: GearIteratee<boolean>) => boolean
+type IEquipment<GearType> = {
+  forEach: (iteratee: GearIteratee<GearType, void>) => void
+  map: <T>(iteratee: GearIteratee<GearType, T>) => T[]
+
+  count: (iteratee?: GearIteratee<GearType, boolean>) => number
+  has: (iteratee: GearIteratee<GearType, boolean>) => boolean
 }
 
 const indexes = [0, 1, 2, 3, 4, 5, "exslot"] as const
 type GearIndex = typeof indexes[number]
 
-class Equipment implements IEquipment {
-  private gears: IGear[]
+export class Equipment<GearType extends { masterId: number }> implements IEquipment<GearType> {
+  private gears: GearType[]
 
-  private entries: Array<[IGear, GearIndex, number | undefined]>
+  private entries: Array<[GearType, GearIndex, number | undefined]>
 
-  constructor(private source: Array<IGear | undefined>, private slots: number[]) {
+  constructor(private source: Array<GearType | undefined>, private slots: number[]) {
     this.gears = source.filter(isNonNullable)
 
-    const entries = Array<[IGear, GearIndex, number | undefined]>()
+    const entries = Array<[GearType, GearIndex, number | undefined]>()
     source.forEach((gear, index) => {
       if (!gear) {
         return
@@ -38,25 +37,26 @@ class Equipment implements IEquipment {
     this.entries = entries
   }
 
-  public forEach = (callbackfn: GearIteratee<void>) => this.entries.forEach(item => callbackfn(...item))
+  public forEach = (callbackfn: GearIteratee<GearType, void>) => this.entries.forEach(item => callbackfn(...item))
 
-  public map = <T>(callbackfn: GearIteratee<T>) => this.entries.map(item => callbackfn(...item))
+  public map = <T>(callbackfn: GearIteratee<GearType, T>) => this.entries.map(item => callbackfn(...item))
 
-  public count = (iteratee?: GearIteratee<boolean> | number) => {
+  public count = (iteratee?: GearIteratee<GearType, boolean> | number) => {
     if (iteratee === undefined) {
       return this.gears.length
     }
-    if (typeof iteratee === "number") {
-      return this.gears.filter(({ masterId }) => masterId === iteratee).length
+    if (typeof iteratee === "function") {
+      return this.entries.filter(item => iteratee(...item)).length
     }
-    return this.entries.filter(item => iteratee(...item)).length
+
+    return this.gears.filter(({ masterId }) => masterId === iteratee).length
   }
 
-  public has = (iteratee: GearIteratee<boolean> | number) => {
+  public has = (iteratee: GearIteratee<GearType, boolean> | number) => {
     return this.count(iteratee) > 0
   }
 
-  public sumBy = (iteratee: ((gear: IGear) => number) | keyof PickByValue<IGear, number>) => {
-    sumBy(this.gears, iteratee)
+  public sumBy = (iteratee: ((gear: GearType) => number) | keyof PickByValue<GearType, number> & string) => {
+    return sumBy(this.gears, iteratee)
   }
 }
