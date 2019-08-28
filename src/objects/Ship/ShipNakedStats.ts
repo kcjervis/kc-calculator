@@ -52,7 +52,14 @@ export default class ShipNakedStats implements IShipNakedStats {
     if (!increased) {
       return 0
     }
-    return increased[statKey] || 0
+    const stat = increased[statKey]
+    if (!stat) {
+      return 0
+    }
+    if (stat > 100000) {
+      return 100000
+    }
+    return stat
   }
 
   get hp() {

@@ -108,4 +108,12 @@ export default class MasterShip {
     }
     return nextShip.remodel.nextId === id
   }
+
+  get grade() {
+    return this.sortId % 10
+  }
+
+  get trivialName() {
+    return Math.floor(this.sortId / 10)
+  }
 }

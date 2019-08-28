@@ -36,4 +36,5 @@ export const calcDeadlyPower = (ship: IShip) => {
   return nowHp + defensePower.max
 }
 
+export * from "./typeGuards"
 export * from "./isMatch"

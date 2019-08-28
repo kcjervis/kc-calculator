@@ -109,26 +109,28 @@ export default class Gear implements IGear {
   })
 
   get isAbyssal() {
-    return this.master.isAbyssal()
+    return this.master.isAbyssal
   }
 
   get isHighAngleMount() {
-    return this.master.isHighAngleMount()
+    return this.master.isHighAngleMount
   }
 
   get isSurfaceRadar() {
-    return this.master.isSurfaceRadar()
+    return this.master.isSurfaceRadar
   }
 
   get isAirRadar() {
-    return this.master.isAirRadar()
+    return this.master.isAirRadar
   }
 
   get isAntiInstallationBomber() {
-    return this.master.isAntiInstallationBomber()
+    return this.master.isAntiInstallationBomber
   }
 
-  public isFighter = () => this.master.isFighter()
+  get isFighter() {
+    return this.master.isFighter
+  }
 
   public calcFighterPower = (slotSize: number, isInterception = false) => {
     const { antiAir, interception, antiBomber, improvement, proficiency } = this

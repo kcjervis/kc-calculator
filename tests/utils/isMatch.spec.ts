@@ -63,7 +63,7 @@ describe("isMatch", () => {
     expect(isMatch(object, { $or: [{ id: 1 }, { id: 2 }] })).toBe(true)
     expect(isMatch(object, { $not: { id: 2 } })).toBe(true)
 
-    expect(isMatch([0, 1], [0, 1])).toBe(true)
+    expect(isMatch<number[]>([0, 1], [0, 1])).toBe(true)
 
     type Id = number | string | { id: number }
 

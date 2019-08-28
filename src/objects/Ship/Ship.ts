@@ -340,7 +340,10 @@ export default class Ship implements IShip {
 
     const { hasGear } = this
 
-    if (!hasGear(gear => gear.category.is("ArmorPiercingShell")) || !hasGear(gear => gear.category.isMainGun)) {
+    const hasArmorPiercingShell = hasGear(gear => gear.category.is("ArmorPiercingShell"))
+    const hasMainGun = hasGear(gear => gear.category.isMainGun)
+
+    if (!hasArmorPiercingShell || !hasMainGun) {
       return modifier
     }
 

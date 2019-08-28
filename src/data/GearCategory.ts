@@ -1,4 +1,4 @@
-import { api_mst_slotitem_equiptype } from "@jervis/data"
+import { api_mst_slotitem_equiptype, GearId } from "@jervis/data"
 
 export enum GearCategoryId {
   /** 小口径主砲 */
@@ -181,14 +181,11 @@ export default class GearCategory {
   )
 
   public static find(categoryId: number, masterId: number) {
-    if (masterId === 128 || masterId === 281) {
-      // 試製51cm連装砲 51cm連装砲
+    if (masterId === GearId["試製51cm連装砲"] || masterId === GearId["51cm連装砲"]) {
       categoryId = GearCategoryId.LargeCaliberMainGun2
-    } else if (masterId === 142) {
-      // 15m二重測距儀＋21号電探改二
+    } else if (masterId === GearId["15m二重測距儀+21号電探改二"]) {
       categoryId = GearCategoryId.LargeRadar2
-    } else if (masterId === 151) {
-      // 試製景雲(艦偵型)
+    } else if (masterId === GearId["試製景雲(艦偵型)"]) {
       categoryId = GearCategoryId.CarrierBasedReconnaissanceAircraft2
     }
 

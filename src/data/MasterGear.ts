@@ -1,4 +1,4 @@
-import { MstEquipment } from "@jervis/data"
+import { MstEquipment, GearId } from "@jervis/data"
 import { PickByValue } from "utility-types"
 import GearCategory from "./GearCategory"
 
@@ -50,7 +50,7 @@ export const gearStatKeys: GearStatKey[] = [
 export default class MasterGear implements GearStats {
   public static readonly abyssalIdFrom = 500
 
-  public readonly id: number
+  public readonly id: GearId
   public readonly name: string
   public readonly categoryId: number
   public readonly iconId: number
@@ -111,32 +111,46 @@ export default class MasterGear implements GearStats {
     }
   }
 
-  public isAbyssal = () => MasterGear.abyssalIdFrom < this.id
+  get isAbyssal() {
+    return MasterGear.abyssalIdFrom < this.id
+  }
 
   private categoryIn = this.category.either
 
-  public isHighAngleMount = () => this.iconId === 16
+  get isHighAngleMount() {
+    return this.iconId === 16
+  }
 
-  public isRadar = () => this.categoryIn("SmallRadar", "LargeRadar", "LargeRadar2")
+  get isRadar() {
+    return this.categoryIn("SmallRadar", "LargeRadar", "LargeRadar2")
+  }
 
-  public isSurfaceRadar = () => this.isRadar() && this.los >= 5
+  get isSurfaceRadar() {
+    return this.isRadar && this.los >= 5
+  }
 
-  public isAirRadar = () => this.isRadar() && this.antiAir >= 2
+  get isAirRadar() {
+    return this.isRadar && this.antiAir >= 2
+  }
 
   /**
    * 対地艦爆
-   * id60 零式艦戦62型(爆戦)
-   * id64 Ju87C改
-   * id148 試製南山
-   * id233 F4U-1D
-   * id277 FM-2
-   * id305 Ju87C改二(KMX搭載機)
-   * id306 Ju87C改二(KMX搭載機/熟練)
-   * id319 彗星一二型(六三四空/三号爆弾搭載機)
    */
-  public isAntiInstallationBomber = () => [60, 64, 148, 233, 277, 305, 306, 319].includes(this.id)
+  get isAntiInstallationBomber() {
+    return [
+      GearId["零式艦戦62型(爆戦)"],
+      GearId["Ju87C改"],
+      GearId["Ju87C改二(KMX搭載機)"],
+      GearId["Ju87C改二(KMX搭載機/熟練)"],
+      GearId["試製南山"],
+      GearId["F4U-1D"],
+      GearId["FM-2"],
+      GearId["彗星一二型(六三四空/三号爆弾搭載機)"]
+    ].includes(this.id)
+  }
 
   /** 戦闘機 */
-  public isFighter = () =>
-    this.categoryIn("CarrierBasedFighterAircraft", "SeaplaneFighter", "LandBasedFighter", "JetPoweredFighter")
+  get isFighter() {
+    return this.categoryIn("CarrierBasedFighterAircraft", "SeaplaneFighter", "LandBasedFighter", "JetPoweredFighter")
+  }
 }

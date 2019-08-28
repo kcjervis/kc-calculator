@@ -35,8 +35,8 @@ const fleetEffectiveLos = (fleet: IFleet, nodeDivaricatedFactor: number, hqLevel
   return fleet.totalShipStats(ship => shipEffectiveLos(ship, nodeDivaricatedFactor)) - Math.ceil(0.4 * hqLevel) + 12
 }
 
-export default class EffectiveLos {
-  public static gearEffectiveLos = gearEffectiveLos
-  public static shipEffectiveLos = shipEffectiveLos
-  public static fleetEffectiveLos = fleetEffectiveLos
+export default {
+  gearEffectiveLos,
+  shipEffectiveLos,
+  fleetEffectiveLos
 }
