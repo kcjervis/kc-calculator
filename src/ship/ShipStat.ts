@@ -6,7 +6,7 @@ type BasicStatTag = typeof basicStatTags[number]
 const increasingStatTags = ["asw", "evasion", "los"] as const
 type IncreasingStatTag = typeof increasingStatTags[number]
 
-type ShipStatTag = BasicStatTag | IncreasingStatTag | "hp"
+export type ShipStatTag = BasicStatTag | IncreasingStatTag | "maxHp" | "luck"
 
 export type ShipStatObject = {
   tag: ShipStatTag
@@ -60,7 +60,7 @@ class IncreasingStat implements ShipStatObject {
 }
 
 class MaxHp implements ShipStatObject {
-  public readonly tag = "hp"
+  public readonly tag = "maxHp"
   constructor(
     public left: number,
     public right: number,
@@ -84,17 +84,16 @@ class MaxHp implements ShipStatObject {
   }
 }
 
-function getShipStat(tag: BasicStatTag): BasicStat
-function getShipStat(tag: IncreasingStatTag): IncreasingStat
-function getShipStat(tag: "hp"): MaxHp
-function getShipStat(tag: ShipStatTag) {
-  if (includes(basicStatTags, tag)) {
-    return new BasicStat(tag, 0, 0, 0)
-  }
-  if (includes(increasingStatTags, tag)) {
-    return new IncreasingStat(tag, 0, 0, 0, 0)
-  }
-  return new MaxHp(0, 0, 0, 0, 0)
-}
+class Luck implements ShipStatObject {
+  public readonly tag = "luck"
+  public equipment = 0
+  constructor(public left: number, public right: number, public modernization = 0) {}
 
-const a = getShipStat("asw")
+  get naked() {
+    return this.left + this.modernization
+  }
+
+  get displayed() {
+    return this.naked
+  }
+}

@@ -1,8 +1,9 @@
-export default class Range extends Number {
-  public static from = (value: number) => new Range(value) as Range & number
+export default class Range {
+  constructor(public naked: number, public equipment = 0, public bonus = 0) {}
 
-  private constructor(public value: number) {
-    super(value)
+  public get value() {
+    const { naked, equipment, bonus } = this
+    return Math.max(naked, equipment) + bonus
   }
 
   public get label() {
@@ -19,9 +20,6 @@ export default class Range extends Number {
       case 4:
         return "超長"
     }
-    if (value >= 5) {
-      return `超長${value}`
-    }
-    return "不明"
+    return value >= 5 ? `超長${value}` : "不明"
   }
 }

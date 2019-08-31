@@ -2,6 +2,7 @@ import { IShip } from "../objects"
 import { sumBy } from "lodash-es"
 import { isNonNullable } from "../utils"
 import { InstallationType } from "../types"
+import { GearId } from "@jervis/data"
 
 export default class ShipAntiInstallationStatus {
   constructor(private ship: IShip) {}
@@ -22,29 +23,124 @@ export default class ShipAntiInstallationStatus {
     return this.ship.hasGearCategory
   }
 
-  private get wgCount() {
-    return this.countGear(126)
-  }
-
   get bombing() {
     const antiInstallationBombers = this.gears.filter(gear => gear.isAntiInstallationBomber)
     return sumBy(antiInstallationBombers, gear => gear.bombing)
   }
 
+  private get wgCount() {
+    return this.countGear(GearId["WG42 (Wurfgerät 42)"])
+  }
+
   // WG42加算補正 共通
   get wgAdditive() {
-    const { wgCount } = this
-    if (wgCount === 1) {
+    const count = this.wgCount
+    if (count === 1) {
       return 75
     }
-    if (wgCount === 2) {
+    if (count === 2) {
       return 110
     }
-    if (wgCount === 3) {
+    if (count === 3) {
       return 140
     }
-    if (wgCount >= 4) {
+    if (count >= 4) {
       return 160
+    }
+    return 0
+  }
+
+  get type4Modifiers() {
+    const count = this.countGear(GearId["艦載型 四式20cm対地噴進砲"])
+
+    if (count === 1) {
+      return {
+        additive: 55,
+
+        antiPillbox: 1.5,
+        antiIsolatedIsland: 1.3,
+        antiSoftSkinned: 1.25,
+        antiSupplyDepotPostCap: 1.2
+      }
+    }
+    if (count >= 2) {
+      return {
+        additive: 115,
+
+        antiPillbox: 2.7,
+        antiIsolatedIsland: 2.145,
+        antiSoftSkinned: 1.875,
+        antiSupplyDepotPostCap: 1.68
+      }
+    }
+    return {
+      additive: 0,
+
+      antiPillbox: 1,
+      antiIsolatedIsland: 1,
+      antiSoftSkinned: 1,
+      antiSupplyDepotPostCap: 1
+    }
+  }
+
+  get type2MortarCount() {
+    return this.countGear(GearId["二式12cm迫撃砲改"])
+  }
+
+  get type2MortarConcentratedCount() {
+    return this.countGear(GearId["二式12cm迫撃砲改 集中配備"])
+  }
+
+  get mortarModifiers() {
+    const count = this.type2MortarCount + this.type2MortarConcentratedCount
+    if (count === 1) {
+      return {
+        antiPillbox: 1.3,
+        antiIsolatedIsland: 1.2,
+        antiSoftSkinned: 1.2,
+        antiSupplyDepotPostCap: 1.15
+      }
+    }
+    if (count >= 2) {
+      return {
+        antiPillbox: 1.95,
+        antiIsolatedIsland: 1.68,
+        antiSoftSkinned: 1.56,
+        antiSupplyDepotPostCap: 1.38
+      }
+    }
+    return {
+      antiPillbox: 1,
+      antiIsolatedIsland: 1,
+      antiSoftSkinned: 1,
+      antiSupplyDepotPostCap: 1
+    }
+  }
+
+  get type2MortarAdditiv() {
+    const count = this.type2MortarCount
+    if (count === 1) {
+      return 30
+    }
+    if (count === 2) {
+      return 55
+    }
+    if (count === 3) {
+      return 75
+    }
+    if (count >= 4) {
+      return 90
+    }
+    return 0
+  }
+
+  get type2MortarConcentratedAdditiv() {
+    const count = this.type2MortarConcentratedCount
+    if (count === 1) {
+      return 60
+    }
+    if (count >= 2) {
+      return 110
     }
     return 0
   }
@@ -98,6 +194,10 @@ export default class ShipAntiInstallationStatus {
   get commonModifiers() {
     const {
       wgAdditive,
+      type4Modifiers,
+      type2MortarAdditiv,
+      type2MortarConcentratedAdditiv,
+
       landingCraftsImprovementMultiplicative,
       specialAmphibiousTanksImprovementMultiplicative,
       shikonModifiers,
@@ -111,7 +211,13 @@ export default class ShipAntiInstallationStatus {
       specialAmphibiousTanksImprovementMultiplicative *
       tokuDaihatsuMultiplicative *
       shikonModifiers.multiplicative
-    const additive = wgAdditive + shikonModifiers.additive
+
+    const additive =
+      wgAdditive +
+      type4Modifiers.additive +
+      type2MortarAdditiv +
+      type2MortarConcentratedAdditiv +
+      shikonModifiers.additive
 
     return { shipTypeAdditive, multiplicative, additive }
   }
@@ -132,6 +238,9 @@ export default class ShipAntiInstallationStatus {
     if (wgCount >= 2) {
       multiplicative *= 1.4
     }
+
+    multiplicative *= this.type4Modifiers.antiSoftSkinned
+    multiplicative *= this.mortarModifiers.antiSoftSkinned
 
     if (hasGearCategory("SeaplaneBomber", "SeaplaneFighter")) {
       multiplicative *= 1.2
@@ -179,6 +288,9 @@ export default class ShipAntiInstallationStatus {
     if (wgCount >= 2) {
       multiplicative *= 1.7
     }
+
+    multiplicative *= this.type4Modifiers.antiPillbox
+    multiplicative *= this.mortarModifiers.antiPillbox
 
     if (hasGearCategory("SeaplaneBomber", "SeaplaneFighter", "CarrierBasedDiveBomber")) {
       multiplicative *= 1.5
@@ -230,6 +342,9 @@ export default class ShipAntiInstallationStatus {
       multiplicative *= 1.5
     }
 
+    multiplicative *= this.type4Modifiers.antiIsolatedIsland
+    multiplicative *= this.mortarModifiers.antiIsolatedIsland
+
     if (hasGearCategory("CarrierBasedDiveBomber")) {
       multiplicative *= 1.4
     }
@@ -276,6 +391,9 @@ export default class ShipAntiInstallationStatus {
     if (wgCount >= 2) {
       multiplicative *= 1.3
     }
+
+    multiplicative *= this.type4Modifiers.antiSupplyDepotPostCap
+    multiplicative *= this.mortarModifiers.antiSupplyDepotPostCap
 
     if (hasGearCategory("LandingCraft")) {
       multiplicative *= 1.7

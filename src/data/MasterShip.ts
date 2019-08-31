@@ -4,7 +4,7 @@ import ShipType from "./ShipType"
 
 type StatRange = [number, number]
 
-const conversionStat = (stat: ShipStat): StatRange => {
+const convert = (stat: ShipStat): StatRange => {
   if (typeof stat === "number") {
     return [stat, stat]
   }
@@ -53,15 +53,16 @@ export default class MasterShip {
     this.name = shipData.name
     this.readingName = shipData.readingName
 
-    this.hp = conversionStat(shipData.hp)
-    this.armor = conversionStat(shipData.armor)
-    this.firepower = conversionStat(shipData.firepower)
-    this.torpedo = conversionStat(shipData.torpedo)
-    this.antiAir = conversionStat(shipData.antiAir)
-    this.luck = conversionStat(shipData.luck)
-    this.asw = conversionStat(shipData.asw)
-    this.evasion = conversionStat(shipData.evasion)
-    this.los = conversionStat(shipData.los)
+    this.hp = convert(shipData.hp)
+    this.armor = convert(shipData.armor)
+    this.firepower = convert(shipData.firepower)
+    this.torpedo = convert(shipData.torpedo)
+    this.antiAir = convert(shipData.antiAir)
+    this.luck = convert(shipData.luck)
+    this.asw = convert(shipData.asw)
+    this.evasion = convert(shipData.evasion)
+    this.los = convert(shipData.los)
+
     this.speed = shipData.speed
     this.range = shipData.range
     this.fuel = shipData.fuel
@@ -111,9 +112,5 @@ export default class MasterShip {
 
   get grade() {
     return this.sortId % 10
-  }
-
-  get trivialName() {
-    return Math.floor(this.sortId / 10)
   }
 }
