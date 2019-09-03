@@ -1,9 +1,9 @@
 import { MasterData } from "../data"
-import { GearFactory, IGearDataObject } from "./Gear"
-import { FleetFactory, IFleetDataObject } from "./Fleet"
-import { ILandBasedAirCorpsDataObject, LandBasedAirCorpsFactory } from "./LandBasedAirCorps"
-import { IOperationDataObject, OperationFactory } from "./Operation"
-import { IShipDataObject, ShipFactory } from "./Ship"
+import { GearFactory } from "./Gear"
+import { FleetFactory } from "./Fleet"
+import { LandBasedAirCorpsFactory } from "./LandBasedAirCorps"
+import { OperationFactory } from "./Operation"
+import { ShipFactory } from "./Ship"
 
 export default class ObjectFactory {
   private readonly gearFactory: GearFactory
@@ -19,23 +19,23 @@ export default class ObjectFactory {
     this.operationFactory = new OperationFactory(this.fleetFactory, this.landBasedAirCorpsFactory)
   }
 
-  public createOperation(dataObject: IOperationDataObject) {
-    return this.operationFactory.create(dataObject)
+  get createOperation() {
+    return this.operationFactory.create
   }
 
-  public createFleet(dataObject: IFleetDataObject) {
-    return this.fleetFactory.create(dataObject)
+  get createFleet() {
+    return this.fleetFactory.create
   }
 
-  public createLandBasedAirCorps(dataObject: ILandBasedAirCorpsDataObject) {
-    return this.landBasedAirCorpsFactory.create(dataObject)
+  get createLandBasedAirCorps() {
+    return this.landBasedAirCorpsFactory.create
   }
 
-  public createShip(dataObject: IShipDataObject) {
-    return this.shipFactory.create(dataObject)
+  get createShip() {
+    return this.shipFactory.create
   }
 
-  public createGear(dataObject: IGearDataObject) {
-    return this.gearFactory.create(dataObject)
+  get createGear() {
+    return this.gearFactory.create
   }
 }

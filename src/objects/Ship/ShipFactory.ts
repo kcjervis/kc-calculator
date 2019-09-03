@@ -23,6 +23,23 @@ export interface IShipDataObject {
 export default class ShipFactory {
   constructor(private readonly masters: MasterShip[], private readonly gearFactory: GearFactory) {}
 
+  private gearsFrom = (sources: IShipDataObject["equipments"], master: MasterShip) => {
+    if (sources) {
+      return sources.map(this.gearFactory.create)
+    }
+
+    if (!master.isAbyssal) {
+      return []
+    }
+
+    return master.equipment.map(value => {
+      if (typeof value === "number") {
+        return this.gearFactory.create({ masterId: value })
+      }
+      return this.gearFactory.create({ masterId: value.id, improvement: value.improvement })
+    })
+  }
+
   public create = (obj?: IShipDataObject): IShip | undefined => {
     if (!obj) {
       return undefined
@@ -34,7 +51,7 @@ export default class ShipFactory {
       return undefined
     }
 
-    const gears = obj.equipments ? obj.equipments.map(this.gearFactory.create) : []
+    const gears = this.gearsFrom(obj.equipments, foundMaster)
 
     const nakedStats = new ShipNakedStats(foundMaster, level, increased)
     const stats = new ShipStats(nakedStats, gears)
