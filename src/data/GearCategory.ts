@@ -175,6 +175,9 @@ export enum GearCategoryId {
 
 export type GearCategoryKey = keyof typeof GearCategoryId
 
+export const matchesCategory = (...keys: GearCategoryKey[]) => (id: number) =>
+  keys.some(key => GearCategoryId[key] === id)
+
 export default class GearCategory {
   public static readonly all = api_mst_slotitem_equiptype.map(
     ({ api_id, api_name }) => new GearCategory(api_id, api_name)

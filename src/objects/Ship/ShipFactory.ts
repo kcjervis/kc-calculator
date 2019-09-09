@@ -32,12 +32,7 @@ export default class ShipFactory {
       return []
     }
 
-    return master.equipment.map(value => {
-      if (typeof value === "number") {
-        return this.gearFactory.create({ masterId: value })
-      }
-      return this.gearFactory.create({ masterId: value.id, improvement: value.improvement })
-    })
+    return master.equipment.map(({ id, improvement }) => this.gearFactory.create({ masterId: id, improvement }))
   }
 
   public create = (obj?: IShipDataObject): IShip | undefined => {

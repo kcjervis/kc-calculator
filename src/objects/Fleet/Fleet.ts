@@ -12,6 +12,8 @@ export interface IFleet {
   nonNullableShips: IShip[]
   planes: IPlane[]
 
+  hasUnknownSlot: boolean
+
   totalShipStats: (iteratee: ShipIterator<number>) => number
 
   fighterPower: number
@@ -31,6 +33,10 @@ export default class Fleet implements IFleet {
 
   get planes() {
     return flatMap(this.nonNullableShips, ship => ship.planes)
+  }
+
+  get hasUnknownSlot() {
+    return this.nonNullableShips.flatMap(ship => ship.slots).some(slot => slot < 0)
   }
 
   get fighterPower() {

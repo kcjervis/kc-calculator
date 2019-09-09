@@ -34,8 +34,8 @@ export default class MasterShip {
   public readonly range: number
   public readonly fuel: number
   public readonly ammo: number
-  public readonly slotCapacities: Readonly<number[]>
-  public readonly equipment: Readonly<Array<number | { id: number; improvement: number }>>
+  public readonly slotCapacities: readonly number[]
+  public readonly equipment: ReadonlyArray<{ id: number; improvement: number }>
   public readonly remodel: Readonly<{
     nextId: number
     nextLevel: number
@@ -68,7 +68,12 @@ export default class MasterShip {
     this.fuel = shipData.fuel
     this.ammo = shipData.ammo
     this.slotCapacities = shipData.slotCapacities.concat()
-    this.equipment = shipData.equipments
+    this.equipment = shipData.equipments.map(value => {
+      if (typeof value === "number") {
+        return { id: value, improvement: 0 }
+      }
+      return value
+    })
 
     if (shipData.remodel) {
       this.remodel = shipData.remodel

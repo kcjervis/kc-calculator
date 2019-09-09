@@ -75,7 +75,7 @@ const calcBaseValue = (
 export default class NightCombatSpecialAttack {
   public static DoubleAttack = new NightCombatSpecialAttack(1, "連撃", 110, { power: 1.2, accuracy: 1.1 })
   public static MainTorp = new NightCombatSpecialAttack(2, "主魚", 115, { power: 1.3, accuracy: 1.5 })
-  public static TorpTorp = new NightCombatSpecialAttack(3, "魚雷", 122, { power: 1.5, accuracy: 1.6 })
+  public static TorpTorp = new NightCombatSpecialAttack(3, "魚雷", 122, { power: 1.5, accuracy: 1.65 })
 
   public static SubmarineTorpTorp = new NightCombatSpecialAttack(3.1, "潜水魚雷", 110, { power: 1.65, accuracy: 1 })
   public static SubmarineRadarTorp = new NightCombatSpecialAttack(3.2, "潜水電探", 102, { power: 1.75, accuracy: 1 })

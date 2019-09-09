@@ -132,7 +132,7 @@ export default class Shelling {
 
   get criticalRate() {
     const { hitRate, proficiencyModifier } = this
-    const hitNumB = Math.floor(Math.sqrt(hitRate * 100 * 1.3))
+    const hitNumB = Math.floor(Math.sqrt(hitRate * 100) * 1.3)
     return (hitNumB + 1) / 100 + proficiencyModifier.criticalRate
   }
 
