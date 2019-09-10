@@ -28,7 +28,7 @@ const createBonus: StatsBonusCreator = ship => {
 
   // 相互シナジーボーナス
   // 対空電探
-  if (ship.hasGear(gear => gear.isAirRadar)) {
+  if (ship.hasGear(gear => gear.hasAttr("AirRadar"))) {
     if (shipClass.is("IseClass") && isKai2) {
       bonus.add({ antiAir: 2, evasion: 3 })
     }

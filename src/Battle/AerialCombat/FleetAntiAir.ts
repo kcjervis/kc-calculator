@@ -3,13 +3,13 @@ import { BattleType, FleetRole, Side } from "../../constants"
 import { sumBy } from "lodash-es"
 
 export const gearFleetAntiAir = (gear: IGear) => {
-  const { name, antiAir, category, isHighAngleMount, improvement } = gear
+  const { name, antiAir, category, improvement } = gear
   if (antiAir === 0) {
     return 0
   }
 
   let multiplier = 0
-  if (category.is("AntiAircraftFireDirector") || isHighAngleMount) {
+  if (category.is("AntiAircraftFireDirector") || gear.hasAttr("HighAngleMount")) {
     multiplier = 0.35
   } else if (category.is("AntiAircraftShell")) {
     multiplier = 0.6

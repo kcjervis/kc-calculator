@@ -72,9 +72,9 @@ export default class ShipNightAttackStatus {
 
   get improvementAccuracyModifier() {
     return this.ship.totalEquipmentStats(gear => {
-      const { improvement, category, isSurfaceRadar } = gear
+      const { improvement, category } = gear
 
-      if (isSurfaceRadar) {
+      if (gear.hasAttr("SurfaceRadar")) {
         return 1.6 * Math.sqrt(improvement.value)
       }
 

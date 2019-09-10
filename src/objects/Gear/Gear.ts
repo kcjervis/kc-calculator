@@ -1,4 +1,4 @@
-import { GearCategory, MasterGear, GearStats } from "../../data"
+import { GearCategory, GearStats, GearAttribute } from "../../data"
 import { IImprovement } from "./Improvement"
 import { IProficiency } from "./Proficiency"
 import { calcFighterPower } from "../../formulas"
@@ -25,21 +25,15 @@ export interface IGear extends GearStats {
   /** 熟練度 */
   proficiency: IProficiency
 
-  isHighAngleMount: boolean
+  category: GearCategory
 
-  isSurfaceRadar: boolean
-
-  isAirRadar: boolean
-
-  isAntiInstallationBomber: boolean
+  hasAttr: (attr: GearAttribute) => boolean
 
   calcFighterPower: (slotSize: number, isInterception?: boolean) => number
 }
 
 export default class Gear implements IGear {
-  public masterId = 0
-
-  public category: GearCategory
+  public gearId: number
 
   public categoryId = 0
   public iconId = 0
@@ -65,12 +59,13 @@ export default class Gear implements IGear {
   public improvable = false
 
   constructor(
-    private readonly master: MasterGear,
+    private readonly stats: GearStats,
+    public readonly category: GearCategory,
     public readonly improvement: IImprovement,
-    public readonly proficiency: IProficiency
+    public readonly proficiency: IProficiency,
+    public hasAttr: (attr: GearAttribute) => boolean
   ) {
-    this.masterId = master.id
-    this.category = master.category
+    this.gearId = stats.gearId
 
     setProperties(
       this,
@@ -98,8 +93,12 @@ export default class Gear implements IGear {
 
         "improvable"
       ],
-      master
+      stats
     )
+  }
+
+  get masterId() {
+    return this.gearId
   }
 
   public toState = (): GearState => ({
@@ -107,30 +106,6 @@ export default class Gear implements IGear {
     improvement: this.improvement.value,
     proficiency: this.proficiency.internal
   })
-
-  get isAbyssal() {
-    return this.master.isAbyssal
-  }
-
-  get isHighAngleMount() {
-    return this.master.isHighAngleMount
-  }
-
-  get isSurfaceRadar() {
-    return this.master.isSurfaceRadar
-  }
-
-  get isAirRadar() {
-    return this.master.isAirRadar
-  }
-
-  get isAntiInstallationBomber() {
-    return this.master.isAntiInstallationBomber
-  }
-
-  get isFighter() {
-    return this.master.isFighter
-  }
 
   public calcFighterPower = (slotSize: number, isInterception = false) => {
     const { antiAir, interception, antiBomber, improvement, proficiency } = this

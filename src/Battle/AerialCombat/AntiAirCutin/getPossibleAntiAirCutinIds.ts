@@ -1,4 +1,5 @@
 import { IGear, IShip } from "../../../objects"
+import { GearId } from "@jervis/data"
 
 export default (ship: IShip) => {
   enum MasterShipId {
@@ -23,7 +24,7 @@ export default (ship: IShip) => {
   type GearIteratee = (gear: IGear) => boolean
 
   /** 高角砲 */
-  const isHighAngleMount: GearIteratee = gear => gear.isHighAngleMount
+  const isHighAngleMount: GearIteratee = gear => gear.hasAttr("HighAngleMount")
   /** 特殊高角砲 */
   const isBuiltinHighAngleMount: GearIteratee = gear => isHighAngleMount(gear) && gear.antiAir >= 8
   /** 標準高角砲 */
@@ -34,8 +35,10 @@ export default (ship: IShip) => {
   const isAARadar: GearIteratee = gear => isRadar(gear) && gear.antiAir >= 2
 
   const isAAGun: GearIteratee = gear => gear.category.is("AntiAircraftGun")
+
   /** 特殊機銃 */
   const isCDMG: GearIteratee = gear => isAAGun(gear) && gear.antiAir >= 9
+
   /** 標準機銃 */
   const isNormalAAGun: GearIteratee = gear => isAAGun(gear) && gear.antiAir >= 3 && gear.antiAir < 9
 
@@ -57,19 +60,22 @@ export default (ship: IShip) => {
   const possibleAntiAirCutinIds: number[] = []
 
   if (ship.shipClass.is("FletcherClass")) {
+    const mk30Count = ship.countGear(GearId["5inch単装砲 Mk.30"]) + ship.countGear(GearId["5inch単装砲 Mk.30改"])
+    const gfcsCount = ship.countGear(GearId["5inch単装砲 Mk.30改+GFCS Mk.37"])
+
     // 5inch単装砲 Mk.30改＋GFCS Mk.37 2本
-    if (ship.countGear(308) >= 2) {
+    if (gfcsCount >= 2) {
       possibleAntiAirCutinIds.push(34)
     }
-    // 5inch単装砲 Mk.30改＋GFCS Mk.37 & 5inch単装砲 Mk.30改
-    if (ship.hasGear(308) && ship.hasGear(313)) {
+    // 5inch単装砲 Mk.30改＋GFCS Mk.37 & 5inch単装砲 Mk.30(改)
+    if (gfcsCount > 0 && mk30Count > 0) {
       possibleAntiAirCutinIds.push(35)
     }
 
-    // 5inch単装砲 Mk.30改 2本
-    if (ship.countGear(313) >= 2) {
+    // 5inch単装砲 Mk.30(改) 2本
+    if (mk30Count >= 2) {
       // GFCS Mk.37
-      if (ship.hasGear(307)) {
+      if (ship.hasGear(GearId["GFCS Mk.37"])) {
         possibleAntiAirCutinIds.push(36)
       }
       possibleAntiAirCutinIds.push(37)
@@ -184,11 +190,11 @@ export default (ship: IShip) => {
       possibleAntiAirCutinIds.push(9)
     }
 
-    // Gotland改 かつ 高角砲を装備 かつ 対空機銃を装備
+    // Gotland改 かつ 高角砲を装備 かつ 対空4以上の対空機銃を装備
     if (
       ship.name === "Gotland改" &&
       ship.hasGear(isHighAngleMount) &&
-      ship.hasGear(gear => gear.category.is("AntiAircraftGun") && gear.antiAir >= 3)
+      ship.hasGear(gear => gear.category.is("AntiAircraftGun") && gear.antiAir >= 4)
     ) {
       possibleAntiAirCutinIds.push(33)
     }
@@ -224,7 +230,7 @@ export default (ship: IShip) => {
 
     // (UIT-25 または 伊504) かつ 標準機銃を装備
     if (shipIs(MasterShipId.Uit25) || shipIs(MasterShipId.I504)) {
-      if (hasSome(isCDMG)) {
+      if (hasSome(isNormalAAGun)) {
         possibleAntiAirCutinIds.push(23)
       }
     }

@@ -33,7 +33,7 @@ const createBonus: StatsBonusCreator = ship => {
 
   // 相互シナジーボーナス
   // 水上電探
-  if (ship.hasGear(gear => gear.isSurfaceRadar)) {
+  if (ship.hasGear(gear => gear.hasAttr("SurfaceRadar"))) {
     if (shipName === "金剛改二" || shipName === "榛名改二") {
       bonus.add({
         firepower: 2,

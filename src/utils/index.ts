@@ -11,12 +11,12 @@ export const setProperties = <T, K extends keyof T>(target: T, keys: K[], source
   }
 }
 
-export const merge = <T>(target: T, ...sources: Array<Partial<T>>) => {
+export const merge = <T extends object>(target: T, ...sources: Array<Partial<T> | T>) => {
   for (const source of sources) {
     for (const key in source) {
       const value = source[key]
       if (isNonNullable(value)) {
-        target[key] = value
+        target[key] = value as T[typeof key]
       }
     }
   }

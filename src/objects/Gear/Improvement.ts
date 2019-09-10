@@ -73,7 +73,7 @@ export default class Improvement implements IImprovement {
   }
 
   get adjustedAntiAirModifier() {
-    const { antiAir, category, isHighAngleMount } = this.master
+    const { antiAir, category, hasAttr } = this.master
     if (antiAir === 0) {
       return 0
     }
@@ -82,20 +82,20 @@ export default class Improvement implements IImprovement {
     if (category.is("AntiAircraftGun")) {
       // https://twitter.com/CitrusJ9N/status/1056224720712921088
       multiplier = antiAir <= 7 ? 4 : 6
-    } else if (category.is("AntiAircraftFireDirector") || isHighAngleMount) {
+    } else if (category.is("AntiAircraftFireDirector") || hasAttr("HighAngleMount")) {
       multiplier = antiAir <= 7 ? 2 : 3
     }
     return multiplier * Math.sqrt(this.value)
   }
 
   get fleetAntiAirModifier() {
-    const { antiAir, category, isHighAngleMount } = this.master
+    const { antiAir, category, hasAttr } = this.master
     if (antiAir === 0) {
       return 0
     }
     // 装備定数B
     let multiplier = 0
-    if (category.is("AntiAircraftFireDirector") || isHighAngleMount) {
+    if (category.is("AntiAircraftFireDirector") || hasAttr("HighAngleMount")) {
       multiplier = antiAir <= 7 ? 2 : 3
     } else if (category.isRadar && antiAir >= 2) {
       multiplier = 1.5
@@ -141,16 +141,15 @@ export default class Improvement implements IImprovement {
   }
 
   get shellingAccuracyModifier() {
-    const { accuracy, category } = this.master
+    const { category, hasAttr } = this.master
 
     if (category.is("Torpedo")) {
       return 0
     }
 
-    const isLargeRadar = category.is("LargeRadar") || category.is("LargeRadar2")
-    const isSurfaceRadar = category.isRadar && accuracy > 2
+    const isLargeRadar = category.either("LargeRadar", "LargeRadar2")
 
-    if (isLargeRadar || isSurfaceRadar) {
+    if (isLargeRadar || hasAttr("SurfaceRadar")) {
       return 1.7 * Math.sqrt(this.value)
     } else if (
       category.isRadar ||

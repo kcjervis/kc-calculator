@@ -137,7 +137,7 @@ export default class NightCombatSpecialAttack {
     const torpedoCount = countGearCategory("Torpedo", "SubmarineTorpedo")
 
     // 駆逐カットイン
-    if (shipType.is("Destroyer") && hasGear(gear => gear.isSurfaceRadar) && torpedoCount >= 1) {
+    if (shipType.is("Destroyer") && hasGear(gear => gear.hasAttr("SurfaceRadar")) && torpedoCount >= 1) {
       if (hasGear(gear => gear.category.is("SmallCaliberMainGun"))) {
         possibleSpecialAttacks.push(NightCombatSpecialAttack.MainTorpRadar)
       }

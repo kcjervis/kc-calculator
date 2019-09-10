@@ -24,7 +24,7 @@ export default class ShipAntiInstallationStatus {
   }
 
   get bombing() {
-    const antiInstallationBombers = this.gears.filter(gear => gear.isAntiInstallationBomber)
+    const antiInstallationBombers = this.gears.filter(gear => gear.hasAttr("AntiInstallationBomber"))
     return sumBy(antiInstallationBombers, gear => gear.bombing)
   }
 

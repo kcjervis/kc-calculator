@@ -4,7 +4,7 @@ import AntiAirCutin from "./AntiAirCutin"
 import { ShipType } from "../../data"
 
 export const calcGearAdjustedAntiAir = (gear: IGear) => {
-  const { antiAir, category, improvement, isHighAngleMount } = gear
+  const { antiAir, category, improvement } = gear
   if (antiAir === 0) {
     return 0
   }
@@ -12,7 +12,7 @@ export const calcGearAdjustedAntiAir = (gear: IGear) => {
   let multiplier = 0
   if (category.is("AntiAircraftGun")) {
     multiplier = 6
-  } else if (category.is("AntiAircraftFireDirector") || isHighAngleMount) {
+  } else if (category.is("AntiAircraftFireDirector") || gear.hasAttr("HighAngleMount")) {
     multiplier = 4
   } else if (category.isRadar) {
     multiplier = 3
