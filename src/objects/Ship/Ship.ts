@@ -1,4 +1,4 @@
-import { api_mst_equip_exslot } from "@jervis/data"
+import { api_mst_equip_exslot, GearId } from "@jervis/data"
 import { ListIterator } from "lodash"
 import { sumBy } from "lodash-es"
 
@@ -7,14 +7,13 @@ import { IMorale } from "./Morale"
 import { IShipNakedStats } from "./ShipNakedStats"
 import { IShipStats } from "./ShipStats"
 
-import { MasterShip, ShipClass, ShipType, GearCategory, GearCategoryKey } from "../../data"
+import { MasterShip, ShipClass, ShipType, GearCategory, GearCategoryKey, GearAttribute } from "../../data"
 import { isNonNullable, shipNameIsKai2 } from "../../utils"
 import { IGear } from "../Gear"
 import { IPlane } from "../Plane"
 import { InstallationType, ShipShellingStats, ShellingType } from "../../types"
 
-type GearIterator<R> = ListIterator<IGear, R>
-type GearIteratee<R, S> = GearIterator<R> | S
+type GearIteratee<R> = GearId | GearAttribute | ((gear: IGear) => R)
 
 type GearCategoryIteratee = ListIterator<GearCategory, boolean> | GearCategoryKey
 
@@ -44,8 +43,8 @@ export interface IShip {
 
   canEquip: (gear: IGear, slotIndex: number) => boolean
 
-  hasGear: (iteratee: GearIteratee<boolean, number>) => boolean
-  countGear: (iteratee?: GearIteratee<boolean, number>) => number
+  hasGear: (iteratee: GearIteratee<boolean>) => boolean
+  countGear: (iteratee?: GearIteratee<boolean>) => number
 
   hasGearCategory: (...args: GearCategoryIteratee[]) => boolean
   countGearCategory: (...args: GearCategoryIteratee[]) => number
@@ -166,22 +165,29 @@ export default class Ship implements IShip {
     return true
   }
 
-  public hasGear = (iteratee: GearIteratee<boolean, number>) => {
-    if (typeof iteratee === "number") {
-      return this.nonNullableGears.some(({ masterId }) => masterId === iteratee)
+  public hasGear = (iteratee: GearIteratee<boolean>) => {
+    const gears = this.nonNullableGears
+    if (typeof iteratee === "string") {
+      return gears.some(gear => gear.is(iteratee))
     }
-    return this.nonNullableGears.some(iteratee)
+    if (typeof iteratee === "number") {
+      return gears.some(({ masterId }) => masterId === iteratee)
+    }
+    return gears.some(iteratee)
   }
 
-  public countGear = (iteratee?: GearIteratee<boolean, number>) => {
-    const { nonNullableGears } = this
+  public countGear = (iteratee?: GearIteratee<boolean>) => {
+    const gears = this.nonNullableGears
     if (iteratee === undefined) {
-      return nonNullableGears.length
+      return gears.length
+    }
+    if (typeof iteratee === "string") {
+      return gears.filter(gear => gear.is(iteratee)).length
     }
     if (typeof iteratee === "number") {
-      return nonNullableGears.filter(({ masterId }) => masterId === iteratee).length
+      return gears.filter(({ masterId }) => masterId === iteratee).length
     }
-    return nonNullableGears.filter(iteratee).length
+    return gears.filter(iteratee).length
   }
 
   public countGearCategory = (...args: GearCategoryIteratee[]) => {
@@ -228,12 +234,14 @@ export default class Ship implements IShip {
     const isZaraClass = shipClass.is("ZaraClass")
 
     if (isCruiser) {
-      const singleGunCount = countGear(gear => [4, 11].includes(gear.masterId))
-      const twinGunCount = countGear(gear => [65, 119, 139].includes(gear.masterId))
+      const singleGunCount = countGear(gear => [GearId["14cm単装砲"], GearId["15.2cm単装砲"]].includes(gear.masterId))
+      const twinGunCount = countGear(gear =>
+        [GearId["15.2cm連装砲"], GearId["14cm連装砲"], GearId["15.2cm連装砲改"]].includes(gear.masterId)
+      )
       fitBonus += Math.sqrt(singleGunCount) + 2 * Math.sqrt(twinGunCount)
     }
     if (isZaraClass) {
-      fitBonus += Math.sqrt(countGear(162))
+      fitBonus += Math.sqrt(countGear(GearId["203mm/53 連装砲"]))
     }
     return fitBonus
   }
@@ -338,17 +346,15 @@ export default class Ship implements IShip {
   private getApShellModifiers = () => {
     const modifier = { power: 1, accuracy: 1 }
 
-    const { hasGear } = this
-
-    const hasArmorPiercingShell = hasGear(gear => gear.category.is("ArmorPiercingShell"))
-    const hasMainGun = hasGear(gear => gear.is("MainGun"))
+    const hasArmorPiercingShell = this.hasGearCategory("ArmorPiercingShell")
+    const hasMainGun = this.hasGear("MainGun")
 
     if (!hasArmorPiercingShell || !hasMainGun) {
       return modifier
     }
 
-    const hasSecondaryGun = hasGear(gear => gear.category.is("SecondaryGun"))
-    const hasRader = hasGear(gear => gear.is("Radar"))
+    const hasSecondaryGun = this.hasGearCategory("SecondaryGun")
+    const hasRader = this.hasGear("Radar")
 
     if (hasSecondaryGun && hasRader) {
       return { power: 1.15, accuracy: 1.3 }

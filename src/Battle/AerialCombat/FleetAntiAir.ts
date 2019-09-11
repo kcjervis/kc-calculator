@@ -9,9 +9,9 @@ export const gearFleetAntiAir = (gear: IGear) => {
   }
 
   let multiplier = 0
-  if (category.is("AntiAircraftFireDirector") || gear.is("HighAngleMount")) {
+  if (gear.is("AntiAircraftFireDirector") || gear.is("HighAngleMount")) {
     multiplier = 0.35
-  } else if (category.is("AntiAircraftShell")) {
+  } else if (gear.is("AntiAircraftShell")) {
     multiplier = 0.6
   } else if (gear.is("Radar")) {
     multiplier = 0.4

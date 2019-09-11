@@ -43,7 +43,7 @@ export default abstract class AerialCombat {
     }
     const proportional = randomValue / 10
     const shotdownNum = Math.floor(plane.slotSize * proportional)
-    if (plane.category.isJetPoweredAircraft) {
+    if (plane.gear.is("JetPoweredAircraft")) {
       plane.shotdown(shotdownNum * 0.6)
     } else {
       plane.shotdown(shotdownNum)

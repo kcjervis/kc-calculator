@@ -178,6 +178,14 @@ export type GearCategoryKey = keyof typeof GearCategoryId
 export default class GearCategory {
   public static readonly keyToId = (key: GearCategoryKey) => GearCategoryId[key]
 
+  public static readonly numberToKey = (num: number): GearCategoryKey | undefined => {
+    const key = GearCategoryId[num]
+    if (key === undefined) {
+      return
+    }
+    return key as GearCategoryKey
+  }
+
   public static readonly all = api_mst_slotitem_equiptype.map(
     ({ api_id, api_name }) => new GearCategory(api_id, api_name)
   )
@@ -208,27 +216,6 @@ export default class GearCategory {
 
   public any = (...keys: GearCategoryKey[]) => {
     return keys.some(this.is)
-  }
-
-  /** 艦載機 */
-  get isCarrierBasedAircraft() {
-    return this.any(
-      "CarrierBasedFighterAircraft",
-      "CarrierBasedDiveBomber",
-      "CarrierBasedTorpedoBomber",
-      "CarrierBasedReconnaissanceAircraft",
-      "CarrierBasedReconnaissanceAircraft2"
-    )
-  }
-
-  /** 噴式機 */
-  get isJetPoweredAircraft() {
-    return this.any(
-      "JetPoweredFighter",
-      "JetPoweredFighterBomber",
-      "JetPoweredTorpedoBomber",
-      "JetPoweredReconnaissanceAircraft"
-    )
   }
 
   /** 戦闘機 */

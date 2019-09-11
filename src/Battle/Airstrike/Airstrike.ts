@@ -39,7 +39,7 @@ export default class Airstrike {
         stat = plane.gear.bombing
         planeTypeModifier = 1
       }
-      if (plane.category.is("JetPoweredFighterBomber")) {
+      if (plane.gear.is("JetPoweredFighterBomber")) {
         planeTypeModifier = 1 / Math.sqrt(2)
       }
       getAirstrikePower({

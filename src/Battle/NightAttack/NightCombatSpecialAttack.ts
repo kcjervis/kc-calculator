@@ -138,7 +138,7 @@ export default class NightCombatSpecialAttack {
 
     // 駆逐カットイン
     if (shipType.is("Destroyer") && hasGear(gear => gear.is("SurfaceRadar")) && torpedoCount >= 1) {
-      if (hasGear(gear => gear.category.is("SmallCaliberMainGun"))) {
+      if (hasGear(gear => gear.is("SmallCaliberMainGun"))) {
         possibleSpecialAttacks.push(NightCombatSpecialAttack.MainTorpRadar)
       }
       if (hasGear(Lookout)) {
@@ -147,10 +147,10 @@ export default class NightCombatSpecialAttack {
     }
 
     const mainGunCount = countGear(gear => gear.is("MainGun"))
-    const secondaryGunCount = countGear(gear => gear.category.is("SecondaryGun"))
+    const secondaryGunCount = countGear(gear => gear.is("SecondaryGun"))
 
     // 潜水カットイン
-    if (submarineTorpedoCount >= 1 && hasGear(gear => gear.category.is("SubmarineEquipment"))) {
+    if (submarineTorpedoCount >= 1 && hasGear(gear => gear.is("SubmarineEquipment"))) {
       possibleSpecialAttacks.push(NightCombatSpecialAttack.SubmarineRadarTorp)
     } else if (submarineTorpedoCount >= 2) {
       possibleSpecialAttacks.push(NightCombatSpecialAttack.SubmarineTorpTorp)

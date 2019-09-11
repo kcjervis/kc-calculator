@@ -147,7 +147,7 @@ export default class ShipAntiInstallationStatus {
 
   // 大発改修補正 共通
   get landingCraftsImprovementMultiplicative() {
-    const landingCrafts = this.gears.filter(gear => gear.category.is("LandingCraft"))
+    const landingCrafts = this.gears.filter(gear => gear.is("LandingCraft"))
     if (landingCrafts.length === 0) {
       return 1
     }
@@ -158,7 +158,7 @@ export default class ShipAntiInstallationStatus {
 
   // 内火艇改修補正 共通
   get specialAmphibiousTanksImprovementMultiplicative() {
-    const tanks = this.gears.filter(gear => gear.category.is("SpecialAmphibiousTank"))
+    const tanks = this.gears.filter(gear => gear.is("SpecialAmphibiousTank"))
     if (tanks.length === 0) {
       return 1
     }

@@ -99,7 +99,8 @@ export default class MasterGear implements GearStats {
     this.evasion = 0
     this.antiBomber = 0
     this.interception = 0
-    if (this.category.is("LandBasedFighter")) {
+
+    if (category.is("LandBasedFighter")) {
       this.antiBomber = accuracy
       this.interception = evasion
     } else {

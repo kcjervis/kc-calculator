@@ -1,4 +1,5 @@
 import GearAttribute, {
+  GearMatcherAttribute,
   GearMatcher,
   isAbyssal,
   isRadar,
@@ -9,12 +10,17 @@ import GearAttribute, {
   isArmor,
   isAntiInstallationBomber,
   isSeaplane,
-  isLandBasedAircraft
+  isLandBasedAircraft,
+  isCarrierBasedAircraft,
+  isJetPoweredAircraft
 } from "./GearAttribute"
 import { GearStats } from "./MasterGear"
-import { GearCategoryId } from "./GearCategory"
+import { GearCategoryId, GearCategoryKey } from "./GearCategory"
 import { merge } from "../utils"
 import { GearId } from "@jervis/data"
+
+export type TypeEq<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false
+export const assertType = <_T extends true>() => undefined
 
 class MockGearStats implements GearStats {
   gearId = 0
@@ -54,6 +60,9 @@ const matcherTest = (matcher: GearMatcher, stats: Partial<GearStats>) => {
 }
 
 describe("GearAttribute", () => {
+  type Repetition = Extract<GearMatcherAttribute, GearCategoryKey>
+  assertType<TypeEq<Repetition, never>>()
+
   it("isAbyssal", () => {
     matcherTest(isAbyssal, { gearId: 501 }).toBe(true)
     matcherTest(isAbyssal, { gearId: 500 }).toBe(false)
@@ -101,6 +110,19 @@ describe("GearAttribute", () => {
     matcherTest(isArmor, { categoryId: GearCategoryId.SmallRadar }).toBe(false)
   })
 
+  it("isCarrierBasedAircraft", () => {
+    const truthyCategories = [
+      GearCategoryId.CarrierBasedFighterAircraft,
+      GearCategoryId.CarrierBasedDiveBomber,
+      GearCategoryId.CarrierBasedTorpedoBomber,
+      GearCategoryId.CarrierBasedReconnaissanceAircraft,
+      GearCategoryId.CarrierBasedReconnaissanceAircraft2
+    ]
+    truthyCategories.forEach(categoryId => matcherTest(isCarrierBasedAircraft, { categoryId }).toBe(true))
+
+    matcherTest(isCarrierBasedAircraft, { categoryId: GearCategoryId.SeaplaneFighter }).toBe(false)
+  })
+
   it("isSeaplane", () => {
     const seaplanes = [
       GearCategoryId.ReconnaissanceSeaplane,
@@ -124,6 +146,18 @@ describe("GearAttribute", () => {
     matcherTest(isSeaplane, { categoryId: GearCategoryId.CarrierBasedFighterAircraft }).toBe(false)
   })
 
+  it("isJetPoweredAircraft", () => {
+    const truthyCategories = [
+      GearCategoryId.JetPoweredFighter,
+      GearCategoryId.JetPoweredFighterBomber,
+      GearCategoryId.JetPoweredTorpedoBomber,
+      GearCategoryId.JetPoweredReconnaissanceAircraft
+    ]
+    truthyCategories.forEach(categoryId => matcherTest(isJetPoweredAircraft, { categoryId }).toBe(true))
+
+    matcherTest(isJetPoweredAircraft, { categoryId: GearCategoryId.CarrierBasedFighterAircraft }).toBe(false)
+  })
+
   it("isAntiInstallationBomber", () => {
     matcherTest(isAntiInstallationBomber, { gearId: GearId["彗星一二型(六三四空/三号爆弾搭載機)"] }).toBe(true)
     matcherTest(isAntiInstallationBomber, { gearId: GearId["彗星一二型(三一号光電管爆弾搭載機)"] }).toBe(false)
@@ -135,8 +169,10 @@ describe("GearAttribute", () => {
 
     expect(attrs.includes("Radar")).toBe(true)
     expect(attrs.includes("AirRadar")).toBe(true)
+    expect(attrs.includes("LargeRadar")).toBe(true)
 
     expect(attrs.includes("SurfaceRadar")).toBe(false)
     expect(attrs.includes("MainGun")).toBe(false)
+    expect(attrs.includes("SmallRadar")).toBe(false)
   })
 })

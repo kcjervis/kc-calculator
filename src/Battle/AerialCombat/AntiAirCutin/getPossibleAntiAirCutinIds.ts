@@ -34,7 +34,7 @@ export default (ship: IShip) => {
   /** 対空電探 */
   const isAARadar: GearIteratee = gear => gear.is("AirRadar")
 
-  const isAAGun: GearIteratee = gear => gear.category.is("AntiAircraftGun")
+  const isAAGun: GearIteratee = gear => gear.is("AntiAircraftGun")
 
   /** 特殊機銃 */
   const isCDMG: GearIteratee = gear => isAAGun(gear) && gear.antiAir >= 9
@@ -46,10 +46,10 @@ export default (ship: IShip) => {
 
   const is10cmTwinHighAngleMountKaiAMG: GearIteratee = gear => gear.masterId === 275
 
-  const isAAShell: GearIteratee = gear => gear.category.is("AntiAircraftShell")
+  const isAAShell: GearIteratee = gear => gear.is("AntiAircraftShell")
 
   /** 高射装置 */
-  const isAAFD: GearIteratee = gear => gear.category.is("AntiAircraftFireDirector")
+  const isAAFD: GearIteratee = gear => gear.is("AntiAircraftFireDirector")
 
   const isLargeCaliberMainGun: GearIteratee = gear => gear.category.any("LargeCaliberMainGun", "LargeCaliberMainGun2")
 
@@ -193,7 +193,7 @@ export default (ship: IShip) => {
     if (
       ship.name === "Gotland改" &&
       ship.hasGear(isHighAngleMount) &&
-      ship.hasGear(gear => gear.category.is("AntiAircraftGun") && gear.antiAir >= 4)
+      ship.hasGear(gear => gear.is("AntiAircraftGun") && gear.antiAir >= 4)
     ) {
       possibleAntiAirCutinIds.push(33)
     }
@@ -202,7 +202,7 @@ export default (ship: IShip) => {
     if (
       hasSome(isCDMG) &&
       hasSome(isAARadar) &&
-      ship.countGear(gear => gear.category.is("AntiAircraftGun") && gear.antiAir >= 3) >= 2
+      ship.countGear(gear => gear.is("AntiAircraftGun") && gear.antiAir >= 3) >= 2
     ) {
       possibleAntiAirCutinIds.push(12)
     }

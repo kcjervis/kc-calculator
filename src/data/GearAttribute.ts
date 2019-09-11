@@ -1,4 +1,4 @@
-import GearCategory, { GearCategoryKey } from "./GearCategory"
+import GearCategory, { GearCategoryKey, GearCategoryId } from "./GearCategory"
 import { GearStats } from "./MasterGear"
 import { GearId } from "@jervis/data"
 
@@ -27,6 +27,15 @@ export const isAirRadar = and(isRadar, stats => stats.antiAir >= 2)
 
 export const isArmor = createCategoryMatcher("ExtraArmor", "MediumExtraArmor", "LargeExtraArmor")
 
+/** 艦載機 */
+export const isCarrierBasedAircraft = createCategoryMatcher(
+  "CarrierBasedFighterAircraft",
+  "CarrierBasedDiveBomber",
+  "CarrierBasedTorpedoBomber",
+  "CarrierBasedReconnaissanceAircraft",
+  "CarrierBasedReconnaissanceAircraft2"
+)
+
 /** 水上機 */
 export const isSeaplane = createCategoryMatcher(
   "ReconnaissanceSeaplane",
@@ -42,6 +51,22 @@ export const isLandBasedAircraft = createCategoryMatcher(
   "LandBasedReconnaissanceAircraft"
 )
 
+/** 噴式機 */
+export const isJetPoweredAircraft = createCategoryMatcher(
+  "JetPoweredFighter",
+  "JetPoweredFighterBomber",
+  "JetPoweredTorpedoBomber",
+  "JetPoweredReconnaissanceAircraft"
+)
+
+/** 戦闘機 */
+export const isFighter = createCategoryMatcher(
+  "CarrierBasedFighterAircraft",
+  "SeaplaneFighter",
+  "LandBasedFighter",
+  "JetPoweredFighter"
+)
+
 /** 対地艦爆 */
 export const isAntiInstallationBomber: GearMatcher = stats =>
   [
@@ -55,9 +80,9 @@ export const isAntiInstallationBomber: GearMatcher = stats =>
     GearId["彗星一二型(六三四空/三号爆弾搭載機)"]
   ].includes(stats.gearId)
 
-const createGearAttribute = <T extends string>(data: { [K in T]: GearMatcher }) => data
+const createMatchers = <T extends string>(matchers: { [K in T]: GearMatcher }) => matchers
 
-const data = createGearAttribute({
+const matchers = createMatchers({
   Abyssal: isAbyssal,
 
   HighAngleMount: isHighAngleMount,
@@ -70,17 +95,30 @@ const data = createGearAttribute({
 
   Armor: isArmor,
 
+  CarrierBasedAircraft: isCarrierBasedAircraft,
   Seaplane: isSeaplane,
   LandBasedAircraft: isLandBasedAircraft,
+  JetPoweredAircraft: isJetPoweredAircraft,
+  Fighter: isFighter,
   AntiInstallationBomber: isAntiInstallationBomber
 })
 
-type GearAttribute = keyof typeof data
+export type GearMatcherAttribute = keyof typeof matchers
+const matcherAttrs = Object.keys(matchers) as GearMatcherAttribute[]
 
+const statsToMatcherAttrs = (stats: GearStats) => matcherAttrs.filter(attr => matchers[attr](stats))
+
+type GearAttribute = GearMatcherAttribute | GearCategoryKey
 const GearAttribute = {
   from: (stats: GearStats) => {
-    const attrs = Object.keys(data) as GearAttribute[]
-    return attrs.filter(attr => data[attr](stats))
+    const attrs: GearAttribute[] = statsToMatcherAttrs(stats)
+
+    const categoryKey = GearCategory.numberToKey(stats.categoryId)
+    if (categoryKey) {
+      attrs.push(categoryKey)
+    }
+
+    return attrs
   }
 }
 

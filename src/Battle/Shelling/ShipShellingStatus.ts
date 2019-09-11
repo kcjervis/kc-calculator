@@ -174,11 +174,11 @@ export default class ShipShellingStatus {
 
     const { hasGear } = ship
 
-    if (!hasGear(gear => gear.category.is("ArmorPiercingShell")) || !hasGear(gear => gear.is("MainGun"))) {
+    if (!hasGear(gear => gear.is("ArmorPiercingShell")) || !hasGear(gear => gear.is("MainGun"))) {
       return modifier
     }
 
-    const hasSecondaryGun = hasGear(gear => gear.category.is("SecondaryGun"))
+    const hasSecondaryGun = hasGear(gear => gear.is("SecondaryGun"))
     const hasRader = hasGear(gear => gear.is("Radar"))
 
     if (hasSecondaryGun && hasRader) {
