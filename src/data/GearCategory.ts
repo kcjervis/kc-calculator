@@ -221,16 +221,6 @@ export default class GearCategory {
     )
   }
 
-  /** 水上機 */
-  get isSeaplane() {
-    return this.any("ReconnaissanceSeaplane", "SeaplaneBomber", "SeaplaneFighter", "LargeFlyingBoat")
-  }
-
-  /** 陸上機 */
-  get isLandBasedAircraft() {
-    return this.any("LandBasedAttackAircraft", "LandBasedFighter", "LandBasedReconnaissanceAircraft")
-  }
-
   /** 噴式機 */
   get isJetPoweredAircraft() {
     return this.any(

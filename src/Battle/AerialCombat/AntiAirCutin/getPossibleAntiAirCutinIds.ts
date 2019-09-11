@@ -24,15 +24,15 @@ export default (ship: IShip) => {
   type GearIteratee = (gear: IGear) => boolean
 
   /** 高角砲 */
-  const isHighAngleMount: GearIteratee = gear => gear.hasAttr("HighAngleMount")
+  const isHighAngleMount: GearIteratee = gear => gear.is("HighAngleMount")
   /** 特殊高角砲 */
   const isBuiltinHighAngleMount: GearIteratee = gear => isHighAngleMount(gear) && gear.antiAir >= 8
   /** 標準高角砲 */
   const isNormalHighAngleMount: GearIteratee = gear => isHighAngleMount(gear) && gear.antiAir < 8
 
-  const isRadar: GearIteratee = gear => gear.hasAttr("Radar")
+  const isRadar: GearIteratee = gear => gear.is("Radar")
   /** 対空電探 */
-  const isAARadar: GearIteratee = gear => gear.hasAttr("AirRadar")
+  const isAARadar: GearIteratee = gear => gear.is("AirRadar")
 
   const isAAGun: GearIteratee = gear => gear.category.is("AntiAircraftGun")
 

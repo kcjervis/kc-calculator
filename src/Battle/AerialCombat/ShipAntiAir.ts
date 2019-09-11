@@ -12,9 +12,9 @@ export const calcGearAdjustedAntiAir = (gear: IGear) => {
   let multiplier = 0
   if (category.is("AntiAircraftGun")) {
     multiplier = 6
-  } else if (category.is("AntiAircraftFireDirector") || gear.hasAttr("HighAngleMount")) {
+  } else if (category.is("AntiAircraftFireDirector") || gear.is("HighAngleMount")) {
     multiplier = 4
-  } else if (gear.hasAttr("Radar")) {
+  } else if (gear.is("Radar")) {
     multiplier = 3
   }
   return multiplier * antiAir + improvement.adjustedAntiAirModifier

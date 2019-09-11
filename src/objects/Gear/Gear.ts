@@ -27,7 +27,7 @@ export interface IGear extends GearStats {
 
   category: GearCategory
 
-  hasAttr: (attr: GearAttribute) => boolean
+  is: (attr: GearAttribute) => boolean
 
   calcFighterPower: (slotSize: number, isInterception?: boolean) => number
 }
@@ -63,7 +63,7 @@ export default class Gear implements IGear {
     public readonly category: GearCategory,
     public readonly improvement: IImprovement,
     public readonly proficiency: IProficiency,
-    public hasAttr: (attr: GearAttribute) => boolean
+    public is: (attr: GearAttribute) => boolean
   ) {
     this.gearId = stats.gearId
 

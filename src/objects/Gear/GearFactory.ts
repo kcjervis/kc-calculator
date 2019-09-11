@@ -24,7 +24,7 @@ export default class GearFactory {
 
     const improvement = new Improvement(obj.improvement, master)
     const proficiency = new Proficiency(obj.proficiency, master.category)
-    const gear = new Gear(master, master.category, improvement, proficiency, master.hasAttr)
+    const gear = new Gear(master, master.category, improvement, proficiency, master.is)
 
     return gear
   }

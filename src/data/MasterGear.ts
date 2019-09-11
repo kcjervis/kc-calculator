@@ -117,5 +117,5 @@ export default class MasterGear implements GearStats {
     return this.id
   }
 
-  public hasAttr = (attr: GearAttribute) => this.attrs.includes(attr)
+  public is = (attr: GearAttribute) => this.attrs.includes(attr)
 }

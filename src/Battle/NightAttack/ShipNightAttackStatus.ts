@@ -50,7 +50,7 @@ export default class ShipNightAttackStatus {
       }
 
       if (
-        gear.hasAttr("MainGun") ||
+        gear.is("MainGun") ||
         category.any(
           "SecondaryGun",
           "ArmorPiercingShell",
@@ -74,12 +74,12 @@ export default class ShipNightAttackStatus {
     return this.ship.totalEquipmentStats(gear => {
       const { improvement, category } = gear
 
-      if (gear.hasAttr("SurfaceRadar")) {
+      if (gear.is("SurfaceRadar")) {
         return 1.6 * Math.sqrt(improvement.value)
       }
 
       if (
-        gear.hasAttr("Armor") ||
+        gear.is("Armor") ||
         category.any("AntiAircraftGun", "Sonar", "LargeSonar", "DepthCharge", "EngineImprovement")
       ) {
         return 0

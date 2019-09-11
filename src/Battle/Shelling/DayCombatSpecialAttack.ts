@@ -43,14 +43,14 @@ export default class DayCombatSpecialAttack {
     const attacks = new Array<DayCombatSpecialAttack>()
 
     const hasObservationPlane = ship.planes.some(plane => plane.category.isObservationPlane && plane.slotSize > 0)
-    const mainGunCount = ship.countGear(gear => gear.hasAttr("MainGun"))
+    const mainGunCount = ship.countGear(gear => gear.is("MainGun"))
     if (!hasObservationPlane || mainGunCount === 0) {
       return attacks
     }
 
     const hasApShell = ship.hasGear(gear => gear.category.is("ArmorPiercingShell"))
     const hasSecondaryGun = ship.hasGear(gear => gear.category.is("SecondaryGun"))
-    const hasRader = ship.hasGear(gear => gear.hasAttr("Radar"))
+    const hasRader = ship.hasGear(gear => gear.is("Radar"))
 
     if (mainGunCount >= 2) {
       attacks.push(DayCombatSpecialAttack.DoubleAttack)

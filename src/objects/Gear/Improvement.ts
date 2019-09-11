@@ -72,7 +72,7 @@ export default class Improvement implements IImprovement {
   }
 
   get adjustedAntiAirModifier() {
-    const { antiAir, category, hasAttr } = this.master
+    const { antiAir, category, is } = this.master
     if (antiAir === 0) {
       return 0
     }
@@ -81,29 +81,29 @@ export default class Improvement implements IImprovement {
     if (category.is("AntiAircraftGun")) {
       // https://twitter.com/CitrusJ9N/status/1056224720712921088
       multiplier = antiAir <= 7 ? 4 : 6
-    } else if (category.is("AntiAircraftFireDirector") || hasAttr("HighAngleMount")) {
+    } else if (category.is("AntiAircraftFireDirector") || is("HighAngleMount")) {
       multiplier = antiAir <= 7 ? 2 : 3
     }
     return multiplier * Math.sqrt(this.value)
   }
 
   get fleetAntiAirModifier() {
-    const { antiAir, category, hasAttr } = this.master
+    const { antiAir, category, is } = this.master
     if (antiAir === 0) {
       return 0
     }
     // 装備定数B
     let multiplier = 0
-    if (category.is("AntiAircraftFireDirector") || hasAttr("HighAngleMount")) {
+    if (category.is("AntiAircraftFireDirector") || is("HighAngleMount")) {
       multiplier = antiAir <= 7 ? 2 : 3
-    } else if (hasAttr("Radar") && antiAir >= 2) {
+    } else if (is("Radar") && antiAir >= 2) {
       multiplier = 1.5
     }
     return multiplier * Math.sqrt(this.value)
   }
 
   get shellingPowerModifier() {
-    const { firepower, category, id: masterId, hasAttr } = this.master
+    const { firepower, category, id: masterId, is } = this.master
 
     const isDepthCharge = [226, 227].includes(masterId)
 
@@ -113,8 +113,8 @@ export default class Improvement implements IImprovement {
 
     if (
       isDepthCharge ||
-      hasAttr("Radar") ||
-      hasAttr("Armor") ||
+      is("Radar") ||
+      is("Armor") ||
       category.isAircraft ||
       category.any("Torpedo", "MidgetSubmarine", "EngineImprovement", "CombatRation")
     ) {
@@ -140,7 +140,7 @@ export default class Improvement implements IImprovement {
   }
 
   get shellingAccuracyModifier() {
-    const { category, hasAttr } = this.master
+    const { category, is } = this.master
 
     if (category.is("Torpedo")) {
       return 0
@@ -148,12 +148,12 @@ export default class Improvement implements IImprovement {
 
     const isLargeRadar = category.any("LargeRadar", "LargeRadar2")
 
-    if (isLargeRadar || hasAttr("SurfaceRadar")) {
+    if (isLargeRadar || is("SurfaceRadar")) {
       return 1.7 * Math.sqrt(this.value)
     } else if (
-      hasAttr("Radar") ||
-      hasAttr("MainGun") ||
-      hasAttr("Armor") ||
+      is("Radar") ||
+      is("MainGun") ||
+      is("Armor") ||
       category.any(
         "SecondaryGun",
         "Sonar",

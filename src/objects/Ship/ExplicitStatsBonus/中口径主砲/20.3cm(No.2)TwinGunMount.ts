@@ -24,13 +24,13 @@ const bonusCreator: StatsBonusCreator = ship => {
   }
 
   // 相互シナジーボーナス
-  if (ship.hasGear(gear => gear.hasAttr("SurfaceRadar"))) {
+  if (ship.hasGear(gear => gear.is("SurfaceRadar"))) {
     if (shipClass.is("FurutakaClass") || shipClass.is("AobaClass")) {
       bonus.add({ firepower: 3, torpedo: 2, evasion: 2 })
     }
   }
 
-  if (ship.hasGear(gear => gear.hasAttr("AirRadar"))) {
+  if (ship.hasGear(gear => gear.is("AirRadar"))) {
     if (isAoba) {
       bonus.add({ antiAir: 5, evasion: 2 })
     }
