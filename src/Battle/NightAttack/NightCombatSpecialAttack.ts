@@ -1,5 +1,6 @@
 import { IShip } from "../../objects"
 import { Formation, Side } from "../../constants"
+import { GearId } from "@jervis/data"
 
 export const isNightAerialAttackShip = (ship: IShip) => {
   if (!ship.shipType.isAircraftCarrierClass) {
@@ -94,7 +95,7 @@ export default class NightCombatSpecialAttack {
   public static TorpRadarLookout = new NightCombatSpecialAttack(8, "魚見電", 150, { power: 1.2, accuracy: 1 })
 
   public static getPossibleSpecialAttacks = (ship: IShip) => {
-    const { shipType, hasGear, countGear, countGearCategory } = ship
+    const { shipType, hasGear, countGear } = ship
     const possibleSpecialAttacks = new Array<NightCombatSpecialAttack>()
 
     if (isNightAerialAttackShip(ship)) {
@@ -133,8 +134,10 @@ export default class NightCombatSpecialAttack {
       return possibleSpecialAttacks
     }
 
-    const submarineTorpedoCount = countGear(213) + countGear(214)
-    const torpedoCount = countGearCategory("Torpedo", "SubmarineTorpedo")
+    const submarineCutinTorpedoCount =
+      countGear(GearId["後期型艦首魚雷(6門)"]) + countGear(GearId["熟練聴音員+後期型艦首魚雷(6門)"])
+
+    const torpedoCount = countGear("Torpedo") + countGear("SubmarineTorpedo")
 
     // 駆逐カットイン
     if (shipType.is("Destroyer") && hasGear(gear => gear.is("SurfaceRadar")) && torpedoCount >= 1) {
@@ -150,9 +153,9 @@ export default class NightCombatSpecialAttack {
     const secondaryGunCount = countGear(gear => gear.is("SecondaryGun"))
 
     // 潜水カットイン
-    if (submarineTorpedoCount >= 1 && hasGear(gear => gear.is("SubmarineEquipment"))) {
+    if (submarineCutinTorpedoCount >= 1 && hasGear(gear => gear.is("SubmarineEquipment"))) {
       possibleSpecialAttacks.push(NightCombatSpecialAttack.SubmarineRadarTorp)
-    } else if (submarineTorpedoCount >= 2) {
+    } else if (submarineCutinTorpedoCount >= 2) {
       possibleSpecialAttacks.push(NightCombatSpecialAttack.SubmarineTorpTorp)
     } else if (mainGunCount >= 3) {
       // 以降汎用カットイン

@@ -6,6 +6,7 @@ import { IHealth } from "./Health"
 import { IMorale } from "./Morale"
 import { IShipNakedStats } from "./ShipNakedStats"
 import { IShipStats } from "./ShipStats"
+import { IDefensePower } from "./DefensePower"
 
 import { MasterShip, ShipClass, ShipType, GearCategory, GearCategoryKey, GearAttribute } from "../../data"
 import { isNonNullable, shipNameIsKai2 } from "../../utils"
@@ -45,9 +46,6 @@ export interface IShip {
 
   hasGear: (iteratee: GearIteratee<boolean>) => boolean
   countGear: (iteratee?: GearIteratee<boolean>) => number
-
-  hasGearCategory: (...args: GearCategoryIteratee[]) => boolean
-  countGearCategory: (...args: GearCategoryIteratee[]) => number
 
   totalEquipmentStats: (iteratee: ((gear: IGear) => number) | keyof IGear) => number
 
@@ -188,20 +186,6 @@ export default class Ship implements IShip {
       return gears.filter(({ masterId }) => masterId === iteratee).length
     }
     return gears.filter(iteratee).length
-  }
-
-  public countGearCategory = (...args: GearCategoryIteratee[]) => {
-    const categories = this.nonNullableGears.map(({ category }) => category)
-    return sumBy(args, arg => {
-      if (typeof arg === "string") {
-        return categories.filter(category => category.is(arg)).length
-      }
-      return categories.filter(arg).length
-    })
-  }
-
-  public hasGearCategory = (...args: GearCategoryIteratee[]) => {
-    return this.countGearCategory(...args) > 0
   }
 
   public totalEquipmentStats = (iteratee: ((gear: IGear) => number) | keyof IGear) => {

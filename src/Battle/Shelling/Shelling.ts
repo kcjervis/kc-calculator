@@ -225,7 +225,7 @@ export default class Shelling {
     }
 
     if (ship.shipType.isSubmarineClass && defenderIsInstallation) {
-      return ship.hasGearCategory("SpecialAmphibiousTank")
+      return ship.hasGear("SpecialAmphibiousTank")
     }
 
     return true
