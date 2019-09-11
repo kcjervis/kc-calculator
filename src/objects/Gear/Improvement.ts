@@ -72,7 +72,8 @@ export default class Improvement implements IImprovement {
   }
 
   get adjustedAntiAirModifier() {
-    const { antiAir, category, is } = this.master
+    const { master } = this
+    const { antiAir, category } = this.master
     if (antiAir === 0) {
       return 0
     }
@@ -81,22 +82,22 @@ export default class Improvement implements IImprovement {
     if (category.is("AntiAircraftGun")) {
       // https://twitter.com/CitrusJ9N/status/1056224720712921088
       multiplier = antiAir <= 7 ? 4 : 6
-    } else if (category.is("AntiAircraftFireDirector") || is("HighAngleMount")) {
+    } else if (category.is("AntiAircraftFireDirector") || master.is("HighAngleMount")) {
       multiplier = antiAir <= 7 ? 2 : 3
     }
     return multiplier * Math.sqrt(this.value)
   }
 
   get fleetAntiAirModifier() {
-    const { antiAir, category, is } = this.master
+    const { antiAir, category } = this.master
     if (antiAir === 0) {
       return 0
     }
     // 装備定数B
     let multiplier = 0
-    if (category.is("AntiAircraftFireDirector") || is("HighAngleMount")) {
+    if (category.is("AntiAircraftFireDirector") || this.master.is("HighAngleMount")) {
       multiplier = antiAir <= 7 ? 2 : 3
-    } else if (is("Radar") && antiAir >= 2) {
+    } else if (this.master.is("Radar") && antiAir >= 2) {
       multiplier = 1.5
     }
     return multiplier * Math.sqrt(this.value)
@@ -113,8 +114,8 @@ export default class Improvement implements IImprovement {
 
     if (
       isDepthCharge ||
-      is("Radar") ||
-      is("Armor") ||
+      this.master.is("Radar") ||
+      this.master.is("Armor") ||
       category.isAircraft ||
       category.any("Torpedo", "MidgetSubmarine", "EngineImprovement", "CombatRation")
     ) {
@@ -140,7 +141,7 @@ export default class Improvement implements IImprovement {
   }
 
   get shellingAccuracyModifier() {
-    const { category, is } = this.master
+    const { category } = this.master
 
     if (category.is("Torpedo")) {
       return 0
@@ -148,12 +149,12 @@ export default class Improvement implements IImprovement {
 
     const isLargeRadar = category.any("LargeRadar", "LargeRadar2")
 
-    if (isLargeRadar || is("SurfaceRadar")) {
+    if (isLargeRadar || this.master.is("SurfaceRadar")) {
       return 1.7 * Math.sqrt(this.value)
     } else if (
-      is("Radar") ||
-      is("MainGun") ||
-      is("Armor") ||
+      this.master.is("Radar") ||
+      this.master.is("MainGun") ||
+      this.master.is("Armor") ||
       category.any(
         "SecondaryGun",
         "Sonar",
