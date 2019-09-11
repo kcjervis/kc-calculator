@@ -11,7 +11,7 @@ const bonusCreator: StatsBonusCreator = ship => {
   const { shipClass } = ship
 
   // 単体ボーナス
-  if (shipClass.either("KatoriClass", "YuubariClass")) {
+  if (shipClass.any("KatoriClass", "YuubariClass")) {
     bonus.add({
       multiplier: count,
       firepower: 1

@@ -42,7 +42,7 @@ type ShellingStats = {
  */
 export const calcCruiserFitBonus = (ship: IShip) => {
   let fitBonus = 0
-  if (ship.shipType.either("LightCruiser", "TorpedoCruiser", "TrainingCruiser")) {
+  if (ship.shipType.any("LightCruiser", "TorpedoCruiser", "TrainingCruiser")) {
     const singleGunCount = ship.countGear(gear => [4, 11].includes(gear.masterId))
     const twinGunCount = ship.countGear(gear => [65, 119, 139].includes(gear.masterId))
     fitBonus += Math.sqrt(singleGunCount) + 2 * Math.sqrt(twinGunCount)

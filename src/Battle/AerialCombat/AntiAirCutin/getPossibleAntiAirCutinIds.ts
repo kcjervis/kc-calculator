@@ -51,8 +51,7 @@ export default (ship: IShip) => {
   /** 高射装置 */
   const isAAFD: GearIteratee = gear => gear.category.is("AntiAircraftFireDirector")
 
-  const isLargeCaliberMainGun: GearIteratee = gear =>
-    gear.category.either("LargeCaliberMainGun", "LargeCaliberMainGun2")
+  const isLargeCaliberMainGun: GearIteratee = gear => gear.category.any("LargeCaliberMainGun", "LargeCaliberMainGun2")
 
   const hasAtLeast = (callback: GearIteratee, count: number) => ship.countGear(callback) >= count
   const hasSome = (callback: GearIteratee) => ship.hasGear(callback)

@@ -12,7 +12,7 @@ const createBonus: StatsBonusCreator = ship => {
   const { shipClass } = ship
 
   // 単体ボーナス
-  if (shipClass.either("AyanamiClass", "AkatsukiClass")) {
+  if (shipClass.any("AyanamiClass", "AkatsukiClass")) {
     bonus.add({
       multiplier,
       firepower: 1
@@ -66,7 +66,7 @@ const createBonus: StatsBonusCreator = ship => {
   // 相互シナジーボーナス
   // 水上電探
   if (ship.hasGear(gear => gear.hasAttr("SurfaceRadar"))) {
-    if (shipClass.either("AyanamiClass", "AkatsukiClass", "HatsuharuClass")) {
+    if (shipClass.any("AyanamiClass", "AkatsukiClass", "HatsuharuClass")) {
       bonus.add({
         firepower: 1,
         torpedo: 2,
@@ -82,7 +82,7 @@ const createBonus: StatsBonusCreator = ship => {
   }
   // 対空電探
   if (ship.hasGear(gear => gear.hasAttr("AirRadar"))) {
-    if (shipClass.either("AyanamiClass", "AkatsukiClass", "HatsuharuClass")) {
+    if (shipClass.any("AyanamiClass", "AkatsukiClass", "HatsuharuClass")) {
       bonus.add({
         antiAir: 5
       })
@@ -95,7 +95,7 @@ const createBonus: StatsBonusCreator = ship => {
 
   // 61cm三連装(酸素)魚雷後期型
   if (ship.hasGear(285)) {
-    if (shipClass.either("AyanamiClass", "AkatsukiClass", "HatsuharuClass")) {
+    if (shipClass.any("AyanamiClass", "AkatsukiClass", "HatsuharuClass")) {
       bonus.add({
         firepower: 1,
         torpedo: 3

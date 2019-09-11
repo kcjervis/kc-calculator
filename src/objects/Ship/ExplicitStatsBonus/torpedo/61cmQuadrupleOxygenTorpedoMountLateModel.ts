@@ -19,7 +19,7 @@ const createBonus: StatsBonusCreator = ship => {
   }
 
   // 単体ボーナス
-  if (shipClass.either("ShiratsuyuClass", "AsashioClass", "KagerouClass", "YuugumoClass")) {
+  if (shipClass.any("ShiratsuyuClass", "AsashioClass", "KagerouClass", "YuugumoClass")) {
     bonus.add({
       multiplier: Math.min(count, 2),
       torpedo: 2,

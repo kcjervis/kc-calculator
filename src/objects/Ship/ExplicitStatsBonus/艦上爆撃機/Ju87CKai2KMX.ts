@@ -11,7 +11,7 @@ const createBonus: StatsBonusCreator = ship => {
   const { shipClass } = ship
 
   const isShinyou = [MasterShipId.Shinyou, MasterShipId.ShinyouKai, MasterShipId.ShinyouKai2].includes(ship.masterId)
-  if (shipClass.either("GrafZeppelinClass", "AquilaClass")) {
+  if (shipClass.any("GrafZeppelinClass", "AquilaClass")) {
     bonus.add({ multiplier, firepower: 1, evasion: 1 })
   } else if (isShinyou) {
     bonus.add({ multiplier, asw: 3, evasion: 2 })

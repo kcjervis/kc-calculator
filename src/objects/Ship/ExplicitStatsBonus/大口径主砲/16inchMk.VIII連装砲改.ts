@@ -12,7 +12,7 @@ const createBonus: StatsBonusCreator = ship => {
     bonus.add({ multiplier, firepower: 2, evasion: 1, antiAir: 1 })
   } else if (/^(Nelson改|長門改二|陸奥改二)$/.test(ship.name)) {
     bonus.add({ multiplier, firepower: 2 })
-  } else if (ship.shipClass.either("NagatoClass", "ColoradoClass")) {
+  } else if (ship.shipClass.any("NagatoClass", "ColoradoClass")) {
     bonus.add({ multiplier, firepower: 1 })
   }
 

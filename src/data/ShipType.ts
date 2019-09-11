@@ -34,7 +34,7 @@ export default class ShipType {
     return this.id === ShipTypeId[key]
   }
 
-  public either = (...keys: Array<keyof typeof ShipTypeId>) => {
+  public any = (...keys: Array<keyof typeof ShipTypeId>) => {
     return keys.some(this.is)
   }
 
@@ -50,7 +50,7 @@ export default class ShipType {
    * 軽巡,雷巡,練巡
    */
   get isLightCruiserClass() {
-    return this.either("LightCruiser", "TorpedoCruiser", "TrainingCruiser")
+    return this.any("LightCruiser", "TorpedoCruiser", "TrainingCruiser")
   }
 
   /**
@@ -58,7 +58,7 @@ export default class ShipType {
    * 重巡,航巡
    */
   get isHeavyCruiserClass() {
-    return this.either("HeavyCruiser", "AviationCruiser")
+    return this.any("HeavyCruiser", "AviationCruiser")
   }
 
   /**
@@ -66,7 +66,7 @@ export default class ShipType {
    * 戦艦,巡洋戦艦,航空戦艦,超弩級戦艦
    */
   get isBattleshipClass() {
-    return this.either("Battlecruiser", "Battleship", "AviationBattleship", "SuperDreadnoughts")
+    return this.any("Battlecruiser", "Battleship", "AviationBattleship", "SuperDreadnoughts")
   }
 
   /**
@@ -74,7 +74,7 @@ export default class ShipType {
    * 軽空母,正規空母,装甲空母
    */
   get isAircraftCarrierClass() {
-    return this.either("LightAircraftCarrier", "AircraftCarrier", "ArmoredAircraftCarrier")
+    return this.any("LightAircraftCarrier", "AircraftCarrier", "ArmoredAircraftCarrier")
   }
 
   /**

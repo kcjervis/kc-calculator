@@ -175,10 +175,9 @@ export enum GearCategoryId {
 
 export type GearCategoryKey = keyof typeof GearCategoryId
 
-export const matchesCategory = (...keys: GearCategoryKey[]) => (id: number) =>
-  keys.some(key => GearCategoryId[key] === id)
-
 export default class GearCategory {
+  public static readonly keyToId = (key: GearCategoryKey) => GearCategoryId[key]
+
   public static readonly all = api_mst_slotitem_equiptype.map(
     ({ api_id, api_name }) => new GearCategory(api_id, api_name)
   )
@@ -207,13 +206,13 @@ export default class GearCategory {
     return this.id === GearCategoryId[key]
   }
 
-  public either = (...keys: GearCategoryKey[]) => {
+  public any = (...keys: GearCategoryKey[]) => {
     return keys.some(this.is)
   }
 
   /** 艦載機 */
   get isCarrierBasedAircraft() {
-    return this.either(
+    return this.any(
       "CarrierBasedFighterAircraft",
       "CarrierBasedDiveBomber",
       "CarrierBasedTorpedoBomber",
@@ -224,17 +223,17 @@ export default class GearCategory {
 
   /** 水上機 */
   get isSeaplane() {
-    return this.either("ReconnaissanceSeaplane", "SeaplaneBomber", "SeaplaneFighter", "LargeFlyingBoat")
+    return this.any("ReconnaissanceSeaplane", "SeaplaneBomber", "SeaplaneFighter", "LargeFlyingBoat")
   }
 
   /** 陸上機 */
   get isLandBasedAircraft() {
-    return this.either("LandBasedAttackAircraft", "LandBasedFighter", "LandBasedReconnaissanceAircraft")
+    return this.any("LandBasedAttackAircraft", "LandBasedFighter", "LandBasedReconnaissanceAircraft")
   }
 
   /** 噴式機 */
   get isJetPoweredAircraft() {
-    return this.either(
+    return this.any(
       "JetPoweredFighter",
       "JetPoweredFighterBomber",
       "JetPoweredTorpedoBomber",
@@ -244,22 +243,22 @@ export default class GearCategory {
 
   /** 戦闘機 */
   get isFighter() {
-    return this.either("CarrierBasedFighterAircraft", "SeaplaneFighter", "LandBasedFighter", "JetPoweredFighter")
+    return this.any("CarrierBasedFighterAircraft", "SeaplaneFighter", "LandBasedFighter", "JetPoweredFighter")
   }
 
   /** 爆撃機 */
   get isDiveBomber() {
-    return this.either("CarrierBasedDiveBomber", "SeaplaneBomber", "JetPoweredFighterBomber")
+    return this.any("CarrierBasedDiveBomber", "SeaplaneBomber", "JetPoweredFighterBomber")
   }
 
   /** 攻撃機 */
   get isTorpedoBomber() {
-    return this.either("CarrierBasedTorpedoBomber", "JetPoweredTorpedoBomber", "LandBasedAttackAircraft")
+    return this.any("CarrierBasedTorpedoBomber", "JetPoweredTorpedoBomber", "LandBasedAttackAircraft")
   }
 
   /** 偵察機 */
   get isReconnaissanceAircraft() {
-    return this.either(
+    return this.any(
       "CarrierBasedReconnaissanceAircraft",
       "CarrierBasedReconnaissanceAircraft2",
       "ReconnaissanceSeaplane",
@@ -271,7 +270,7 @@ export default class GearCategory {
 
   /** 空母砲撃する航空機 */
   get isCarrierShellingAircraft() {
-    return this.either(
+    return this.any(
       "CarrierBasedDiveBomber",
       "CarrierBasedTorpedoBomber",
       "JetPoweredFighterBomber",
@@ -285,18 +284,18 @@ export default class GearCategory {
   }
 
   get isAircraft() {
-    const { isFighter, isDiveBomber, isTorpedoBomber, isReconnaissanceAircraft, either } = this
+    const { isFighter, isDiveBomber, isTorpedoBomber, isReconnaissanceAircraft, any } = this
 
     return (
       isFighter ||
       isDiveBomber ||
       isTorpedoBomber ||
       isReconnaissanceAircraft ||
-      either("Autogyro", "AntiSubmarinePatrolAircraft")
+      any("Autogyro", "AntiSubmarinePatrolAircraft")
     )
   }
 
   get isObservationPlane() {
-    return this.either("SeaplaneBomber", "ReconnaissanceSeaplane")
+    return this.any("SeaplaneBomber", "ReconnaissanceSeaplane")
   }
 }

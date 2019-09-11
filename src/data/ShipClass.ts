@@ -115,7 +115,7 @@ export default class ShipClass {
     return this.id === ShipClassId[key]
   }
 
-  public either = (...keys: Array<keyof typeof ShipClassId>) => {
+  public any = (...keys: Array<keyof typeof ShipClassId>) => {
     return keys.some(this.is)
   }
 
@@ -123,11 +123,11 @@ export default class ShipClass {
    * 特型駆逐艦
    */
   get isSpecialTypeDD() {
-    return this.either("FubukiClass", "AyanamiClass", "AkatsukiClass")
+    return this.any("FubukiClass", "AyanamiClass", "AkatsukiClass")
   }
 
   get isUsNavy() {
-    return this.either(
+    return this.any(
       "JohnCButlerClass",
       "FletcherClass",
       "IowaClass",
@@ -139,6 +139,6 @@ export default class ShipClass {
   }
 
   get isRoyalNavy() {
-    return this.either("QueenElizabethClass", "NelsonClass", "ArkRoyalClass", "JClass")
+    return this.any("QueenElizabethClass", "NelsonClass", "ArkRoyalClass", "JClass")
   }
 }

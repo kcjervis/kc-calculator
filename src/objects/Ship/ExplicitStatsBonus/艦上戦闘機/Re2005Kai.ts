@@ -9,7 +9,7 @@ const createBonus: StatsBonusCreator = ship => {
   const bonus = new StatsBonus()
 
   // 単体ボーナス
-  if (ship.shipClass.either("AquilaClass", "GrafZeppelinClass")) {
+  if (ship.shipClass.any("AquilaClass", "GrafZeppelinClass")) {
     bonus.add({ multiplier, antiAir: 1, evasion: 2 })
   }
 

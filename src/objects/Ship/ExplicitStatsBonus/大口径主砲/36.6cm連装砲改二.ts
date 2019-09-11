@@ -22,7 +22,7 @@ const createBonus: StatsBonusCreator = ship => {
     }
   }
 
-  if (shipClass.either("FusouClass", "IseClass")) {
+  if (shipClass.any("FusouClass", "IseClass")) {
     bonus.add({ multiplier, firepower: 1 })
   }
 

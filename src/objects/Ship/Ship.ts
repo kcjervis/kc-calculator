@@ -224,7 +224,7 @@ export default class Ship implements IShip {
   private calcCruiserFitBonus = () => {
     const { shipType, shipClass, countGear } = this
     let fitBonus = 0
-    const isCruiser = shipType.either("LightCruiser", "TorpedoCruiser", "TrainingCruiser")
+    const isCruiser = shipType.any("LightCruiser", "TorpedoCruiser", "TrainingCruiser")
     const isZaraClass = shipClass.is("ZaraClass")
 
     if (isCruiser) {

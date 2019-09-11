@@ -33,7 +33,7 @@ export default class Improvement implements IImprovement {
     if (!category.isReconnaissanceAircraft) {
       return 0
     }
-    if (category.either("CarrierBasedReconnaissanceAircraft", "CarrierBasedReconnaissanceAircraft2")) {
+    if (category.any("CarrierBasedReconnaissanceAircraft", "CarrierBasedReconnaissanceAircraft2")) {
       if (los === 7) {
         // 二式艦偵 [0.25, 3) または√☆
         return 0.25 * value
@@ -116,7 +116,7 @@ export default class Improvement implements IImprovement {
       hasAttr("Radar") ||
       hasAttr("Armor") ||
       category.isAircraft ||
-      category.either("Torpedo", "MidgetSubmarine", "EngineImprovement", "CombatRation")
+      category.any("Torpedo", "MidgetSubmarine", "EngineImprovement", "CombatRation")
     ) {
       return 0
     }
@@ -132,7 +132,7 @@ export default class Improvement implements IImprovement {
 
     if (firepower > 12) {
       multiplier = 1.5
-    } else if (category.either("Sonar", "LargeSonar", "DepthCharge")) {
+    } else if (category.any("Sonar", "LargeSonar", "DepthCharge")) {
       multiplier = 0.75
     }
 
@@ -146,7 +146,7 @@ export default class Improvement implements IImprovement {
       return 0
     }
 
-    const isLargeRadar = category.either("LargeRadar", "LargeRadar2")
+    const isLargeRadar = category.any("LargeRadar", "LargeRadar2")
 
     if (isLargeRadar || hasAttr("SurfaceRadar")) {
       return 1.7 * Math.sqrt(this.value)
@@ -154,7 +154,7 @@ export default class Improvement implements IImprovement {
       hasAttr("Radar") ||
       hasAttr("MainGun") ||
       hasAttr("Armor") ||
-      category.either(
+      category.any(
         "SecondaryGun",
         "Sonar",
         "LargeSonar",
@@ -174,10 +174,10 @@ export default class Improvement implements IImprovement {
     const { category } = this.master
     if (category.is("SmallRadar")) {
       multiplier = 1.25
-    } else if (category.either("LargeRadar", "LargeRadar2")) {
+    } else if (category.any("LargeRadar", "LargeRadar2")) {
       multiplier = 1.4
     } else if (
-      category.either(
+      category.any(
         "CarrierBasedReconnaissanceAircraft",
         "CarrierBasedReconnaissanceAircraft2",
         "ReconnaissanceSeaplane"

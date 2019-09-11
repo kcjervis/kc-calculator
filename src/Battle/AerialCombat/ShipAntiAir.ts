@@ -36,7 +36,7 @@ export const calcShipAdjustedAntiAir = (ship: IShip, side: Side) => {
 }
 
 const isPropellantBarrageShipType = (type: ShipType) =>
-  type.isAircraftCarrierClass || type.either("AviationCruiser", "AviationBattleship", "SeaplaneTender")
+  type.isAircraftCarrierClass || type.any("AviationCruiser", "AviationBattleship", "SeaplaneTender")
 
 export default class ShipAntiAir {
   constructor(

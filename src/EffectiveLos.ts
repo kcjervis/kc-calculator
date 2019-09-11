@@ -8,7 +8,7 @@ const gearEffectiveLos = (gear: IGear) => {
   let multiplier = 0.6
   if (category.is("CarrierBasedTorpedoBomber")) {
     multiplier = 0.8
-  } else if (category.either("CarrierBasedReconnaissanceAircraft", "CarrierBasedReconnaissanceAircraft2")) {
+  } else if (category.any("CarrierBasedReconnaissanceAircraft", "CarrierBasedReconnaissanceAircraft2")) {
     multiplier = 1
   } else if (category.is("ReconnaissanceSeaplane")) {
     multiplier = 1.2

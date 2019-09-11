@@ -30,7 +30,7 @@ export default class Shelling {
     return (
       defenderType.isBattleshipClass ||
       defenderType.isHeavyCruiserClass ||
-      defenderType.either("AircraftCarrier", "ArmoredAircraftCarrier")
+      defenderType.any("AircraftCarrier", "ArmoredAircraftCarrier")
     )
   }
 
