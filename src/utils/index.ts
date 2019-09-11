@@ -1,5 +1,4 @@
 import { IShip } from "../objects"
-import DefensePower from "../Battle/DefensePower"
 
 export const isNonNullable = <T>(item: T): item is NonNullable<T> => item !== undefined && item !== null
 export const nonNullable = isNonNullable
@@ -31,8 +30,7 @@ export const shipNameIsKai2 = (name: string) => /(改二|Верный)(?!丙)/.t
 
 export const calcDeadlyPower = (ship: IShip) => {
   const { nowHp } = ship.health
-  const { armor } = ship.stats
-  const defensePower = new DefensePower(armor, ship.totalEquipmentStats(gear => gear.improvement.defensePowerModifier))
+  const defensePower = ship.getDefensePower()
   return nowHp + defensePower.max
 }
 
