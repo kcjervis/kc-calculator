@@ -1,22 +1,18 @@
 import { api_mst_equip_exslot, GearId } from "@jervis/data"
-import { ListIterator } from "lodash"
-import { sumBy } from "lodash-es"
+import { sumBy, range, random } from "lodash-es"
 
 import { IHealth } from "./Health"
 import { IMorale } from "./Morale"
 import { IShipNakedStats } from "./ShipNakedStats"
 import { IShipStats } from "./ShipStats"
-import { IDefensePower } from "./DefensePower"
 
-import { MasterShip, ShipClass, ShipType, GearCategory, GearCategoryKey, GearAttribute } from "../../data"
+import { MasterShip, ShipClass, ShipType, GearAttribute } from "../../data"
 import { isNonNullable, shipNameIsKai2 } from "../../utils"
 import { IGear } from "../Gear"
 import { IPlane } from "../Plane"
-import { InstallationType, ShipShellingStats, ShellingType } from "../../types"
+import { DefensePower, InstallationType, ShipShellingStats, ShellingType } from "../../types"
 
 type GearIteratee<R> = GearId | GearAttribute | ((gear: IGear) => R)
-
-type GearCategoryIteratee = ListIterator<GearCategory, boolean> | GearCategoryKey
 
 export interface IShip {
   masterId: number
@@ -48,6 +44,8 @@ export interface IShip {
   countGear: (iteratee?: GearIteratee<boolean>) => number
 
   totalEquipmentStats: (iteratee: ((gear: IGear) => number) | keyof IGear) => number
+
+  getDefensePower: () => DefensePower
 
   canNightAttack: boolean
 
@@ -190,6 +188,23 @@ export default class Ship implements IShip {
 
   public totalEquipmentStats = (iteratee: ((gear: IGear) => number) | keyof IGear) => {
     return sumBy(this.nonNullableGears, iteratee)
+  }
+
+  public getDefensePower = () => {
+    const { armor } = this.stats
+    const mod = this.totalEquipmentStats(gear => gear.improvement.defensePowerModifier)
+
+    const base = armor + mod
+    const min = Math.max(base, 1) * 0.7
+    const max = min + Math.floor(base - 1) * 0.6
+
+    return {
+      min,
+      max,
+
+      values: () => range(Math.floor(base)).map(value => min + value * 0.6),
+      random: () => min + random(Math.floor(base - 1)) * 0.6
+    }
   }
 
   get canNightAttack() {

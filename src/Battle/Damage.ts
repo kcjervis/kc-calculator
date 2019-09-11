@@ -1,6 +1,5 @@
-import DefensePower from "./DefensePower"
 import { range } from "lodash-es"
-
+import { DefensePower } from "../types"
 export default class Damage {
   public static calc = (attackPower = 0, baseArmor: DefensePower, remainingAmmoModifier = 1) => {
     return new Damage(attackPower, baseArmor, remainingAmmoModifier).random()
@@ -33,7 +32,7 @@ export default class Damage {
 
   public get values() {
     const { defensePower, calcValue } = this
-    return defensePower.values.map(calcValue)
+    return defensePower.values().map(calcValue)
   }
 
   public get isDeadly() {

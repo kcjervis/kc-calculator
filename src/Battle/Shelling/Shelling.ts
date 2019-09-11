@@ -4,7 +4,6 @@ import { ShipInformation, ShellingType, InstallationType, BattleState } from "..
 import ShipShellingStatus, { getProficiencyModifier } from "./ShipShellingStatus"
 import getCombinedFleetFactor from "./getCombinedFleetFactor"
 import Damage from "../Damage"
-import DefensePower from "../DefensePower"
 import { calcEvasionValue } from "../Evasion"
 import { calcHitRate } from "../Hit"
 import { Side, Formation } from "../../constants"
@@ -137,16 +136,12 @@ export default class Shelling {
   }
 
   get defensePower() {
-    const { stats, totalEquipmentStats } = this.defender.ship
-    return new DefensePower(stats.armor, totalEquipmentStats(gear => gear.improvement.defensePowerModifier))
+    return this.defender.ship.getDefensePower()
   }
 
   get damage() {
     const { power, defender, remainingAmmoModifier } = this
-    const defensePower = new DefensePower(
-      defender.ship.stats.armor,
-      defender.ship.totalEquipmentStats(gear => gear.improvement.defensePowerModifier)
-    )
+    const defensePower = defender.ship.getDefensePower()
     return new Damage(power.value, defensePower, defender.ship.health.nowHp, remainingAmmoModifier)
   }
 

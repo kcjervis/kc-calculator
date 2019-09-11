@@ -6,7 +6,6 @@ import { ShipInformation, InstallationType } from "../../types"
 
 import ShipNightAttackStatus from "./ShipNightAttackStatus"
 import Damage from "../Damage"
-import DefensePower from "../DefensePower"
 import NightAttackAccuracy from "./NightAttackAccuracy"
 import { calcHitRate } from "../Hit"
 import { calcEvasionValue } from "../Evasion"
@@ -108,12 +107,7 @@ export default class NightAttack {
   }
 
   get defensePower() {
-    const { stats, totalEquipmentStats } = this.defender.ship
-    const defensePower = new DefensePower(
-      stats.armor,
-      totalEquipmentStats(gear => gear.improvement.defensePowerModifier)
-    )
-    return defensePower
+    return this.defender.ship.getDefensePower()
   }
 
   get damage() {

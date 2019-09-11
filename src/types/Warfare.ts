@@ -1,5 +1,12 @@
 export type Factors<T extends string> = { [K in T]: number }
 
+export type DefensePower = {
+  min: number
+  max: number
+  values: () => number[]
+  random: () => number
+}
+
 export type WarfareModifiers = {
   power: number
   accuracy: number
