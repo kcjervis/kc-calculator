@@ -1,9 +1,24 @@
 {
-  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": [
+      "esnext"
+    ],
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "declaration": true,
+    "outDir": "./dist",
+    "experimentalDecorators": true,
+    "typeRoots": ["node_modules/@types", "src/types"]
+  },
   "include": [
-    "src/**/*",
-    "data/**/*",
-    "tests/**/*",
-    "scripts/**/*"
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }

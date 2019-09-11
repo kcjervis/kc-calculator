@@ -13,13 +13,11 @@
   "scripts": {
     "test": "jest --coverage",
     "build": "tsc -p tsconfig.build.json",
-    "script": "yarn run ts-node --files scripts",
-    "upload": "yarn build && yarn publish",
-    "update-ships": "yarn run ts-node --files scripts",
-    "db": "yarn run ts-node --files scripts/db"
+    "upload": "yarn build && yarn publish"
   },
   "jest": {
     "preset": "ts-jest",
+    "coveragePathIgnorePatterns": ["/node_modules/", "/testUtils/"],
     "moduleNameMapper": {
       "^lodash-es$": "<rootDir>/node_modules/lodash/index.js"
     }
