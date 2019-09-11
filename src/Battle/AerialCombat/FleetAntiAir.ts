@@ -13,7 +13,7 @@ export const gearFleetAntiAir = (gear: IGear) => {
     multiplier = 0.35
   } else if (category.is("AntiAircraftShell")) {
     multiplier = 0.6
-  } else if (category.isRadar) {
+  } else if (gear.hasAttr("Radar")) {
     multiplier = 0.4
   } else if (name === "46cm三連装砲") {
     multiplier = 0.25

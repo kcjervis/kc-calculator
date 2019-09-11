@@ -1,9 +1,6 @@
 import { MasterGear } from "../../data"
 
-export interface IImprovement {
-  /** 改修値 */
-  value: number
-
+export type ImprovementModifiers = {
   contactSelectionModifier: number
 
   fighterPowerModifier: number
@@ -17,11 +14,13 @@ export interface IImprovement {
   defensePowerModifier: number
 }
 
+export interface IImprovement extends ImprovementModifiers {
+  /** 改修値 */
+  value: number
+}
+
 export default class Improvement implements IImprovement {
-  public value: number
-  constructor(value: number | undefined, private readonly master: MasterGear) {
-    this.value = value ? value : 0
-  }
+  constructor(public value = 0, private readonly master: MasterGear) {}
 
   /**
    * https://t.co/Ou8KzFANPK
@@ -97,14 +96,14 @@ export default class Improvement implements IImprovement {
     let multiplier = 0
     if (category.is("AntiAircraftFireDirector") || hasAttr("HighAngleMount")) {
       multiplier = antiAir <= 7 ? 2 : 3
-    } else if (category.isRadar && antiAir >= 2) {
+    } else if (hasAttr("Radar") && antiAir >= 2) {
       multiplier = 1.5
     }
     return multiplier * Math.sqrt(this.value)
   }
 
   get shellingPowerModifier() {
-    const { firepower, category, id: masterId } = this.master
+    const { firepower, category, id: masterId, hasAttr } = this.master
 
     const isDepthCharge = [226, 227].includes(masterId)
 
@@ -114,8 +113,8 @@ export default class Improvement implements IImprovement {
 
     if (
       isDepthCharge ||
-      category.isRadar ||
-      category.isArmor ||
+      hasAttr("Radar") ||
+      hasAttr("Armor") ||
       category.isAircraft ||
       category.either("Torpedo", "MidgetSubmarine", "EngineImprovement", "CombatRation")
     ) {
@@ -152,9 +151,9 @@ export default class Improvement implements IImprovement {
     if (isLargeRadar || hasAttr("SurfaceRadar")) {
       return 1.7 * Math.sqrt(this.value)
     } else if (
-      category.isRadar ||
-      category.isMainGun ||
-      category.isArmor ||
+      hasAttr("Radar") ||
+      hasAttr("MainGun") ||
+      hasAttr("Armor") ||
       category.either(
         "SecondaryGun",
         "Sonar",

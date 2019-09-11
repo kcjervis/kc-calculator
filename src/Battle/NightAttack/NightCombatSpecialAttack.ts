@@ -146,7 +146,7 @@ export default class NightCombatSpecialAttack {
       }
     }
 
-    const mainGunCount = countGear(gear => gear.category.isMainGun)
+    const mainGunCount = countGear(gear => gear.hasAttr("MainGun"))
     const secondaryGunCount = countGear(gear => gear.category.is("SecondaryGun"))
 
     // 潜水カットイン

@@ -211,11 +211,6 @@ export default class GearCategory {
     return keys.some(this.is)
   }
 
-  /** 電探 */
-  get isRadar() {
-    return this.either("SmallRadar", "LargeRadar", "LargeRadar2")
-  }
-
   /** 艦載機 */
   get isCarrierBasedAircraft() {
     return this.either(
@@ -301,15 +296,7 @@ export default class GearCategory {
     )
   }
 
-  get isArmor() {
-    return this.either("ExtraArmor", "MediumExtraArmor", "LargeExtraArmor")
-  }
-
   get isObservationPlane() {
     return this.either("SeaplaneBomber", "ReconnaissanceSeaplane")
-  }
-
-  get isMainGun() {
-    return this.either("SmallCaliberMainGun", "MediumCaliberMainGun", "LargeCaliberMainGun", "LargeCaliberMainGun2")
   }
 }

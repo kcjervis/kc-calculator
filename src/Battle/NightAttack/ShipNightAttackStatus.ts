@@ -50,7 +50,7 @@ export default class ShipNightAttackStatus {
       }
 
       if (
-        category.isMainGun ||
+        gear.hasAttr("MainGun") ||
         category.either(
           "SecondaryGun",
           "ArmorPiercingShell",
@@ -79,7 +79,7 @@ export default class ShipNightAttackStatus {
       }
 
       if (
-        category.isArmor ||
+        gear.hasAttr("Armor") ||
         category.either("AntiAircraftGun", "Sonar", "LargeSonar", "DepthCharge", "EngineImprovement")
       ) {
         return 0

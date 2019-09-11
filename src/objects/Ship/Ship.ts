@@ -160,7 +160,7 @@ export default class Ship implements IShip {
     }
 
     if (this.shipClass.is("IseClass") && shipNameIsKai2(this.name)) {
-      return !(slotIndex > 1 && category.isMainGun)
+      return !(slotIndex > 1 && gear.hasAttr("MainGun"))
     }
 
     return true
@@ -341,14 +341,14 @@ export default class Ship implements IShip {
     const { hasGear } = this
 
     const hasArmorPiercingShell = hasGear(gear => gear.category.is("ArmorPiercingShell"))
-    const hasMainGun = hasGear(gear => gear.category.isMainGun)
+    const hasMainGun = hasGear(gear => gear.hasAttr("MainGun"))
 
     if (!hasArmorPiercingShell || !hasMainGun) {
       return modifier
     }
 
     const hasSecondaryGun = hasGear(gear => gear.category.is("SecondaryGun"))
-    const hasRader = hasGear(gear => gear.category.isRadar)
+    const hasRader = hasGear(gear => gear.hasAttr("Radar"))
 
     if (hasSecondaryGun && hasRader) {
       return { power: 1.15, accuracy: 1.3 }
