@@ -14,7 +14,8 @@ export interface IPlane {
   contactTriggerFactor: number
   contactSelectionRate: (state: AirControlState) => number
 
-  canParticipateInAirstrike: boolean
+  participatesInAirstrike: boolean
+  participatesInCarrierShelling: boolean
 
   fleetLosModifier: number
 
@@ -69,12 +70,25 @@ export default class Plane implements IPlane {
     return Math.ceil(los + improvement.contactSelectionModifier) / (20 - 2 * state.contactMultiplier)
   }
 
-  get canParticipateInAirstrike() {
+  get participatesInAirstrike() {
     const { category, slotSize } = this
     if (slotSize === 0) {
       return false
     }
     return category.isDiveBomber || category.isTorpedoBomber
+  }
+
+  get participatesInCarrierShelling() {
+    const { category, slotSize } = this
+    if (slotSize === 0) {
+      return false
+    }
+    return category.any(
+      "CarrierBasedDiveBomber",
+      "CarrierBasedTorpedoBomber",
+      "JetPoweredFighterBomber",
+      "JetPoweredTorpedoBomber"
+    )
   }
 
   get fleetLosModifier() {

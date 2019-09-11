@@ -43,10 +43,10 @@ export default class CarrierBasedAerialCombat extends AerialCombat {
     // stage2
     const { player, enemy } = combatInformation
     const playerAirstrikePlanes = playerFighterCombatPlanes.filter(
-      plane => plane.slotSize > 0 && plane.canParticipateInAirstrike
+      plane => plane.slotSize > 0 && plane.participatesInAirstrike
     )
     const enemyAirstrikePlanes = enemyFighterCombatPlanes.filter(
-      plane => plane.slotSize > 0 && plane.canParticipateInAirstrike
+      plane => plane.slotSize > 0 && plane.participatesInAirstrike
     )
 
     this.antiAirDefense(playerAntiAirDefenseShips, enemyAirstrikePlanes, AntiAirCutin.try(player.allShips))

@@ -26,7 +26,7 @@ export default class LandBaseAerialSupport extends AerialCombat {
     enemyPlanes.forEach(plane => this.shotdownInFighterCombat(plane, airControlState.constant, Side.Enemy))
 
     // stage2
-    const playerAirstrikePlanes = playerPlanes.filter(plane => plane.slotSize > 0 && plane.canParticipateInAirstrike)
+    const playerAirstrikePlanes = playerPlanes.filter(plane => plane.slotSize > 0 && plane.participatesInAirstrike)
     this.antiAirDefense(enemy.allShips, playerAirstrikePlanes)
 
     return {

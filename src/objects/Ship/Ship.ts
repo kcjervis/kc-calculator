@@ -296,7 +296,7 @@ export default class Ship implements IShip {
   private getSpecialProficiencyModifiers = () => {
     const modifiers = { power: 1, hitRate: 0, criticalRate: 0 }
     const shellingPlanes = this.getRemainingPlanes().filter(
-      plane => plane.category.isCarrierShellingAircraft && plane.gear.proficiency.internal === 120
+      plane => plane.participatesInCarrierShelling && plane.gear.proficiency.internal === 120
     )
     if (shellingPlanes.some(plane => plane.index === 0)) {
       modifiers.power = 1.25
@@ -330,14 +330,14 @@ export default class Ship implements IShip {
   private getApShellModifiers = () => {
     const modifier = { power: 1, accuracy: 1 }
 
-    const hasArmorPiercingShell = this.hasGearCategory("ArmorPiercingShell")
+    const hasArmorPiercingShell = this.hasGear("ArmorPiercingShell")
     const hasMainGun = this.hasGear("MainGun")
 
     if (!hasArmorPiercingShell || !hasMainGun) {
       return modifier
     }
 
-    const hasSecondaryGun = this.hasGearCategory("SecondaryGun")
+    const hasSecondaryGun = this.hasGear("SecondaryGun")
     const hasRader = this.hasGear("Radar")
 
     if (hasSecondaryGun && hasRader) {

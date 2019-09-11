@@ -245,16 +245,6 @@ export default class GearCategory {
     )
   }
 
-  /** 空母砲撃する航空機 */
-  get isCarrierShellingAircraft() {
-    return this.any(
-      "CarrierBasedDiveBomber",
-      "CarrierBasedTorpedoBomber",
-      "JetPoweredFighterBomber",
-      "JetPoweredTorpedoBomber"
-    )
-  }
-
   /** 航空戦に参加する航空機 */
   get isAerialCombatAircraft() {
     return this.isFighter || this.isDiveBomber || this.isTorpedoBomber || this.isReconnaissanceAircraft

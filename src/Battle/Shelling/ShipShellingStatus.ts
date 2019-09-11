@@ -60,7 +60,7 @@ export const calcCruiserFitBonus = (ship: IShip) => {
 export const getProficiencyModifier = (ship: IShip, specialAttack?: DayCombatSpecialAttack) => {
   const modifier = { power: 1, hitRate: 0, criticalRate: 0 }
   if (specialAttack && specialAttack.isCarrierSpecialAttack) {
-    const planes = ship.planes.filter(plane => plane.slotSize > 0 && plane.category.isCarrierShellingAircraft)
+    const planes = ship.planes.filter(plane => plane.participatesInCarrierShelling)
     if (planes.some(plane => plane.index === 0)) {
       modifier.power = 1.25
     } else {

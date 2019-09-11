@@ -221,7 +221,7 @@ export default class Shelling {
         return false
       }
 
-      return ship.planes.some(plane => plane.slotSize > 0 && plane.category.isCarrierShellingAircraft)
+      return ship.planes.some(plane => plane.participatesInCarrierShelling)
     }
 
     if (ship.shipType.isSubmarineClass && defenderIsInstallation) {
