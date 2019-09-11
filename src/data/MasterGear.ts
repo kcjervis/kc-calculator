@@ -1,33 +1,9 @@
 import { MstEquipment, GearId } from "@jervis/data"
 import { PickByValue } from "utility-types"
+import { GearStats } from "../types"
 import GearCategory from "./GearCategory"
 import GearAttribute from "./GearAttribute"
 
-export type GearStats = {
-  gearId: number
-  categoryId: number
-  iconId: number
-  name: string
-
-  hp: number
-  firepower: number
-  armor: number
-  torpedo: number
-  antiAir: number
-  speed: number
-  bombing: number
-  asw: number
-  los: number
-  luck: number
-  range: number
-  accuracy: number
-  evasion: number
-  antiBomber: number
-  interception: number
-  radius: number
-
-  improvable: boolean
-}
 export type GearStatKey = keyof PickByValue<GearStats, number>
 
 export const gearStatKeys: GearStatKey[] = [

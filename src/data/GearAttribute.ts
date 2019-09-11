@@ -1,5 +1,5 @@
-import GearCategory, { GearCategoryKey, GearCategoryId } from "./GearCategory"
-import { GearStats } from "./MasterGear"
+import GearCategory, { GearCategoryKey } from "./GearCategory"
+import { GearStats } from "../types"
 import { GearId } from "@jervis/data"
 
 export type GearMatcher = (stats: GearStats) => boolean

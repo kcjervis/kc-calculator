@@ -1,5 +1,5 @@
 export { default as MasterData } from "./MasterData"
-export { default as MasterGear, GearStats, gearStatKeys, GearStatKey } from "./MasterGear"
+export { default as MasterGear, gearStatKeys, GearStatKey } from "./MasterGear"
 export { default as GearCategory, GearCategoryKey } from "./GearCategory"
 export { default as GearAttribute } from "./GearAttribute"
 export { default as MasterShip } from "./MasterShip"

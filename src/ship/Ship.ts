@@ -1,4 +1,4 @@
-import { GearState } from "../objects/Gear/Gear"
+import { GearState } from "../types"
 import { ShipStatObject, ShipStatTag } from "./ShipStat"
 
 type EquipmentState = {

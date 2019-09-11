@@ -14,7 +14,7 @@ import GearAttribute, {
   isCarrierBasedAircraft,
   isJetPoweredAircraft
 } from "../../data/GearAttribute"
-import { GearStats } from "../../data/MasterGear"
+import { GearStats } from "../../types"
 import { GearCategoryId, GearCategoryKey } from "../../data/GearCategory"
 import { StubbedGearStats, TypeEq, assertType } from "../testUtils"
 import { GearId } from "@jervis/data"

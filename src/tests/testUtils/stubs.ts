@@ -1,5 +1,5 @@
 import { merge } from "../../utils"
-import { GearStats } from "../../data/MasterGear"
+import { GearStats } from "../../types"
 
 export class StubbedGearStats implements GearStats {
   gearId = 0

@@ -45,10 +45,9 @@ export interface IShip {
 
   totalEquipmentStats: (iteratee: ((gear: IGear) => number) | keyof IGear) => number
 
-  getDefensePower: () => DefensePower
-
   canNightAttack: boolean
 
+  getDefensePower: () => DefensePower
   getShellingStats: () => ShipShellingStats
 
   /** 廃止予定 */
@@ -190,7 +189,7 @@ export default class Ship implements IShip {
     return sumBy(this.nonNullableGears, iteratee)
   }
 
-  public getDefensePower = () => {
+  public getDefensePower = (): DefensePower => {
     const { armor } = this.stats
     const mod = this.totalEquipmentStats(gear => gear.improvement.defensePowerModifier)
 

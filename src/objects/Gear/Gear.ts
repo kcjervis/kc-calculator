@@ -1,19 +1,9 @@
-import { GearCategory, GearStats, GearAttribute } from "../../data"
+import { GearCategory, GearAttribute } from "../../data"
 import { IImprovement } from "./Improvement"
 import { IProficiency } from "./Proficiency"
 import { calcFighterPower } from "../../formulas"
 import { setProperties } from "../../utils"
-
-export type GearState = {
-  /** 装備ID */
-  masterId: number
-
-  /** 改修度 */
-  improvement: number
-
-  /** 内部熟練度 */
-  proficiency: number
-}
+import { GearStats, GearState } from "../../types"
 
 export interface IGear extends GearStats {
   /** 装備ID */
