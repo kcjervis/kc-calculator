@@ -4,7 +4,7 @@ import { sumBy } from "lodash-es"
 import DayCombatSpecialAttack from "./DayCombatSpecialAttack"
 import { ShipRole, ShellingType, ShellingPowerFactors, ShellingAccuracyFactors, InstallationType } from "../../types"
 import ShellingPower from "./ShellingPower"
-import ShipAntiInstallationStatus from "../../objects/Ship/ShipAntiInstallationStatus"
+import ShipAntiInstallationStatus from "../../objects/ship/ShipAntiInstallationStatus"
 import ShellingAccuracy from "./ShellingAccuracy"
 
 type ShipShellingPowerOptions = Partial<{

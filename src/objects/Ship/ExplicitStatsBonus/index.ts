@@ -1,4 +1,4 @@
-import { IShip } from "../Ship"
+import { IShip } from "../ship"
 import StatsBonus, { StatsBonusCreator } from "./StatsBonus"
 
 import createBonus104 from "./35.6cm連装砲(ダズル迷彩)"

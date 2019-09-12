@@ -1,4 +1,4 @@
-import { IShip } from "./Ship"
+import { IShip } from "./ship"
 import { sumBy } from "lodash-es"
 import { isNonNullable } from "../../utils"
 import { InstallationType } from "../../types"

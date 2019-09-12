@@ -1,4 +1,4 @@
-import { IShip } from "../Ship"
+import { IShip } from "../ship"
 import { IBaseStats, shipStatKeys } from "../ShipNakedStats"
 
 type BonusPojo = Partial<IBaseStats> & { multiplier?: number }

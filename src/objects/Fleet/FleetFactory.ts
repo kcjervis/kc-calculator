@@ -1,4 +1,4 @@
-import { IShipDataObject, ShipFactory } from "../Ship"
+import { IShipDataObject, ShipFactory } from "../ship"
 
 import Fleet from "./Fleet"
 

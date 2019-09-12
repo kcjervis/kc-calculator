@@ -3,7 +3,7 @@ import { GearFactory } from "./gear"
 import { FleetFactory } from "./fleet"
 import { LandBasedAirCorpsFactory } from "./landBasedAirCorps"
 import { OperationFactory } from "./operation"
-import { ShipFactory } from "./Ship"
+import { ShipFactory } from "./ship"
 
 export default class ObjectFactory {
   private readonly gearFactory: GearFactory

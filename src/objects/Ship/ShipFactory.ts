@@ -5,7 +5,7 @@ import { createPlanes } from "../plane"
 import { createExplicitStatsBonus } from "./ExplicitStatsBonus"
 import Health from "./Health"
 import Morale from "./Morale"
-import Ship, { IShip } from "./Ship"
+import Ship, { IShip } from "./ship"
 import ShipNakedStats, { IBaseStats } from "./ShipNakedStats"
 import ShipStats from "./ShipStats"
 
