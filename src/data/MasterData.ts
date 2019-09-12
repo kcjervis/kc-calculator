@@ -36,14 +36,14 @@ export default class MasterData {
   /**
    * 装備マスターデータを探す
    */
-  public findMasterGear(masterId: number) {
-    return this.gears.find(gear => gear.id === masterId)
+  public findMasterGear(gearId: number) {
+    return this.gears.find(gear => gear.id === gearId)
   }
 
   /**
    * 艦娘マスターデータを探す
    */
-  public findMasterShip(masterId: number) {
-    return this.ships.find(ship => ship.id === masterId)
+  public findMasterShip(shipId: number) {
+    return this.ships.find(ship => ship.shipId === shipId)
   }
 }
