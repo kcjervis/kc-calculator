@@ -1,4 +1,3 @@
-import { GearCategory } from "../../data"
 import { maxBy } from "lodash-es"
 
 type LevelBonus = { level: number; value: number }
@@ -15,6 +14,8 @@ export interface IProficiency {
   fighterPowerBonus: number
   criticalPowerModifier: number
 }
+
+export type ProficiencyType = "Fighter" | "SeaplaneBomber" | "Other"
 
 /** 熟練度 */
 export default class Proficiency implements IProficiency {
@@ -47,18 +48,7 @@ export default class Proficiency implements IProficiency {
     return Proficiency.internalBounds.filter(bound => bound <= internal).length - 1
   }
 
-  constructor(public internal = 0, private readonly category: GearCategory) {}
-
-  private get type() {
-    const { category } = this
-    if (category.isFighter) {
-      return "Fighter"
-    }
-    if (category.is("SeaplaneBomber")) {
-      return "SeaplaneBomber"
-    }
-    return "Other"
-  }
+  constructor(public internal = 0, private type: ProficiencyType) {}
 
   get level() {
     return Proficiency.internalToLevel(this.internal)

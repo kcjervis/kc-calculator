@@ -16,11 +16,11 @@ import GearAttribute, {
 } from "../../data/GearAttribute"
 import { GearStats } from "../../types"
 import { GearCategoryId, GearCategoryKey } from "../../data/GearCategory"
-import { StubbedGearStats, TypeEq, assertType } from "../testUtils"
+import { createStubbedGearStats, TypeEq, assertType } from "../testUtils"
 import { GearId } from "@jervis/data"
 
 const matcherTest = (matcher: GearMatcher, stats: Partial<GearStats>) => {
-  const stub = new StubbedGearStats(stats)
+  const stub = createStubbedGearStats(stats)
   return expect(matcher(stub))
 }
 
@@ -129,7 +129,7 @@ describe("GearAttribute", () => {
   })
 
   it("GearAttribute.from", () => {
-    const stats = new StubbedGearStats({ categoryId: GearCategoryId.LargeRadar, antiAir: 2 })
+    const stats = createStubbedGearStats({ categoryId: GearCategoryId.LargeRadar, antiAir: 2 })
     const attrs = GearAttribute.from(stats)
 
     expect(attrs.includes("Radar")).toBe(true)

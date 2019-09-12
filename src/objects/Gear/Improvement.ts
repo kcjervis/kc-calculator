@@ -1,4 +1,6 @@
-import { MasterGear } from "../../data"
+import { GearStats } from "../../types"
+import { GearAttribute } from "../../data"
+import { GearId } from "@jervis/data"
 
 export type ImprovementModifiers = {
   contactSelectionModifier: number
@@ -20,7 +22,7 @@ export interface IImprovement extends ImprovementModifiers {
 }
 
 export default class Improvement implements IImprovement {
-  constructor(public value = 0, private readonly master: MasterGear) {}
+  constructor(public value = 0, private stats: GearStats, private gearIs: (attr: GearAttribute) => boolean) {}
 
   /**
    * https://t.co/Ou8KzFANPK
@@ -28,12 +30,13 @@ export default class Improvement implements IImprovement {
    *
    */
   get contactSelectionModifier() {
-    const { value, master } = this
-    const { los, category } = master
-    if (!category.isReconnaissanceAircraft) {
+    const { value, gearIs } = this
+    if (!gearIs("ReconnaissanceAircraft")) {
       return 0
     }
-    if (category.any("CarrierBasedReconnaissanceAircraft", "CarrierBasedReconnaissanceAircraft2")) {
+    const { los } = this.stats
+
+    if (gearIs("CarrierBasedReconnaissanceAircraft") || gearIs("CarrierBasedReconnaissanceAircraft2")) {
       if (los === 7) {
         // 二式艦偵 [0.25, 3) または√☆
         return 0.25 * value
@@ -61,108 +64,114 @@ export default class Improvement implements IImprovement {
   }
 
   get fighterPowerModifier() {
-    const { value, master } = this
-    const { category } = master
-    if (category.isFighter) {
+    const { value, gearIs } = this
+    if (gearIs("Fighter")) {
       return 0.2 * value
-    } else if (category.is("CarrierBasedDiveBomber")) {
+    } else if (gearIs("CarrierBasedDiveBomber")) {
       return 0.25 * value
     }
     return 0
   }
 
   get adjustedAntiAirModifier() {
-    const { master } = this
-    const { antiAir, category } = this.master
+    const { gearIs } = this
+    const { antiAir } = this.stats
     if (antiAir === 0) {
       return 0
     }
 
     let multiplier = 0
-    if (category.is("AntiAircraftGun")) {
+    if (gearIs("AntiAircraftGun")) {
       // https://twitter.com/CitrusJ9N/status/1056224720712921088
       multiplier = antiAir <= 7 ? 4 : 6
-    } else if (category.is("AntiAircraftFireDirector") || master.is("HighAngleMount")) {
+    } else if (gearIs("AntiAircraftFireDirector") || gearIs("HighAngleMount")) {
       multiplier = antiAir <= 7 ? 2 : 3
     }
     return multiplier * Math.sqrt(this.value)
   }
 
   get fleetAntiAirModifier() {
-    const { antiAir, category } = this.master
+    const { gearIs } = this
+    const { antiAir } = this.stats
+
     if (antiAir === 0) {
       return 0
     }
     // 装備定数B
     let multiplier = 0
-    if (category.is("AntiAircraftFireDirector") || this.master.is("HighAngleMount")) {
+    if (gearIs("AntiAircraftFireDirector") || gearIs("HighAngleMount")) {
       multiplier = antiAir <= 7 ? 2 : 3
-    } else if (this.master.is("Radar") && antiAir >= 2) {
+    } else if (gearIs("AirRadar")) {
       multiplier = 1.5
     }
     return multiplier * Math.sqrt(this.value)
   }
 
   get shellingPowerModifier() {
-    const { firepower, category, id: masterId, is } = this.master
+    const { firepower, gearId } = this.stats
+    const { gearIs } = this
 
-    const isDepthCharge = [226, 227].includes(masterId)
+    if (firepower > 12) {
+      return 1.5 * Math.sqrt(this.value)
+    }
 
-    if (category.is("CarrierBasedTorpedoBomber")) {
+    if (gearIs("CarrierBasedTorpedoBomber")) {
       return 0.2 * this.value
     }
 
     if (
-      isDepthCharge ||
-      this.master.is("Radar") ||
-      this.master.is("Armor") ||
-      category.isAircraft ||
-      category.any("Torpedo", "MidgetSubmarine", "EngineImprovement", "CombatRation")
+      [
+        GearId["12.7cm連装高角砲"],
+        GearId["8cm高角砲"],
+        GearId["8cm高角砲改+増設機銃"],
+        GearId["10cm連装高角砲改+増設機銃"]
+      ].includes(gearId)
     ) {
-      return 0
-    }
-
-    if ([10, 66, 220, 275].includes(masterId)) {
       return 0.2 * this.value
     }
-    if ([12, 234, 247].includes(masterId)) {
+
+    if ([GearId["15.5cm三連装副砲"], GearId["15.5cm三連装副砲改"], GearId["15.2cm三連装砲"]].includes(gearId)) {
       return 0.3 * this.value
     }
 
-    let multiplier = 1
-
-    if (firepower > 12) {
-      multiplier = 1.5
-    } else if (category.any("Sonar", "LargeSonar", "DepthCharge")) {
-      multiplier = 0.75
+    if (
+      gearIs("MainGun") ||
+      gearIs("SecondaryGun") ||
+      gearIs("ArmorPiercingShell") ||
+      gearIs("AntiAircraftFireDirector") ||
+      gearIs("Searchlight") ||
+      gearIs("AntiAircraftGun") ||
+      gearIs("LandingCraft") ||
+      gearIs("SpecialAmphibiousTank") ||
+      gearIs("AntiAircraftShell")
+    ) {
+      return Math.sqrt(this.value)
     }
 
-    return multiplier * Math.sqrt(this.value)
+    if (gearIs("Sonar") || gearIs("LargeRadar") || gearIs("DepthCharge")) {
+      return 0.75 * Math.sqrt(this.value)
+    }
+
+    return 0
   }
 
   get shellingAccuracyModifier() {
-    const { category } = this.master
+    const { gearIs } = this
 
-    if (category.is("Torpedo")) {
-      return 0
+    if (gearIs("SurfaceRadar")) {
+      return 1.7 * Math.sqrt(this.value)
     }
 
-    const isLargeRadar = category.any("LargeRadar", "LargeRadar2")
-
-    if (isLargeRadar || this.master.is("SurfaceRadar")) {
-      return 1.7 * Math.sqrt(this.value)
-    } else if (
-      this.master.is("Radar") ||
-      this.master.is("MainGun") ||
-      this.master.is("Armor") ||
-      category.any(
-        "SecondaryGun",
-        "Sonar",
-        "LargeSonar",
-        "DepthCharge",
-        "ArmorPiercingShell",
-        "AntiAircraftFireDirector"
-      )
+    if (
+      gearIs("Radar") ||
+      gearIs("MainGun") ||
+      gearIs("Armor") ||
+      gearIs("SecondaryGun") ||
+      gearIs("Sonar") ||
+      gearIs("LargeSonar") ||
+      gearIs("DepthCharge") ||
+      gearIs("ArmorPiercingShell") ||
+      gearIs("AntiAircraftFireDirector")
     ) {
       return Math.sqrt(this.value)
     }
@@ -171,32 +180,36 @@ export default class Improvement implements IImprovement {
   }
 
   get effectiveLosModifier() {
-    let multiplier = 0
-    const { category } = this.master
-    if (category.is("SmallRadar")) {
-      multiplier = 1.25
-    } else if (category.any("LargeRadar", "LargeRadar2")) {
-      multiplier = 1.4
-    } else if (
-      category.any(
-        "CarrierBasedReconnaissanceAircraft",
-        "CarrierBasedReconnaissanceAircraft2",
-        "ReconnaissanceSeaplane"
-      )
-    ) {
-      multiplier = 1.2
-    } else if (category.is("SeaplaneBomber")) {
-      multiplier = 1.15
+    const { gearIs, value } = this
+    if (gearIs("SmallRadar")) {
+      return 1.25 * Math.sqrt(value)
     }
-    return multiplier * Math.sqrt(this.value)
+
+    if (gearIs("LargeRadar") || gearIs("LargeRadar2")) {
+      return 1.4 * Math.sqrt(value)
+    }
+
+    if (
+      gearIs("CarrierBasedReconnaissanceAircraft") ||
+      gearIs("CarrierBasedReconnaissanceAircraft2") ||
+      gearIs("ReconnaissanceSeaplane")
+    ) {
+      return 1.2 * Math.sqrt(value)
+    }
+
+    if (gearIs("SeaplaneBomber")) {
+      return 1.15 * Math.sqrt(value)
+    }
+
+    return 0
   }
 
   get defensePowerModifier() {
-    const { category } = this.master
-    if (category.is("MediumExtraArmor")) {
+    const { gearIs } = this
+    if (gearIs("MediumExtraArmor")) {
       return 0.2 * this.value
     }
-    if (category.is("LargeExtraArmor")) {
+    if (gearIs("LargeExtraArmor")) {
       return 0.3 * this.value
     }
     return 0

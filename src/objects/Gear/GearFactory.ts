@@ -2,7 +2,7 @@ import { MasterGear } from "../../data"
 
 import Gear, { IGear } from "./Gear"
 import Improvement from "./Improvement"
-import Proficiency from "./Proficiency"
+import Proficiency, { ProficiencyType } from "./Proficiency"
 
 export interface IGearDataObject {
   masterId: number
@@ -22,8 +22,16 @@ export default class GearFactory {
       return undefined
     }
 
-    const improvement = new Improvement(obj.improvement, master)
-    const proficiency = new Proficiency(obj.proficiency, master.category)
+    let proficiencyType: ProficiencyType = "Other"
+    if (master.is("Fighter")) {
+      proficiencyType = "Fighter"
+    }
+    if (master.is("SeaplaneBomber")) {
+      proficiencyType = "SeaplaneBomber"
+    }
+
+    const improvement = new Improvement(obj.improvement, master, master.is)
+    const proficiency = new Proficiency(obj.proficiency, proficiencyType)
     const gear = new Gear(master, master.category, improvement, proficiency, master.is)
 
     return gear

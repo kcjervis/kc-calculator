@@ -79,7 +79,7 @@ export default class Ship implements IShip {
   }
 
   get masterId() {
-    return this.master.id
+    return this.master.shipId
   }
 
   get name() {

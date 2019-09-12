@@ -190,12 +190,12 @@ export default class GearCategory {
     ({ api_id, api_name }) => new GearCategory(api_id, api_name)
   )
 
-  public static find(categoryId: number, masterId: number) {
-    if (masterId === GearId["試製51cm連装砲"] || masterId === GearId["51cm連装砲"]) {
+  public static find(categoryId: number, gearId: number) {
+    if (gearId === GearId["試製51cm連装砲"] || gearId === GearId["51cm連装砲"]) {
       categoryId = GearCategoryId.LargeCaliberMainGun2
-    } else if (masterId === GearId["15m二重測距儀+21号電探改二"]) {
+    } else if (gearId === GearId["15m二重測距儀+21号電探改二"]) {
       categoryId = GearCategoryId.LargeRadar2
-    } else if (masterId === GearId["試製景雲(艦偵型)"]) {
+    } else if (gearId === GearId["試製景雲(艦偵型)"]) {
       categoryId = GearCategoryId.CarrierBasedReconnaissanceAircraft2
     }
 
