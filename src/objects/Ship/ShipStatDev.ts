@@ -1,5 +1,5 @@
-import { calcHpAtLevel, calcStatAtLevel } from "../formulas"
-import { includes } from "../utils"
+import { calcHpAtLevel, calcStatAtLevel } from "../../formulas"
+import { includes } from "../../utils"
 
 const basicStatTags = ["firepower", "armor", "torpedo", "antiAir"] as const
 type BasicStatTag = typeof basicStatTags[number]

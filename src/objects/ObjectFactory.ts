@@ -1,8 +1,8 @@
 import { MasterData } from "../data"
 import { GearFactory } from "./gear"
-import { FleetFactory } from "./Fleet"
-import { LandBasedAirCorpsFactory } from "./LandBasedAirCorps"
-import { OperationFactory } from "./Operation"
+import { FleetFactory } from "./fleet"
+import { LandBasedAirCorpsFactory } from "./landBasedAirCorps"
+import { OperationFactory } from "./operation"
 import { ShipFactory } from "./Ship"
 
 export default class ObjectFactory {

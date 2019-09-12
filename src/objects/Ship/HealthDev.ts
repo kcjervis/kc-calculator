@@ -1,4 +1,4 @@
-import { calcHpAtLevel } from "../formulas"
+import { calcHpAtLevel } from "../../formulas"
 
 enum DamageStatus {
   /** 無傷 */

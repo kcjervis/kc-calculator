@@ -2,7 +2,7 @@ import { flatMap, sumBy } from "lodash-es"
 
 import EffectiveLos from "../../EffectiveLos"
 import { isNonNullable } from "../../utils"
-import { IPlane } from "../Plane"
+import { IPlane } from "../plane"
 import { IShip } from "../Ship"
 
 type ShipIterator<R> = (ship: IShip) => R

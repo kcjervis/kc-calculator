@@ -1,6 +1,6 @@
 import { MasterShip } from "../../data"
 import { GearFactory, IGearDataObject } from "../gear"
-import { createPlanes } from "../Plane"
+import { createPlanes } from "../plane"
 
 import { createExplicitStatsBonus } from "./ExplicitStatsBonus"
 import Health from "./Health"

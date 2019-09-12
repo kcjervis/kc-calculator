@@ -10,7 +10,7 @@ import { MasterShip, ShipClass, ShipType, GearAttribute } from "../../data"
 import { isNonNullable, shipNameIsKai2 } from "../../utils"
 import { getApShellModifiers, calcCruiserFitBonus } from "../../formulas"
 import { IGear } from "../gear"
-import { IPlane } from "../Plane"
+import { IPlane } from "../plane"
 import { DefensePower, InstallationType, ShipShellingStats, ShellingType } from "../../types"
 import ShipAntiInstallationStatus from "./ShipAntiInstallationStatus"
 

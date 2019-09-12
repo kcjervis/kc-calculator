@@ -2,7 +2,7 @@ import { sumBy } from "lodash-es"
 
 import { isNonNullable } from "../../utils"
 import { IGear } from "../gear"
-import { createPlanes, IPlane } from "../Plane"
+import { createPlanes, IPlane } from "../plane"
 
 // 陸偵出撃制空補正
 const getReconnaissanceFighterPowerModifier = (gear: IGear) => {
