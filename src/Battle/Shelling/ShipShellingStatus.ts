@@ -56,8 +56,7 @@ export const getProficiencyModifier = (ship: IShip, specialAttack?: DayCombatSpe
   }
 
   const planes = ship.planes.filter(
-    ({ slotSize, category }) =>
-      slotSize > 0 && (category.isDiveBomber || category.isTorpedoBomber || category.is("LargeFlyingBoat"))
+    plane => (plane.slotSize > 0 && plane.is("DiveBomber")) || plane.is("TorpedoBomber") || plane.is("LargeFlyingBoat")
   )
   modifier.power =
     1 +
@@ -123,7 +122,7 @@ export default class ShipShellingStatus {
       return "Shelling"
     }
 
-    if (hasGear(gear => gear.category.isAerialCombatAircraft)) {
+    if (hasGear("DiveBomber") || hasGear("TorpedoBomber")) {
       return "CarrierShelling"
     }
 

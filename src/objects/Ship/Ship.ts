@@ -100,7 +100,7 @@ export default class Ship implements IShip {
 
   get fighterPower() {
     return sumBy(
-      this.planes.filter(({ category }) => category.isFighter || category.isTorpedoBomber || category.isDiveBomber),
+      this.planes.filter(({ gear }) => gear.is("Fighter") || gear.is("TorpedoBomber") || gear.is("DiveBomber")),
       "fighterPower"
     )
   }
@@ -133,18 +133,18 @@ export default class Ship implements IShip {
   public canEquip = (gear: IGear, slotIndex: number) => {
     const shipId = this.masterId
     const { equippable, isAbyssal } = this.master
-    const { masterId: gearId, category } = gear
+    const { gearId, categoryId } = gear
 
     if (isAbyssal) {
       return true
     }
 
-    if (!equippable.categories.includes(category.id)) {
+    if (!equippable.categories.includes(categoryId)) {
       return false
     }
 
     // Richelieu
-    if ([492, 392].includes(shipId) && category.is("SeaplaneBomber")) {
+    if ([492, 392].includes(shipId) && gear.is("SeaplaneBomber")) {
       // Laté 298B
       return gearId === 194
     }
@@ -152,7 +152,7 @@ export default class Ship implements IShip {
     if (this.slots.length <= slotIndex) {
       const turbine = 33
       return (
-        api_mst_equip_exslot.includes(category.id) || equippable.expantionSlot.includes(gearId) || gearId === turbine
+        api_mst_equip_exslot.includes(categoryId) || equippable.expantionSlot.includes(gearId) || gearId === turbine
       )
     }
 
@@ -248,7 +248,7 @@ export default class Ship implements IShip {
     const modifiers = { power: 1, hitRate: 0, criticalRate: 0 }
 
     const planes = this.getRemainingPlanes().filter(
-      ({ category }) => category.isDiveBomber || category.isTorpedoBomber || category.is("LargeFlyingBoat")
+      plane => plane.is("DiveBomber") || plane.is("TorpedoBomber") || plane.is("LargeFlyingBoat")
     )
     modifiers.power =
       1 +
@@ -325,7 +325,7 @@ export default class Ship implements IShip {
       return "Shelling"
     }
 
-    if (hasGear(gear => gear.category.isAerialCombatAircraft)) {
+    if (hasGear("DiveBomber") || hasGear("TorpedoBomber")) {
       return "CarrierShelling"
     }
 

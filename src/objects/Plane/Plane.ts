@@ -4,6 +4,7 @@ import { IGear } from "../gear"
 
 export interface IPlane {
   gear: IGear
+  is: IGear["is"]
   index: number
   category: GearCategory
   slotSize: number
@@ -32,6 +33,10 @@ export interface IPlane {
 export default class Plane implements IPlane {
   constructor(public readonly gear: IGear, private readonly slots: number[], public readonly index: number) {}
 
+  get is() {
+    return this.gear.is
+  }
+
   get category() {
     return this.gear.category
   }
@@ -56,8 +61,7 @@ export default class Plane implements IPlane {
   }
 
   get canContact() {
-    const { category } = this
-    return category.isTorpedoBomber || category.isReconnaissanceAircraft
+    return this.is("CarrierBasedTorpedoBomber") || this.is("ReconnaissanceAircraft")
   }
 
   get contactTriggerFactor() {
@@ -71,11 +75,11 @@ export default class Plane implements IPlane {
   }
 
   get participatesInAirstrike() {
-    const { category, slotSize } = this
+    const { slotSize } = this
     if (slotSize === 0) {
       return false
     }
-    return category.isDiveBomber || category.isTorpedoBomber
+    return this.is("DiveBomber") || this.is("TorpedoBomber")
   }
 
   get participatesInCarrierShelling() {
@@ -92,11 +96,11 @@ export default class Plane implements IPlane {
   }
 
   get fleetLosModifier() {
-    const { category, gear, slotSize } = this
-    if (!category.isObservationPlane) {
-      return 0
+    const { gear, slotSize } = this
+    if (this.is("ReconnaissanceSeaplane") || this.is("SeaplaneBomber")) {
+      return gear.los * Math.floor(Math.sqrt(slotSize))
     }
-    return gear.los * Math.floor(Math.sqrt(slotSize))
+    return 0
   }
 
   get isSwordfish() {

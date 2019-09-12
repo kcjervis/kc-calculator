@@ -1,7 +1,7 @@
 import { flatMap } from "lodash-es"
 
 import { AirControlState, Side } from "../../constants"
-import { ILandBasedAirCorps } from "../../objects"
+import { ILandBasedAirCorps, IPlane } from "../../objects"
 import { ICombatInformation } from "../CombatInformation"
 
 import AerialCombat from "./AerialCombat"
@@ -22,11 +22,20 @@ export default class LandBaseAerialSupport extends AerialCombat {
 
     const airControlState = AirControlState.fromFighterPower(playerFp, enemyFp)
 
-    playerPlanes.forEach(plane => this.shotdownInFighterCombat(plane, airControlState.constant, Side.Player))
-    enemyPlanes.forEach(plane => this.shotdownInFighterCombat(plane, airControlState.constant, Side.Enemy))
+    const participates = (plane: IPlane) =>
+      plane.is("DiveBomber") || plane.is("TorpedoBomber") || plane.is("Fighter") || plane.is("ReconnaissanceAircraft")
+    const playerFighterCombatPlanes = playerPlanes.filter(participates)
+    const enemyFighterCombatPlanes = enemyPlanes.filter(participates)
+
+    playerFighterCombatPlanes.forEach(plane =>
+      this.shotdownInFighterCombat(plane, airControlState.constant, Side.Player)
+    )
+    enemyFighterCombatPlanes.forEach(plane => this.shotdownInFighterCombat(plane, airControlState.constant, Side.Enemy))
 
     // stage2
-    const playerAirstrikePlanes = playerPlanes.filter(plane => plane.slotSize > 0 && plane.participatesInAirstrike)
+    const playerAirstrikePlanes = playerFighterCombatPlanes.filter(
+      plane => plane.slotSize > 0 && plane.participatesInAirstrike
+    )
     this.antiAirDefense(enemy.allShips, playerAirstrikePlanes)
 
     return {

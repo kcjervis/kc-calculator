@@ -25,21 +25,21 @@ export default class Airstrike {
       if (plane.slotSize <= 0) {
         return false
       }
-      return plane.category.isTorpedoBomber || plane.category.isDiveBomber
+      return plane.is("TorpedoBomber") || plane.is("DiveBomber")
     })
 
     return planes.map(plane => {
       let stat = 0
       let planeTypeModifier = 1
-      if (plane.category.isTorpedoBomber) {
+      if (plane.is("TorpedoBomber")) {
         stat = plane.gear.torpedo
         planeTypeModifier = torpedoBomberModifier
       }
-      if (plane.category.isDiveBomber) {
+      if (plane.is("DiveBomber")) {
         stat = plane.gear.bombing
         planeTypeModifier = 1
       }
-      if (plane.gear.is("JetPoweredFighterBomber")) {
+      if (plane.is("JetPoweredFighterBomber")) {
         planeTypeModifier = 1 / Math.sqrt(2)
       }
       getAirstrikePower({

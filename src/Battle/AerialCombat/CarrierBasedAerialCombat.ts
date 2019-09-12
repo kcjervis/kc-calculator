@@ -1,6 +1,4 @@
-import { flatMap } from "lodash-es"
-
-import { IShip } from "../../objects"
+import { IShip, IPlane } from "../../objects"
 import { ICombatInformation } from "../CombatInformation"
 
 import AerialCombat from "./AerialCombat"
@@ -30,12 +28,12 @@ export default class CarrierBasedAerialCombat extends AerialCombat {
   public main() {
     const { playerAntiAirDefenseShips, enemyAntiAirDefenseShips, combatInformation } = this
 
-    const playerPlanes = flatMap(playerAntiAirDefenseShips, ({ planes }) => planes)
+    const playerPlanes = playerAntiAirDefenseShips.flatMap(({ planes }) => planes)
+    const enemyPlanes = enemyAntiAirDefenseShips.flatMap(({ planes }) => planes)
 
-    const enemyPlanes = flatMap(enemyAntiAirDefenseShips, ({ planes }) => planes)
-
-    const playerFighterCombatPlanes = playerPlanes.filter(plane => !plane.category.isReconnaissanceAircraft)
-    const enemyFighterCombatPlanes = enemyPlanes.filter(plane => !plane.category.isReconnaissanceAircraft)
+    const participates = (plane: IPlane) => plane.is("DiveBomber") || plane.is("TorpedoBomber") || plane.is("Fighter")
+    const playerFighterCombatPlanes = playerPlanes.filter(participates)
+    const enemyFighterCombatPlanes = enemyPlanes.filter(participates)
 
     // stage1
     const airControlState = this.fighterCombat(playerFighterCombatPlanes, enemyFighterCombatPlanes)

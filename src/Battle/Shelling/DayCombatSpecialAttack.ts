@@ -19,8 +19,8 @@ export default class DayCombatSpecialAttack {
     const cutins = new Array<DayCombatSpecialAttack>()
 
     const planes = ship.planes.filter(({ slotSize }) => slotSize > 0)
-    const bomberCount = planes.filter(plane => plane.gear.is("CarrierBasedDiveBomber")).length
-    const hasTorpedoBomber = planes.some(plane => plane.gear.is("CarrierBasedTorpedoBomber"))
+    const bomberCount = planes.filter(plane => plane.is("CarrierBasedDiveBomber")).length
+    const hasTorpedoBomber = planes.some(plane => plane.is("CarrierBasedTorpedoBomber"))
 
     if (bomberCount === 0 || !hasTorpedoBomber) {
       return cutins
@@ -31,7 +31,7 @@ export default class DayCombatSpecialAttack {
       cutins.push(DayCombatSpecialAttack.BomberBomberAttacker)
     }
 
-    const hasFighter = planes.some(plane => plane.gear.is("CarrierBasedFighterAircraft"))
+    const hasFighter = planes.some(plane => plane.is("CarrierBasedFighterAircraft"))
     if (hasFighter) {
       cutins.push(DayCombatSpecialAttack.FighterBomberAttacker)
     }
@@ -42,9 +42,11 @@ export default class DayCombatSpecialAttack {
   private static getPossibleArtillerySpottings = (ship: IShip) => {
     const attacks = new Array<DayCombatSpecialAttack>()
 
-    const hasObservationPlane = ship.planes.some(plane => plane.category.isObservationPlane && plane.slotSize > 0)
+    const hasObservationSeaplane = ship.planes.some(
+      plane => (plane.slotSize > 0 && plane.is("ReconnaissanceSeaplane")) || plane.is("SeaplaneBomber")
+    )
     const mainGunCount = ship.countGear(gear => gear.is("MainGun"))
-    if (!hasObservationPlane || mainGunCount === 0) {
+    if (!hasObservationSeaplane || mainGunCount === 0) {
       return attacks
     }
 

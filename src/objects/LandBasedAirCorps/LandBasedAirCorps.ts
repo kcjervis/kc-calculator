@@ -6,8 +6,8 @@ import { createPlanes, IPlane } from "../Plane"
 
 // 陸偵出撃制空補正
 const getReconnaissanceFighterPowerModifier = (gear: IGear) => {
-  const { category, los } = gear
-  if (!category.is("LandBasedReconnaissanceAircraft")) {
+  const { los } = gear
+  if (!gear.is("LandBasedReconnaissanceAircraft")) {
     return 1
   }
   if (los <= 7) {
@@ -19,8 +19,8 @@ const getReconnaissanceFighterPowerModifier = (gear: IGear) => {
 }
 
 const getReconnaissanceInterceptionPowerModifier = (gear: IGear) => {
-  const { category, los } = gear
-  if (category.is("CarrierBasedReconnaissanceAircraft") || category.is("CarrierBasedReconnaissanceAircraft2")) {
+  const { los } = gear
+  if (gear.is("CarrierBasedReconnaissanceAircraft") || gear.is("CarrierBasedReconnaissanceAircraft2")) {
     if (los <= 7) {
       return 1.2
     } else if (los === 8) {
@@ -29,10 +29,10 @@ const getReconnaissanceInterceptionPowerModifier = (gear: IGear) => {
     }
     return 1.3
   }
-  if (category.is("LandBasedReconnaissanceAircraft")) {
+  if (gear.is("LandBasedReconnaissanceAircraft")) {
     return 1.18
   }
-  if (category.is("ReconnaissanceSeaplane") || category.is("LargeFlyingBoat")) {
+  if (gear.is("ReconnaissanceSeaplane") || gear.is("LargeFlyingBoat")) {
     if (los <= 7) {
       return 1.1
     } else if (los === 8) {
@@ -108,9 +108,9 @@ export default class LandBasedAirCorps implements ILandBasedAirCorps {
     }
     const { minCombatRadius, nonNullableGears } = this
     const maxReconRadius = Math.max(
-      ...nonNullableGears.map(({ radius, category }) => {
-        if (category.isReconnaissanceAircraft) {
-          return radius
+      ...nonNullableGears.map(gear => {
+        if (gear.is("ReconnaissanceAircraft")) {
+          return gear.radius
         }
         return 0
       })

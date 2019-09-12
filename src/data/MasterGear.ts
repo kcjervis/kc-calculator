@@ -1,7 +1,7 @@
 import { MstEquipment, GearId } from "@jervis/data"
 import { PickByValue } from "utility-types"
 import { GearStats } from "../types"
-import GearCategory from "./GearCategory"
+import GearCategory, { GearCategoryId } from "./GearCategory"
 import GearAttribute from "./GearAttribute"
 
 export type GearStatKey = keyof PickByValue<GearStats, number>
@@ -76,7 +76,7 @@ export default class MasterGear implements GearStats {
     this.antiBomber = 0
     this.interception = 0
 
-    if (category.is("LandBasedFighter")) {
+    if (this.categoryId === GearCategoryId.LandBasedFighter) {
       this.antiBomber = accuracy
       this.interception = evasion
     } else {

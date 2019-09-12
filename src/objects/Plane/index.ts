@@ -8,7 +8,7 @@ export const createPlanes = (slots: number[], gears: Array<IGear | undefined>) =
   const planes = new Array<IPlane>()
   slots.map((slotSize, index) => {
     const gear = gears[index]
-    if (!slotSize || !gear || !gear.category.isAerialCombatAircraft) {
+    if (!slotSize || !gear || !gear.is("Aircraft")) {
       return
     }
     planes.push(new Plane(gear, slots, index))

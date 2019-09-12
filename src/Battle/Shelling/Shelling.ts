@@ -264,7 +264,7 @@ export default class Shelling {
 
       if (
         defenderIsInstallation &&
-        planes.some(plane => plane.category.isDiveBomber && !plane.gear.is("AntiInstallationBomber"))
+        planes.some(plane => plane.is("DiveBomber") && !plane.is("AntiInstallationBomber"))
       ) {
         return false
       }

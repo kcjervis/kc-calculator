@@ -3,16 +3,16 @@ import { IGear, IFleet, IShip } from "./objects"
 import carrierBasedReconnaissanceAircraftBonus from "./objects/Ship/ExplicitStatsBonus/艦上偵察機"
 
 const gearEffectiveLos = (gear: IGear) => {
-  const { category, los, improvement } = gear
+  const { los, improvement } = gear
 
   let multiplier = 0.6
-  if (category.is("CarrierBasedTorpedoBomber")) {
+  if (gear.is("CarrierBasedTorpedoBomber")) {
     multiplier = 0.8
-  } else if (category.any("CarrierBasedReconnaissanceAircraft", "CarrierBasedReconnaissanceAircraft2")) {
+  } else if (gear.is("CarrierBasedReconnaissanceAircraft") || gear.is("CarrierBasedReconnaissanceAircraft2")) {
     multiplier = 1
-  } else if (category.is("ReconnaissanceSeaplane")) {
+  } else if (gear.is("ReconnaissanceSeaplane")) {
     multiplier = 1.2
-  } else if (category.is("SeaplaneBomber")) {
+  } else if (gear.is("SeaplaneBomber")) {
     multiplier = 1.1
   }
 
