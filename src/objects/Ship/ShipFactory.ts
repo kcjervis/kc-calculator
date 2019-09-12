@@ -1,5 +1,5 @@
 import { MasterShip } from "../../data"
-import { GearFactory, IGearDataObject } from "../Gear"
+import { GearFactory, IGearDataObject } from "../gear"
 import { createPlanes } from "../Plane"
 
 import { createExplicitStatsBonus } from "./ExplicitStatsBonus"
@@ -32,7 +32,7 @@ export default class ShipFactory {
       return []
     }
 
-    return master.equipment.map(({ id, improvement }) => this.gearFactory.create({ masterId: id, improvement }))
+    return master.initialEquipment.map(({ id, improvement }) => this.gearFactory.create({ masterId: id, improvement }))
   }
 
   public create = (obj?: IShipDataObject): IShip | undefined => {
@@ -41,7 +41,7 @@ export default class ShipFactory {
     }
 
     const { masterId, level = 1, increased, morale: moraleValue } = obj
-    const foundMaster = this.masters.find(master => master.id === masterId)
+    const foundMaster = this.masters.find(master => master.shipId === masterId)
     if (!foundMaster) {
       return undefined
     }

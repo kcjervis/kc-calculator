@@ -1,7 +1,7 @@
 import { sumBy } from "lodash-es"
 
 import { isNonNullable } from "../../utils"
-import { IGear } from "../Gear"
+import { IGear } from "../gear"
 import { createPlanes, IPlane } from "../Plane"
 
 // 陸偵出撃制空補正

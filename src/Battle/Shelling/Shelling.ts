@@ -1,12 +1,19 @@
 import DayCombatSpecialAttack from "./DayCombatSpecialAttack"
-import { ShipInformation, ShellingType, InstallationType, BattleState } from "../../types"
+import {
+  ShipInformation,
+  InstallationType,
+  BattleState,
+  ShellingPowerFactors,
+  ShellingAccuracyFactors
+} from "../../types"
 
-import ShipShellingStatus, { getProficiencyModifier } from "./ShipShellingStatus"
 import getCombinedFleetFactor from "./getCombinedFleetFactor"
 import Damage from "../Damage"
 import { calcEvasionValue } from "../Evasion"
 import { calcHitRate } from "../Hit"
 import { Side, Formation } from "../../constants"
+import ShellingPower from "./ShellingPower"
+import ShellingAccuracy from "./ShellingAccuracy"
 
 export default class Shelling {
   public static getCombinedFleetFactor = getCombinedFleetFactor
@@ -24,6 +31,10 @@ export default class Shelling {
     public fitGunBonus = 0
   ) {}
 
+  private get attackStats() {
+    return this.attacker.ship.getShellingStats()
+  }
+
   get isArmorPiercing() {
     const defenderType = this.defender.ship.shipType
     return (
@@ -40,20 +51,13 @@ export default class Shelling {
     return { power, accuracy: 0 }
   }
 
-  get attackerShellingStatus() {
-    return new ShipShellingStatus(this.attacker.ship)
-  }
-
-  get shellingType() {
-    return this.attackerShellingStatus.shellingType
-  }
-
-  get proficiencyModifier() {
-    const { attacker, shellingType, specialAttack } = this
+  get proficiencyModifiers() {
+    const { attacker, specialAttack } = this
+    const { shellingType, normalProficiencyModifiers, specialProficiencyModifiers } = this.attackStats
     if (shellingType === "Shelling") {
       return { power: 1, hitRate: 0, criticalRate: 0 }
     }
-    return getProficiencyModifier(attacker.ship, specialAttack)
+    return specialAttack === undefined ? normalProficiencyModifiers : specialProficiencyModifiers
   }
 
   private getDefenderInstallationType() {
@@ -66,54 +70,103 @@ export default class Shelling {
       battleState,
       attacker,
       isCritical,
-      attackerShellingStatus,
       combinedFleetFactors,
       eventMapModifier,
       specialAttack,
       isArmorPiercing
     } = this
+
     const { engagement } = battleState
     const { role, formation } = attacker
     const combinedFleetFactor = combinedFleetFactors.power
 
     const installationType = this.getDefenderInstallationType()
+    const {
+      shellingType,
+      firepower,
+      torpedo,
+      bombing,
+      improvementModifiers,
+      healthModifier,
+      cruiserFitBonus,
+      apShellModifiers
+    } = this.attackStats
 
-    return attackerShellingStatus.calcPower({
-      role,
-      formation,
-      engagement,
+    const formationModifier = formation.getModifiersWithRole(role).shelling.power
+    const engagementModifier = engagement.modifier
+
+    const criticalModifier = isCritical ? 1.5 : 1
+
+    const specialAttackModifier = specialAttack ? specialAttack.modifier.power : 1
+    const apShellModifier = isArmorPiercing ? apShellModifiers.power : 1
+
+    const antiInstallationStatus = attacker.ship.getAntiInstallationStatus()
+
+    const antiInstallationModifiers = antiInstallationStatus.getModifiersFromType(installationType)
+    const isAntiInstallationWarfare = installationType !== "None"
+
+    const effectiveBombing = isAntiInstallationWarfare
+      ? attacker.ship.totalEquipmentStats(gear => (gear.is("AntiInstallationBomber") ? gear.bombing : 0))
+      : bombing
+
+    const effectivenessMultiplicative = antiInstallationModifiers.postCapMultiplicative
+    const effectivenessAdditive = 0
+
+    const proficiencyModifier = this.proficiencyModifiers.power
+
+    const factors: ShellingPowerFactors = {
+      shellingType,
       combinedFleetFactor,
-      eventMapModifier,
-      specialAttack,
-      isArmorPiercing,
-      installationType,
-      isCritical
-    })
+      firepower,
+      torpedo: isAntiInstallationWarfare ? 0 : torpedo,
+      bombing: effectiveBombing,
+      improvementModifier: improvementModifiers.power,
+
+      antiInstallationModifiers,
+      formationModifier,
+      engagementModifier,
+      healthModifier,
+      cruiserFitBonus,
+
+      effectivenessMultiplicative,
+      effectivenessAdditive,
+      specialAttackModifier,
+      apShellModifier,
+      criticalModifier,
+      proficiencyModifier,
+      eventMapModifier
+    }
+
+    return new ShellingPower(factors)
   }
 
   get accuracy() {
-    const {
-      attacker,
-      defender,
-      combinedFleetFactors,
-      attackerShellingStatus,
-      isArmorPiercing,
-      specialAttack,
-      fitGunBonus
-    } = this
+    const { attacker, defender, combinedFleetFactors, isArmorPiercing, specialAttack, fitGunBonus } = this
 
     let formationModifier = attacker.formation.getModifiersWithRole(attacker.role).shelling.accuracy
     if (Formation.isIneffective(attacker.formation, defender.formation)) {
       formationModifier = 1
     }
 
-    return attackerShellingStatus.calcAccuracy({
-      fitGunBonus,
+    const { level, luck, accuracy, improvementModifiers, moraleModifier, apShellModifiers } = this.attackStats
+
+    const specialAttackModifier = specialAttack ? specialAttack.modifier.accuracy : 1
+    const apShellModifier = isArmorPiercing ? apShellModifiers.accuracy : 1
+
+    const factors: ShellingAccuracyFactors = {
       combinedFleetFactor: combinedFleetFactors.accuracy,
+      level,
+      luck,
+      equipmentAccuracy: accuracy,
+      improvementModifier: improvementModifiers.accuracy,
+      moraleModifier,
       formationModifier,
-      isArmorPiercing,
-      specialAttack
-    })
+      fitGunBonus,
+      specialAttackModifier,
+      apShellModifier
+    }
+
+    return new ShellingAccuracy(factors)
   }
 
   get defenderEvasionValue() {
@@ -123,16 +176,16 @@ export default class Shelling {
   }
 
   get hitRate() {
-    const { accuracy, defender, defenderEvasionValue, proficiencyModifier } = this
+    const { accuracy, defender, defenderEvasionValue } = this
     const moraleModifier = defender.ship.morale.evasionModifier
 
-    return calcHitRate(accuracy.value, defenderEvasionValue, moraleModifier, proficiencyModifier.hitRate)
+    return calcHitRate(accuracy.value, defenderEvasionValue, moraleModifier, this.proficiencyModifiers.hitRate)
   }
 
   get criticalRate() {
-    const { hitRate, proficiencyModifier } = this
+    const { hitRate } = this
     const hitNumB = Math.floor(Math.sqrt(hitRate * 100) * 1.3)
-    return (hitNumB + 1) / 100 + proficiencyModifier.criticalRate
+    return (hitNumB + 1) / 100 + this.proficiencyModifiers.criticalRate
   }
 
   get defensePower() {
@@ -184,9 +237,9 @@ export default class Shelling {
   }
 
   get can() {
-    const { attacker, defender, attackerShellingStatus } = this
+    const { attacker, defender } = this
     const defenderIsInstallation = defender.ship.isInstallation
-    const { shellingType } = attackerShellingStatus
+    const { shellingType } = this.attackStats
 
     const { ship } = attacker
 

@@ -2,8 +2,6 @@ import { sumBy } from "lodash-es"
 import { isNonNullable, isMatch, Condition } from "../../utils"
 import { PickByValue } from "utility-types"
 
-type GearCondition<GearType extends { masterId: number }> = number | Condition<GearType>
-
 type GearIteratee<GearType, R> = (gear: GearType, index?: GearIndex, slotSize?: number) => R
 
 type IEquipment<GearType> = {

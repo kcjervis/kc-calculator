@@ -1,3 +1,5 @@
+import { ShellingType } from "./ship"
+
 export type Factors<T extends string> = { [K in T]: number }
 
 export type DefensePower = {
@@ -21,22 +23,7 @@ export type FormationModifiers = {
   nightBattle: WarfareModifiers
 }
 
-export type ShellingType = "Shelling" | "CarrierShelling"
-
 export type InstallationType = "None" | "SoftSkinned" | "Pillbox" | "SupplyDepot" | "IsolatedIsland"
-
-type AttackModifiers = { power: number; accuracy: number }
-
-export type ShipShellingStats = {
-  shellingType: ShellingType
-
-  improvementModifier: number
-  cruiserFitBonus: number
-  healthModifier: number
-  apShellModifiers: AttackModifiers
-
-  fitGunAccuracyBonus: number
-}
 
 export type AntiInstallationModifiers = {
   shipTypeAdditive: number

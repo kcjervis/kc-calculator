@@ -1,5 +1,5 @@
 import { MasterData } from "../data"
-import { GearFactory } from "./Gear"
+import { GearFactory } from "./gear"
 import { FleetFactory } from "./Fleet"
 import { LandBasedAirCorpsFactory } from "./LandBasedAirCorps"
 import { OperationFactory } from "./Operation"
@@ -11,7 +11,7 @@ export default class ObjectFactory {
   private readonly fleetFactory: FleetFactory
   private readonly landBasedAirCorpsFactory: LandBasedAirCorpsFactory
   private readonly operationFactory: OperationFactory
-  constructor(private readonly masterData: MasterData) {
+  constructor(private readonly masterData = new MasterData()) {
     this.gearFactory = new GearFactory(masterData.gears)
     this.shipFactory = new ShipFactory(masterData.ships, this.gearFactory)
     this.fleetFactory = new FleetFactory(this.shipFactory)

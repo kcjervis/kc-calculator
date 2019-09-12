@@ -1,4 +1,4 @@
-import Proficiency, { getLevelBonusValue } from "../objects/Gear/Proficiency"
+import Proficiency, { getLevelBonusValue } from "../objects/gear/Proficiency"
 
 describe("Proficiency", () => {
   it("getLevelBonusValue", () => {

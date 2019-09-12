@@ -1,4 +1,4 @@
-import { IGear } from "../Gear"
+import { IGear } from "../gear"
 import Plane, { IPlane } from "./Plane"
 
 export { Plane, IPlane }

@@ -1,5 +1,5 @@
 import { maxBy } from "lodash-es"
-import { IGear } from "../../../Gear"
+import { IGear } from "../../../gear"
 import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {

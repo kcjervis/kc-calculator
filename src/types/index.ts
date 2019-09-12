@@ -5,5 +5,6 @@ export type KeysByValue<T, ValueType> = {
 }[keyof T]
 
 export * from "./gear"
+export * from "./ship"
 export * from "./battle"
 export * from "./warfare"

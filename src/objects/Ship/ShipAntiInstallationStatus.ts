@@ -1,7 +1,7 @@
-import { IShip } from "../objects"
+import { IShip } from "./Ship"
 import { sumBy } from "lodash-es"
-import { isNonNullable } from "../utils"
-import { InstallationType } from "../types"
+import { isNonNullable } from "../../utils"
+import { InstallationType } from "../../types"
 import { GearId } from "@jervis/data"
 
 export default class ShipAntiInstallationStatus {
@@ -21,11 +21,6 @@ export default class ShipAntiInstallationStatus {
 
   private get countGear() {
     return this.ship.countGear
-  }
-
-  get bombing() {
-    const antiInstallationBombers = this.gears.filter(gear => gear.is("AntiInstallationBomber"))
-    return sumBy(antiInstallationBombers, gear => gear.bombing)
   }
 
   private get wgCount() {

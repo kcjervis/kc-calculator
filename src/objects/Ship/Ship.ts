@@ -8,11 +8,13 @@ import { IShipStats } from "./ShipStats"
 
 import { MasterShip, ShipClass, ShipType, GearAttribute } from "../../data"
 import { isNonNullable, shipNameIsKai2 } from "../../utils"
-import { IGear } from "../Gear"
+import { getApShellModifiers, calcCruiserFitBonus } from "../../formulas"
+import { IGear } from "../gear"
 import { IPlane } from "../Plane"
 import { DefensePower, InstallationType, ShipShellingStats, ShellingType } from "../../types"
+import ShipAntiInstallationStatus from "./ShipAntiInstallationStatus"
 
-type GearIteratee<R> = GearId | GearAttribute | ((gear: IGear) => R)
+export type GearIteratee<R> = GearId | GearAttribute | ((gear: IGear) => R)
 
 export interface IShip {
   masterId: number
@@ -48,6 +50,7 @@ export interface IShip {
   canNightAttack: boolean
 
   getDefensePower: () => DefensePower
+  getAntiInstallationStatus: () => ShipAntiInstallationStatus
   getShellingStats: () => ShipShellingStats
 
   /** 廃止予定 */
@@ -218,30 +221,21 @@ export default class Ship implements IShip {
     return master.firepower[0] > 0
   }
 
-  /**
-   * 巡洋艦砲フィット補正
-   *
-   * 軽巡軽量砲補正と伊重巡フィット砲補正
-   * @see https://github.com/Nishisonic/UnexpectedDamage/blob/develop/攻撃力資料/キャップ前攻撃力.md#軽巡軽量砲補正
-   * @see https://github.com/Nishisonic/UnexpectedDamage/blob/develop/攻撃力資料/キャップ前攻撃力.md#伊重巡フィット砲補正
-   */
   private calcCruiserFitBonus = () => {
     const { shipType, shipClass, countGear } = this
-    let fitBonus = 0
-    const isCruiser = shipType.any("LightCruiser", "TorpedoCruiser", "TrainingCruiser")
+    const isLightCruiserClass = shipType.any("LightCruiser", "TorpedoCruiser", "TrainingCruiser")
     const isZaraClass = shipClass.is("ZaraClass")
-
-    if (isCruiser) {
-      const singleGunCount = countGear(gear => [GearId["14cm単装砲"], GearId["15.2cm単装砲"]].includes(gear.masterId))
-      const twinGunCount = countGear(gear =>
-        [GearId["15.2cm連装砲"], GearId["14cm連装砲"], GearId["15.2cm連装砲改"]].includes(gear.masterId)
-      )
-      fitBonus += Math.sqrt(singleGunCount) + 2 * Math.sqrt(twinGunCount)
-    }
-    if (isZaraClass) {
-      fitBonus += Math.sqrt(countGear(GearId["203mm/53 連装砲"]))
-    }
-    return fitBonus
+    const singleGunCount = countGear(gear => [GearId["14cm単装砲"], GearId["15.2cm単装砲"]].includes(gear.masterId))
+    const twinGunCount = countGear(gear =>
+      [GearId["15.2cm連装砲"], GearId["14cm連装砲"], GearId["15.2cm連装砲改"]].includes(gear.masterId)
+    )
+    return calcCruiserFitBonus({
+      isLightCruiserClass,
+      singleGunCount,
+      twinGunCount,
+      isZaraClass,
+      zaraGunCount: Math.sqrt(countGear(GearId["203mm/53 連装砲"]))
+    })
   }
 
   private getRemainingPlanes = () => this.planes.filter(isNonNullable)
@@ -338,43 +332,49 @@ export default class Ship implements IShip {
     return "Shelling"
   }
 
-  /**
-   * 徹甲弾補正
-   */
-  private getApShellModifiers = () => {
-    const modifier = { power: 1, accuracy: 1 }
-
-    const hasArmorPiercingShell = this.hasGear("ArmorPiercingShell")
-    const hasMainGun = this.hasGear("MainGun")
-
-    if (!hasArmorPiercingShell || !hasMainGun) {
-      return modifier
-    }
-
-    const hasSecondaryGun = this.hasGear("SecondaryGun")
-    const hasRader = this.hasGear("Radar")
-
-    if (hasSecondaryGun && hasRader) {
-      return { power: 1.15, accuracy: 1.3 }
-    }
-    if (hasSecondaryGun) {
-      return { power: 1.15, accuracy: 1.2 }
-    }
-    if (hasRader) {
-      return { power: 1.1, accuracy: 1.25 }
-    }
-    return { power: 1.08, accuracy: 1.1 }
+  public getAntiInstallationStatus = (): ShipAntiInstallationStatus => {
+    return new ShipAntiInstallationStatus(this)
   }
 
   public getShellingStats = (): ShipShellingStats => {
+    const { firepower, torpedo, luck } = this.stats
+    const bombing = this.totalEquipmentStats("bombing")
+    const improvementModifiers = {
+      power: this.totalEquipmentStats(gear => gear.improvement.shellingPowerModifier),
+      accuracy: this.totalEquipmentStats(gear => gear.improvement.shellingAccuracyModifier)
+    }
+
+    const apShellModifiers = getApShellModifiers({
+      hasMainGun: this.hasGear("MainGun"),
+      hasArmorPiercingShell: this.hasGear("ArmorPiercingShell"),
+      hasSecondaryGun: this.hasGear("SecondaryGun"),
+      hasRader: this.hasGear("Radar")
+    })
+
+    const normalProficiencyModifiers = this.getNormalProficiencyModifiers()
+    const specialProficiencyModifiers = this.getSpecialProficiencyModifiers()
     return {
       shellingType: this.getShellingType(),
-      improvementModifier: this.totalEquipmentStats(gear => gear.improvement.shellingPowerModifier),
+      firepower,
+      torpedo,
+      bombing,
+
       cruiserFitBonus: this.calcCruiserFitBonus(),
       healthModifier: this.health.shellingPowerModifier,
-      apShellModifiers: this.getApShellModifiers(),
 
-      fitGunAccuracyBonus: 0
+      accuracy: this.totalEquipmentStats("accuracy"),
+      level: this.level,
+      luck,
+
+      moraleModifier: this.morale.shellingAccuracyModifier,
+
+      improvementModifiers,
+      apShellModifiers,
+
+      fitGunAccuracyBonus: 0,
+
+      normalProficiencyModifiers,
+      specialProficiencyModifiers
     }
   }
 }

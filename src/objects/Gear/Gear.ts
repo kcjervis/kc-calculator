@@ -2,7 +2,6 @@ import { GearCategory, GearAttribute } from "../../data"
 import { IImprovement } from "./Improvement"
 import { IProficiency } from "./Proficiency"
 import { calcFighterPower } from "../../formulas"
-import { setProperties } from "../../utils"
 import { GearStats, GearState } from "../../types"
 
 export interface IGear extends GearStats {
@@ -23,68 +22,79 @@ export interface IGear extends GearStats {
 }
 
 export default class Gear implements IGear {
-  public gearId: number
-
-  public categoryId = 0
-  public iconId = 0
-  public name = ""
-
-  public hp = 0
-  public firepower = 0
-  public armor = 0
-  public torpedo = 0
-  public antiAir = 0
-  public speed = 0
-  public bombing = 0
-  public asw = 0
-  public los = 0
-  public luck = 0
-  public range = 0
-  public accuracy = 0
-  public evasion = 0
-  public antiBomber = 0
-  public interception = 0
-  public radius = 0
-
-  public improvable = false
-
   constructor(
     private readonly stats: GearStats,
     public readonly category: GearCategory,
     public readonly improvement: IImprovement,
     public readonly proficiency: IProficiency,
     public is: (attr: GearAttribute) => boolean
-  ) {
-    this.gearId = stats.gearId
+  ) {}
 
-    setProperties(
-      this,
-      [
-        "categoryId",
-        "iconId",
-        "name",
+  get gearId() {
+    return this.stats.gearId
+  }
+  get categoryId() {
+    return this.stats.categoryId
+  }
+  get iconId() {
+    return this.stats.iconId
+  }
 
-        "hp",
-        "firepower",
-        "armor",
-        "torpedo",
-        "antiAir",
-        "speed",
-        "bombing",
-        "asw",
-        "los",
-        "luck",
-        "range",
-        "accuracy",
-        "evasion",
-        "antiBomber",
-        "interception",
-        "radius",
+  get name() {
+    return this.stats.name
+  }
 
-        "improvable"
-      ],
-      stats
-    )
+  get improvable() {
+    return this.stats.improvable
+  }
+
+  get hp() {
+    return this.stats.hp
+  }
+  get firepower() {
+    return this.stats.firepower
+  }
+  get armor() {
+    return this.stats.armor
+  }
+  get torpedo() {
+    return this.stats.torpedo
+  }
+  get antiAir() {
+    return this.stats.armor
+  }
+  get speed() {
+    return this.stats.speed
+  }
+  get bombing() {
+    return this.stats.bombing
+  }
+  get asw() {
+    return this.stats.asw
+  }
+  get los() {
+    return this.stats.los
+  }
+  get luck() {
+    return this.stats.luck
+  }
+  get range() {
+    return this.stats.range
+  }
+  get accuracy() {
+    return this.stats.accuracy
+  }
+  get evasion() {
+    return this.stats.evasion
+  }
+  get antiBomber() {
+    return this.stats.antiBomber
+  }
+  get interception() {
+    return this.stats.interception
+  }
+  get radius() {
+    return this.stats.radius
   }
 
   get masterId() {

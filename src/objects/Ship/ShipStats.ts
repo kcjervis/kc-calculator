@@ -1,6 +1,6 @@
 import { maxBy, sumBy } from "lodash-es"
 
-import { IGear } from "../Gear"
+import { IGear } from "../gear"
 
 import { isNonNullable } from "../../utils"
 import ShipNakedStats, { IBaseStats } from "./ShipNakedStats"

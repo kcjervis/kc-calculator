@@ -3,7 +3,6 @@ import { NightAttackType, ShipRole, InstallationType, NightAttackPowerFactors } 
 import { sumBy } from "lodash-es"
 import { Formation } from "../../constants"
 import NightAttackPower from "./NightAttackPower"
-import ShipAntiInstallationStatus from "../ShipAntiInstallationStatus"
 import { calcCruiserFitBonus, getProficiencyModifier } from "../Shelling/ShipShellingStatus"
 import NightCombatSpecialAttack, { isNightAerialAttackShip } from "./NightCombatSpecialAttack"
 

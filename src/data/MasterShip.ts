@@ -4,6 +4,34 @@ import ShipType from "./ShipType"
 
 type StatRange = [number, number]
 
+export type Equippable = {
+  categories: number[]
+  expantionSlot: number[]
+}
+
+export type ShipBase = {
+  shipId: number
+  sortId: number
+  name: string
+  readingName: string
+  hp: StatRange
+  armor: StatRange
+  firepower: StatRange
+  torpedo: StatRange
+  antiAir: StatRange
+  luck: StatRange
+  asw: StatRange
+  evasion: StatRange
+  los: StatRange
+  speed: number
+  range: number
+  fuel: number
+  ammo: number
+  slotCapacities: number[]
+  initialEquipment: Array<{ id: number; improvement: number }>
+  equippable: Equippable
+}
+
 const convert = (stat: ShipStat): StatRange => {
   if (typeof stat === "number") {
     return [stat, stat]
@@ -11,12 +39,12 @@ const convert = (stat: ShipStat): StatRange => {
   return stat
 }
 
-export default class MasterShip {
+export default class MasterShip implements ShipBase {
   public static readonly all = new Array<MasterShip>()
 
   public static readonly abyssalIdFrom = 1500
 
-  public readonly id: number
+  public readonly shipId: number
   public readonly sortNo: number
   public readonly sortId: number
   public readonly name: string
@@ -34,8 +62,8 @@ export default class MasterShip {
   public readonly range: number
   public readonly fuel: number
   public readonly ammo: number
-  public readonly slotCapacities: readonly number[]
-  public readonly equipment: ReadonlyArray<{ id: number; improvement: number }>
+  public readonly slotCapacities: number[]
+  public readonly initialEquipment: Array<{ id: number; improvement: number }>
   public readonly remodel: Readonly<{
     nextId: number
     nextLevel: number
@@ -47,7 +75,7 @@ export default class MasterShip {
   }
 
   constructor(shipData: ShipData, public readonly shipType: ShipType, public readonly shipClass: ShipClass) {
-    this.id = shipData.id
+    this.shipId = shipData.id
     this.sortNo = shipData.sortNo
     this.sortId = shipData.sortId
     this.name = shipData.name
@@ -68,7 +96,7 @@ export default class MasterShip {
     this.fuel = shipData.fuel
     this.ammo = shipData.ammo
     this.slotCapacities = shipData.slotCapacities.concat()
-    this.equipment = shipData.equipments.map(value => {
+    this.initialEquipment = shipData.equipments.map(value => {
       if (typeof value === "number") {
         return { id: value, improvement: 0 }
       }
@@ -95,7 +123,7 @@ export default class MasterShip {
   }
 
   get isAbyssal() {
-    return this.id > MasterShip.abyssalIdFrom
+    return this.shipId > MasterShip.abyssalIdFrom
   }
 
   get canRemodel() {
@@ -104,15 +132,15 @@ export default class MasterShip {
 
   get canConvert() {
     const {
-      id,
+      shipId,
       remodel: { nextId }
     } = this
 
-    const nextShip = MasterShip.all.find(ship => ship.id === nextId)
+    const nextShip = MasterShip.all.find(ship => ship.shipId === nextId)
     if (!nextShip) {
       return false
     }
-    return nextShip.remodel.nextId === id
+    return nextShip.remodel.nextId === shipId
   }
 
   get grade() {

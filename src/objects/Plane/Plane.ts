@@ -1,6 +1,6 @@
 import { AirControlState } from "../../constants"
 import { GearCategory } from "../../data"
-import { IGear } from "../Gear"
+import { IGear } from "../gear"
 
 export interface IPlane {
   gear: IGear
