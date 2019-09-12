@@ -12,6 +12,7 @@
   "license": "MIT",
   "scripts": {
     "test": "jest --coverage",
+    "ts-check": "yarn tsc  --noEmit",
     "build": "tsc -p tsconfig.build.json",
     "upload": "yarn build && yarn publish"
   },

@@ -22,7 +22,10 @@ export default class GearFactory {
       return undefined
     }
 
-    let proficiencyType: ProficiencyType = "Other"
+    let proficiencyType: ProficiencyType = "None"
+    if (master.is("DiveBomber") || master.is("TorpedoBomber") || master.is("ReconnaissanceAircraft")) {
+      proficiencyType = "Other"
+    }
     if (master.is("Fighter")) {
       proficiencyType = "Fighter"
     }

@@ -10,12 +10,13 @@ export const getLevelBonusValue = (bonuses: LevelBonus[], level: number) => {
 export interface IProficiency {
   internal: number
   level: number
+  visible: boolean
 
   fighterPowerBonus: number
   criticalPowerModifier: number
 }
 
-export type ProficiencyType = "Fighter" | "SeaplaneBomber" | "Other"
+export type ProficiencyType = "None" | "Fighter" | "SeaplaneBomber" | "Other"
 
 /** 熟練度 */
 export default class Proficiency implements IProficiency {
@@ -49,6 +50,10 @@ export default class Proficiency implements IProficiency {
   }
 
   constructor(public internal = 0, private type: ProficiencyType) {}
+
+  get visible() {
+    return this.type !== "None"
+  }
 
   get level() {
     return Proficiency.internalToLevel(this.internal)

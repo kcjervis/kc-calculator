@@ -178,6 +178,65 @@ export default class ShipShellingStatus {
     return { power: 1.08, accuracy: 1.1 }
   }
 
+  public calcPower = (options: ShipShellingPowerOptions) => {
+    const {
+      role = "Main",
+      isCritical = false,
+      formation = Formation.LineAhead,
+      engagement = Engagement.Parallel,
+      combinedFleetFactor = 0,
+      eventMapModifier = 1,
+      specialAttack,
+      isArmorPiercing = false,
+      installationType = "None"
+    } = options
+
+    const { shellingType, firepower, torpedo, bombing, improvementModifier, cruiserFitBonus, healthModifier } = this
+
+    const formationModifier = formation.getModifiersWithRole(role).shelling.power
+    const engagementModifier = engagement.modifier
+
+    const criticalModifier = isCritical ? 1.5 : 1
+
+    const specialAttackModifier = specialAttack ? specialAttack.modifier.power : 1
+    const apShellModifier = isArmorPiercing ? this.apShellModifiers.power : 1
+
+    const antiInstallationModifiers = this.antiInstallationStatus.getModifiersFromType(installationType)
+    const isAntiInstallationWarfare = installationType !== "None"
+
+    const effectiveBombing = isAntiInstallationWarfare
+      ? this.ship.totalEquipmentStats(gear => (gear.is("AntiInstallationBomber") ? gear.bombing : 0))
+      : bombing
+
+    const effectivenessMultiplicative = antiInstallationModifiers.postCapMultiplicative
+    const effectivenessAdditive = 0
+
+    const factors: ShellingPowerFactors = {
+      shellingType,
+      combinedFleetFactor,
+      firepower,
+      torpedo: isAntiInstallationWarfare ? 0 : torpedo,
+      bombing: effectiveBombing,
+      improvementModifier,
+
+      antiInstallationModifiers,
+      formationModifier,
+      engagementModifier,
+      healthModifier,
+      cruiserFitBonus,
+
+      effectivenessMultiplicative,
+      effectivenessAdditive,
+      specialAttackModifier,
+      apShellModifier,
+      criticalModifier,
+      proficiencyModifier: getProficiencyModifier(this.ship, specialAttack).power,
+      eventMapModifier
+    }
+
+    return new ShellingPower(factors)
+  }
+
   public calcAccuracy = (options: {
     fitGunBonus: number
     combinedFleetFactor: number
