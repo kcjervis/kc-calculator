@@ -195,15 +195,15 @@ export default class Shelling {
   get damage() {
     const { power, defender, remainingAmmoModifier } = this
     const defensePower = defender.ship.getDefensePower()
-    return new Damage(power.value, defensePower, defender.ship.health.nowHp, remainingAmmoModifier)
+    return new Damage(power.value, defensePower, defender.ship.health.currentHp, remainingAmmoModifier)
   }
 
   get taihaRate() {
     const { damage, defender, hitRate, criticalRate, isCritical } = this
-    const { nowHp, maxHp } = defender.ship.health
+    const { currentHp, maxHp } = defender.ship.health
     const { side } = defender
 
-    const isTaihaDamage = (value: number) => (nowHp - value) / maxHp <= 0.25
+    const isTaihaDamage = (value: number) => (currentHp - value) / maxHp <= 0.25
     const calcTaihaRate = (damageValues: number[]) => {
       if (damageValues.length === 0) {
         return 0
@@ -218,7 +218,7 @@ export default class Shelling {
       if (value <= 0) {
         return false
       }
-      if (side === Side.Player && nowHp - value <= 0) {
+      if (side === Side.Player && currentHp - value <= 0) {
         return false
       }
       return true
@@ -243,7 +243,7 @@ export default class Shelling {
 
     const { ship } = attacker
 
-    if (ship.health.damage === "Lost") {
+    if (ship.health.damage === "Sunk") {
       return false
     }
 
@@ -252,11 +252,11 @@ export default class Shelling {
     }
 
     if (shellingType === "CarrierShelling") {
-      if (ship.health.lte("Heavy")) {
+      if (ship.health.lte("Taiha")) {
         return false
       }
 
-      if (!ship.shipType.is("ArmoredAircraftCarrier") && ship.health.lte("Moderate")) {
+      if (!ship.shipType.is("ArmoredAircraftCarrier") && ship.health.lte("Chuuha")) {
         return false
       }
 

@@ -112,6 +112,6 @@ export default class NightAttack {
 
   get damage() {
     const { power, defensePower, remainingAmmoModifier, defender } = this
-    return new Damage(power.value, defensePower, defender.ship.health.nowHp, remainingAmmoModifier)
+    return new Damage(power.value, defensePower, defender.ship.health.currentHp, remainingAmmoModifier)
   }
 }

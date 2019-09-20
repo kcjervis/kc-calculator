@@ -211,12 +211,12 @@ export default class Ship implements IShip {
 
   get canNightAttack() {
     const { shipClass, shipType, health, master } = this
-    if (health.lte("Heavy")) {
+    if (health.lte("Taiha")) {
       return false
     }
 
     if (shipClass.is("ArkRoyalClass")) {
-      return health.damage !== "Moderate" && this.planes.some(plane => plane.isSwordfish)
+      return health.damage !== "Chuuha" && this.planes.some(plane => plane.isSwordfish)
     }
     return master.firepower[0] > 0
   }

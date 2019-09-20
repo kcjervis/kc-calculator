@@ -1,15 +1,15 @@
 /**
  * Less 無傷
- * Minor 小破
- * Moderate 中破
- * Heavy 大破
- * Lost 轟沈
+ * Shouha 小破
+ * Chuuha 中破
+ * Taiha 大破
+ * Sunk 轟沈
  */
-type HealthDamage = "Less" | "Minor" | "Moderate" | "Heavy" | "Lost"
+type HealthDamage = "Less" | "Shouha" | "Chuuha" | "Taiha" | "Sunk"
 
 export interface IHealth {
   maxHp: number
-  nowHp: number
+  currentHp: number
 
   damage: HealthDamage
   gte: (damage: HealthDamage) => boolean
@@ -20,32 +20,32 @@ export interface IHealth {
 }
 
 export default class Health implements IHealth {
-  constructor(public readonly maxHp: number, public nowHp: number) {}
+  constructor(public readonly maxHp: number, public currentHp: number) {}
 
   get damage() {
-    const rate = this.nowHp / this.maxHp
+    const rate = this.currentHp / this.maxHp
     if (rate <= 0) {
-      return "Lost"
+      return "Sunk"
     } else if (rate <= 0.25) {
-      return "Heavy"
+      return "Taiha"
     } else if (rate <= 0.5) {
-      return "Moderate"
+      return "Chuuha"
     } else if (rate <= 0.75) {
-      return "Minor"
+      return "Shouha"
     }
     return "Less"
   }
 
   public gte = (damage: HealthDamage) => {
-    const rate = this.nowHp / this.maxHp
+    const rate = this.currentHp / this.maxHp
     switch (damage) {
       case "Less":
         return rate >= 1
-      case "Minor":
+      case "Shouha":
         return rate >= 0.75
-      case "Moderate":
+      case "Chuuha":
         return rate >= 0.5
-      case "Heavy":
+      case "Taiha":
         return rate >= 0.25
     }
     return true
@@ -56,11 +56,11 @@ export default class Health implements IHealth {
   get shellingPowerModifier() {
     switch (this.damage) {
       case "Less":
-      case "Minor":
+      case "Shouha":
         return 1
-      case "Moderate":
+      case "Chuuha":
         return 0.7
-      case "Heavy":
+      case "Taiha":
         return 0.4
     }
     return 0
@@ -69,16 +69,16 @@ export default class Health implements IHealth {
   get torpedoPowerModifire() {
     switch (this.damage) {
       case "Less":
-      case "Minor":
+      case "Shouha":
         return 1
-      case "Moderate":
+      case "Chuuha":
         return 0.8
     }
     return 0
   }
 
   get nightAttackPowerModifire() {
-    if (this.lte("Heavy")) {
+    if (this.lte("Taiha")) {
       return 0
     }
     return this.shellingPowerModifier

@@ -1,5 +1,5 @@
-import MasterShipId from "../../../../data/MasterShipId"
 import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
+import { ShipId } from "@jervis/data"
 
 const bonusCreator: StatsBonusCreator = ship => {
   // 20.3cm(2号)連装砲
@@ -13,13 +13,13 @@ const bonusCreator: StatsBonusCreator = ship => {
   const isAoba = name.includes("青葉")
 
   // 単体ボーナス
-  if ([MasterShipId.FurutakaKai2, MasterShipId.KakoKai2, MasterShipId.KinugasaKai].includes(ship.masterId)) {
+  if ([ShipId["古鷹改二"], ShipId["加古改二"], ShipId["衣笠改"]].includes(ship.masterId)) {
     bonus.add({ multiplier: count, firepower: 1 })
   }
-  if (MasterShipId.AobaKai === ship.masterId) {
+  if (ShipId["青葉改"] === ship.masterId) {
     bonus.add({ multiplier: count, firepower: 1, antiAir: 1 })
   }
-  if (MasterShipId.KinugasaKai2 === ship.masterId) {
+  if (ShipId["衣笠改二"] === ship.masterId) {
     bonus.add({ multiplier: count, firepower: 2, evasion: 1 })
   }
 

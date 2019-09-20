@@ -8,7 +8,7 @@ const createBonus: StatsBonusCreator = ship => {
   }
   const bonus = new StatsBonus()
 
-  if (ship.shipClass.isSpecialTypeDD) {
+  if (ship.shipClass.isSpecialTypeDestroyer) {
     // 単体ボーナス
     bonus.add({
       multiplier: count294,

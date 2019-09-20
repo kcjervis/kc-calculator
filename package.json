@@ -18,7 +18,11 @@
   },
   "jest": {
     "preset": "ts-jest",
-    "coveragePathIgnorePatterns": ["/node_modules/", "/testUtils/"],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/testUtils/",
+      "/ExplicitStatsBonus/"
+    ],
     "moduleNameMapper": {
       "^lodash-es$": "<rootDir>/node_modules/lodash/index.js"
     }
@@ -31,7 +35,7 @@
     "@types/jest": "^24.0.18",
     "@types/lodash-es": "^4.17.3",
     "@types/nedb": "^1.8.9",
-    "@types/node": "^12.7.4",
+    "@types/node": "^12.7.5",
     "@typescript-eslint/eslint-plugin": "^2.2.0",
     "@typescript-eslint/parser": "^2.2.0",
     "babel-jest": "^24.9.0",
@@ -42,7 +46,7 @@
     "jest": "^24.9.0",
     "nedb": "^1.8.0",
     "prettier": "^1.18.2",
-    "ts-jest": "^24.0.2",
+    "ts-jest": "^24.1.0",
     "ts-node": "^8.3.0",
     "typescript": "^3.6.3",
     "utility-types": "^3.7.0"

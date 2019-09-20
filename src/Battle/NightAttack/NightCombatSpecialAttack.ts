@@ -50,7 +50,7 @@ const calcBaseValue = (
   if (isFlagship) {
     baseValue += 15
   }
-  if (ship.health.damage === "Moderate") {
+  if (ship.health.damage === "Chuuha") {
     baseValue += 18
   }
   if (ship.hasGear(Lookout)) {

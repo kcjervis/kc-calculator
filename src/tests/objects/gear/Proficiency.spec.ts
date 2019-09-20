@@ -5,6 +5,11 @@ describe("gear/Proficiency", () => {
     return expect(new Proficiency(internal, type)[key])
   }
 
+  it("visible", () => {
+    const pro = new Proficiency(undefined, "None")
+    expect(pro.visible).toBe(false)
+  })
+
   it("level", () => {
     const pro = new Proficiency(undefined, "Fighter")
     expect(pro.level).toBe(0)

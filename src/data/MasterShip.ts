@@ -11,6 +11,8 @@ export type Equippable = {
 
 export type ShipBase = {
   shipId: number
+  shipClassId: number
+
   sortId: number
   name: string
   readingName: string
@@ -45,6 +47,8 @@ export default class MasterShip implements ShipBase {
   public static readonly abyssalIdFrom = 1500
 
   public readonly shipId: number
+  public readonly shipClassId: number
+
   public readonly sortNo: number
   public readonly sortId: number
   public readonly name: string
@@ -76,6 +80,8 @@ export default class MasterShip implements ShipBase {
 
   constructor(shipData: ShipData, public readonly shipType: ShipType, public readonly shipClass: ShipClass) {
     this.shipId = shipData.id
+    this.shipClassId = shipClass.id
+
     this.sortNo = shipData.sortNo
     this.sortId = shipData.sortId
     this.name = shipData.name

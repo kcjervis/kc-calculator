@@ -128,6 +128,6 @@ export default class ShellingSupport {
   get damage() {
     const { power, defender, remainingAmmoModifier } = this
     const defensePower = defender.ship.getDefensePower()
-    return new Damage(power.value, defensePower, defender.ship.health.nowHp, remainingAmmoModifier)
+    return new Damage(power.value, defensePower, defender.ship.health.currentHp, remainingAmmoModifier)
   }
 }

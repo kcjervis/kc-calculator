@@ -22,9 +22,10 @@ export type NumberCondition<T extends number = number> =
       $between?: [number, number]
     }
 export type StringCondition<T extends string = string> = T | T[]
-export type ObjectCondition<T extends object> = {
-  [K in keyof T]?: Condition<T[K]>
-}
+export type ObjectCondition<T extends object> = object &
+  {
+    [K in keyof T]?: Condition<T[K]>
+  }
 
 export type Condition<T> =
   | T

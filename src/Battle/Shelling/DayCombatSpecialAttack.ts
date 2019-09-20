@@ -75,7 +75,7 @@ export default class DayCombatSpecialAttack {
   }
 
   public static getPossibleAttacks = (ship: IShip): DayCombatSpecialAttack[] => {
-    if (ship.health.damage === "Heavy") {
+    if (ship.health.damage === "Taiha") {
       return []
     }
 

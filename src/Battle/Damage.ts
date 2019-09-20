@@ -8,7 +8,7 @@ export default class Damage {
   constructor(
     private readonly attackPower = 0,
     private readonly defensePower: DefensePower,
-    private readonly defenderNowHp: number,
+    private readonly defenderCurrentHp: number,
     private readonly remainingAmmoModifier = 1
   ) {}
 
@@ -36,8 +36,8 @@ export default class Damage {
   }
 
   public get isDeadly() {
-    const { min, defenderNowHp } = this
-    return defenderNowHp <= min
+    const { min, defenderCurrentHp } = this
+    return defenderCurrentHp <= min
   }
 
   public get scratchDamageProbability() {
@@ -46,17 +46,17 @@ export default class Damage {
   }
 
   public get scratchDamages() {
-    const { defenderNowHp } = this
-    return range(defenderNowHp).map(randomValue => Math.floor(defenderNowHp * 0.06 + randomValue * 0.08))
+    const { defenderCurrentHp } = this
+    return range(defenderCurrentHp).map(randomValue => Math.floor(defenderCurrentHp * 0.06 + randomValue * 0.08))
   }
 
   public get deadlyDamageProbability() {
-    const { values, defenderNowHp } = this
-    return values.filter(value => defenderNowHp - value <= 0).length / values.length
+    const { values, defenderCurrentHp } = this
+    return values.filter(value => defenderCurrentHp - value <= 0).length / values.length
   }
 
   public get stopperDamages() {
-    const { defenderNowHp } = this
-    return range(defenderNowHp).map(randomValue => Math.floor(defenderNowHp * 0.5 + randomValue * 0.3))
+    const { defenderCurrentHp } = this
+    return range(defenderCurrentHp).map(randomValue => Math.floor(defenderCurrentHp * 0.5 + randomValue * 0.3))
   }
 }

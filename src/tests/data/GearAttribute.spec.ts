@@ -25,6 +25,7 @@ const matcherTest = (matcher: GearMatcher, stats: Partial<GearStats>) => {
 }
 
 describe("GearAttribute", () => {
+  // GearMatcherAttributeとGearCategoryKeyの重複が無いか確認
   type Repetition = Extract<GearMatcherAttribute, GearCategoryKey>
   assertType<TypeEq<Repetition, never>>()
 

@@ -14,11 +14,11 @@ const createBonus: StatsBonusCreator = ship => {
   const { shipClass } = ship
   const isKai2 = shipNameIsKai2(ship.name)
 
-  const isSpecialTypeDDKai2 = shipClass.isSpecialTypeDD && isKai2
+  const isSpecialTypeDestroyerKai2 = shipClass.isSpecialTypeDestroyer && isKai2
   const isHatsuharuClassKai2 = shipClass.is("HatsuharuClass") && isKai2
 
   // 単体ボーナス
-  if (isSpecialTypeDDKai2 || isHatsuharuClassKai2) {
+  if (isSpecialTypeDestroyerKai2 || isHatsuharuClassKai2) {
     bonus.add({
       multiplier: Math.min(count, 2),
       torpedo: 2,

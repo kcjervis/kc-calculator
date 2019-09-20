@@ -29,9 +29,9 @@ export const shipNameIsKai = (name: string) => name.endsWith("改")
 export const shipNameIsKai2 = (name: string) => /(改二|Верный)(?!丙)/.test(name)
 
 export const calcDeadlyPower = (ship: IShip) => {
-  const { nowHp } = ship.health
+  const { currentHp } = ship.health
   const defensePower = ship.getDefensePower()
-  return nowHp + defensePower.max
+  return currentHp + defensePower.max
 }
 
 export * from "./typeGuards"

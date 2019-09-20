@@ -1,4 +1,4 @@
-import { MasterShip } from "../../data"
+import { MasterShip, ShipAttribute } from "../../data"
 import { GearFactory, IGearDataObject } from "../gear"
 import { createPlanes } from "../plane"
 
@@ -15,7 +15,7 @@ export interface IShipDataObject {
   slots?: number[]
   equipments?: Array<IGearDataObject | undefined>
 
-  nowHp?: number
+  currentHp?: number
   morale?: number
   increased?: Partial<IBaseStats>
 }
@@ -51,8 +51,8 @@ export default class ShipFactory {
     const nakedStats = new ShipNakedStats(foundMaster, level, increased)
     const stats = new ShipStats(nakedStats, gears)
 
-    const { nowHp = stats.hp } = obj
-    const health = new Health(stats.hp, nowHp)
+    const { currentHp = stats.hp } = obj
+    const health = new Health(stats.hp, currentHp)
     const morale = new Morale(moraleValue)
 
     const slots = obj.slots ? obj.slots.concat() : foundMaster.slotCapacities.concat()
