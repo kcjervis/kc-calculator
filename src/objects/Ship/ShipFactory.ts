@@ -58,7 +58,18 @@ export default class ShipFactory {
     const slots = obj.slots ? obj.slots.concat() : foundMaster.slotCapacities.concat()
 
     const planes = createPlanes(slots, gears)
-    const ship = new Ship(foundMaster, stats, nakedStats, health, morale, slots, gears, planes)
+
+    const ship = new Ship(
+      foundMaster,
+      stats,
+      nakedStats,
+      health,
+      morale,
+      slots,
+      gears,
+      planes,
+      ShipAttribute.from(foundMaster).includes
+    )
 
     // 装備ボーナスを適応
     ship.stats.statsBonus = createExplicitStatsBonus(ship)

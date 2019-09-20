@@ -6,7 +6,7 @@ import { IMorale } from "./Morale"
 import { IShipNakedStats } from "./ShipNakedStats"
 import { IShipStats } from "./ShipStats"
 
-import { MasterShip, ShipClass, ShipType, GearAttribute } from "../../data"
+import { MasterShip, ShipClass, ShipType, GearAttribute, ShipAttribute } from "../../data"
 import { isNonNullable, shipNameIsKai2 } from "../../utils"
 import { getApShellModifiers, calcCruiserFitBonus } from "../../formulas"
 import { IGear } from "../gear"
@@ -40,6 +40,8 @@ export interface IShip {
   installationType: InstallationType
   isInstallation: boolean
 
+  is: (attr: ShipAttribute) => boolean
+
   canEquip: (gear: IGear, slotIndex: number) => boolean
 
   hasGear: (iteratee: GearIteratee<boolean>) => boolean
@@ -68,7 +70,8 @@ export default class Ship implements IShip {
     public readonly morale: IMorale,
     public readonly slots: number[],
     public readonly gears: Array<IGear | undefined>,
-    public readonly planes: IPlane[]
+    public readonly planes: IPlane[],
+    public readonly is: (attr: ShipAttribute) => boolean
   ) {
     this.slotCapacities = master.slotCapacities.concat()
   }

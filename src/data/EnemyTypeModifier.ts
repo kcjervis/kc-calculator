@@ -3,6 +3,7 @@ import { GearStats } from "../types"
 import GearAttribute from "./GearAttribute"
 import { GearId } from "@jervis/data"
 import { IGear, IShip } from "../objects"
+import { ShipAttribute } from "."
 
 type AttackPowerModifierPosition =
   | "a1"
@@ -38,23 +39,12 @@ type AttackPowerModifier = Partial<Record<AttackPowerModifierPosition, number>>
 
 type GearCondition = Condition<GearStats> | { attr: GearAttribute | GearAttribute[] }
 
-type ShipCondition = Condition<IShip> | number
-
-type AttackModifier = {
-  byTarget: ShipCondition
-  power: AttackPowerModifier
-}
-
-type EnemyTypeModifier = {
-  byEnemy: {}
-  byShip: {}
-  byGear: {}
-}
+type ShipCondition = Condition<IShip> | number | { attr: ShipAttribute }
 
 type EquipmentEffect = {}
 
 type EquipmentEffectiveness = {
-  byTarget?: number
+  byTarget?: ShipCondition
   byShip?: ShipCondition
   byGear: GearCondition
   count1?: AttackPowerModifier
@@ -65,9 +55,24 @@ type EquipmentEffectiveness = {
 }
 
 const modifiers: EquipmentEffectiveness[] = [
-  { byGear: { attr: "AntiAircraftShell" }, count1: { a13: 1.75 } },
+  { byTarget: { attr: "IsolatedIsland" }, byGear: { attr: "AntiAircraftShell" }, count1: { a13: 1.75 } },
   { byGear: { gearId: GearId["WG42 (Wurfgerät 42)"] }, count1: { a13: 1.6 }, count2: { a13: 2.72 } }
 ]
+
+const shipStatKeys = ["firepower", "armor", "torpedo", "evasion", "antiAir", "asw", "speed", "los", "range"] as const
+
+type StatBonusRecord = Partial<Record<typeof shipStatKeys[number], number>>
+
+type VisibleEquipmentStatBonus = {
+  byShip: ShipCondition
+  byGear: GearCondition
+  multiple?: StatBonusRecord
+  count1?: StatBonusRecord
+  count2?: StatBonusRecord
+  count3?: StatBonusRecord
+  count4?: StatBonusRecord
+  count5?: StatBonusRecord
+}
 
 const matchesGear = (condition: GearCondition) => (gear: IGear) => {
   if (!("attr" in condition)) {

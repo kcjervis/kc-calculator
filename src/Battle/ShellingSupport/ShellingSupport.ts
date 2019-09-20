@@ -7,6 +7,7 @@ import { calcBasicPower, calcPreCapPower, calcPower } from "../Shelling/Shelling
 import ShipShellingStatus from "../Shelling/ShipShellingStatus"
 import { softcap } from "../../utils"
 import { calcShellingBasicAccuracy, calcShellingAccuracy } from "../Shelling/ShellingAccuracy"
+import { Formation } from "../../constants"
 
 type ShellingSupportPowerDef = {
   battleState: BattleState
@@ -26,7 +27,14 @@ export default class ShellingSupport {
 
     const { shellingType, firepower, torpedo, bombing, healthModifier } = new ShipShellingStatus(ship)
 
-    const formationModifier = formation.getModifiersWithRole(role).shelling.power
+    let formationModifier = formation.getModifiersWithRole(role).shelling.power
+    if (Formation.combinedFleetFormations.includes(formation)) {
+      formationModifier = 1
+    }
+    if (Formation.Vanguard === formation) {
+      formationModifier = 0.5
+    }
+
     const engagementModifier = battleState.engagement.modifier
 
     const criticalModifier = isCritical ? 1.5 : 1
