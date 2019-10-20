@@ -97,7 +97,14 @@ export default class ShellingSupport {
     const { ship, formation, role } = attacker
     const { level, stats, totalEquipmentStats } = ship
 
-    const formationModifier = formation.getModifiersWithRole(role).shelling.accuracy
+    let formationModifier = formation.getModifiersWithRole(role).shelling.accuracy
+    if (Formation.combinedFleetFormations.includes(formation)) {
+      formationModifier = 1
+    }
+    if (Formation.Vanguard === formation) {
+      formationModifier = 0.8
+    }
+
     const moraleModifier = ship.morale.shellingAccuracyModifier
 
     const equipmentAccuracy = totalEquipmentStats("accuracy")

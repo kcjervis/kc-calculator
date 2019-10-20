@@ -1,6 +1,9 @@
 import { sumBy } from "lodash-es"
 import { IGear, IFleet, IShip } from "./objects"
-import carrierBasedReconnaissanceAircraftBonus from "./objects/ship/ExplicitStatsBonus/艦上偵察機"
+import carrierBasedReconnaissanceAircraftBonuses from "./objects/ship/ExplicitStatsBonus/艦上偵察機"
+import createLateBonus from "./objects/ship/ExplicitStatsBonus/SeaplaneBomber/Laté 298B"
+
+const equipmentBonuses = carrierBasedReconnaissanceAircraftBonuses.concat(createLateBonus)
 
 const gearEffectiveLos = (gear: IGear) => {
   const { los, improvement } = gear
@@ -23,7 +26,7 @@ const shipEffectiveLos = (ship: IShip, nodeDivaricatedFactor: number) => {
   const { totalEquipmentStats, nakedStats } = ship
   const equipTotal = totalEquipmentStats(gearEffectiveLos)
 
-  const fitBonus = sumBy(carrierBasedReconnaissanceAircraftBonus, createBonus => {
+  const fitBonus = sumBy(equipmentBonuses, createBonus => {
     const bonus = createBonus(ship)
     return bonus ? bonus.los : 0
   })

@@ -1,5 +1,5 @@
 import { sumBy } from "lodash-es"
-import { isNonNullable, isMatch, Condition } from "../../utils"
+import { isNonNullable } from "../../utils"
 import { PickByValue } from "utility-types"
 
 type GearIteratee<GearType, R> = (gear: GearType, index?: GearIndex, slotSize?: number) => R

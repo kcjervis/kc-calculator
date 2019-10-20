@@ -12,7 +12,11 @@ export type ImprovementModifiers = {
   shellingPowerModifier: number
   shellingAccuracyModifier: number
 
+  nightAttackPowerModifier: number
+  nightAttackAccuracyModifier: number
+
   effectiveLosModifier: number
+  evasionModifier: number
   defensePowerModifier: number
 }
 
@@ -165,7 +169,6 @@ export default class Improvement implements IImprovement {
     if (
       gearIs("Radar") ||
       gearIs("MainGun") ||
-      gearIs("Armor") ||
       gearIs("SecondaryGun") ||
       gearIs("Sonar") ||
       gearIs("LargeSonar") ||
@@ -174,6 +177,50 @@ export default class Improvement implements IImprovement {
       gearIs("AntiAircraftFireDirector")
     ) {
       return Math.sqrt(this.value)
+    }
+
+    return 0
+  }
+
+  get nightAttackPowerModifier() {
+    const { gearIs } = this
+    const { gearId } = this.stats
+    // 12.7cm 連装高角砲、8cm 高角砲、8cm 高角砲改＋増設機銃、10cm 連装高角砲改＋増設機銃
+    if ([10, 66, 220, 275].includes(gearId)) {
+      return 0.2 * this.value
+    }
+    // 15.5cm 三連装副砲、15.5cm 三連装副砲改、15.2cm 三連装砲
+    if ([12, 234, 247].includes(gearId)) {
+      return 0.3 * this.value
+    }
+
+    if (
+      gearIs("MainGun") ||
+      gearIs("SecondaryGun") ||
+      gearIs("ArmorPiercingShell") ||
+      gearIs("AntiAircraftShell") ||
+      gearIs("AntiAircraftFireDirector") ||
+      gearIs("Searchlight") ||
+      gearIs("Torpedo") ||
+      gearIs("LandingCraft") ||
+      gearIs("SpecialAmphibiousTank") ||
+      gearIs("MidgetSubmarine")
+    ) {
+      return Math.sqrt(this.value)
+    }
+
+    return 0
+  }
+
+  get nightAttackAccuracyModifier() {
+    const { gearIs, value } = this
+
+    if (gearIs("SurfaceRadar")) {
+      return 1.6 * Math.sqrt(value)
+    }
+
+    if (gearIs("MediumCaliberMainGun") || gearIs("Radar")) {
+      return 1.3 * Math.sqrt(value)
     }
 
     return 0
@@ -202,6 +249,13 @@ export default class Improvement implements IImprovement {
     }
 
     return 0
+  }
+
+  get evasionModifier() {
+    if (!this.gearIs("EngineImprovement")) {
+      return 0
+    }
+    return 1.5 * Math.sqrt(this.value)
   }
 
   get defensePowerModifier() {

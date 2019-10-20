@@ -1,9 +1,11 @@
-import { Condition, isMatch } from "../utils"
+import { Condition } from "../utils"
 import { GearStats } from "../types"
-import GearAttribute from "./GearAttribute"
-import { GearId } from "@jervis/data"
 import { IGear, IShip } from "../objects"
-import { ShipAttribute } from "."
+import { GearQuery } from "../objects/gear/Gear"
+import GearAttribute from "./GearAttribute"
+import ShipAttribute from "./ShipAttribute"
+import { GearId, ShipClassId, ShipId } from "@jervis/data"
+import sift, { SiftQuery } from "sift"
 
 type AttackPowerModifierPosition =
   | "a1"
@@ -37,16 +39,12 @@ type AttackPowerModifierPosition =
 
 type AttackPowerModifier = Partial<Record<AttackPowerModifierPosition, number>>
 
-type GearCondition = Condition<GearStats> | { attr: GearAttribute | GearAttribute[] }
-
 type ShipCondition = Condition<IShip> | number | { attr: ShipAttribute }
-
-type EquipmentEffect = {}
 
 type EquipmentEffectiveness = {
   byTarget?: ShipCondition
   byShip?: ShipCondition
-  byGear: GearCondition
+  byGear: GearQuery
   count1?: AttackPowerModifier
   count2?: AttackPowerModifier
   count3?: AttackPowerModifier
@@ -55,7 +53,7 @@ type EquipmentEffectiveness = {
 }
 
 const modifiers: EquipmentEffectiveness[] = [
-  { byTarget: { attr: "IsolatedIsland" }, byGear: { attr: "AntiAircraftShell" }, count1: { a13: 1.75 } },
+  { byTarget: { attr: "IsolatedIsland" }, byGear: { attrs: "AntiAircraftShell" }, count1: { a13: 1.75 } },
   { byGear: { gearId: GearId["WG42 (Wurfgerät 42)"] }, count1: { a13: 1.6 }, count2: { a13: 2.72 } }
 ]
 
@@ -65,7 +63,7 @@ type StatBonusRecord = Partial<Record<typeof shipStatKeys[number], number>>
 
 type VisibleEquipmentStatBonus = {
   byShip: ShipCondition
-  byGear: GearCondition
+  byGear: GearQuery
   multiple?: StatBonusRecord
   count1?: StatBonusRecord
   count2?: StatBonusRecord
@@ -74,20 +72,13 @@ type VisibleEquipmentStatBonus = {
   count5?: StatBonusRecord
 }
 
-const matchesGear = (condition: GearCondition) => (gear: IGear) => {
-  if (!("attr" in condition)) {
-    return isMatch(gear, condition)
-  }
-  const { attr } = condition
-  if (typeof attr === "string") {
-    return gear.is(attr)
-  }
-  return attr.some(gear.is)
-}
+const bonuses: VisibleEquipmentStatBonus[] = [
+  { byGear: { gearId: GearId["三式弾"] }, byShip: { shipId: ShipId["金剛改二"] }, count1: { firepower: 1, antiAir: 1 } }
+]
 
 const selectModifier = (gears: IGear[], modifier: EquipmentEffectiveness) => {
   const { byGear, count1, count2, count3, count4, count5 } = modifier
-  const count = gears.filter(matchesGear(byGear)).length
+  const count = gears.filter(gear => gear.match(byGear)).length
   if (count === 0) {
     return undefined
   }

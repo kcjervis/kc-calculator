@@ -8,18 +8,30 @@ export default class AirControlState {
   public static readonly AirDenial = new AirControlState(3, "航空劣勢", 7)
   public static readonly AirIncapability = new AirControlState(4, "制空権喪失", 10)
 
-  public static fromFighterPower(allied: number, enemy: number) {
-    if (allied >= 3 * enemy) {
-      return AirControlState.AirSupremacy
-    } else if (allied >= 1.5 * enemy) {
-      return AirControlState.AirSuperiority
-    } else if (allied >= (2 / 3) * enemy) {
-      return AirControlState.AirParity
-    } else if (allied >= (1 / 3) * enemy) {
-      return AirControlState.AirDenial
-    } else {
-      return AirControlState.AirIncapability
+  public static getBoundaryValues = (fp: number) => {
+    return {
+      AirSupremacy: Math.ceil(3 * fp),
+      AirSuperiority: Math.ceil(1.5 * fp),
+      AirParity: Math.floor((2 / 3) * fp) + 1,
+      AirDenial: Math.floor((1 / 3) * fp) + 1
     }
+  }
+
+  public static fromFighterPower(allied: number, enemy: number) {
+    const bounds = AirControlState.getBoundaryValues(enemy)
+    if (allied >= bounds.AirSupremacy) {
+      return AirControlState.AirSupremacy
+    }
+    if (allied >= bounds.AirSuperiority) {
+      return AirControlState.AirSuperiority
+    }
+    if (allied >= bounds.AirParity) {
+      return AirControlState.AirParity
+    }
+    if (allied >= bounds.AirDenial) {
+      return AirControlState.AirDenial
+    }
+    return AirControlState.AirIncapability
   }
 
   public static fromId(id: number) {

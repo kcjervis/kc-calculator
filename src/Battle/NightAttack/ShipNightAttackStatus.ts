@@ -35,59 +35,6 @@ export default class ShipNightAttackStatus {
     return getProficiencyModifier(ship)
   }
 
-  private get improvementPowerModifier() {
-    return this.ship.totalEquipmentStats(gear => {
-      const { masterId, improvement, category } = gear
-
-      // 12.7cm 連装高角砲、8cm 高角砲、8cm 高角砲改＋増設機銃、10cm 連装高角砲改＋増設機銃
-      if ([10, 66, 220, 275].includes(masterId)) {
-        return 0.2 * improvement.value
-      }
-      // 15.5cm 三連装副砲、15.5cm 三連装副砲改、15.2cm 三連装砲
-      if ([12, 234, 247].includes(masterId)) {
-        return 0.3 * improvement.value
-      }
-
-      if (
-        gear.is("MainGun") ||
-        category.any(
-          "SecondaryGun",
-          "ArmorPiercingShell",
-          "AntiAircraftShell",
-          "AntiAircraftFireDirector",
-          "Searchlight",
-          "Torpedo",
-          "LandingCraft",
-          "SpecialAmphibiousTank",
-          "MidgetSubmarine"
-        )
-      ) {
-        return Math.sqrt(improvement.value)
-      }
-
-      return 0
-    })
-  }
-
-  get improvementAccuracyModifier() {
-    return this.ship.totalEquipmentStats(gear => {
-      const { improvement, category } = gear
-
-      if (gear.is("SurfaceRadar")) {
-        return 1.6 * Math.sqrt(improvement.value)
-      }
-
-      if (
-        gear.is("Armor") ||
-        category.any("AntiAircraftGun", "Sonar", "LargeSonar", "DepthCharge", "EngineImprovement")
-      ) {
-        return 0
-      }
-
-      return Math.sqrt(improvement.value)
-    })
-  }
-
   public calcNightAerialAttackPower(isAntiInstallationWarfare?: boolean) {
     const { ship, nightAttackType } = this
     if (nightAttackType !== "NightAerialAttack") {
@@ -110,8 +57,10 @@ export default class ShipNightAttackStatus {
       specialAttack,
       isCritical = false
     } = options
-    const { ship, nightAttackType, improvementPowerModifier, proficiencyModifier } = this
+    const { ship, nightAttackType, proficiencyModifier } = this
     const { firepower, torpedo } = ship.stats
+
+    const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.nightAttackPowerModifier)
 
     const isAntiInstallationWarfare = installationType !== "None"
     const nightAerialAttackPower = this.calcNightAerialAttackPower(isAntiInstallationWarfare)
@@ -138,7 +87,7 @@ export default class ShipNightAttackStatus {
       nightAttackType,
       firepower,
       torpedo: isAntiInstallationWarfare ? 0 : torpedo,
-      improvementModifier: improvementPowerModifier,
+      improvementModifier,
       nightAerialAttackPower,
       nightContactModifier,
 

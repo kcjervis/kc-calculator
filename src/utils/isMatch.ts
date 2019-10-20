@@ -11,6 +11,17 @@ export type LogicalCondition<T> =
     }
   | { $not: Condition<T> }
 
+type ComparisonQueryOperators<T extends number = number> = {
+  $eq?: number
+  $ne?: number
+  $lt?: number
+  $lte?: number
+  $gt?: number
+  $gte?: number
+  $in?: number[]
+  $nin?: number[]
+}
+
 export type NumberCondition<T extends number = number> =
   | T
   | T[]

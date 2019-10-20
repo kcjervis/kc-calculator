@@ -1,4 +1,5 @@
 import { maxBy } from "lodash-es"
+import { GearAttribute } from "../../data"
 
 type LevelBonus = { level: number; value: number }
 
@@ -17,6 +18,21 @@ export interface IProficiency {
 }
 
 export type ProficiencyType = "None" | "Fighter" | "SeaplaneBomber" | "Other"
+export const ProficiencyType = {
+  from: (attrs: GearAttribute[]): ProficiencyType => {
+    const gearIs = (attr: GearAttribute) => attrs.includes(attr)
+    if (gearIs("DiveBomber") || gearIs("TorpedoBomber") || gearIs("ReconnaissanceAircraft")) {
+      return "Other"
+    }
+    if (gearIs("Fighter")) {
+      return "Fighter"
+    }
+    if (gearIs("SeaplaneBomber")) {
+      return "SeaplaneBomber"
+    }
+    return "None"
+  }
+}
 
 /** 熟練度 */
 export default class Proficiency implements IProficiency {

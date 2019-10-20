@@ -21,5 +21,7 @@ export const calcEvasionValue = (ship: IShip, formationModifier: number, postCap
     postCap = Math.floor(40 + 3 * Math.sqrt(basicEvasion - 40))
   }
 
-  return Math.floor(postCap + postCapModifier)
+  const improvementModifier = Math.floor(ship.totalEquipmentStats(gear => gear.improvement.evasionModifier))
+
+  return Math.floor(postCap + postCapModifier) + improvementModifier
 }

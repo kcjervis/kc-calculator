@@ -3,6 +3,9 @@ import { IImprovement } from "./Improvement"
 import { IProficiency } from "./Proficiency"
 import { calcFighterPower } from "../../formulas"
 import { GearStats, GearState } from "../../types"
+import sift, { SiftQuery } from "sift"
+
+export type GearQuery = SiftQuery<GearStats & { attrs: GearAttribute[] }>
 
 export interface IGear extends GearStats {
   /** 装備ID */
@@ -16,7 +19,11 @@ export interface IGear extends GearStats {
 
   category: GearCategory
 
+  attrs: GearAttribute[]
+
   is: (attr: GearAttribute) => boolean
+
+  match: (query: GearQuery) => boolean
 
   calcFighterPower: (slotSize: number, isInterception?: boolean) => number
 }
@@ -27,8 +34,10 @@ export default class Gear implements IGear {
     public readonly category: GearCategory,
     public readonly improvement: IImprovement,
     public readonly proficiency: IProficiency,
-    public is: (attr: GearAttribute) => boolean
+    public attrs: GearAttribute[]
   ) {}
+
+  public is = (attr: GearAttribute) => this.attrs.includes(attr)
 
   get gearId() {
     return this.stats.gearId
@@ -61,7 +70,7 @@ export default class Gear implements IGear {
     return this.stats.torpedo
   }
   get antiAir() {
-    return this.stats.armor
+    return this.stats.antiAir
   }
   get speed() {
     return this.stats.speed
@@ -99,6 +108,10 @@ export default class Gear implements IGear {
 
   get masterId() {
     return this.gearId
+  }
+
+  public match = (query: GearQuery) => {
+    return sift(query)(this)
   }
 
   public toState = (): GearState => ({

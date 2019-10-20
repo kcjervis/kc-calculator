@@ -20,6 +20,10 @@ export interface IShip {
   masterId: number
   name: string
 
+  shipId: number
+  shipClassId: number
+  shipTypeId: number
+
   shipClass: ShipClass
   shipType: ShipType
 
@@ -74,6 +78,16 @@ export default class Ship implements IShip {
     public readonly is: (attr: ShipAttribute) => boolean
   ) {
     this.slotCapacities = master.slotCapacities.concat()
+  }
+
+  get shipId() {
+    return this.master.shipId
+  }
+  get shipClassId() {
+    return this.master.shipClassId
+  }
+  get shipTypeId() {
+    return this.master.shipType.id
   }
 
   /** 廃止予定 */

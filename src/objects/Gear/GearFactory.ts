@@ -22,20 +22,11 @@ export default class GearFactory {
       return undefined
     }
 
-    let proficiencyType: ProficiencyType = "None"
-    if (master.is("DiveBomber") || master.is("TorpedoBomber") || master.is("ReconnaissanceAircraft")) {
-      proficiencyType = "Other"
-    }
-    if (master.is("Fighter")) {
-      proficiencyType = "Fighter"
-    }
-    if (master.is("SeaplaneBomber")) {
-      proficiencyType = "SeaplaneBomber"
-    }
+    const proficiencyType = ProficiencyType.from(master.attrs)
 
     const improvement = new Improvement(obj.improvement, master, master.is)
     const proficiency = new Proficiency(obj.proficiency, proficiencyType)
-    const gear = new Gear(master, master.category, improvement, proficiency, master.is)
+    const gear = new Gear(master, master.category, improvement, proficiency, master.attrs)
 
     return gear
   }

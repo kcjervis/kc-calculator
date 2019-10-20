@@ -35,9 +35,11 @@ export default class NightAttack {
   }
 
   get accuracy() {
-    const { attacker, defender, attackerNightAttackStatus, specialAttack, contactModifier } = this
+    const { attacker, specialAttack, contactModifier } = this
     const { formation, role } = attacker
     const { stats, level, totalEquipmentStats, morale, shipType, hasGear } = attacker.ship
+
+    const improvementModifier = totalEquipmentStats(gear => gear.improvement.nightAttackAccuracyModifier)
 
     const formationModifier = formation.getModifiersWithRole(role).nightBattle.accuracy
 
@@ -64,7 +66,7 @@ export default class NightAttack {
       level,
       luck: stats.luck,
       equipmentAccuracy: totalEquipmentStats("accuracy"),
-      improvementModifier: attackerNightAttackStatus.improvementAccuracyModifier,
+      improvementModifier,
 
       formationModifier,
       moraleModifier: morale.nightBattleAccuracyModifier,

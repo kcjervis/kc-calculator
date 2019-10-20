@@ -89,7 +89,7 @@ export default class NightCombatSpecialAttack {
   public static AerialAttack1 = new NightCombatSpecialAttack(6.1, "夜襲1.25", 105, { power: 1.25, accuracy: 1 })
   public static AerialAttack2 = new NightCombatSpecialAttack(6.2, "夜襲1.20", 115, { power: 1.2, accuracy: 1 })
   public static AerialAttack3 = new NightCombatSpecialAttack(6.3, "夜襲1.18", 125, { power: 1.18, accuracy: 1 })
-  public static SuiseiAttack = new NightCombatSpecialAttack(6.4, "彗星夜襲", 115, { power: 1.18, accuracy: 1 })
+  public static SuiseiAttack = new NightCombatSpecialAttack(6.4, "彗星夜襲", 115, { power: 1.2, accuracy: 1 })
 
   public static MainTorpRadar = new NightCombatSpecialAttack(7, "主魚電", 130, { power: 1.3, accuracy: 1 })
   public static TorpRadarLookout = new NightCombatSpecialAttack(8, "魚見電", 150, { power: 1.2, accuracy: 1 })
@@ -123,7 +123,7 @@ export default class NightCombatSpecialAttack {
       if (!hasNightFighter) {
         return possibleSpecialAttacks
       }
-      if (nightFighterCount >= 3 || nightAttackerCount + semiNightPlaneCount >= 2) {
+      if (nightFighterCount + semiNightPlaneCount >= 3 || nightAttackerCount + semiNightPlaneCount >= 2) {
         possibleSpecialAttacks.push(NightCombatSpecialAttack.AerialAttack3)
       }
 

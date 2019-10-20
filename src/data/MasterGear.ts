@@ -48,7 +48,7 @@ export default class MasterGear implements GearStats {
 
   public readonly radius: number = 0
 
-  private readonly attrs: GearAttribute[]
+  public readonly attrs: GearAttribute[]
 
   constructor(raw: MstEquipment, public readonly category: GearCategory, public readonly improvable: boolean) {
     this.id = raw.api_id
