@@ -192,6 +192,10 @@ export default class NightCombatSpecialAttack {
     return this.id === 7 || this.id === 8
   }
 
+  get isAerialAttack() {
+    return this.api === 6
+  }
+
   public calcRate = (baseValue: number) => {
     if (this === NightCombatSpecialAttack.DoubleAttack) {
       return 109 / 110

@@ -67,7 +67,18 @@ export default class ShipNightAttackStatus {
 
     const formationModifier = formation.getModifiersWithRole(role).nightBattle.power
     const healthModifier = ship.health.nightAttackPowerModifire
-    const antiInstallationModifiers = ship.getAntiInstallationStatus().getModifiersFromType(installationType)
+
+    let antiInstallationModifiers = ship.getAntiInstallationStatus().getModifiersFromType(installationType)
+    if (isAntiInstallationWarfare && specialAttack && specialAttack.isAerialAttack) {
+      antiInstallationModifiers = {
+        shipTypeAdditive: 0,
+        a13: 1,
+        b13: 0,
+        a13d: 1,
+        b13d: 0,
+        postCapMultiplicative: 1
+      }
+    }
 
     let specialAttackModifier = 1
     if (specialAttack) {

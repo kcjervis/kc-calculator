@@ -54,8 +54,10 @@ export default class ShellingSupport {
       healthModifier,
       antiInstallationModifiers: {
         shipTypeAdditive: 0,
-        multiplicative: 1,
-        additive: 0
+        a13: 1,
+        b13: 0,
+        a13d: 1,
+        b13d: 0
       },
       cruiserFitBonus: 0
     })

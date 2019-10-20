@@ -35,8 +35,8 @@ export const calcPreCapPower = (basicPower: number, modifiers: ShellingPowerPreC
     cruiserFitBonus
   } = modifiers
 
-  const { shipTypeAdditive, multiplicative, additive } = antiInstallationModifiers
-  const antiInstallationModified = (basicPower + shipTypeAdditive) * multiplicative + additive
+  const { shipTypeAdditive, a13, b13, a13d, b13d } = antiInstallationModifiers
+  const antiInstallationModified = ((basicPower + shipTypeAdditive) * a13 + b13) * a13d + b13d
 
   return antiInstallationModified * formationModifier * engagementModifier * healthModifier + cruiserFitBonus
 }
@@ -95,8 +95,10 @@ export default class ShellingPower implements ShellingPowerInformation {
 
   public antiInstallationModifiers: AntiInstallationModifiers = {
     shipTypeAdditive: 0,
-    multiplicative: 1,
-    additive: 0
+    a13: 1,
+    b13: 0,
+    a13d: 1,
+    b13d: 0
   }
 
   constructor(factors: Partial<ShellingPowerFactors>) {

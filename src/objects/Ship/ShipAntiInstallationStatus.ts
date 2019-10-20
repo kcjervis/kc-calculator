@@ -45,13 +45,43 @@ export default class ShipAntiInstallationStatus {
     return 0
   }
 
-  get type4Modifiers() {
+  get type4AntiGroundRocketLauncherAdditiv() {
     const count = this.countGear(GearId["艦載型 四式20cm対地噴進砲"])
+    if (count === 1) {
+      return 55
+    }
+    if (count === 2) {
+      return 115
+    }
+    if (count === 3) {
+      return 160
+    }
+    if (count >= 4) {
+      return 190
+    }
+    return 0
+  }
+
+  get type4AntiGroundRocketLauncherConcentratedAdditiv() {
+    const count = this.countGear(GearId["四式20cm対地噴進砲 集中配備"])
+    if (count === 1) {
+      return 80
+    }
+    if (count >= 2) {
+      return 170
+    }
+    return 0
+  }
+
+  get antiGroundRocketLauncherModifiers() {
+    const count =
+      this.countGear(GearId["艦載型 四式20cm対地噴進砲"]) + this.countGear(GearId["四式20cm対地噴進砲 集中配備"])
+
+    const b13d = this.type4AntiGroundRocketLauncherAdditiv + this.type4AntiGroundRocketLauncherConcentratedAdditiv
 
     if (count === 1) {
       return {
-        additive: 55,
-
+        b13d,
         antiPillbox: 1.5,
         antiIsolatedIsland: 1.3,
         antiSoftSkinned: 1.25,
@@ -60,7 +90,7 @@ export default class ShipAntiInstallationStatus {
     }
     if (count >= 2) {
       return {
-        additive: 115,
+        b13d,
 
         antiPillbox: 2.7,
         antiIsolatedIsland: 2.145,
@@ -69,7 +99,7 @@ export default class ShipAntiInstallationStatus {
       }
     }
     return {
-      additive: 0,
+      b13d,
 
       antiPillbox: 1,
       antiIsolatedIsland: 1,
@@ -84,32 +114,6 @@ export default class ShipAntiInstallationStatus {
 
   get type2MortarConcentratedCount() {
     return this.countGear(GearId["二式12cm迫撃砲改 集中配備"])
-  }
-
-  get mortarModifiers() {
-    const count = this.type2MortarCount + this.type2MortarConcentratedCount
-    if (count === 1) {
-      return {
-        antiPillbox: 1.3,
-        antiIsolatedIsland: 1.2,
-        antiSoftSkinned: 1.2,
-        antiSupplyDepotPostCap: 1.15
-      }
-    }
-    if (count >= 2) {
-      return {
-        antiPillbox: 1.95,
-        antiIsolatedIsland: 1.68,
-        antiSoftSkinned: 1.56,
-        antiSupplyDepotPostCap: 1.38
-      }
-    }
-    return {
-      antiPillbox: 1,
-      antiIsolatedIsland: 1,
-      antiSoftSkinned: 1,
-      antiSupplyDepotPostCap: 1
-    }
   }
 
   get type2MortarAdditiv() {
@@ -134,10 +138,43 @@ export default class ShipAntiInstallationStatus {
     if (count === 1) {
       return 60
     }
-    if (count >= 2) {
+    if (count === 2) {
       return 110
     }
+    if (count >= 3) {
+      return 150
+    }
     return 0
+  }
+
+  get mortarModifiers() {
+    const count = this.type2MortarCount + this.type2MortarConcentratedCount
+    const b13d = this.type2MortarAdditiv + this.type2MortarConcentratedAdditiv
+    if (count === 1) {
+      return {
+        b13d,
+        antiPillbox: 1.3,
+        antiIsolatedIsland: 1.2,
+        antiSoftSkinned: 1.2,
+        antiSupplyDepotPostCap: 1.15
+      }
+    }
+    if (count >= 2) {
+      return {
+        b13d,
+        antiPillbox: 1.95,
+        antiIsolatedIsland: 1.68,
+        antiSoftSkinned: 1.56,
+        antiSupplyDepotPostCap: 1.38
+      }
+    }
+    return {
+      b13d,
+      antiPillbox: 1,
+      antiIsolatedIsland: 1,
+      antiSoftSkinned: 1,
+      antiSupplyDepotPostCap: 1
+    }
   }
 
   // 大発改修補正 共通
@@ -173,9 +210,17 @@ export default class ShipAntiInstallationStatus {
   get shikonModifiers() {
     const shikonCount = this.countGear(GearId["特大発動艇+戦車第11連隊"])
     if (shikonCount >= 1) {
-      return { additive: 25, multiplicative: 1.8 }
+      return { b13: 25, a13: 1.8 }
     }
-    return { additive: 0, multiplicative: 1 }
+    return { b13: 0, a13: 1 }
+  }
+
+  get m4a1Modifiers() {
+    const count = this.countGear(GearId["M4A1 DD"])
+    if (count >= 1) {
+      return { a13d: 1.4, b13: 25 }
+    }
+    return { a13d: 1, b13: 0 }
   }
 
   get submarineClassAdditive() {
@@ -189,183 +234,177 @@ export default class ShipAntiInstallationStatus {
   get commonModifiers() {
     const {
       wgAdditive,
-      type4Modifiers,
-      type2MortarAdditiv,
-      type2MortarConcentratedAdditiv,
+      antiGroundRocketLauncherModifiers,
+      mortarModifiers,
 
       landingCraftsImprovementMultiplicative,
       specialAmphibiousTanksImprovementMultiplicative,
       shikonModifiers,
+      m4a1Modifiers,
       tokuDaihatsuMultiplicative,
       submarineClassAdditive
     } = this
 
     const shipTypeAdditive = submarineClassAdditive
-    const multiplicative =
+    const a13 =
       landingCraftsImprovementMultiplicative *
       specialAmphibiousTanksImprovementMultiplicative *
       tokuDaihatsuMultiplicative *
-      shikonModifiers.multiplicative
+      shikonModifiers.a13
 
-    const additive =
-      wgAdditive +
-      type4Modifiers.additive +
-      type2MortarAdditiv +
-      type2MortarConcentratedAdditiv +
-      shikonModifiers.additive
+    const b13 = shikonModifiers.b13 + m4a1Modifiers.b13
 
-    return { shipTypeAdditive, multiplicative, additive }
+    const a13d = m4a1Modifiers.a13d
+    const b13d = wgAdditive + antiGroundRocketLauncherModifiers.b13d + mortarModifiers.b13d
+
+    return { shipTypeAdditive, a13, b13, a13d, b13d }
   }
 
   get antiSoftSkinnedModifiers() {
     const { wgCount, commonModifiers, hasGear, countGear } = this
-
-    let { multiplicative } = commonModifiers
-    const { shipTypeAdditive, additive } = commonModifiers
+    let { a13 } = commonModifiers
 
     if (hasGear("AntiAircraftShell")) {
-      multiplicative *= 2.5
+      a13 *= 2.5
     }
 
     if (wgCount >= 1) {
-      multiplicative *= 1.3
+      a13 *= 1.3
     }
     if (wgCount >= 2) {
-      multiplicative *= 1.4
+      a13 *= 1.4
     }
 
-    multiplicative *= this.type4Modifiers.antiSoftSkinned
-    multiplicative *= this.mortarModifiers.antiSoftSkinned
+    a13 *= this.antiGroundRocketLauncherModifiers.antiSoftSkinned
+    a13 *= this.mortarModifiers.antiSoftSkinned
 
     if (hasGear("SeaplaneBomber") || hasGear("SeaplaneFighter")) {
-      multiplicative *= 1.2
+      a13 *= 1.2
     }
 
     if (hasGear("LandingCraft")) {
-      multiplicative *= 1.4
+      a13 *= 1.4
     }
 
     // 大発動艇(八九式中戦車＆陸戦隊)
     const count166 = countGear(GearId["大発動艇(八九式中戦車&陸戦隊)"])
     if (count166 >= 1) {
-      multiplicative *= 1.5
+      a13 *= 1.5
     }
     if (count166 >= 2) {
-      multiplicative *= 1.3
+      a13 *= 1.3
     }
 
     // 内火艇
     const countSpecialAmphibiousTank = countGear("SpecialAmphibiousTank")
     if (countSpecialAmphibiousTank >= 1) {
-      multiplicative *= 1.5
+      a13 *= 1.5
     }
     if (countSpecialAmphibiousTank >= 2) {
-      multiplicative *= 1.2
+      a13 *= 1.2
     }
 
-    return { shipTypeAdditive, additive, multiplicative }
+    return { ...commonModifiers, a13 }
   }
 
   get antiPillboxModifiers() {
     const { shipType, wgCount, commonModifiers, hasGear, countGear } = this
 
-    let { multiplicative } = commonModifiers
-    const { shipTypeAdditive, additive } = commonModifiers
+    let { a13 } = commonModifiers
 
     if (hasGear("ArmorPiercingShell")) {
-      multiplicative *= 1.85
+      a13 *= 1.85
     }
 
     if (wgCount >= 1) {
-      multiplicative *= 1.6
+      a13 *= 1.6
     }
     if (wgCount >= 2) {
-      multiplicative *= 1.7
+      a13 *= 1.7
     }
 
-    multiplicative *= this.type4Modifiers.antiPillbox
-    multiplicative *= this.mortarModifiers.antiPillbox
+    a13 *= this.antiGroundRocketLauncherModifiers.antiPillbox
+    a13 *= this.mortarModifiers.antiPillbox
 
     if (hasGear("SeaplaneBomber") || hasGear("SeaplaneFighter") || hasGear("CarrierBasedDiveBomber")) {
-      multiplicative *= 1.5
+      a13 *= 1.5
     }
 
     if (hasGear("LandingCraft")) {
-      multiplicative *= 1.8
+      a13 *= 1.8
     }
 
     // 大発動艇(八九式中戦車＆陸戦隊)
     const count166 = countGear(166)
     if (count166 >= 1) {
-      multiplicative *= 1.5
+      a13 *= 1.5
     }
     if (count166 >= 2) {
-      multiplicative *= 1.4
+      a13 *= 1.4
     }
 
     // 内火艇
     const countSpecialAmphibiousTank = countGear("SpecialAmphibiousTank")
     if (countSpecialAmphibiousTank >= 1) {
-      multiplicative *= 2.4
+      a13 *= 2.4
     }
     if (countSpecialAmphibiousTank >= 2) {
-      multiplicative *= 1.35
+      a13 *= 1.35
     }
 
     if (shipType.isDestroyer || shipType.isLightCruiserClass) {
-      multiplicative *= 1.4
+      a13 *= 1.4
     }
 
-    return { shipTypeAdditive, additive, multiplicative }
+    return { ...commonModifiers, a13 }
   }
 
   get antiIsolatedIslandModifiers() {
     const { wgCount, commonModifiers, hasGear, countGear } = this
 
-    let { multiplicative } = commonModifiers
-    const { shipTypeAdditive, additive } = commonModifiers
+    let { a13 } = commonModifiers
 
     if (hasGear("AntiAircraftShell")) {
-      multiplicative *= 1.75
+      a13 *= 1.75
     }
 
     if (wgCount >= 1) {
-      multiplicative *= 1.4
+      a13 *= 1.4
     }
     if (wgCount >= 2) {
-      multiplicative *= 1.5
+      a13 *= 1.5
     }
 
-    multiplicative *= this.type4Modifiers.antiIsolatedIsland
-    multiplicative *= this.mortarModifiers.antiIsolatedIsland
+    a13 *= this.antiGroundRocketLauncherModifiers.antiIsolatedIsland
+    a13 *= this.mortarModifiers.antiIsolatedIsland
 
     if (hasGear("CarrierBasedDiveBomber")) {
-      multiplicative *= 1.4
+      a13 *= 1.4
     }
 
     if (hasGear("LandingCraft")) {
-      multiplicative *= 1.8
+      a13 *= 1.8
     }
 
     // 大発動艇(八九式中戦車＆陸戦隊)
     const count166 = countGear(166)
     if (count166 >= 1) {
-      multiplicative *= 1.2
+      a13 *= 1.2
     }
     if (count166 >= 2) {
-      multiplicative *= 1.4
+      a13 *= 1.4
     }
 
     // 内火艇
     const specialAmphibiousTankCount = countGear("SpecialAmphibiousTank")
     if (specialAmphibiousTankCount >= 1) {
-      multiplicative *= 2.4
+      a13 *= 2.4
     }
     if (specialAmphibiousTankCount >= 2) {
-      multiplicative *= 1.35
+      a13 *= 1.35
     }
 
-    return { shipTypeAdditive, additive, multiplicative }
+    return { ...commonModifiers, a13 }
   }
 
   get antiSupplyDepotPostCapModifier() {
@@ -376,52 +415,52 @@ export default class ShipAntiInstallationStatus {
       hasGear,
       countGear
     } = this
-    let multiplicative = 1
+    let postCapMultiplicative = 1
 
     if (wgCount >= 1) {
-      multiplicative *= 1.25
+      postCapMultiplicative *= 1.25
     }
     if (wgCount >= 2) {
-      multiplicative *= 1.3
+      postCapMultiplicative *= 1.3
     }
 
-    multiplicative *= this.type4Modifiers.antiSupplyDepotPostCap
-    multiplicative *= this.mortarModifiers.antiSupplyDepotPostCap
+    postCapMultiplicative *= this.antiGroundRocketLauncherModifiers.antiSupplyDepotPostCap
+    postCapMultiplicative *= this.mortarModifiers.antiSupplyDepotPostCap
 
     if (hasGear("LandingCraft")) {
-      multiplicative *= 1.7
+      postCapMultiplicative *= 1.7
     }
 
     // 特大発
     if (countGear(GearId["特大発動艇"]) >= 1) {
-      multiplicative *= 1.2
+      postCapMultiplicative *= 1.2
     }
 
-    multiplicative *= landingCraftsImprovementMultiplicative
+    postCapMultiplicative *= landingCraftsImprovementMultiplicative
 
     // 大発動艇(八九式中戦車＆陸戦隊)
     const count166 = countGear(GearId["大発動艇(八九式中戦車&陸戦隊)"])
     if (count166 >= 1) {
-      multiplicative *= 1.3 * landingCraftsImprovementMultiplicative
+      postCapMultiplicative *= 1.3 * landingCraftsImprovementMultiplicative
     }
     if (count166 >= 2) {
-      multiplicative *= 1.6
+      postCapMultiplicative *= 1.6
     }
 
     const countSpecialAmphibiousTank = countGear("SpecialAmphibiousTank")
     if (countSpecialAmphibiousTank >= 1) {
-      multiplicative *= 1.7
+      postCapMultiplicative *= 1.7
     }
     if (countSpecialAmphibiousTank >= 2) {
-      multiplicative *= 1.5
+      postCapMultiplicative *= 1.5
     }
-    multiplicative *= specialAmphibiousTanksImprovementMultiplicative
+    postCapMultiplicative *= specialAmphibiousTanksImprovementMultiplicative
 
-    return multiplicative
+    return postCapMultiplicative
   }
 
   public getModifiersFromType = (type: InstallationType) => {
-    const modifiers = { shipTypeAdditive: 0, multiplicative: 1, additive: 0, postCapMultiplicative: 1 }
+    const modifiers = { shipTypeAdditive: 0, a13: 1, b13: 0, a13d: 1, b13d: 0, postCapMultiplicative: 1 }
     switch (type) {
       case "SoftSkinned":
         return { ...modifiers, ...this.antiSoftSkinnedModifiers }

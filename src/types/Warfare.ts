@@ -27,8 +27,10 @@ export type InstallationType = "None" | "SoftSkinned" | "Pillbox" | "SupplyDepot
 
 export type AntiInstallationModifiers = {
   shipTypeAdditive: number
-  additive: number
-  multiplicative: number
+  a13: number
+  b13: number
+  a13d: number
+  b13d: number
 }
 
 export type ShellingBasicPowerFactors = {
