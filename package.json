@@ -28,7 +28,7 @@
     }
   },
   "dependencies": {
-    "fp-ts": "^2.1.0",
+    "fp-ts": "^2.1.1",
     "lodash-es": "^4.17.15",
     "sift": "^8.5.1"
   },
@@ -36,9 +36,9 @@
     "@types/jest": "^24.0.19",
     "@types/lodash-es": "^4.17.3",
     "@types/nedb": "^1.8.9",
-    "@types/node": "^12.11.1",
-    "@typescript-eslint/eslint-plugin": "^2.4.0",
-    "@typescript-eslint/parser": "^2.4.0",
+    "@types/node": "^12.11.5",
+    "@typescript-eslint/eslint-plugin": "^2.5.0",
+    "@typescript-eslint/parser": "^2.5.0",
     "babel-jest": "^24.9.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "eslint": "^6.5.1",

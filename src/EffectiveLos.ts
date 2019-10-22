@@ -5,7 +5,7 @@ import createLateBonus from "./objects/ship/ExplicitStatsBonus/SeaplaneBomber/La
 
 const equipmentBonuses = carrierBasedReconnaissanceAircraftBonuses.concat(createLateBonus)
 
-const gearEffectiveLos = (gear: IGear) => {
+const calcGearEffectiveLos = (gear: IGear) => {
   const { los, improvement } = gear
 
   let multiplier = 0.6
@@ -22,9 +22,9 @@ const gearEffectiveLos = (gear: IGear) => {
   return multiplier * (los + improvement.effectiveLosModifier)
 }
 
-const shipEffectiveLos = (ship: IShip, nodeDivaricatedFactor: number) => {
+const calcShipEffectiveLos = (ship: IShip, nodeDivaricatedFactor: number) => {
   const { totalEquipmentStats, nakedStats } = ship
-  const equipTotal = totalEquipmentStats(gearEffectiveLos)
+  const equipTotal = totalEquipmentStats(calcGearEffectiveLos)
 
   const fitBonus = sumBy(equipmentBonuses, createBonus => {
     const bonus = createBonus(ship)
@@ -34,12 +34,12 @@ const shipEffectiveLos = (ship: IShip, nodeDivaricatedFactor: number) => {
   return Math.sqrt(nakedStats.los + fitBonus) + equipTotal * nodeDivaricatedFactor - 2
 }
 
-const fleetEffectiveLos = (fleet: IFleet, nodeDivaricatedFactor: number, hqLevel: number) => {
-  return fleet.totalShipStats(ship => shipEffectiveLos(ship, nodeDivaricatedFactor)) - Math.ceil(0.4 * hqLevel) + 12
+const calcFleetEffectiveLos = (fleet: IFleet, nodeDivaricatedFactor: number, hqLevel: number) => {
+  return fleet.totalShipStats(ship => calcShipEffectiveLos(ship, nodeDivaricatedFactor)) - Math.ceil(0.4 * hqLevel) + 12
 }
 
 export default {
-  gearEffectiveLos,
-  shipEffectiveLos,
-  fleetEffectiveLos
+  calcGearEffectiveLos,
+  calcShipEffectiveLos,
+  calcFleetEffectiveLos
 }

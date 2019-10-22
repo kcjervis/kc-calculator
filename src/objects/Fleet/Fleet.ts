@@ -44,6 +44,6 @@ export default class Fleet implements IFleet {
   }
 
   public effectiveLos = (nodeDivaricatedFactor: number, hqLevel: number): number => {
-    return EffectiveLos.fleetEffectiveLos(this, nodeDivaricatedFactor, hqLevel)
+    return EffectiveLos.calcFleetEffectiveLos(this, nodeDivaricatedFactor, hqLevel)
   }
 }

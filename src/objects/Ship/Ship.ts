@@ -1,5 +1,6 @@
 import { api_mst_equip_exslot, GearId } from "@jervis/data"
 import { sumBy, range, random } from "lodash-es"
+import sift, { SiftQuery } from "sift"
 
 import { IHealth } from "./Health"
 import { IMorale } from "./Morale"
@@ -13,6 +14,8 @@ import { IGear } from "../gear"
 import { IPlane } from "../plane"
 import { DefensePower, InstallationType, ShipShellingStats, ShellingType } from "../../types"
 import ShipAntiInstallationStatus from "./ShipAntiInstallationStatus"
+
+export type ShipQuery = SiftQuery<{ shipClassId: number; shipTypeId: number }>
 
 export type GearIteratee<R> = GearId | GearAttribute | ((gear: IGear) => R)
 
@@ -45,6 +48,7 @@ export interface IShip {
   isInstallation: boolean
 
   is: (attr: ShipAttribute) => boolean
+  match: (query: ShipQuery) => boolean
 
   canEquip: (gear: IGear, slotIndex: number) => boolean
 
@@ -179,6 +183,8 @@ export default class Ship implements IShip {
 
     return true
   }
+
+  public match = (query: ShipQuery) => sift(query)(this)
 
   public hasGear = (iteratee: GearIteratee<boolean>) => {
     const gears = this.nonNullableGears

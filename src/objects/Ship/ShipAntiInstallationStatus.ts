@@ -304,6 +304,10 @@ export default class ShipAntiInstallationStatus {
       a13 *= 1.2
     }
 
+    if (hasGear(GearId["M4A1 DD"])) {
+      a13 *= 1.1
+    }
+
     return { ...commonModifiers, a13 }
   }
 
@@ -454,6 +458,11 @@ export default class ShipAntiInstallationStatus {
     if (countSpecialAmphibiousTank >= 2) {
       postCapMultiplicative *= 1.5
     }
+
+    if (hasGear(GearId["M4A1 DD"])) {
+      postCapMultiplicative *= 1.2
+    }
+
     postCapMultiplicative *= specialAmphibiousTanksImprovementMultiplicative
 
     return postCapMultiplicative

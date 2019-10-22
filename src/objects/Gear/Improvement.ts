@@ -16,7 +16,6 @@ export type ImprovementModifiers = {
   nightAttackAccuracyModifier: number
 
   effectiveLosModifier: number
-  evasionModifier: number
   defensePowerModifier: number
 }
 
@@ -249,13 +248,6 @@ export default class Improvement implements IImprovement {
     }
 
     return 0
-  }
-
-  get evasionModifier() {
-    if (!this.gearIs("EngineImprovement")) {
-      return 0
-    }
-    return 1.5 * Math.sqrt(this.value)
   }
 
   get defensePowerModifier() {
