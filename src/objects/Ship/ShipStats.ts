@@ -1,27 +1,27 @@
 import { maxBy, sumBy } from "lodash-es"
-
 import { IGear } from "../gear"
-
-import { isNonNullable } from "../../utils"
+import { isNonNullable, includes } from "../../utils"
 import ShipNakedStats, { IBaseStats } from "./ShipNakedStats"
-import { StatsBonusRecord } from "../../data/EquipmentBonus"
-
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+import { StatsBonusRecord, shipStatKeys } from "../../data/EquipmentBonus"
 
 export interface IShipStats extends IBaseStats {
   equipmentBonus: StatsBonusRecord
-  getBonus: (key: keyof StatsBonusRecord) => number
+  getBonus: (key: keyof StatsBonusRecord | keyof IBaseStats) => number
 }
 
-export default class ShipStats implements IBaseStats {
+export default class ShipStats implements IShipStats {
   constructor(
     private readonly nakedStats: ShipNakedStats,
     private readonly gears: Array<IGear | undefined>,
     public equipmentBonus: StatsBonusRecord = {}
   ) {}
 
-  public getBonus = (key: keyof StatsBonusRecord) => {
-    return this.equipmentBonus[key] || 0
+  public getBonus = (key: keyof StatsBonusRecord | keyof IBaseStats) => {
+    const { equipmentBonus } = this
+    if (includes(shipStatKeys, key)) {
+      return equipmentBonus[key] || 0
+    }
+    return 0
   }
 
   private getStat(key: keyof Omit<StatsBonusRecord, "effectiveLos">) {
