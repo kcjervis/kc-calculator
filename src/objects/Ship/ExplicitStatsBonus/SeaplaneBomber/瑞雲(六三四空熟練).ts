@@ -13,25 +13,13 @@ const createBonus: StatsBonusCreator = ship => {
   const { shipClass } = ship
 
   const isIseClass = shipClass.is("IseClass")
-  const isFusouClassKai2 = shipClass.is("FusouClass") && isKai2
 
   if (isIseClass && isKai2) {
-    bonus.add({
-      multiplier: count,
-      firepower: 4,
-      evasion: 2
-    })
-  } else if (isIseClass) {
-    bonus.add({
-      multiplier: count,
-      firepower: 3,
-      evasion: 1
-    })
-  } else if (isFusouClassKai2) {
-    bonus.add({
-      multiplier: count,
-      firepower: 2
-    })
+    bonus.add({ multiplier: count, firepower: 4, evasion: 2 })
+  } else if (isIseClass && ship.shipType.is("AviationBattleship")) {
+    bonus.add({ multiplier: count, firepower: 3, evasion: 1 })
+  } else if (shipClass.is("FusouClass") && ship.shipType.is("AviationBattleship")) {
+    bonus.add({ multiplier: count, firepower: 2 })
   }
 
   return bonus

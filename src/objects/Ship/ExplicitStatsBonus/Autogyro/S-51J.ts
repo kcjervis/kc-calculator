@@ -9,10 +9,10 @@ const createBonus: StatsBonusCreator = ship => {
 
   // 単体ボーナス
   if (ship.name === "伊勢改二") {
-    bonus.add({ multiplier, firepower: 2, asw: 1, evasion: 2 })
+    bonus.add({ multiplier, asw: 2, evasion: 1 })
   }
   if (ship.name === "日向改二") {
-    bonus.add({ multiplier, firepower: 3, asw: 2, evasion: 3 })
+    bonus.add({ multiplier, firepower: 1, asw: 3, evasion: 2 })
   }
 
   return bonus

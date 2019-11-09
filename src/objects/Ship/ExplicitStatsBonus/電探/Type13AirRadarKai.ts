@@ -12,7 +12,7 @@ const bonusCreator: StatsBonusCreator = ship => {
     ["", "改", "乙改", "改二", "改二乙", "改ニ丁"].map(grade => name + grade).includes(ship.name)
 
   // 単体ボーナス
-  if (["潮", "時雨", "初霜"].some(shipNameIs) || ["榛名改二", "長門改二"].includes(ship.name)) {
+  if (["潮改二", "時雨改二", "初霜改二", "榛名改二", "長門改二"].includes(ship.name)) {
     bonus.add({
       multiplier: count,
       firepower: 1,
@@ -20,7 +20,7 @@ const bonusCreator: StatsBonusCreator = ship => {
       evasion: 3,
       armor: 1
     })
-  } else if (["矢矧", "霞", "雪風", "磯風", "磯風", "浜風", "朝霜", "涼月"].some(shipNameIs)) {
+  } else if (["矢矧", "霞", "雪風", "磯風", "浜風", "朝霜", "涼月"].some(shipNameIs)) {
     bonus.add({
       multiplier: count,
       antiAir: 2,

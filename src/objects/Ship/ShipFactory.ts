@@ -2,12 +2,12 @@ import { MasterShip, ShipAttribute } from "../../data"
 import { GearFactory, IGearDataObject } from "../gear"
 import { createPlanes } from "../plane"
 
-import { createExplicitStatsBonus } from "./ExplicitStatsBonus"
 import Health from "./Health"
 import Morale from "./Morale"
 import Ship, { IShip } from "./ship"
 import ShipNakedStats, { IBaseStats } from "./ShipNakedStats"
 import ShipStats from "./ShipStats"
+import { getEquipmentBonus } from "../../data/EquipmentBonus"
 
 export interface IShipDataObject {
   masterId: number
@@ -59,20 +59,12 @@ export default class ShipFactory {
 
     const planes = createPlanes(slots, gears)
 
-    const ship = new Ship(
-      foundMaster,
-      stats,
-      nakedStats,
-      health,
-      morale,
-      slots,
-      gears,
-      planes,
-      ShipAttribute.from(foundMaster).includes
-    )
+    const attrs = ShipAttribute.from(foundMaster)
+
+    const ship = new Ship(foundMaster, stats, nakedStats, health, morale, slots, gears, planes, attrs)
 
     // 装備ボーナスを適応
-    ship.stats.statsBonus = createExplicitStatsBonus(ship)
+    ship.stats.equipmentBonus = getEquipmentBonus(ship)
 
     return ship
   }

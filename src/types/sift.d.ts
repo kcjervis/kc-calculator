@@ -7,7 +7,7 @@ declare module "sift" {
   export type Query<T extends SupportedType> = {
     $eq?: T
     $ne?: T
-    $or?: T[]
+    $or?: Array<SiftQuery<T>>
     $gt?: T
     $gte?: T
     $lt?: T
@@ -20,7 +20,7 @@ declare module "sift" {
     $all?: T[]
     $size?: number
     $nor?: T[]
-    $and?: T[]
+    $and?: Array<SiftQuery<T>>
     $regex?: RegExp | string
     $elemMatch?: ExternalQuery<T>
     $exists?: boolean
@@ -37,11 +37,10 @@ declare module "sift" {
 
   export type FilterFn = <T>(value: T, index?: number, array?: T[]) => boolean
 
-  type SiftQueryBase<T extends SupportedType> = ExternalQuery<T> | InternalQuery<T>
-
-  export type SiftQuery<T extends SupportedType> = T extends Array<infer U>
-    ? SiftQueryBase<U> | SiftQueryBase<T>
-    : SiftQueryBase<T>
+  export type SiftQuery<T extends SupportedType> =
+    | ExternalQuery<T>
+    | InternalQuery<T>
+    | (T extends Array<infer U> ? ExternalQuery<U> | InternalQuery<U> : never)
 
   export type PluginDefinition<T> = {
     [index: string]: (a: T, b: T) => boolean | number
@@ -61,7 +60,6 @@ declare module "sift" {
     <T extends SupportedType>(query: SiftQuery<T>, options?: Options<T>): FilterFn
     compare<T, K>(a: T, b: K): 0 | -1 | 1
   }
-
   const sift: Sift
   export default sift
 }

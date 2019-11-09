@@ -3,8 +3,8 @@ import { shipNameIsKai2 } from "../../../utils"
 
 const createBonus: StatsBonusCreator = ship => {
   // 61cm四連装(酸素)魚雷
-  const count = ship.countGear(15)
-  if (count === 0) {
+  const multiplier = Math.min(ship.countGear(15), 2)
+  if (multiplier === 0) {
     return undefined
   }
   const bonus = new StatsBonus()
@@ -14,10 +14,7 @@ const createBonus: StatsBonusCreator = ship => {
 
   // 単体ボーナス
   if (shipClass.is("KagerouClass") && isKai2) {
-    bonus.add({
-      multiplier: count,
-      torpedo: 2
-    })
+    bonus.add({ multiplier, torpedo: 2 })
   }
 
   return bonus

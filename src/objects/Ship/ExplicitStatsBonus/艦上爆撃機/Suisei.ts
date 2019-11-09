@@ -18,7 +18,7 @@ const createBonus: StatsBonusCreator = ship => {
   }
 
   if (model22634AirGroupSkilled) {
-    bonus.add({ multiplier: model22634AirGroupSkilled, firepower: 8, evasion: 2 })
+    bonus.add({ multiplier: model22634AirGroupSkilled, firepower: 8, antiAir: 1, evasion: 2 })
   }
 
   if (otherSuiseiCount) {

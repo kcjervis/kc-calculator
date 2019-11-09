@@ -35,4 +35,3 @@ export const calcDeadlyPower = (ship: IShip) => {
 }
 
 export * from "./typeGuards"
-export * from "./isMatch"

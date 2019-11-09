@@ -19,24 +19,13 @@ const bonusCreator: StatsBonusCreator = ship => {
 
   // 単体ボーナス
   if (isJintsuu) {
-    bonus.add({
-      firepower: 2,
-      torpedo: 2,
-      evasion: -1
-    })
+    bonus.add({ firepower: 2, torpedo: 2, evasion: -1 })
   } else if (isHiei || isKirishima || isChoukai || isAkatsuki) {
-    bonus.add({
-      firepower: 2,
-      evasion: -1
-    })
+    bonus.add({ firepower: 2, evasion: -1 })
   } else if (isAkigumo) {
-    bonus.add({
-      firepower: 1
-    })
+    bonus.add({ multiplier: count, firepower: 1 })
   } else if (isYukikaze) {
-    bonus.add({
-      antiAir: 1
-    })
+    bonus.add({ multiplier: count, antiAir: 1 })
   }
 
   return bonus

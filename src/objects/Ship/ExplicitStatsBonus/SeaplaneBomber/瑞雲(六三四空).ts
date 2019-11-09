@@ -1,5 +1,5 @@
 import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
-import { shipNameIsKai2 } from "../../../../utils"
+import { shipNameIsKai2, shipNameIsKai } from "../../../../utils"
 
 const createBonus: StatsBonusCreator = ship => {
   // 瑞雲(六三四空) 瑞雲12型(六三四空)
@@ -9,22 +9,16 @@ const createBonus: StatsBonusCreator = ship => {
   }
   const bonus = new StatsBonus()
 
+  const isKai = shipNameIsKai(ship.name)
   const isKai2 = shipNameIsKai2(ship.name)
   const { shipClass } = ship
 
   const isIseClass = shipClass.is("IseClass")
-  const isFusouClassKai2 = shipClass.is("FusouClass") && isKai2
 
   if (isIseClass && isKai2) {
-    bonus.add({
-      multiplier: count,
-      firepower: 3
-    })
-  } else if (isIseClass || isFusouClassKai2) {
-    bonus.add({
-      multiplier: count,
-      firepower: 2
-    })
+    bonus.add({ multiplier: count, firepower: 3 })
+  } else if (ship.shipType.is("AviationBattleship") && shipClass.any("FusouClass", "IseClass")) {
+    bonus.add({ multiplier: count, firepower: 2 })
   }
 
   return bonus

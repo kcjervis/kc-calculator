@@ -1,4 +1,12 @@
-import { api_mst_slotitem, improvableIds, ships as defaultShipsData } from "@jervis/data"
+import {
+  api_mst_slotitem,
+  improvableIds,
+  ships as defaultShipsData,
+  ShipName,
+  GearId,
+  GearName,
+  ShipId
+} from "@jervis/data"
 
 import GearCategory from "./GearCategory"
 import MasterGear from "./MasterGear"
@@ -36,14 +44,35 @@ export default class MasterData {
   /**
    * 装備マスターデータを探す
    */
-  public findMasterGear(gearId: number) {
+  public findMasterGear = (gearId: number) => {
     return this.gears.find(gear => gear.id === gearId)
   }
 
   /**
    * 艦娘マスターデータを探す
    */
-  public findMasterShip(shipId: number) {
+  public findMasterShip = (shipId: number) => {
     return this.ships.find(ship => ship.shipId === shipId)
+  }
+
+  public shipIdToName = (shipId: ShipId) => {
+    const found = this.ships.find(ship => ship.shipId === shipId)
+    return found ? found.name : ""
+  }
+  public shipNameToId = (name: string) => {
+    const found = this.ships.find(ship => ship.name === name)
+    return found ? found.shipId : 0
+  }
+
+  public shipClassIdToName = (id: number) => ShipClass.fromId(id).name
+  public shipTypeIdToName = (id: number) => ShipType.fromId(id).name
+
+  public gearIdToName = (gearId: GearId) => {
+    const found = this.findMasterGear(gearId)
+    return found ? (found.name as GearName) : ""
+  }
+  public gearNameToId = (name: string) => {
+    const found = this.gears.find(gear => gear.name === name)
+    return found && found.id
   }
 }

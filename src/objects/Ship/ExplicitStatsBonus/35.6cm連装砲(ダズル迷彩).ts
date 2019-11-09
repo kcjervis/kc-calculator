@@ -23,7 +23,7 @@ const createBonus: StatsBonusCreator = ship => {
       multiplier: count,
       firepower: 2
     })
-  } else if (shipId === ShipId["金剛改二丙"] || shipId === ShipId["霧島改二"]) {
+  } else if (shipId === ShipId["比叡改二"] || shipId === ShipId["霧島改二"]) {
     bonus.add({
       multiplier: count,
       firepower: 1

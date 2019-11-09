@@ -4,18 +4,21 @@ import { IProficiency } from "./Proficiency"
 import { calcFighterPower } from "../../formulas"
 import { GearStats, GearState } from "../../types"
 import sift, { SiftQuery } from "sift"
+import { GearId } from "@jervis/data"
 
-export type GearQuery = SiftQuery<GearStats & { attrs: GearAttribute[] }>
+export type GearQuery = GearId | SiftQuery<GearStats & { attrs: GearAttribute[]; star: number }>
 
 export interface IGear extends GearStats {
   /** 装備ID */
   masterId: number
 
-  /** 改修度 */
+  /** 改修 */
   improvement: IImprovement
 
   /** 熟練度 */
   proficiency: IProficiency
+
+  star: number
 
   category: GearCategory
 
@@ -110,7 +113,14 @@ export default class Gear implements IGear {
     return this.gearId
   }
 
+  get star() {
+    return this.improvement.value
+  }
+
   public match = (query: GearQuery) => {
+    if (typeof query === "number") {
+      return this.gearId === query
+    }
     return sift(query)(this)
   }
 

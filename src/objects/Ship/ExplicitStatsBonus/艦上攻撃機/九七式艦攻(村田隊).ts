@@ -7,7 +7,7 @@ const createBonus: StatsBonusCreator = ship => {
   }
   const bonus = new StatsBonus()
 
-  if (ship.name.startsWith("赤城改")) {
+  if (ship.name === "赤城改" || ship.name === "赤城改二") {
     bonus.add({ firepower: 3 })
   }
   if (ship.name === "加賀改" || ship.name.startsWith("翔鶴")) {

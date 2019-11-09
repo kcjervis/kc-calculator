@@ -20,33 +20,18 @@ const createBonus: StatsBonusCreator = ship => {
 
   // 単体ボーナス
   if (isYuugumoClass && isKai2) {
-    bonus.add({
-      multiplier: count267,
-      firepower: 3,
-      evasion: 1
-    })
+    bonus.add({ multiplier: count267, firepower: 3, evasion: 1 })
   } else if (isYuugumoClass || isShimakazeClass) {
-    bonus.add({
-      multiplier: count267,
-      firepower: 2,
-      evasion: 1
-    })
+    bonus.add({ multiplier: count267, firepower: 2, evasion: 1 })
   } else if (isKagerouClass && isKai2) {
     if (count267 === 1) {
-      bonus.add({
-        firepower: 2,
-        evasion: 1
-      })
+      bonus.add({ firepower: 2, evasion: 1 })
     } else if (count267 === 2) {
-      bonus.add({
-        firepower: 3,
-        evasion: 2
-      })
+      bonus.add({ firepower: 3, evasion: 2 })
     } else if (count267 === 3) {
-      bonus.add({
-        firepower: 4,
-        evasion: 3
-      })
+      bonus.add({ firepower: 4, evasion: 3 })
+    } else {
+      bonus.add({ firepower: 5, evasion: 4 })
     }
   } else if (isKagerouClass) {
     bonus.add({

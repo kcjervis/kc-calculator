@@ -2,28 +2,19 @@ import StatsBonus, { StatsBonusCreator } from "../StatsBonus"
 
 const createBonus: StatsBonusCreator = ship => {
   // 5inch単装砲 Mk.30改＋GFCS Mk.37
-  const count = ship.countGear(308)
-  if (count === 0) {
+  const multiplier = ship.countGear(308)
+  if (multiplier === 0) {
     return undefined
   }
   const bonus = new StatsBonus()
   const { shipClass, shipType } = ship
   // 単体ボーナス
-  if (!shipType.is("Destroyer")) {
-    return undefined
-  }
-  if (shipClass.isUsNavy) {
-    bonus.add({
-      multiplier: count,
-      firepower: 2,
-      antiAir: 1,
-      evasion: 1
-    })
-  } else {
-    bonus.add({
-      multiplier: count,
-      firepower: 1
-    })
+  if (shipClass.isUsNavy && shipType.is("Destroyer")) {
+    bonus.add({ multiplier, firepower: 2, antiAir: 1, evasion: 1 })
+  } else if (shipType.is("Destroyer")) {
+    bonus.add({ multiplier, firepower: 1 })
+  } else if (shipType.is("CoastalDefenseShip")) {
+    bonus.add({ multiplier, antiAir: 1, evasion: 1 })
   }
 
   return bonus

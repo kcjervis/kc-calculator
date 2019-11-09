@@ -11,13 +11,13 @@ const createBonus: StatsBonusCreator = ship => {
     bonus.add({ multiplier, firepower: 3, evasion: 1 })
   }
   if ("龍鳳改" === ship.name) {
-    bonus.add({ multiplier, firepower: 5, asw: 1, evasion: 2 })
+    bonus.add({ multiplier, firepower: 5, evasion: 2, asw: 1 })
   }
   if (/^瑞鳳改二乙?$/.test(ship.name)) {
-    bonus.add({ multiplier, firepower: 3, asw: 2, evasion: 2 })
+    bonus.add({ multiplier, firepower: 3, evasion: 3, asw: 2 })
   }
   if ("祥鳳改" === ship.name) {
-    bonus.add({ multiplier, firepower: 3, asw: 1, evasion: 1 })
+    bonus.add({ multiplier, firepower: 3, evasion: 1, asw: 1 })
   }
 
   return bonus

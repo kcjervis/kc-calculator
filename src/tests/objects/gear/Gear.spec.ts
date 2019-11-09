@@ -44,9 +44,11 @@ describe("gear/Gear", () => {
       attrs: ["Abyssal", "Radar", "AirRadar"]
     })
     expect(gear.match({ firepower: 5 })).toBe(true)
+    expect(gear.match({ star: 2 })).toBe(true)
 
     expect(gear.match({ attrs: "AirRadar" })).toBe(true)
     expect(gear.match({ attrs: { $all: ["Abyssal", "AirRadar"] } })).toBe(true)
+    expect(gear.match({ attrs: { $not: "Armor" } })).toBe(true)
 
     expect(gear.match({ attrs: "Aircraft" })).toBe(false)
   })

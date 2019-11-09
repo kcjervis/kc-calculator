@@ -149,7 +149,20 @@ export default class MasterShip implements ShipBase {
     return nextShip.remodel.nextId === shipId
   }
 
-  get grade() {
+  private getPrevShip = () => {
+    return MasterShip.all.find(ship => ship.remodel.nextId === this.shipId)
+  }
+
+  get remodelGroup() {
+    let remodelGroup = this.shipId
+    let found = this.getPrevShip()
+    while (found) {
+      remodelGroup = found.shipId
+      found = found.getPrevShip()
+    }
+    return remodelGroup
+  }
+  get rank() {
     return this.sortId % 10
   }
 }

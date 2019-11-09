@@ -21,14 +21,14 @@ export type ProficiencyType = "None" | "Fighter" | "SeaplaneBomber" | "Other"
 export const ProficiencyType = {
   from: (attrs: GearAttribute[]): ProficiencyType => {
     const gearIs = (attr: GearAttribute) => attrs.includes(attr)
-    if (gearIs("DiveBomber") || gearIs("TorpedoBomber") || gearIs("ReconnaissanceAircraft")) {
-      return "Other"
-    }
     if (gearIs("Fighter")) {
       return "Fighter"
     }
     if (gearIs("SeaplaneBomber")) {
       return "SeaplaneBomber"
+    }
+    if (gearIs("DiveBomber") || gearIs("TorpedoBomber") || gearIs("ReconnaissanceAircraft")) {
+      return "Other"
     }
     return "None"
   }

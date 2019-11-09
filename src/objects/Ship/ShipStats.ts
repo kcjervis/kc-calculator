@@ -4,27 +4,29 @@ import { IGear } from "../gear"
 
 import { isNonNullable } from "../../utils"
 import ShipNakedStats, { IBaseStats } from "./ShipNakedStats"
+import { StatsBonusRecord } from "../../data/EquipmentBonus"
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 export interface IShipStats extends IBaseStats {
-  statsBonus?: IBaseStats
+  equipmentBonus: StatsBonusRecord
+  getBonus: (key: keyof StatsBonusRecord) => number
 }
 
-export default class ShipStats implements IShipStats {
+export default class ShipStats implements IBaseStats {
   constructor(
     private readonly nakedStats: ShipNakedStats,
     private readonly gears: Array<IGear | undefined>,
-    public statsBonus?: IBaseStats
+    public equipmentBonus: StatsBonusRecord = {}
   ) {}
 
-  private getStat(statKey: keyof Omit<IBaseStats, "luck" | "hp">) {
-    const { nakedStats, gears, statsBonus } = this
-    let bonus = 0
-    if (statsBonus !== undefined) {
-      bonus = statsBonus[statKey]
-    }
-    return nakedStats[statKey] + sumBy(gears.filter(isNonNullable), statKey) + bonus
+  public getBonus = (key: keyof StatsBonusRecord) => {
+    return this.equipmentBonus[key] || 0
+  }
+
+  private getStat(key: keyof Omit<StatsBonusRecord, "effectiveLos">) {
+    const { nakedStats, gears } = this
+    return nakedStats[key] + sumBy(gears.filter(isNonNullable), key) + this.getBonus(key)
   }
 
   get hp() {
@@ -68,15 +70,11 @@ export default class ShipStats implements IShipStats {
   }
 
   get range() {
-    const { nakedStats, gears, statsBonus } = this
+    const { nakedStats, gears, getBonus } = this
     const nakedRange = nakedStats.range
     const longest = maxBy(gears, "range")
     const range = longest && longest.range > nakedRange ? longest.range : nakedRange
 
-    if (statsBonus === undefined) {
-      return range
-    }
-
-    return range + statsBonus.range
+    return range + getBonus("range")
   }
 }

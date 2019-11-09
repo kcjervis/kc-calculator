@@ -19,29 +19,18 @@ const createBonus: StatsBonusCreator = ship => {
   // 単体ボーナス
   if (isKagerouClass && shipNameIsKai2(shipName)) {
     if (count266 === 1) {
-      bonus.add({
-        firepower: 2
-      })
+      bonus.add({ firepower: 2 })
     } else if (count266 === 2) {
-      bonus.add({
-        firepower: 5
-      })
+      bonus.add({ firepower: 5 })
     } else if (count266 === 3) {
-      bonus.add({
-        firepower: 6
-      })
+      bonus.add({ firepower: 6 })
+    } else {
+      bonus.add({ firepower: 7 })
     }
   } else if (shipName === "雪風改" || shipName === "磯風乙改" || shipName === "時雨改二") {
-    bonus.add({
-      multiplier: count266,
-      firepower: 1,
-      evasion: 1
-    })
+    bonus.add({ multiplier: count266, firepower: 1, evasion: 1 })
   } else if (isShiratsuyuClass || isAsashioClass || isKagerouClass) {
-    bonus.add({
-      multiplier: count266,
-      firepower: 1
-    })
+    bonus.add({ multiplier: count266, firepower: 1 })
   }
 
   // 相互シナジーボーナス
