@@ -799,7 +799,7 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
     ]
   },
 
-  // 魚体
+  // 魚雷
   {
     byGear: { gearId: GearId["53cm連装魚雷"] },
     rules: [
@@ -1702,18 +1702,12 @@ const statBonusRuleToRecord = (ship: IShip, byGear: GearQuery, count: number) =>
   if (multiple) {
     record = multiplyBonus(multiple, count)
   }
-  if (count >= 4 && count4) {
-    record = addBonus(record, count4)
-  }
-  if (count >= 3 && count3) {
-    record = addBonus(record, count3)
-  }
-  if (count >= 2 && count2) {
-    record = addBonus(record, count2)
-  }
-  if (count >= 1 && count1) {
-    record = addBonus(record, count1)
-  }
+
+  ;[count1, count2, count3, count4].forEach((countBonus, index) => {
+    if (countBonus && count > index) {
+      record = addBonus(record, countBonus)
+    }
+  })
 
   return record
 }
