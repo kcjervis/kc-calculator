@@ -9,3 +9,4 @@ export { default as Speed } from "./Speed"
 export { default as BattleType } from "./BattleType"
 
 export { default as GearStatNames, GearStatName } from "./GearStatNames"
+export { default as EnemyTypeId } from "./EnemyTypeId"

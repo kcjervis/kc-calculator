@@ -511,8 +511,53 @@ const makeModifiersCreater = (ship: IShip, target: IShip) => {
   return createModifiers
 }
 
+const getLandingCraftImprovementModifier = (ship: IShip, targetIsSupplyDepot: boolean) => {
+  const count = ship.countGear("LandingCraft")
+  const modifier: AttackPowerModifier = {}
+  if (count) {
+    const totalStar = ship.totalEquipmentStats(gear => (gear.is("LandingCraft") ? gear.star : 0))
+    modifier.a13 = 1 + totalStar / count / 50
+
+    if (!targetIsSupplyDepot) {
+      return modifier
+    }
+    modifier.a5 = modifier.a13
+    if (ship.hasGear(GearId["大発動艇(八九式中戦車&陸戦隊)"])) {
+      modifier.a5 *= modifier.a5
+    }
+  }
+
+  return modifier
+}
+
+const getTankImprovementModifier = (ship: IShip, targetIsSupplyDepot: boolean) => {
+  const count = ship.countGear(GearId["特二式内火艇"])
+  const modifier: AttackPowerModifier = {}
+  if (count) {
+    const totalStar = ship.totalEquipmentStats(gear => (gear.match(GearId["特二式内火艇"]) ? gear.star : 0))
+    modifier.a13 = 1 + totalStar / count / 30
+
+    if (!targetIsSupplyDepot) {
+      return modifier
+    }
+    modifier.a5 = modifier.a13
+  }
+
+  return modifier
+}
+
+const getImprovementModifiers = (ship: IShip, target: IShip) => {
+  const targetIsSupplyDepot = target.is("SupplyDepot")
+  return [
+    getLandingCraftImprovementModifier(ship, targetIsSupplyDepot),
+    getTankImprovementModifier(ship, targetIsSupplyDepot)
+  ]
+}
+
 export const getSpecialEnemyModifier = (ship: IShip, target: IShip): AttackPowerModifier => {
   const createModifiers = makeModifiersCreater(ship, target)
   const modifiers = data.flatMap(rule => createModifiers(rule))
-  return mergeAttackPowerModifier(...modifiers)
+  const improvementModifiers = getImprovementModifiers(ship, target)
+
+  return mergeAttackPowerModifier(...modifiers, ...improvementModifiers)
 }

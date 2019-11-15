@@ -289,6 +289,23 @@ export default class Ship implements IShip {
   }
 
   private getRemainingPlanes = () => this.planes.filter(isNonNullable)
+  
+  private getShellingType(): ShellingType {
+    const { shipType, shipClass, isInstallation, hasGear } = this
+    if (shipType.isAircraftCarrierClass) {
+      return "CarrierShelling"
+    }
+
+    if (!shipClass.is("RevisedKazahayaClass") && !isInstallation) {
+      return "Shelling"
+    }
+
+    if (hasGear("DiveBomber") || hasGear("TorpedoBomber")) {
+      return "CarrierShelling"
+    }
+
+    return "Shelling"
+  }
 
   /**
    * 熟練度補正
@@ -296,6 +313,9 @@ export default class Ship implements IShip {
    */
   private getNormalProficiencyModifiers = () => {
     const modifiers = { power: 1, hitRate: 0, criticalRate: 0 }
+    if (this.getShellingType() !== "CarrierShelling") {
+      return modifiers
+    }
 
     const planes = this.getRemainingPlanes().filter(
       plane => plane.is("DiveBomber") || plane.is("TorpedoBomber") || plane.is("LargeFlyingBoat")
@@ -353,6 +373,10 @@ export default class Ship implements IShip {
    */
   private getSpecialProficiencyModifiers = () => {
     const modifiers = { power: 1, hitRate: 0, criticalRate: 0 }
+    if (this.getShellingType() !== "CarrierShelling") {
+      return modifiers
+    }
+
     const shellingPlanes = this.getRemainingPlanes().filter(
       plane => plane.participatesInCarrierShelling && plane.gear.proficiency.internal === 120
     )
@@ -365,22 +389,7 @@ export default class Ship implements IShip {
     return modifiers
   }
 
-  private getShellingType(): ShellingType {
-    const { shipType, shipClass, isInstallation, hasGear } = this
-    if (shipType.isAircraftCarrierClass) {
-      return "CarrierShelling"
-    }
 
-    if (!shipClass.is("RevisedKazahayaClass") && !isInstallation) {
-      return "Shelling"
-    }
-
-    if (hasGear("DiveBomber") || hasGear("TorpedoBomber")) {
-      return "CarrierShelling"
-    }
-
-    return "Shelling"
-  }
 
   public getSpecialEnemyModifier = (target: IShip): AttackPowerModifier => getSpecialEnemyModifier(this, target)
 

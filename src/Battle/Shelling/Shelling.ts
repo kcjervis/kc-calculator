@@ -1,11 +1,5 @@
 import DayCombatSpecialAttack from "./DayCombatSpecialAttack"
-import {
-  ShipInformation,
-  InstallationType,
-  BattleState,
-  ShellingPowerFactors,
-  ShellingAccuracyFactors
-} from "../../types"
+import { ShipInformation, BattleState, ShellingPowerFactors, ShellingAccuracyFactors } from "../../types"
 
 import getCombinedFleetFactor from "./getCombinedFleetFactor"
 import Damage from "../Damage"
@@ -27,7 +21,6 @@ export default class Shelling {
 
     public eventMapModifier = 1,
     public remainingAmmoModifier = 1,
-    public manualInstallationType?: InstallationType,
     public fitGunBonus = 0
   ) {}
 
@@ -60,11 +53,6 @@ export default class Shelling {
     return specialAttack === undefined ? normalProficiencyModifiers : specialProficiencyModifiers
   }
 
-  private getDefenderInstallationType() {
-    const { defender, manualInstallationType } = this
-    return manualInstallationType || defender.ship.installationType
-  }
-
   get power() {
     const {
       battleState,
@@ -81,7 +69,6 @@ export default class Shelling {
     const { role, formation } = attacker
     const combinedFleetFactor = combinedFleetFactors.power
 
-    const installationType = this.getDefenderInstallationType()
     const {
       shellingType,
       firepower,
@@ -102,7 +89,7 @@ export default class Shelling {
     const apShellModifier = isArmorPiercing ? apShellModifiers.power : 1
 
     const antiInstallationModifiers = attacker.ship.getAntiInstallationModifier(defender.ship)
-    const isAntiInstallationWarfare = installationType !== "None"
+    const isAntiInstallationWarfare = defender.ship.isInstallation
 
     const effectiveBombing = isAntiInstallationWarfare
       ? attacker.ship.totalEquipmentStats(gear => (gear.is("AntiInstallationBomber") ? gear.bombing : 0))
