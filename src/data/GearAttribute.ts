@@ -113,6 +113,12 @@ export const isAntiInstallationBomber = createGearIdMatcher(
 /** 増加爆雷 */
 export const isAdditionalDepthCharge = createGearIdMatcher(GearId["九五式爆雷"], GearId["二式爆雷"])
 
+/** 対地噴進砲 */
+export const AntiGroundRocketLauncher = createGearIdMatcher(
+  GearId["艦載型 四式20cm対地噴進砲"],
+  GearId["四式20cm対地噴進砲 集中配備"]
+)
+
 /** 迫撃砲 */
 export const isMortar = createGearIdMatcher(GearId["二式12cm迫撃砲改"], GearId["二式12cm迫撃砲改 集中配備"])
 
@@ -143,6 +149,7 @@ const matchers = createMatchers({
   AntiInstallationBomber: isAntiInstallationBomber,
 
   AdditionalDepthCharge: isAdditionalDepthCharge,
+  AntiGroundRocketLauncher,
   Mortar: isMortar
 })
 

@@ -69,6 +69,7 @@ export default class Shelling {
     const {
       battleState,
       attacker,
+      defender,
       isCritical,
       combinedFleetFactors,
       eventMapModifier,
@@ -100,16 +101,14 @@ export default class Shelling {
     const specialAttackModifier = specialAttack ? specialAttack.modifier.power : 1
     const apShellModifier = isArmorPiercing ? apShellModifiers.power : 1
 
-    const antiInstallationStatus = attacker.ship.getAntiInstallationStatus()
-
-    const antiInstallationModifiers = antiInstallationStatus.getModifiersFromType(installationType)
+    const antiInstallationModifiers = attacker.ship.getAntiInstallationModifier(defender.ship)
     const isAntiInstallationWarfare = installationType !== "None"
 
     const effectiveBombing = isAntiInstallationWarfare
       ? attacker.ship.totalEquipmentStats(gear => (gear.is("AntiInstallationBomber") ? gear.bombing : 0))
       : bombing
 
-    const effectivenessMultiplicative = antiInstallationModifiers.postCapMultiplicative
+    const effectivenessMultiplicative = antiInstallationModifiers.a5
     const effectivenessAdditive = 0
 
     const proficiencyModifier = this.proficiencyModifiers.power

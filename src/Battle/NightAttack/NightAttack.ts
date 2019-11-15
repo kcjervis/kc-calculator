@@ -19,8 +19,7 @@ export default class NightAttack {
 
     public nightContactModifier = 0,
     public eventMapModifier = 1,
-    public remainingAmmoModifier = 1,
-    public manualInstallationType?: InstallationType
+    public remainingAmmoModifier = 1
   ) {}
 
   get attackerNightAttackStatus() {
@@ -77,19 +76,16 @@ export default class NightAttack {
   }
 
   get power() {
-    const { isCritical, manualInstallationType, attackerNightAttackStatus, specialAttack, eventMapModifier } = this
-    const { role, formation } = this.attacker
-
-    const installationType = manualInstallationType || this.defender.ship.installationType
+    const { attacker, defender, isCritical, attackerNightAttackStatus, specialAttack, eventMapModifier } = this
+    const { role, formation } = attacker
 
     return attackerNightAttackStatus.calcPower({
       role,
       nightContactModifier: this.contactModifier.power,
       formation,
-      installationType,
       specialAttack,
       isCritical,
-      eventMapModifier
+      target: defender.ship
     })
   }
 

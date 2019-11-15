@@ -1,9 +1,8 @@
-import { mapValues, mergeWith } from "lodash-es"
-import { GearId, ShipClassId, ShipId } from "@jervis/data"
+import { mapValues } from "lodash-es"
+import { GearId, ShipClassId, ShipId, RemodelGroup } from "@jervis/data"
 import { ShipQuery, IShip } from "../objects/ship/ship"
 import { GearQuery } from "../objects/gear/Gear"
 import { ShipTypeId } from "."
-import { InternalQuery } from "sift"
 import { GearCategoryId } from "./GearCategory"
 import { Speed } from "../constants"
 
@@ -1184,11 +1183,11 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
         multiple: { firepower: 1, evasion: 1 }
       },
       {
-        byShip: { remodelGroup: ShipId["春日丸"], rank: { $gte: 2 } },
+        byShip: { remodelGroup: RemodelGroup["春日丸"], rank: { $gte: 2 } },
         multiple: { asw: 1, evasion: 1 }
       },
       {
-        byShip: { remodelGroup: ShipId["神鷹"] },
+        byShip: { remodelGroup: RemodelGroup["神鷹"] },
         multiple: { asw: 3, evasion: 2 }
       }
     ]
@@ -1471,20 +1470,20 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
         byShip: {
           remodelGroup: {
             $in: [
-              ShipId["矢矧"],
-              ShipId["霞"],
-              ShipId["雪風"],
-              ShipId["磯風"],
-              ShipId["浜風"],
-              ShipId["朝霜"],
-              ShipId["涼月"]
+              RemodelGroup["矢矧"],
+              RemodelGroup["霞"],
+              RemodelGroup["雪風"],
+              RemodelGroup["磯風"],
+              RemodelGroup["浜風"],
+              RemodelGroup["朝霜"],
+              RemodelGroup["涼月"]
             ]
           }
         },
         multiple: { antiAir: 2, evasion: 2, armor: 1 }
       },
       {
-        byShip: { remodelGroup: { $in: [ShipId["大淀"], ShipId["響"], ShipId["鹿島"]] } },
+        byShip: { remodelGroup: { $in: [RemodelGroup["大淀"], RemodelGroup["響"], RemodelGroup["鹿島"]] } },
         multiple: { antiAir: 1, evasion: 3, armor: 1 }
       }
     ]
@@ -1517,7 +1516,14 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
       {
         byShip: {
           remodelGroup: {
-            $in: [ShipId["神風"], ShipId["春風"], ShipId["時雨"], ShipId["山風"], ShipId["舞風"], ShipId["朝霜"]]
+            $in: [
+              RemodelGroup["神風"],
+              RemodelGroup["春風"],
+              RemodelGroup["時雨"],
+              RemodelGroup["山風"],
+              RemodelGroup["舞風"],
+              RemodelGroup["朝霜"]
+            ]
           }
         },
         multiple: { firepower: 1, evasion: 2, asw: 3 }
@@ -1525,7 +1531,14 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
       {
         byShip: {
           remodelGroup: {
-            $in: [ShipId["潮"], ShipId["雷"], ShipId["山雲"], ShipId["磯風"], ShipId["浜風"], ShipId["岸波"]]
+            $in: [
+              RemodelGroup["潮"],
+              RemodelGroup["雷"],
+              RemodelGroup["山雲"],
+              RemodelGroup["磯風"],
+              RemodelGroup["浜風"],
+              RemodelGroup["岸波"]
+            ]
           }
         },
         multiple: { evasion: 2, asw: 2 }
@@ -1605,19 +1618,21 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
     byGear: GearId["探照灯"],
     rules: [
       {
-        byShip: { remodelGroup: ShipId["神通"] },
+        byShip: { remodelGroup: RemodelGroup["神通"] },
         count1: { firepower: 2, torpedo: 2, evasion: -1 }
       },
       {
-        byShip: { remodelGroup: { $in: [ShipId["比叡"], ShipId["霧島"], ShipId["鳥海"], ShipId["暁"]] } },
+        byShip: {
+          remodelGroup: { $in: [RemodelGroup["比叡"], RemodelGroup["霧島"], RemodelGroup["鳥海"], RemodelGroup["暁"]] }
+        },
         count1: { firepower: 2, evasion: -1 }
       },
       {
-        byShip: { remodelGroup: ShipId["秋雲"] },
+        byShip: { remodelGroup: RemodelGroup["秋雲"] },
         multiple: { firepower: 1 }
       },
       {
-        byShip: { remodelGroup: ShipId["雪風"] },
+        byShip: { remodelGroup: RemodelGroup["雪風"] },
         multiple: { antiAir: 1 }
       }
     ]
@@ -1625,7 +1640,7 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
 
   {
     byGear: GearId["96式150cm探照灯"],
-    byShip: { remodelGroup: { $in: [ShipId["比叡"], ShipId["霧島"]] } },
+    byShip: { remodelGroup: { $in: [RemodelGroup["比叡"], RemodelGroup["霧島"]] } },
     count1: { firepower: 3, evasion: -2 }
   },
 

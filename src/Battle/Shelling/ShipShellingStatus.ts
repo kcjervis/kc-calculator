@@ -2,9 +2,8 @@ import { Formation, Engagement } from "../../constants"
 import { IShip } from "../../objects"
 import { sumBy } from "lodash-es"
 import DayCombatSpecialAttack from "./DayCombatSpecialAttack"
-import { ShipRole, ShellingType, ShellingPowerFactors, ShellingAccuracyFactors, InstallationType } from "../../types"
+import { ShipRole, ShellingType, ShellingPowerFactors, ShellingAccuracyFactors } from "../../types"
 import ShellingPower from "./ShellingPower"
-import ShipAntiInstallationStatus from "../../objects/ship/ShipAntiInstallationStatus"
 import ShellingAccuracy from "./ShellingAccuracy"
 
 type ShipShellingPowerOptions = Partial<{
@@ -14,10 +13,11 @@ type ShipShellingPowerOptions = Partial<{
   combinedFleetFactor: number
   specialAttack: DayCombatSpecialAttack
   isArmorPiercing: boolean
-  installationType: InstallationType
   isCritical: boolean
   eventMapModifier: number
-}>
+}> & {
+  target: IShip
+}
 
 /**
  * 巡洋艦砲フィット補正
@@ -106,11 +106,7 @@ export const getProficiencyModifier = (ship: IShip, specialAttack?: DayCombatSpe
 }
 
 export default class ShipShellingStatus {
-  public antiInstallationStatus: ShipAntiInstallationStatus
-
-  constructor(private ship: IShip) {
-    this.antiInstallationStatus = new ShipAntiInstallationStatus(ship)
-  }
+  constructor(private ship: IShip) {}
 
   get shellingType(): ShellingType {
     const { shipType, shipClass, isInstallation, hasGear } = this.ship
@@ -188,7 +184,7 @@ export default class ShipShellingStatus {
       eventMapModifier = 1,
       specialAttack,
       isArmorPiercing = false,
-      installationType = "None"
+      target
     } = options
 
     const { shellingType, firepower, torpedo, bombing, improvementModifier, cruiserFitBonus, healthModifier } = this
@@ -201,14 +197,14 @@ export default class ShipShellingStatus {
     const specialAttackModifier = specialAttack ? specialAttack.modifier.power : 1
     const apShellModifier = isArmorPiercing ? this.apShellModifiers.power : 1
 
-    const antiInstallationModifiers = this.antiInstallationStatus.getModifiersFromType(installationType)
-    const isAntiInstallationWarfare = installationType !== "None"
+    const antiInstallationModifiers = this.ship.getAntiInstallationModifier(target)
+    const isAntiInstallationWarfare = target.isInstallation
 
     const effectiveBombing = isAntiInstallationWarfare
       ? this.ship.totalEquipmentStats(gear => (gear.is("AntiInstallationBomber") ? gear.bombing : 0))
       : bombing
 
-    const effectivenessMultiplicative = antiInstallationModifiers.postCapMultiplicative
+    const effectivenessMultiplicative = antiInstallationModifiers.a5
     const effectivenessAdditive = 0
 
     const factors: ShellingPowerFactors = {

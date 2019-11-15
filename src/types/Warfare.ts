@@ -26,11 +26,11 @@ export type FormationModifiers = {
 export type InstallationType = "None" | "SoftSkinned" | "Pillbox" | "SupplyDepot" | "IsolatedIsland"
 
 export type AntiInstallationModifiers = {
-  shipTypeAdditive: number
+  b12: number
   a13: number
   b13: number
-  a13d: number
-  b13d: number
+  a13next: number
+  b13next: number
 }
 
 export type ShellingBasicPowerFactors = {

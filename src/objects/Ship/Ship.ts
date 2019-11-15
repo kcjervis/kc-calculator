@@ -13,7 +13,7 @@ import { getApShellModifiers, calcCruiserFitBonus } from "../../formulas"
 import { IGear } from "../gear"
 import { IPlane } from "../plane"
 import { DefensePower, InstallationType, ShipShellingStats, ShellingType } from "../../types"
-import ShipAntiInstallationStatus from "./ShipAntiInstallationStatus"
+import { AttackPowerModifier, getSpecialEnemyModifier } from "../../data/SpecialEnemyModifier"
 
 export type ShipQuery =
   | ShipId
@@ -71,7 +71,10 @@ export interface IShip {
   canNightAttack: boolean
 
   getDefensePower: () => DefensePower
-  getAntiInstallationStatus: () => ShipAntiInstallationStatus
+  getSpecialEnemyModifier: (target: IShip) => AttackPowerModifier
+  getAntiInstallationModifier: (
+    target: IShip
+  ) => Required<Pick<AttackPowerModifier, "a5" | "a13" | "a13next" | "b12" | "b13" | "b13next">>
   getShellingStats: () => ShipShellingStats
 
   /** 廃止予定 */
@@ -379,8 +382,12 @@ export default class Ship implements IShip {
     return "Shelling"
   }
 
-  public getAntiInstallationStatus = (): ShipAntiInstallationStatus => {
-    return new ShipAntiInstallationStatus(this)
+  public getSpecialEnemyModifier = (target: IShip): AttackPowerModifier => getSpecialEnemyModifier(this, target)
+
+  public getAntiInstallationModifier = (target: IShip) => {
+    const modifier = this.getSpecialEnemyModifier(target)
+    const defaultModifier = { a13: 1, a13next: 1, a5: 1, b12: 0, b13: 0, b13next: 0 }
+    return { ...defaultModifier, ...modifier }
   }
 
   public getShellingStats = (): ShipShellingStats => {

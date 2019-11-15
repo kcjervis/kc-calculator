@@ -7,7 +7,7 @@ import {
   shipStatKeys
 } from "./EquipmentBonus"
 import { ObjectFactory, IGearDataObject, IShip } from "../objects"
-import { GearId, ShipClassId, ShipId, ShipName, GearName } from "@jervis/data"
+import { ShipName, GearName } from "@jervis/data"
 import { MasterData } from "."
 import { range, isEqual, mergeWith } from "lodash-es"
 
@@ -47,12 +47,17 @@ const toShipId = (name: ShipName) => {
 
 const getGears = (state: GearState, qty: number) => Array.from({ length: qty }, () => state)
 
-const makeBonus = (shipName: ShipName, ...gears: GearState[]) => {
+export const makeShip = (shipName: ShipName, ...gears: GearState[]) => {
   const shipId = toShipId(shipName)
   const ship = factory.createShip({ masterId: shipId, equipments: gears.map(toGearData) })
   if (!ship) {
     throw Error(`${shipId} is not found`)
   }
+  return ship
+}
+
+const makeBonus = (shipName: ShipName, ...gears: GearState[]) => {
+  const ship = makeShip(shipName, ...gears)
   return getEquipmentBonus(ship)
 }
 

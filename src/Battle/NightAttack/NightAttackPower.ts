@@ -32,8 +32,8 @@ const calcNightAttackPreCapPower = (basicPower: number, modifiers: NightAttackPo
     antiInstallationModifiers
   } = modifiers
 
-  const { shipTypeAdditive, a13, b13, a13d, b13d } = antiInstallationModifiers
-  const antiInstallationModified = ((basicPower + shipTypeAdditive) * a13 + b13) * a13d + b13d
+  const { b12, a13, b13, a13next, b13next } = antiInstallationModifiers
+  const antiInstallationModified = ((basicPower + b12) * a13 + b13) * a13next + b13next
 
   return antiInstallationModified * formationModifier * healthModifier * specialAttackModifier + cruiserFitBonus
 }
@@ -73,11 +73,11 @@ export default class NightAttackPower implements NightAttackPowerFactors {
   public specialAttackModifier = 1
   public cruiserFitBonus = 0
   public antiInstallationModifiers: AntiInstallationModifiers = {
-    shipTypeAdditive: 0,
+    b12: 0,
     a13: 1,
     b13: 0,
-    a13d: 1,
-    b13d: 0
+    a13next: 1,
+    b13next: 0
   }
 
   public effectivenessMultiplicative = 1

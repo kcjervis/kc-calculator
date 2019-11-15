@@ -1,20 +1,29 @@
 import { IShip } from "../../objects"
-import { NightAttackType, ShipRole, InstallationType, NightAttackPowerFactors } from "../../types"
+import {
+  NightAttackType,
+  ShipRole,
+  InstallationType,
+  NightAttackPowerFactors,
+  AntiInstallationModifiers
+} from "../../types"
 import { sumBy } from "lodash-es"
 import { Formation } from "../../constants"
 import NightAttackPower from "./NightAttackPower"
 import { calcCruiserFitBonus, getProficiencyModifier } from "../Shelling/ShipShellingStatus"
 import NightCombatSpecialAttack, { isNightAerialAttackShip } from "./NightCombatSpecialAttack"
+import { AttackPowerModifier } from "../../data/SpecialEnemyModifier"
+import { GearId } from "@jervis/data"
 
 type ShipNightAttackPowerOptions = Partial<{
   role: ShipRole
   formation: Formation
   nightContactModifier: number
-  installationType: InstallationType
   specialAttack: NightCombatSpecialAttack
   isCritical: boolean
   eventMapModifier: number
-}>
+}> & {
+  target: IShip
+}
 
 export default class ShipNightAttackStatus {
   constructor(private ship: IShip) {}
@@ -53,44 +62,38 @@ export default class ShipNightAttackStatus {
       nightContactModifier = 0,
       formation = Formation.LineAhead,
       eventMapModifier = 1,
-      installationType = "None",
       specialAttack,
-      isCritical = false
+      isCritical = false,
+      target
     } = options
     const { ship, nightAttackType, proficiencyModifier } = this
     const { firepower, torpedo } = ship.stats
 
+    const isAntiInstallationWarfare = target.isInstallation
+
     const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.nightAttackPowerModifier)
 
-    const isAntiInstallationWarfare = installationType !== "None"
     const nightAerialAttackPower = this.calcNightAerialAttackPower(isAntiInstallationWarfare)
 
     const formationModifier = formation.getModifiersWithRole(role).nightBattle.power
     const healthModifier = ship.health.nightAttackPowerModifire
 
-    let antiInstallationModifiers = ship.getAntiInstallationStatus().getModifiersFromType(installationType)
+    let antiInstallationModifiers = ship.getAntiInstallationModifier(target)
     if (isAntiInstallationWarfare && specialAttack && specialAttack.isAerialAttack) {
-      antiInstallationModifiers = {
-        shipTypeAdditive: 0,
-        a13: 1,
-        b13: 0,
-        a13d: 1,
-        b13d: 0,
-        postCapMultiplicative: 1
-      }
+      antiInstallationModifiers = { a13: 1, a13next: 1, a5: 1, b12: 0, b13: 0, b13next: 0 }
     }
 
     let specialAttackModifier = 1
     if (specialAttack) {
       specialAttackModifier = specialAttack.modifier.power
-      if (specialAttack.isDestroyerCutin && ship.hasGear(267)) {
+      if (specialAttack.isDestroyerCutin && ship.hasGear(GearId["12.7cm連装砲D型改二"])) {
         specialAttackModifier *= 1.25
       }
     }
 
     const cruiserFitBonus = calcCruiserFitBonus(ship)
 
-    const effectivenessMultiplicative = antiInstallationModifiers.postCapMultiplicative
+    const effectivenessMultiplicative = antiInstallationModifiers.a5
     const effectivenessAdditive = 0
     const criticalModifier = isCritical ? 1.5 : 1
 
