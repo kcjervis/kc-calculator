@@ -547,6 +547,9 @@ const getTankImprovementModifier = (ship: IShip, targetIsSupplyDepot: boolean) =
 }
 
 const getImprovementModifiers = (ship: IShip, target: IShip) => {
+  if (!target.isInstallation) {
+    return []
+  }
   const targetIsSupplyDepot = target.is("SupplyDepot")
   return [
     getLandingCraftImprovementModifier(ship, targetIsSupplyDepot),

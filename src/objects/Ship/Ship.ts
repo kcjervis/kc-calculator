@@ -289,7 +289,7 @@ export default class Ship implements IShip {
   }
 
   private getRemainingPlanes = () => this.planes.filter(isNonNullable)
-  
+
   private getShellingType(): ShellingType {
     const { shipType, shipClass, isInstallation, hasGear } = this
     if (shipType.isAircraftCarrierClass) {
@@ -388,8 +388,6 @@ export default class Ship implements IShip {
 
     return modifiers
   }
-
-
 
   public getSpecialEnemyModifier = (target: IShip): AttackPowerModifier => getSpecialEnemyModifier(this, target)
 

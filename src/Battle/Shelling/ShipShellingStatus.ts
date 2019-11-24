@@ -44,65 +44,11 @@ export const calcCruiserFitBonus = (ship: IShip) => {
  * 戦爆連合は適当
  */
 export const getProficiencyModifier = (ship: IShip, specialAttack?: DayCombatSpecialAttack) => {
-  const modifier = { power: 1, hitRate: 0, criticalRate: 0 }
+  const stats = ship.getShellingStats()
   if (specialAttack && specialAttack.isCarrierSpecialAttack) {
-    const planes = ship.planes.filter(plane => plane.participatesInCarrierShelling)
-    if (planes.some(plane => plane.index === 0)) {
-      modifier.power = 1.25
-    } else {
-      modifier.power = 1.106
-    }
-    return modifier
+    return stats.specialProficiencyModifiers
   }
-
-  const planes = ship.planes.filter(
-    plane => (plane.slotSize > 0 && plane.is("DiveBomber")) || plane.is("TorpedoBomber") || plane.is("LargeFlyingBoat")
-  )
-  modifier.power =
-    1 +
-    sumBy(planes, plane => {
-      if (plane.index === 0) {
-        return plane.gear.proficiency.criticalPowerModifier / 100
-      }
-      return plane.gear.proficiency.criticalPowerModifier / 200
-    })
-
-  const average = sumBy(planes, plane => plane.gear.proficiency.internal) / planes.length
-  let averageModifierA = 0
-  let averageModifierB = 0
-  if (average >= 10) {
-    averageModifierA = Math.floor(Math.sqrt(0.1 * average))
-  }
-  if (average >= 25) {
-    averageModifierB = 1
-  }
-  if (average >= 40) {
-    averageModifierB = 2
-  }
-  if (average >= 55) {
-    averageModifierB = 3
-  }
-  if (average >= 70) {
-    averageModifierB = 4
-  }
-  if (average >= 80) {
-    averageModifierB = 6
-  }
-  if (average >= 100) {
-    averageModifierB = 9
-  }
-  modifier.hitRate = averageModifierA + averageModifierB
-
-  modifier.criticalRate = sumBy(planes, plane => {
-    const { internal, level } = plane.gear.proficiency
-    let levelBonus = 0
-    if (level === 7) {
-      levelBonus = 3
-    }
-    return (Math.sqrt(Math.sqrt(0.1 * internal)) + levelBonus) / 100
-  })
-
-  return modifier
+  return stats.normalProficiencyModifiers
 }
 
 export default class ShipShellingStatus {

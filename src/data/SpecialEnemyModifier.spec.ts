@@ -1,12 +1,14 @@
 import { mergeAttackPowerModifier, getSpecialEnemyModifier } from "./SpecialEnemyModifier"
 import { makeShip } from "./EquipmentBonus.spec"
 
+const normal = makeShip("駆逐イ級")
 const pillbox = makeShip("砲台小鬼")
 const supplyDepot = makeShip("集積地棲姫")
 
 const expectModifier = (...params: Parameters<typeof makeShip>) => {
   const ship = makeShip(...params)
   const actual = {
+    normal: getSpecialEnemyModifier(ship, normal),
     pillbox: getSpecialEnemyModifier(ship, pillbox),
     supplyDepot: getSpecialEnemyModifier(ship, supplyDepot)
   }
@@ -34,5 +36,7 @@ describe("SpecialEnemyModifier", () => {
 
     expectModifier("伊19").toMatchObject({ pillbox: { b12: 30 } })
     expectModifier("伊19改").toMatchObject({ pillbox: { b12: 30 } })
+
+    expectModifier("睦月", { name: "大発動艇", star: 10 }).toMatchObject({ normal: {}, pillbox: { a13: 3.024 } })
   })
 })
