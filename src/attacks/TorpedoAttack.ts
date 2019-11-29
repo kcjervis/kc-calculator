@@ -3,6 +3,7 @@ import { ShipInformation } from "../types"
 import { Engagement, Formation, FleetType, Side } from "../constants"
 import { Damage } from "../Battle"
 import { IShip } from "../objects"
+import TorpedoAttackStatus from "./TorpedoAttackStatus"
 
 type TorpedoBasicPowerFactors = {
   torpedo: number
@@ -54,6 +55,8 @@ export default class TorpedoAttack {
   public remainingAmmoModifier: number
   public innateTorpedoAccuracy: number
 
+  private attackerStatus: TorpedoAttackStatus
+
   constructor({
     attacker,
     defender,
@@ -68,6 +71,8 @@ export default class TorpedoAttack {
     this.isCritical = isCritical
     this.remainingAmmoModifier = remainingAmmoModifier
     this.innateTorpedoAccuracy = innateTorpedoAccuracy
+
+    this.attackerStatus = new TorpedoAttackStatus(attacker.ship)
   }
 
   private getFleetTypeBySide = (side: Side) => {
@@ -97,13 +102,6 @@ export default class TorpedoAttack {
     }
   }
 
-  private getBasicPowerFactors = () => {
-    const { ship } = this.attacker
-    const fleetFactor = this.getFleetFactor()
-    const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.torpedoPowerModifier)
-    return { torpedo: ship.stats.torpedo, fleetFactor, improvementModifier }
-  }
-
   private getPowerModifiers = () => {
     const { attacker, engagement } = this
     const formationModifier = this.getFormationModifiers().attacker.power
@@ -114,15 +112,10 @@ export default class TorpedoAttack {
     return { a14 }
   }
 
-  private calcBasicPower = () => {
-    return calcBasicPower(this.getBasicPowerFactors())
-  }
-
   private getPreCriticalPower = () => {
-    const basic = this.calcBasicPower()
-    const cap = TorpedoAttack.cap
+    const fleetFactor = this.getFleetFactor()
     const modifiers = this.getPowerModifiers()
-    return createAttackPower({ basic, cap, modifiers })
+    return this.attackerStatus.createPreCriticalPower({ fleetFactor, modifiers })
   }
 
   get power() {
@@ -133,7 +126,7 @@ export default class TorpedoAttack {
       return preCriticalPower
     }
     const postcap = Math.floor(preCriticalPower.postcap * 1.5)
-    return { ...preCriticalPower, postcap }
+    return { ...preCriticalPower, postcap, preCritical: preCriticalPower.precap }
   }
 
   get accuracy() {

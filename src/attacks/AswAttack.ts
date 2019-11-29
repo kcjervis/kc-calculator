@@ -4,31 +4,9 @@ import { IShip, IGear } from "../objects"
 import { Asw, FunctionalModifier, createCriticalFm, createHitRate } from "../formulas"
 import { Engagement, Formation } from "../constants"
 import { Damage } from "../Battle"
+import AswAttackStatus, { isAswAircraft, isAswGear } from "./AswAttackStatus"
 
-const isAswAircraft = ({ asw, category }: IGear) =>
-  asw > 0 &&
-  category.any(
-    "CarrierBasedDiveBomber",
-    "CarrierBasedTorpedoBomber",
-    "SeaplaneBomber",
-    "Autogyro",
-    "AntiSubmarinePatrolAircraft",
-    "LargeFlyingBoat"
-  )
-
-const isAswGear = (gear: IGear) =>
-  gear.category.any(
-    "CarrierBasedDiveBomber",
-    "CarrierBasedTorpedoBomber",
-    "SeaplaneBomber",
-    "Sonar",
-    "DepthCharge",
-    "Autogyro",
-    "AntiSubmarinePatrolAircraft",
-    "LargeSonar"
-  )
-
-const getAswType = (ship: IShip, isNight = false) => {
+export const getAswType = (ship: IShip, isNight = false) => {
   if (isNight) {
     return ship.nakedStats.asw > 0 ? "DepthCharge" : "None"
   }
@@ -41,7 +19,7 @@ const getAswType = (ship: IShip, isNight = false) => {
       "LightAircraftCarrier",
       "AmphibiousAssaultShip"
     ) ||
-    ShipId["速吸改"]
+    ShipId["速吸改"] === ship.shipId
   ) {
     const hasAswAircraft = ship.planes.some(plane => plane.slotSize > 0 && isAswAircraft(plane.gear))
     return hasAswAircraft ? "AircraftCarrier" : "None"
@@ -50,7 +28,7 @@ const getAswType = (ship: IShip, isNight = false) => {
   return ship.nakedStats.asw > 0 ? "DepthCharge" : "None"
 }
 
-const isPossible = (attacker: IShip, defender: IShip) => {
+export const isPossible = (attacker: IShip, defender: IShip) => {
   if (!defender.shipType.isSubmarineClass) {
     return false
   }
@@ -85,6 +63,8 @@ export default class AswAttack {
   public isNight: boolean
   public remainingAmmoModifier: number
 
+  private attackerStatus: AswAttackStatus
+
   constructor({
     attacker,
     defender,
@@ -101,32 +81,12 @@ export default class AswAttack {
     this.isOpeningAaw = isOpeningAaw
     this.isNight = isNight
     this.remainingAmmoModifier = remainingAmmoModifier
+
+    this.attackerStatus = new AswAttackStatus(attacker.ship, isNight)
   }
 
   private get type() {
-    return getAswType(this.attacker.ship, this.isNight)
-  }
-
-  /**
-   * @see https://twitter.com/KennethWWKK/status/1156195106837286912
-   */
-  public getSynergy = () => {
-    const { hasGear } = this.attacker.ship
-    let oldSynergy = 1
-    let newSynergy = 1
-    if ((hasGear("Sonar") || hasGear("LargeSonar")) && hasGear("DepthCharge")) {
-      oldSynergy = 1.15
-    }
-
-    if (hasGear("AdditionalDepthCharge") && hasGear("DepthChargeProjector")) {
-      if (hasGear("Sonar")) {
-        newSynergy = 1.25
-      } else {
-        newSynergy = 1.1
-      }
-    }
-
-    return oldSynergy * newSynergy
+    return this.attackerStatus.type
   }
 
   private getFormationModifiers = () => {
@@ -156,26 +116,12 @@ export default class AswAttack {
   }
 
   get power() {
-    const { ship } = this.attacker
-    const equipmentAsw = ship.totalEquipmentStats(gear => (isAswGear(gear) ? gear.asw : 0))
-    const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.aswPowerModifier)
-
-    const typeConstant = this.type === "DepthCharge" ? 13 : 8
-
     const additionalFm = this.getAdditionalFm()
 
-    return Asw.calcPower({
-      nakedAsw: ship.nakedStats.asw,
-      equipmentAsw,
-      improvementModifier,
-      typeConstant,
+    const formation = this.getFormationModifiers().power
+    const engagement = this.engagement.modifier
 
-      health: ship.health.aswPowerModifire,
-      formation: this.getFormationModifiers().power,
-      engagement: this.engagement.modifier,
-      synergy: this.getSynergy(),
-      additionalFm
-    })
+    return this.attackerStatus.calcPower({ formation, engagement, additionalFm })
   }
 
   get accuracy() {
@@ -220,8 +166,15 @@ export default class AswAttack {
   }
 
   get damage() {
-    const { power, defender, remainingAmmoModifier } = this
+    const { power, defender, remainingAmmoModifier, attackerStatus } = this
     const defensePower = defender.ship.getDefensePower()
-    return new Damage(power.postcap, defensePower, defender.ship.health.currentHp, remainingAmmoModifier)
+    const { armorPenetration } = attackerStatus
+    return new Damage(
+      power.postcap,
+      defensePower,
+      defender.ship.health.currentHp,
+      remainingAmmoModifier,
+      armorPenetration
+    )
   }
 }
