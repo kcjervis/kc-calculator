@@ -67,7 +67,7 @@ export type ShellingPowerFactors = ShellingBasicPowerFactors &
 
 export type ShellingPowerInformation = ShellingPowerFactors & {
   basicPower: number
-  preCapPower: number
+  precapPower: number
   cappedPower: number
   value: number
 }

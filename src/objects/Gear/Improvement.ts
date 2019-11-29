@@ -1,6 +1,7 @@
 import { GearStats } from "../../types"
 import { GearAttribute } from "../../data"
 import { GearId } from "@jervis/data"
+import { GearCategoryId } from "../../data/GearCategory"
 
 export type ImprovementModifiers = {
   contactSelectionModifier: number
@@ -11,6 +12,12 @@ export type ImprovementModifiers = {
 
   shellingPowerModifier: number
   shellingAccuracyModifier: number
+
+  aswPowerModifier: number
+  aswAccuracyModifier: number
+
+  torpedoPowerModifier: number
+  torpedoAccuracyModifier: number
 
   nightAttackPowerModifier: number
   nightAttackAccuracyModifier: number
@@ -26,6 +33,10 @@ export interface IImprovement extends ImprovementModifiers {
 
 export default class Improvement implements IImprovement {
   constructor(public value = 0, private stats: GearStats, private gearIs: (attr: GearAttribute) => boolean) {}
+
+  get star() {
+    return this.value
+  }
 
   /**
    * https://t.co/Ou8KzFANPK
@@ -178,6 +189,52 @@ export default class Improvement implements IImprovement {
       return Math.sqrt(this.value)
     }
 
+    return 0
+  }
+
+  get aswPowerModifier() {
+    const { gearIs, stats, star } = this
+    if (gearIs("CarrierBasedTorpedoBomber")) {
+      return 0.2 * star
+    }
+    if (gearIs("DepthCharge") || gearIs("Sonar")) {
+      return Math.floor(star)
+    }
+    if (gearIs("Autogyro")) {
+      const multiplier = stats.asw > 10 ? 0.3 : 0.2
+      return multiplier * star
+    }
+    return 0
+  }
+
+  get aswAccuracyModifier() {
+    const { star } = this
+    switch (this.stats.categoryId) {
+      case GearCategoryId.Sonar:
+      case GearCategoryId.LargeSonar:
+      case GearCategoryId.DepthCharge:
+        return 1.3 * Math.sqrt(star)
+    }
+    return 0
+  }
+
+  get torpedoPowerModifier() {
+    const { star } = this
+    switch (this.stats.categoryId) {
+      case GearCategoryId.Torpedo:
+      case GearCategoryId.AntiAircraftGun:
+        return 1.2 * Math.sqrt(star)
+    }
+    return 0
+  }
+
+  get torpedoAccuracyModifier() {
+    const { star } = this
+    switch (this.stats.categoryId) {
+      case GearCategoryId.Torpedo:
+      case GearCategoryId.MidgetSubmarine:
+        return 2 * Math.sqrt(star)
+    }
     return 0
   }
 

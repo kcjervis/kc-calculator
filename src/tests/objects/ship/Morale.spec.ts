@@ -1,4 +1,4 @@
-import Morale from "../../../objects/ship/Morale"
+import Morale, { BattleType } from "../../../objects/ship/Morale"
 
 describe("ship/Morale", () => {
   const makeExpect = (key: keyof Morale) => (value: number) => expect(new Morale(value)[key])
@@ -17,22 +17,58 @@ describe("ship/Morale", () => {
     expect(new Morale(30).state).toBe("Normal")
   })
 
-  it("shellingAccuracyModifier", () => {
-    const expectation: Array<[Morale, number]> = [[red, 0.5], [orange, 0.8], [normal, 1], [sparkling, 1.2]]
-    expectation.forEach(([morale, value]) => {
-      expect(morale.shellingAccuracyModifier).toBe(value)
+  describe("getAccuracyModifier", () => {
+    const testAccuracyModifier = (type: BattleType) => ([morale, expected]: [Morale, number]) => {
+      expect(morale.getAccuracyModifier(type)).toBe(expected)
+    }
+    it("shelling", () => {
+      const expectation: Array<[Morale, number]> = [
+        [red, 0.5],
+        [orange, 0.8],
+        [normal, 1],
+        [sparkling, 1.2]
+      ]
+      expectation.forEach(testAccuracyModifier("shelling"))
     })
-  })
 
-  it("nightBattleAccuracyModifier", () => {
-    const expectation: Array<[Morale, number]> = [[red, 0.5], [orange, 0.8], [normal, 1], [sparkling, 1.2]]
-    expectation.forEach(([morale, value]) => {
-      expect(morale.nightBattleAccuracyModifier).toBe(value)
+    it("asw", () => {
+      const expectation: Array<[Morale, number]> = [
+        [red, 0.5],
+        [orange, 0.8],
+        [normal, 1],
+        [sparkling, 1.2]
+      ]
+      expectation.forEach(testAccuracyModifier("asw"))
+    })
+
+    it("torpedo", () => {
+      const expectation: Array<[Morale, number]> = [
+        [red, 0.35],
+        [orange, 0.7],
+        [normal, 1],
+        [sparkling, 1.3]
+      ]
+      expectation.forEach(testAccuracyModifier("torpedo"))
+    })
+
+    it("night", () => {
+      const expectation: Array<[Morale, number]> = [
+        [red, 0.5],
+        [orange, 0.8],
+        [normal, 1],
+        [sparkling, 1.2]
+      ]
+      expectation.forEach(testAccuracyModifier("night"))
     })
   })
 
   it("evasionModifier", () => {
-    const expectation: Array<[Morale, number]> = [[red, 1.4], [orange, 1.2], [normal, 1], [sparkling, 0.7]]
+    const expectation: Array<[Morale, number]> = [
+      [red, 1.4],
+      [orange, 1.2],
+      [normal, 1],
+      [sparkling, 0.7]
+    ]
     expectation.forEach(([morale, value]) => {
       expect(morale.evasionModifier).toBe(value)
     })

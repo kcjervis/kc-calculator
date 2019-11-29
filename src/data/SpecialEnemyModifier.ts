@@ -42,9 +42,37 @@ const positions = [
 
 type AttackPowerModifierPosition = typeof positions[number]
 
-type NumberRecord<T extends string> = { [K in T]?: number }
+export type NumberRecord<T extends string> = { [K in T]?: number }
 
-export type AttackPowerModifier = NumberRecord<AttackPowerModifierPosition>
+export type AttackPowerModifierRecord = NumberRecord<AttackPowerModifierPosition>
+
+export const compose = (...args: AttackPowerModifierRecord[]) => {
+  const result: AttackPowerModifierRecord = {}
+
+  const setValue = (key: AttackPowerModifierPosition, value: number) => {
+    let next: number
+    if (key.startsWith("a")) {
+      next = (result[key] || 1) * value
+    } else {
+      next = (result[key] || 0) + value
+    }
+    result[key] = next
+  }
+  const setModifier = (mod: AttackPowerModifierRecord) => {
+    positions.forEach(key => {
+      const value = mod[key]
+      if (value) {
+        setValue(key, value)
+      }
+    })
+  }
+
+  args.forEach(setModifier)
+
+  return result
+}
+
+export const AttackPowerModifierRecord = { compose }
 
 type CountRule<T> = {
   count1?: T
@@ -61,8 +89,8 @@ type AttackCondition = {
 }
 
 type SpecialEnemyModifierRule = AttackCondition &
-  CountRule<AttackPowerModifier> & {
-    bonus?: AttackPowerModifier
+  CountRule<AttackPowerModifierRecord> & {
+    bonus?: AttackPowerModifierRecord
     rules?: SpecialEnemyModifierRule[]
   }
 
@@ -80,32 +108,6 @@ const isHarbourSummerPrincess: ShipQuery = { shipClassId: ShipClassId.HarbourSum
 const isSupplyDepot: ShipQuery = { attrs: "SupplyDepot" }
 
 const or = <T>(...args: Array<SiftQuery<T>>): SiftQuery<T> => ({ $or: [...args] })
-
-export const mergeAttackPowerModifier = (...args: AttackPowerModifier[]) => {
-  const result: AttackPowerModifier = {}
-
-  const setValue = (key: AttackPowerModifierPosition, value: number) => {
-    let next: number
-    if (key.startsWith("a")) {
-      next = (result[key] || 1) * value
-    } else {
-      next = (result[key] || 0) + value
-    }
-    result[key] = next
-  }
-  const setModifier = (mod: AttackPowerModifier) => {
-    positions.forEach(key => {
-      const value = mod[key]
-      if (value) {
-        setValue(key, value)
-      }
-    })
-  }
-
-  args.forEach(setModifier)
-
-  return result
-}
 
 const data: SpecialEnemyModifierRule[] = [
   {
@@ -370,6 +372,14 @@ const data: SpecialEnemyModifierRule[] = [
     gear: GearId["M4A1 DD"],
     rules: [
       {
+        target: isPillbox,
+        count1: { a13: 2 }
+      },
+      {
+        target: isIsolatedIsland,
+        count1: { a13: 1.8 }
+      },
+      {
         target: isSoftSkinned,
         count1: { a13: 1.1 }
       },
@@ -419,11 +429,13 @@ const data: SpecialEnemyModifierRule[] = [
     rules: [
       {
         target: isPillbox,
-        count1: { a13: 1.5 }
+        count1: { a13: 1.5 },
+        count2: { a13: 3 }
       },
       {
         target: isIsolatedIsland,
-        count1: { a13: 1.4 }
+        count1: { a13: 1.4 },
+        count2: { a13: 2.45 }
       },
       {
         target: isHarbourSummerPrincess,
@@ -478,7 +490,7 @@ const matchRule = (rule: AttackCondition, ship: IShip, target: IShip) => {
 
 const countRuleToModifier = (rule: SpecialEnemyModifierRule, qty: number) => {
   const { count1, count2, count3, count4, count5 } = rule
-  let modifier: AttackPowerModifier = {}
+  let modifier: AttackPowerModifierRecord = {}
   ;[count1, count2, count3, count4, count5].forEach((record, index) => {
     if (record && qty > index) {
       modifier = record
@@ -488,8 +500,8 @@ const countRuleToModifier = (rule: SpecialEnemyModifierRule, qty: number) => {
 }
 
 const makeModifiersCreater = (ship: IShip, target: IShip) => {
-  const createModifiers = (rule: SpecialEnemyModifierRule, inheritedCount = 0): AttackPowerModifier[] => {
-    const result: AttackPowerModifier[] = []
+  const createModifiers = (rule: SpecialEnemyModifierRule, inheritedCount = 0): AttackPowerModifierRecord[] => {
+    const result: AttackPowerModifierRecord[] = []
     if (!matchRule(rule, ship, target)) {
       return result
     }
@@ -513,7 +525,7 @@ const makeModifiersCreater = (ship: IShip, target: IShip) => {
 
 const getLandingCraftImprovementModifier = (ship: IShip, targetIsSupplyDepot: boolean) => {
   const count = ship.countGear("LandingCraft")
-  const modifier: AttackPowerModifier = {}
+  const modifier: AttackPowerModifierRecord = {}
   if (count) {
     const totalStar = ship.totalEquipmentStats(gear => (gear.is("LandingCraft") ? gear.star : 0))
     modifier.a13 = 1 + totalStar / count / 50
@@ -532,7 +544,7 @@ const getLandingCraftImprovementModifier = (ship: IShip, targetIsSupplyDepot: bo
 
 const getTankImprovementModifier = (ship: IShip, targetIsSupplyDepot: boolean) => {
   const count = ship.countGear(GearId["特二式内火艇"])
-  const modifier: AttackPowerModifier = {}
+  const modifier: AttackPowerModifierRecord = {}
   if (count) {
     const totalStar = ship.totalEquipmentStats(gear => (gear.match(GearId["特二式内火艇"]) ? gear.star : 0))
     modifier.a13 = 1 + totalStar / count / 30
@@ -557,10 +569,10 @@ const getImprovementModifiers = (ship: IShip, target: IShip) => {
   ]
 }
 
-export const getSpecialEnemyModifier = (ship: IShip, target: IShip): AttackPowerModifier => {
+export const getSpecialEnemyModifier = (ship: IShip, target: IShip): AttackPowerModifierRecord => {
   const createModifiers = makeModifiersCreater(ship, target)
   const modifiers = data.flatMap(rule => createModifiers(rule))
   const improvementModifiers = getImprovementModifiers(ship, target)
 
-  return mergeAttackPowerModifier(...modifiers, ...improvementModifiers)
+  return compose(...modifiers, ...improvementModifiers)
 }

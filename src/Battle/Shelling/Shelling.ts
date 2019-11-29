@@ -3,13 +3,13 @@ import { ShipInformation, BattleState, ShellingPowerFactors, ShellingAccuracyFac
 
 import getCombinedFleetFactor from "./getCombinedFleetFactor"
 import Damage from "../Damage"
-import { calcEvasionValue } from "../Evasion"
-import { calcHitRate } from "../Hit"
+import { createHitRate } from "../../formulas"
 import { Side, Formation } from "../../constants"
 import ShellingPower from "./ShellingPower"
 import ShellingAccuracy from "./ShellingAccuracy"
 
 export default class Shelling {
+  public static criticalRateConstant = 1.3
   public static getCombinedFleetFactor = getCombinedFleetFactor
   constructor(
     public battleState: BattleState,
@@ -158,20 +158,22 @@ export default class Shelling {
   get defenderEvasionValue() {
     const { ship, formation, role } = this.defender
     const formationModifier = formation.getModifiersWithRole(role).shelling.evasion
-    return calcEvasionValue(ship, formationModifier)
+    return ship.calcEvasionValue(formationModifier)
   }
 
   get hitRate() {
     const { accuracy, defender, defenderEvasionValue } = this
     const moraleModifier = defender.ship.morale.evasionModifier
 
-    return calcHitRate(accuracy.value, defenderEvasionValue, moraleModifier, this.proficiencyModifiers.hitRate)
-  }
+    return createHitRate({
+      accuracy: accuracy.value,
+      evasion: defenderEvasionValue,
+      moraleModifier,
 
-  get criticalRate() {
-    const { hitRate } = this
-    const hitNumB = Math.floor(Math.sqrt(hitRate * 100) * 1.3)
-    return (hitNumB + 1) / 100 + this.proficiencyModifiers.criticalRate
+      criticalRateConstant: Shelling.criticalRateConstant,
+      hitRateBonus: this.proficiencyModifiers.hitRate,
+      criticalRateBonus: this.proficiencyModifiers.criticalRate
+    })
   }
 
   get defensePower() {
@@ -185,7 +187,7 @@ export default class Shelling {
   }
 
   get taihaRate() {
-    const { damage, defender, hitRate, criticalRate, isCritical } = this
+    const { damage, defender, hitRate, isCritical } = this
     const { currentHp, maxHp } = defender.ship.health
     const { side } = defender
 
@@ -217,9 +219,9 @@ export default class Shelling {
       stopperDamageProbability * calcTaihaRate(stopperDamages)
 
     if (isCritical) {
-      return criticalRate * taihaDamageRate
+      return hitRate.criticalRate * taihaDamageRate
     }
-    return (hitRate - criticalRate) * taihaDamageRate
+    return hitRate.normalHitRate * taihaDamageRate
   }
 
   get can() {

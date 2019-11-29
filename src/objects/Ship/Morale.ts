@@ -1,10 +1,24 @@
+type MoraleState = "Sparkling" | "Normal" | "Orange" | "Red"
+
+export type BattleType = "shelling" | "asw" | "torpedo" | "night"
+
 export interface IMorale {
   value: number
-  state: "Sparkling" | "Normal" | "Orange" | "Red"
+  state: MoraleState
 
-  shellingAccuracyModifier: number
-  nightBattleAccuracyModifier: number
+  getAccuracyModifier: (type: BattleType) => number
   evasionModifier: number
+}
+
+const CommonMoraleModifier = { Sparkling: 1.2, Normal: 1, Orange: 0.8, Red: 0.5 }
+const MoraleModifierConfig = {
+  accuracy: {
+    shelling: CommonMoraleModifier,
+    asw: CommonMoraleModifier,
+    torpedo: { Sparkling: 1.3, Normal: 1, Orange: 0.7, Red: 0.35 },
+    night: CommonMoraleModifier
+  },
+  evasion: { Sparkling: 0.7, Normal: 1, Orange: 1.2, Red: 1.4 }
 }
 
 export default class Morale implements IMorale {
@@ -22,33 +36,9 @@ export default class Morale implements IMorale {
     return "Red"
   }
 
-  get shellingAccuracyModifier() {
-    switch (this.state) {
-      case "Sparkling":
-        return 1.2
-      case "Normal":
-        return 1
-      case "Orange":
-        return 0.8
-      case "Red":
-        return 0.5
-    }
-  }
-
-  get nightBattleAccuracyModifier() {
-    return this.shellingAccuracyModifier
-  }
+  public getAccuracyModifier = (type: BattleType) => MoraleModifierConfig.accuracy[type][this.state]
 
   get evasionModifier() {
-    switch (this.state) {
-      case "Sparkling":
-        return 0.7
-      case "Normal":
-        return 1
-      case "Orange":
-        return 1.2
-      case "Red":
-        return 1.4
-    }
+    return MoraleModifierConfig.evasion[this.state]
   }
 }

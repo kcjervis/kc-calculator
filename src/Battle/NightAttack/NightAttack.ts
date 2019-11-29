@@ -1,16 +1,13 @@
-import { Formation, Engagement, FleetType, Side } from "../../constants"
-import { IShip } from "../../objects"
-import { sumBy } from "lodash-es"
 import NightCombatSpecialAttack from "./NightCombatSpecialAttack"
-import { ShipInformation, InstallationType } from "../../types"
+import { ShipInformation } from "../../types"
 
 import ShipNightAttackStatus from "./ShipNightAttackStatus"
 import Damage from "../Damage"
 import NightAttackAccuracy from "./NightAttackAccuracy"
-import { calcHitRate } from "../Hit"
-import { calcEvasionValue } from "../Evasion"
+import { createHitRate } from "../../formulas"
 
 export default class NightAttack {
+  public static criticalRateConstant = 1.5
   constructor(
     public attacker: ShipInformation,
     public defender: ShipInformation,
@@ -30,7 +27,7 @@ export default class NightAttack {
     if (this.nightContactModifier === 5) {
       return { power: 5, accuracy: 1.1, criticalRate: 1.57 }
     }
-    return { power: 0, accuracy: 1, criticalRate: 1 }
+    return { power: 0, accuracy: 1, criticalRate: NightAttack.criticalRateConstant }
   }
 
   get accuracy() {
@@ -68,7 +65,7 @@ export default class NightAttack {
       improvementModifier,
 
       formationModifier,
-      moraleModifier: morale.nightBattleAccuracyModifier,
+      moraleModifier: morale.getAccuracyModifier("night"),
       specialAttackModifier,
       searchlightModifier,
       fitGunBonus: heavyCruiserBonus
@@ -93,15 +90,20 @@ export default class NightAttack {
     const { ship, formation, role } = this.defender
     const formationModifier = formation.getModifiersWithRole(role).nightBattle.evasion
     const shipTypeMod = ship.shipType.isHeavyCruiserClass ? 5 : 0
-    return calcEvasionValue(ship, formationModifier, shipTypeMod)
+    return ship.calcEvasionValue(formationModifier, shipTypeMod)
   }
 
+  // 夜戦熟練度命中補正ってどうなってるの?
   get hitRate() {
-    const { accuracy, defender, defenderEvasionValue } = this
-    const proficiencyModifier = 0
+    const { accuracy, defender, defenderEvasionValue, contactModifier } = this
     const moraleModifier = defender.ship.morale.evasionModifier
 
-    return calcHitRate(accuracy.value, defenderEvasionValue, moraleModifier, proficiencyModifier)
+    return createHitRate({
+      accuracy: accuracy.value,
+      evasion: defenderEvasionValue,
+      moraleModifier,
+      criticalRateConstant: contactModifier.criticalRate
+    })
   }
 
   get defensePower() {

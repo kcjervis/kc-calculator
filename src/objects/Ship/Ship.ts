@@ -9,11 +9,11 @@ import { IShipStats } from "./ShipStats"
 
 import { MasterShip, ShipClass, ShipType, GearAttribute, ShipAttribute } from "../../data"
 import { isNonNullable, shipNameIsKai2 } from "../../utils"
-import { getApShellModifiers, calcCruiserFitBonus } from "../../formulas"
+import { getApShellModifiers, calcCruiserFitBonus, calcEvasionValue } from "../../formulas"
 import { IGear } from "../gear"
 import { IPlane } from "../plane"
 import { DefensePower, InstallationType, ShipShellingStats, ShellingType } from "../../types"
-import { AttackPowerModifier, getSpecialEnemyModifier } from "../../data/SpecialEnemyModifier"
+import { AttackPowerModifierRecord, getSpecialEnemyModifier } from "../../data/SpecialEnemyModifier"
 
 export type ShipQuery =
   | ShipId
@@ -71,11 +71,14 @@ export interface IShip {
   canNightAttack: boolean
 
   getDefensePower: () => DefensePower
-  getSpecialEnemyModifier: (target: IShip) => AttackPowerModifier
+  getSpecialEnemyModifier: (target: IShip) => AttackPowerModifierRecord
   getAntiInstallationModifier: (
     target: IShip
-  ) => Required<Pick<AttackPowerModifier, "a5" | "a13" | "a13next" | "b12" | "b13" | "b13next">>
+  ) => Required<Pick<AttackPowerModifierRecord, "a5" | "a13" | "a13next" | "b12" | "b13" | "b13next">>
   getShellingStats: () => ShipShellingStats
+  getNormalProficiencyModifiers: () => { power: number; hitRate: number; criticalRate: number }
+
+  calcEvasionValue: (formationModifier: number, postcapModifier?: number) => number
 
   /** 廃止予定 */
   equipments: Array<IGear | undefined>
@@ -308,10 +311,9 @@ export default class Ship implements IShip {
   }
 
   /**
-   * 熟練度補正
-   * 戦爆連合は適当
+   * 通常熟練度補正
    */
-  private getNormalProficiencyModifiers = () => {
+  public getNormalProficiencyModifiers = () => {
     const modifiers = { power: 1, hitRate: 0, criticalRate: 0 }
     if (this.getShellingType() !== "CarrierShelling") {
       return modifiers
@@ -389,7 +391,7 @@ export default class Ship implements IShip {
     return modifiers
   }
 
-  public getSpecialEnemyModifier = (target: IShip): AttackPowerModifier => getSpecialEnemyModifier(this, target)
+  public getSpecialEnemyModifier = (target: IShip): AttackPowerModifierRecord => getSpecialEnemyModifier(this, target)
 
   public getAntiInstallationModifier = (target: IShip) => {
     const modifier = this.getSpecialEnemyModifier(target)
@@ -427,7 +429,7 @@ export default class Ship implements IShip {
       level: this.level,
       luck,
 
-      moraleModifier: this.morale.shellingAccuracyModifier,
+      moraleModifier: this.morale.getAccuracyModifier("shelling"),
 
       improvementModifiers,
       apShellModifiers,
@@ -437,5 +439,19 @@ export default class Ship implements IShip {
       normalProficiencyModifiers,
       specialProficiencyModifiers
     }
+  }
+
+  public calcEvasionValue = (formationModifier: number, postcapModifier?: number) => {
+    const { evasion, luck } = this.stats
+
+    const totalStar = this.totalEquipmentStats(gear => {
+      if (!gear.is("EngineImprovement")) {
+        return 0
+      }
+      return gear.star
+    })
+    const improvementModifier = Math.floor(1.5 * Math.sqrt(totalStar))
+
+    return calcEvasionValue({ evasion, luck, improvementModifier, formationModifier, postcapModifier })
   }
 }

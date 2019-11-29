@@ -193,7 +193,7 @@ export default class ShipShellingStatus {
     const equipmentAccuracy = ship.totalEquipmentStats("accuracy")
     const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.shellingAccuracyModifier)
 
-    const moraleModifier = ship.morale.shellingAccuracyModifier
+    const moraleModifier = ship.morale.getAccuracyModifier("shelling")
     const specialAttackModifier = specialAttack ? specialAttack.modifier.accuracy : 1
     const apShellModifier = isArmorPiercing ? this.apShellModifiers.accuracy : 1
     const factors: ShellingAccuracyFactors = {

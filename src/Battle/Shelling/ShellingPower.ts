@@ -52,21 +52,21 @@ export const calcPower = (cappedPower: number, modifiers: ShellingPowerPostCapMo
     eventMapModifier
   } = modifiers
 
-  let postCap = Math.floor(cappedPower) * specialAttackModifier
+  let postcap = Math.floor(cappedPower) * specialAttackModifier
 
   if (effectivenessMultiplicative > 1 || effectivenessAdditive > 0) {
-    postCap = Math.floor(postCap * effectivenessMultiplicative) + effectivenessAdditive
+    postcap = Math.floor(postcap * effectivenessMultiplicative) + effectivenessAdditive
   }
 
   // 要修正
   if (apShellModifier > 1) {
-    postCap = Math.floor(postCap * apShellModifier)
+    postcap = Math.floor(postcap * apShellModifier)
   }
 
   if (criticalModifier > 1) {
-    postCap = Math.floor(postCap * criticalModifier * proficiencyModifier)
+    postcap = Math.floor(postcap * criticalModifier * proficiencyModifier)
   }
-  return postCap * eventMapModifier
+  return postcap * eventMapModifier
 }
 
 export default class ShellingPower implements ShellingPowerInformation {
@@ -109,16 +109,16 @@ export default class ShellingPower implements ShellingPowerInformation {
     return calcBasicPower(this)
   }
 
-  get preCapPower() {
+  get precapPower() {
     return calcPreCapPower(this.basicPower, this)
   }
 
   get cappedPower() {
-    return softcap(ShellingPower.cap, this.preCapPower)
+    return softcap(ShellingPower.cap, this.precapPower)
   }
 
   get isCapped() {
-    return this.preCapPower > ShellingPower.cap
+    return this.precapPower > ShellingPower.cap
   }
 
   get value() {

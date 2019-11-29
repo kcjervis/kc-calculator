@@ -16,6 +16,7 @@ export interface IHealth {
   lte: (damage: HealthDamage) => boolean
   shellingPowerModifier: number
   torpedoPowerModifire: number
+  aswPowerModifire: number
   nightAttackPowerModifire: number
 }
 
@@ -75,6 +76,10 @@ export default class Health implements IHealth {
         return 0.8
     }
     return 0
+  }
+
+  get aswPowerModifire() {
+    return this.shellingPowerModifier
   }
 
   get nightAttackPowerModifire() {

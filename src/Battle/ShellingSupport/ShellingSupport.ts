@@ -1,8 +1,7 @@
-import { ShipInformation, ShellingType, InstallationType, BattleState } from "../../types"
+import { ShipInformation, BattleState } from "../../types"
 
 import Damage from "../Damage"
-import { calcEvasionValue } from "../Evasion"
-import { calcHitRate } from "../Hit"
+import { createHitRate } from "../../formulas"
 import { calcBasicPower, calcPreCapPower, calcPower } from "../Shelling/ShellingPower"
 import ShipShellingStatus from "../Shelling/ShipShellingStatus"
 import { softcap } from "../../utils"
@@ -17,6 +16,8 @@ type ShellingSupportPowerDef = {
 }
 
 export default class ShellingSupport {
+  // 改式だと1.1 実際いくつかわからない
+  public static criticalRateConstant = 1.3
   public static getShellingSupportPower = ({
     battleState,
     attacker,
@@ -48,7 +49,7 @@ export default class ShellingSupport {
       improvementModifier: 0
     })
 
-    const preCap = calcPreCapPower(basicPower, {
+    const precap = calcPreCapPower(basicPower, {
       formationModifier,
       engagementModifier,
       healthModifier,
@@ -63,8 +64,8 @@ export default class ShellingSupport {
     })
 
     const cap = 150
-    const isCapped = preCap > cap
-    const capped = softcap(cap, preCap)
+    const isCapped = precap > cap
+    const capped = softcap(cap, precap)
 
     const value = calcPower(capped, {
       effectivenessAdditive: 0,
@@ -76,7 +77,7 @@ export default class ShellingSupport {
       eventMapModifier
     })
 
-    return { basicPower, preCap, isCapped, capped, value }
+    return { basicPower, precap, isCapped, capped, value }
   }
 
   constructor(
@@ -107,7 +108,7 @@ export default class ShellingSupport {
       formationModifier = 0.8
     }
 
-    const moraleModifier = ship.morale.shellingAccuracyModifier
+    const moraleModifier = ship.morale.getAccuracyModifier("shelling")
 
     const equipmentAccuracy = totalEquipmentStats("accuracy")
 
@@ -132,14 +133,18 @@ export default class ShellingSupport {
   get defenderEvasionValue() {
     const { ship, formation, role } = this.defender
     const formationModifier = formation.getModifiersWithRole(role).shelling.evasion
-    return calcEvasionValue(ship, formationModifier)
+    return ship.calcEvasionValue(formationModifier)
   }
 
   get hitRate() {
     const { accuracy, defender, defenderEvasionValue } = this
     const moraleModifier = defender.ship.morale.evasionModifier
-
-    return calcHitRate(accuracy.value, defenderEvasionValue, moraleModifier, 0)
+    return createHitRate({
+      accuracy: accuracy.value,
+      evasion: defenderEvasionValue,
+      moraleModifier,
+      criticalRateConstant: ShellingSupport.criticalRateConstant
+    })
   }
 
   get damage() {

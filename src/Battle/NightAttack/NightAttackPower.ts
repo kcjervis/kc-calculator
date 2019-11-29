@@ -94,16 +94,16 @@ export default class NightAttackPower implements NightAttackPowerFactors {
     return calcNightAttackBasicPower(this)
   }
 
-  get preCapPower() {
+  get precapPower() {
     return calcNightAttackPreCapPower(this.basicPower, this)
   }
 
   get cappedPower() {
-    return softcap(NightAttackPower.cap, this.preCapPower)
+    return softcap(NightAttackPower.cap, this.precapPower)
   }
 
   get isCapped() {
-    return this.preCapPower > NightAttackPower.cap
+    return this.precapPower > NightAttackPower.cap
   }
 
   get value() {

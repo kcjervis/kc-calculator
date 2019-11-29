@@ -3,7 +3,6 @@ import BattleFleet from "./BattleFleet"
 import CombatInformation from "./CombatInformation"
 
 import Damage from "./Damage"
-export * from "./Evasion"
 export * from "./Airstrike"
 
 export * from "./Shelling"

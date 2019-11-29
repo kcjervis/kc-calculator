@@ -110,6 +110,9 @@ export const isAntiInstallationBomber = createGearIdMatcher(
   GearId["彗星一二型(六三四空/三号爆弾搭載機)"]
 )
 
+/** 爆雷投射機 */
+export const DepthChargeProjector = createGearIdMatcher(GearId["九四式爆雷投射機"], GearId["三式爆雷投射機"])
+
 /** 増加爆雷 */
 export const isAdditionalDepthCharge = createGearIdMatcher(GearId["九五式爆雷"], GearId["二式爆雷"])
 
@@ -148,6 +151,7 @@ const matchers = createMatchers({
   Aircraft: isAircraft,
   AntiInstallationBomber: isAntiInstallationBomber,
 
+  DepthChargeProjector,
   AdditionalDepthCharge: isAdditionalDepthCharge,
   AntiGroundRocketLauncher,
   Mortar: isMortar

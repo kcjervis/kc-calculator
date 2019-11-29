@@ -1,4 +1,4 @@
-import { mergeAttackPowerModifier, getSpecialEnemyModifier } from "./SpecialEnemyModifier"
+import { compose, getSpecialEnemyModifier } from "./SpecialEnemyModifier"
 import { makeShip } from "./EquipmentBonus.spec"
 
 const normal = makeShip("駆逐イ級")
@@ -18,9 +18,9 @@ const expectModifier = (...params: Parameters<typeof makeShip>) => {
 }
 
 describe("SpecialEnemyModifier", () => {
-  it("mergeAttackPowerModifier", () => {
-    expect(mergeAttackPowerModifier({ a5: 1.1 }, { a5: 1.2 }, { a5: 1.3 })).toEqual({ a5: 1.1 * 1.2 * 1.3 })
-    expect(mergeAttackPowerModifier({ a5: 2, b5: 11 }, { b5: 12 })).toEqual({ a5: 2, b5: 23 })
+  it("compose", () => {
+    expect(compose({ a5: 1.1 }, { a5: 1.2 }, { a5: 1.3 })).toEqual({ a5: 1.1 * 1.2 * 1.3 })
+    expect(compose({ a5: 2, b5: 11 }, { b5: 12 })).toEqual({ a5: 2, b5: 23 })
   })
 
   it("getSpecialEnemyModifier", () => {

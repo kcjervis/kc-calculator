@@ -11,7 +11,6 @@ import { Formation } from "../../constants"
 import NightAttackPower from "./NightAttackPower"
 import { calcCruiserFitBonus, getProficiencyModifier } from "../Shelling/ShipShellingStatus"
 import NightCombatSpecialAttack, { isNightAerialAttackShip } from "./NightCombatSpecialAttack"
-import { AttackPowerModifier } from "../../data/SpecialEnemyModifier"
 import { GearId } from "@jervis/data"
 
 type ShipNightAttackPowerOptions = Partial<{
