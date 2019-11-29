@@ -22,6 +22,8 @@ export * from "./data"
 
 export * from "./constants"
 
+export * from "./attacks"
+
 export * from "./Battle"
 
 export * from "./types"
