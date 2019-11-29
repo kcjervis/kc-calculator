@@ -28,7 +28,39 @@ const isAswGear = (gear: IGear) =>
     "LargeSonar"
   )
 
-type AswAttackParams = {
+const getAswType = (ship: IShip, isNight = false) => {
+  if (isNight) {
+    return ship.nakedStats.asw > 0 ? "DepthCharge" : "None"
+  }
+
+  if (
+    ship.shipType.any(
+      "AviationCruiser",
+      "AviationBattleship",
+      "SeaplaneTender",
+      "LightAircraftCarrier",
+      "AmphibiousAssaultShip"
+    ) ||
+    ShipId["速吸改"]
+  ) {
+    const hasAswAircraft = ship.planes.some(plane => plane.slotSize > 0 && isAswAircraft(plane.gear))
+    return hasAswAircraft ? "AircraftCarrier" : "None"
+  }
+
+  return ship.nakedStats.asw > 0 ? "DepthCharge" : "None"
+}
+
+const isPossible = (attacker: IShip, defender: IShip) => {
+  if (!defender.shipType.isSubmarineClass) {
+    return false
+  }
+  if (getAswType(attacker) === "None") {
+    return false
+  }
+  return true
+}
+
+export type AswAttackParams = {
   attacker: ShipInformation
   defender: ShipInformation
   engagement: Engagement
@@ -42,6 +74,8 @@ type AswAttackParams = {
 export default class AswAttack {
   public static readonly cap = 150
   public static readonly criticalRateConstant = 1.1
+
+  public static isPossible = isPossible
 
   public attacker: ShipInformation
   public defender: ShipInformation
@@ -69,28 +103,8 @@ export default class AswAttack {
     this.remainingAmmoModifier = remainingAmmoModifier
   }
 
-  private getAswType = () => {
-    const { ship } = this.attacker
-
-    if (this.isNight) {
-      return ship.nakedStats.asw > 0 ? "DepthCharge" : "None"
-    }
-
-    if (
-      ship.shipType.any(
-        "AviationCruiser",
-        "AviationBattleship",
-        "SeaplaneTender",
-        "LightAircraftCarrier",
-        "AmphibiousAssaultShip"
-      ) ||
-      ShipId["速吸改"]
-    ) {
-      const hasAswAircraft = ship.planes.some(plane => plane.slotSize > 0 && isAswAircraft(plane.gear))
-      return hasAswAircraft ? "AircraftCarrier" : "None"
-    }
-
-    return ship.nakedStats.asw > 0 ? "DepthCharge" : "None"
+  private get type() {
+    return getAswType(this.attacker.ship, this.isNight)
   }
 
   /**
@@ -129,11 +143,11 @@ export default class AswAttack {
   }
 
   private getAdditionalFm = (): FunctionalModifier | undefined => {
-    const { getAswType, isCritical, isOpeningAaw } = this
+    const { type, isCritical, isOpeningAaw } = this
     if (!isCritical) {
       return undefined
     }
-    const type = getAswType()
+
     if (isOpeningAaw || type !== "AircraftCarrier") {
       return createCriticalFm()
     }
@@ -146,7 +160,7 @@ export default class AswAttack {
     const equipmentAsw = ship.totalEquipmentStats(gear => (isAswGear(gear) ? gear.asw : 0))
     const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.aswPowerModifier)
 
-    const typeConstant = this.getAswType() === "DepthCharge" ? 13 : 8
+    const typeConstant = this.type === "DepthCharge" ? 13 : 8
 
     const additionalFm = this.getAdditionalFm()
 

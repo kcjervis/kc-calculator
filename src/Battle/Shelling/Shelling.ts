@@ -45,12 +45,13 @@ export default class Shelling {
   }
 
   get proficiencyModifiers() {
-    const { attacker, specialAttack } = this
+    const { specialAttack } = this
     const { shellingType, normalProficiencyModifiers, specialProficiencyModifiers } = this.attackStats
+
     if (shellingType === "Shelling") {
       return { power: 1, hitRate: 0, criticalRate: 0 }
     }
-    return specialAttack === undefined ? normalProficiencyModifiers : specialProficiencyModifiers
+    return specialAttack ? specialProficiencyModifiers : normalProficiencyModifiers
   }
 
   get power() {

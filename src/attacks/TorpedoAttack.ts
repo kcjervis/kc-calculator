@@ -2,6 +2,7 @@ import { FunctionalModifier, createAttackPower, createHitRate } from "../formula
 import { ShipInformation } from "../types"
 import { Engagement, Formation, FleetType, Side } from "../constants"
 import { Damage } from "../Battle"
+import { IShip } from "../objects"
 
 type TorpedoBasicPowerFactors = {
   torpedo: number
@@ -30,9 +31,21 @@ type TorpedoAttackParams = {
   innateTorpedoAccuracy?: number
 }
 
+const isPossible = (attacker: IShip, defender: IShip) => {
+  if (attacker.nakedStats.torpedo === 0) {
+    return false
+  }
+  if (defender.isInstallation) {
+    return false
+  }
+  return true
+}
+
 export default class TorpedoAttack {
   public static readonly cap = 150
   public static readonly criticalRateConstant = 1.5
+
+  public static isPossible = isPossible
 
   public attacker: ShipInformation
   public defender: ShipInformation
@@ -137,10 +150,10 @@ export default class TorpedoAttack {
     const formationModifier = this.getFormationModifiers().attacker.accuracy
     const moraleModifier = ship.morale.getAccuracyModifier("torpedo")
 
-    return (
+    return Math.floor(
       (constant + shipAccuracy + equipmentAccuracy + improvementModifier + powerModifier + innateTorpedoAccuracy) *
-      formationModifier *
-      moraleModifier
+        formationModifier *
+        moraleModifier
     )
   }
 
