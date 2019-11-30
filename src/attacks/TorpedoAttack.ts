@@ -4,6 +4,7 @@ import { Engagement, Formation, FleetType, Side } from "../constants"
 import { Damage } from "../Battle"
 import { IShip } from "../objects"
 import TorpedoAttackStatus from "./TorpedoAttackStatus"
+import { getAswFleetFactor } from "./FleetFactor"
 
 type TorpedoBasicPowerFactors = {
   torpedo: number
@@ -75,25 +76,6 @@ export default class TorpedoAttack {
     this.attackerStatus = new TorpedoAttackStatus(attacker.ship)
   }
 
-  private getFleetTypeBySide = (side: Side) => {
-    const { attacker, defender } = this
-    return attacker.side === side ? attacker.fleetType : defender.fleetType
-  }
-
-  private getFleetFactor = () => {
-    const playerFleetIsCombined = this.getFleetTypeBySide(Side.Player).isCombined
-    const enemyFleetIsCombined = this.getFleetTypeBySide(Side.Enemy).isCombined
-
-    const singleFleetFactor = 5
-    if (!playerFleetIsCombined && !enemyFleetIsCombined) {
-      return singleFleetFactor
-    }
-    if (playerFleetIsCombined && !enemyFleetIsCombined) {
-      return singleFleetFactor - 5
-    }
-    return singleFleetFactor + 10
-  }
-
   private getFormationModifiers = () => {
     const { attacker, defender } = this
     return {
@@ -113,7 +95,7 @@ export default class TorpedoAttack {
   }
 
   private getPreCriticalPower = () => {
-    const fleetFactor = this.getFleetFactor()
+    const fleetFactor = getAswFleetFactor(this.attacker, this.defender)
     const modifiers = this.getPowerModifiers()
     return this.attackerStatus.createPreCriticalPower({ fleetFactor, modifiers })
   }

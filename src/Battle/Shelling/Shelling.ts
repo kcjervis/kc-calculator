@@ -1,7 +1,7 @@
 import DayCombatSpecialAttack from "./DayCombatSpecialAttack"
 import { ShipInformation, BattleState, ShellingPowerFactors, ShellingAccuracyFactors } from "../../types"
 
-import getCombinedFleetFactor from "./getCombinedFleetFactor"
+import { getShellingFleetFactor } from "../../attacks/FleetFactor"
 import Damage from "../Damage"
 import { createHitRate } from "../../formulas"
 import { Side, Formation } from "../../constants"
@@ -10,7 +10,7 @@ import ShellingAccuracy from "./ShellingAccuracy"
 
 export default class Shelling {
   public static criticalRateConstant = 1.3
-  public static getCombinedFleetFactor = getCombinedFleetFactor
+
   constructor(
     public battleState: BattleState,
     public attacker: ShipInformation,
@@ -39,7 +39,7 @@ export default class Shelling {
 
   private get combinedFleetFactors() {
     const { attacker, defender } = this
-    const power = getCombinedFleetFactor(attacker, defender)
+    const power = getShellingFleetFactor(attacker, defender)
     // accuracy 仮置き
     return { power, accuracy: 0 }
   }

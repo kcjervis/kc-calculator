@@ -50,7 +50,8 @@ export const createAttackPower = ({ basic, cap, modifiers, additionalFm }: Attac
   const postcapFm = createPostcapFm(modifiers)
 
   const precap = precapFm(basic)
+  const isCapped = cap < precap
   const capped = softcap(cap, precap)
   const postcap = additionalFm ? additionalFm(postcapFm(capped)) : postcapFm(capped)
-  return { precap, capped, postcap }
+  return { precap, isCapped, capped, postcap }
 }

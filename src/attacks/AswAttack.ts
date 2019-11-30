@@ -102,26 +102,12 @@ export default class AswAttack {
     return modifiers
   }
 
-  private getAdditionalFm = (): FunctionalModifier | undefined => {
-    const { type, isCritical, isOpeningAaw } = this
-    if (!isCritical) {
-      return undefined
-    }
-
-    if (isOpeningAaw || type !== "AircraftCarrier") {
-      return createCriticalFm()
-    }
-    const { power } = this.attacker.ship.getNormalProficiencyModifiers()
-    return createCriticalFm(power)
-  }
-
   get power() {
-    const additionalFm = this.getAdditionalFm()
+    const { isCritical, isOpeningAaw } = this
+    const formationModifier = this.getFormationModifiers().power
+    const engagementModifier = this.engagement.modifier
 
-    const formation = this.getFormationModifiers().power
-    const engagement = this.engagement.modifier
-
-    return this.attackerStatus.calcPower({ formation, engagement, additionalFm })
+    return this.attackerStatus.createPower({ formationModifier, engagementModifier, isCritical, isOpeningAaw })
   }
 
   get accuracy() {

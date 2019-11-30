@@ -13,23 +13,23 @@ export const calcBasicPower = ({ nakedAsw, equipmentAsw, improvementModifier, ty
 }
 
 type BasicPrecapPowerModifiers = {
-  formation: number
-  engagement: number
-  health: number
+  formationModifier: number
+  engagementModifier: number
+  healthModifier: number
 }
 
 type AswPrecapModifiers = BasicPrecapPowerModifiers & {
-  synergy: number
+  synergyModifier: number
 }
 
 export type AswPowerFactors = AswBasicPowerFactors & AswPrecapModifiers & { additionalFm?: FunctionalModifier }
 
-const calcPower = (factors: AswPowerFactors, optionalModifiers?: AttackPowerModifierRecord) => {
-  const { formation, engagement, health, synergy, additionalFm } = factors
+const createPower = (factors: AswPowerFactors, optionalModifiers?: AttackPowerModifierRecord) => {
+  const { formationModifier, engagementModifier, healthModifier, synergyModifier, additionalFm } = factors
 
   const basic = calcBasicPower(factors)
   const cap = 150
-  const a14 = formation * engagement * health * synergy
+  const a14 = formationModifier * engagementModifier * healthModifier * synergyModifier
   const modifiers = optionalModifiers ? AttackPowerModifierRecord.compose(optionalModifiers, { a14 }) : { a14 }
 
   return createAttackPower({ basic, cap, modifiers, additionalFm })
@@ -54,6 +54,6 @@ const calcAccuracy = (factors: AccuracyFactors) => {
 }
 
 export const Asw = {
-  calcPower,
+  createPower,
   calcAccuracy
 }

@@ -1,5 +1,5 @@
-import { Side, FleetType } from "../../constants"
-import { ShipInformation } from "../../types"
+import { Side, FleetType } from "../constants"
+import { ShipInformation } from "../types"
 
 const playerAttackMatchers = [
   {
@@ -57,9 +57,9 @@ const enemyAttackMatchers = [
   }
 ]
 
-type ShipFleetState = Pick<ShipInformation, "side" | "fleetType" | "formation" | "role">
+export type ShipFleetState = Pick<ShipInformation, "side" | "fleetType" | "formation" | "role">
 
-const getCombinedFleetFactor = (attacker: ShipFleetState, defender: ShipFleetState) => {
+export const getShellingFleetFactor = (attacker: ShipFleetState, defender: ShipFleetState) => {
   // 通常vs通常
   if (!attacker.fleetType.isCombined && !defender.fleetType.isCombined) {
     return 0
@@ -88,4 +88,25 @@ const getCombinedFleetFactor = (attacker: ShipFleetState, defender: ShipFleetSta
   return found ? found.factors[factorIndex] : 0
 }
 
-export default getCombinedFleetFactor
+export const getAswFleetFactor = (attacker: ShipFleetState, defender: ShipFleetState) => {
+  const getFleetTypeBySide = (side: Side) => {
+    return attacker.side === side ? attacker.fleetType : defender.fleetType
+  }
+  const playerFleetIsCombined = getFleetTypeBySide(Side.Player).isCombined
+  const enemyFleetIsCombined = getFleetTypeBySide(Side.Enemy).isCombined
+
+  const singleFleetFactor = 5
+  if (!playerFleetIsCombined && !enemyFleetIsCombined) {
+    return singleFleetFactor
+  }
+  if (playerFleetIsCombined && !enemyFleetIsCombined) {
+    return singleFleetFactor - 5
+  }
+  return singleFleetFactor + 10
+}
+
+export const getFleetFactors = (attacker: ShipFleetState, defender: ShipFleetState) => {
+  const shelling = getShellingFleetFactor(attacker, defender)
+  const asw = getAswFleetFactor(attacker, defender)
+  return { shelling, asw }
+}

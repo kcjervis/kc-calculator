@@ -102,22 +102,37 @@ export default class AswAttackStatus {
     return this.ship.totalEquipmentStats(gear => gear.improvement.aswPowerModifier)
   }
 
-  public calcPower = (
-    params: Omit<
-      AswPowerFactors,
-      "nakedAsw" | "equipmentAsw" | "improvementModifier" | "typeConstant" | "health" | "synergy"
-    >
-  ) => {
-    const { ship, typeConstant, equipmentAsw, improvementModifier } = this
+  private getAdditionalFm = (isCritical = false, isOpeningAaw = false) => {
+    const { type } = this
+    if (!isCritical) {
+      return undefined
+    }
 
-    return Asw.calcPower({
+    if (isOpeningAaw || type !== "AircraftCarrier") {
+      return createCriticalFm()
+    }
+    const { power } = this.ship.getNormalProficiencyModifiers()
+    return createCriticalFm(power)
+  }
+
+  public createPower = (params: {
+    formationModifier: number
+    engagementModifier: number
+    isCritical: boolean
+    isOpeningAaw: boolean
+  }) => {
+    const { ship, typeConstant, equipmentAsw, improvementModifier, synergyModifier } = this
+    const additionalFm = this.getAdditionalFm(params.isCritical, params.isOpeningAaw)
+
+    return Asw.createPower({
       nakedAsw: ship.nakedStats.asw,
       equipmentAsw,
       improvementModifier,
       typeConstant,
 
-      health: ship.health.aswPowerModifire,
-      synergy: this.synergyModifier,
+      healthModifier: ship.health.aswPowerModifire,
+      synergyModifier,
+      additionalFm,
       ...params
     })
   }
