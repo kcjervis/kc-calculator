@@ -2,8 +2,7 @@ import { ShipId } from "@jervis/data"
 import { ShipInformation } from "../types"
 import { IShip, IGear } from "../objects"
 import { Asw, FunctionalModifier, createCriticalFm, createHitRate, AswPowerFactors } from "../formulas"
-import { Engagement, Formation } from "../constants"
-import { Damage } from "../Battle"
+import { AttackPowerModifierRecord } from "../data/SpecialEnemyModifier"
 
 export const isAswAircraft = ({ asw, category }: IGear) =>
   asw > 0 &&
@@ -48,6 +47,12 @@ export const getAswType = (ship: IShip, isNight = false) => {
   }
 
   return ship.nakedStats.asw > 0 ? "DepthCharge" : "None"
+}
+
+type AswAttackFactors = {
+  formationModifiers: { power: number; accuracy: number }
+
+  moraleModifier: number
 }
 
 export default class AswAttackStatus {
@@ -120,6 +125,7 @@ export default class AswAttackStatus {
     engagementModifier: number
     isCritical: boolean
     isOpeningAaw: boolean
+    optionalModifiers?: AttackPowerModifierRecord
   }) => {
     const { ship, typeConstant, equipmentAsw, improvementModifier, synergyModifier } = this
     const additionalFm = this.getAdditionalFm(params.isCritical, params.isOpeningAaw)
@@ -134,6 +140,18 @@ export default class AswAttackStatus {
       synergyModifier,
       additionalFm,
       ...params
+    })
+  }
+
+  get aswEquipmentAccuracyModifier() {
+    return this.ship.totalEquipmentStats(gear => {
+      if (gear.is("Sonar")) {
+        return 2 * gear.asw
+      }
+      if (gear.is("AdditionalDepthCharge")) {
+        return gear.asw
+      }
+      return 0
     })
   }
 }

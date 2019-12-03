@@ -2,15 +2,6 @@ import { FunctionalModifier, createAttackPower, createHitRate } from "../formula
 import { IShip } from "../objects"
 import { AttackPowerModifierRecord } from "../data/SpecialEnemyModifier"
 
-type TorpedoBasicPowerFactors = {
-  torpedo: number
-  fleetFactor: number
-  improvementModifier: number
-}
-const calcBasicPower = ({ torpedo, improvementModifier, fleetFactor }: TorpedoBasicPowerFactors) => {
-  return torpedo + improvementModifier + fleetFactor
-}
-
 export default class TorpedoAttackStatus {
   constructor(private ship: IShip) {}
 
@@ -18,28 +9,31 @@ export default class TorpedoAttackStatus {
     return this.ship.totalEquipmentStats(gear => gear.improvement.torpedoPowerModifier)
   }
 
-  public createPreCriticalPower = ({
-    fleetFactor,
-    modifiers
-  }: {
+  public createPower = (params: {
     fleetFactor: number
-    modifiers: AttackPowerModifierRecord
+    formationModifier: number
+    engagementModifier: number
+    isCritical: boolean
+    optionalModifiers?: AttackPowerModifierRecord
   }) => {
+    const { fleetFactor, formationModifier, engagementModifier, optionalModifiers = {} } = params
     const { ship, improvementModifier } = this
     const { torpedo } = ship.stats
 
-    const basic = calcBasicPower({ torpedo, fleetFactor, improvementModifier })
-    const cap = 150
-    return createAttackPower({ basic, cap, modifiers })
-  }
+    const healthModifier = ship.health.torpedoPowerModifire
+    const a14 = formationModifier * engagementModifier * healthModifier
+    const modifiers = AttackPowerModifierRecord.compose({ a14 }, optionalModifiers)
 
-  public createPower = (params: { fleetFactor: number; modifiers: AttackPowerModifierRecord; isCritical: boolean }) => {
-    const preCriticalPower = this.createPreCriticalPower(params)
+    const basic = torpedo + improvementModifier + fleetFactor
+    const cap = 150
+    const preCriticalPower = createAttackPower({ basic, cap, modifiers })
+    const preCritical = preCriticalPower.postcap
 
     if (!params.isCritical) {
-      return preCriticalPower
+      return { ...preCriticalPower, preCritical }
     }
+
     const postcap = Math.floor(preCriticalPower.postcap * 1.5)
-    return { ...preCriticalPower, postcap }
+    return { ...preCriticalPower, preCritical, postcap }
   }
 }

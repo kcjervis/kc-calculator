@@ -4,29 +4,8 @@ import { IShip, IGear } from "../objects"
 import { Asw, FunctionalModifier, createCriticalFm, createHitRate } from "../formulas"
 import { Engagement, Formation } from "../constants"
 import { Damage } from "../Battle"
-import AswAttackStatus, { isAswAircraft, isAswGear } from "./AswAttackStatus"
-
-export const getAswType = (ship: IShip, isNight = false) => {
-  if (isNight) {
-    return ship.nakedStats.asw > 0 ? "DepthCharge" : "None"
-  }
-
-  if (
-    ship.shipType.any(
-      "AviationCruiser",
-      "AviationBattleship",
-      "SeaplaneTender",
-      "LightAircraftCarrier",
-      "AmphibiousAssaultShip"
-    ) ||
-    ShipId["速吸改"] === ship.shipId
-  ) {
-    const hasAswAircraft = ship.planes.some(plane => plane.slotSize > 0 && isAswAircraft(plane.gear))
-    return hasAswAircraft ? "AircraftCarrier" : "None"
-  }
-
-  return ship.nakedStats.asw > 0 ? "DepthCharge" : "None"
-}
+import AswAttackStatus, { isAswAircraft, isAswGear, getAswType } from "./AswAttackStatus"
+import { AttackPowerModifierRecord } from "../data/SpecialEnemyModifier"
 
 export const isPossible = (attacker: IShip, defender: IShip) => {
   if (!defender.shipType.isSubmarineClass) {
@@ -47,6 +26,7 @@ export type AswAttackParams = {
   isOpeningAaw?: boolean
   isNight?: boolean
   remainingAmmoModifier?: number
+  optionalPowerModifiers?: AttackPowerModifierRecord
 }
 
 export default class AswAttack {
@@ -62,6 +42,7 @@ export default class AswAttack {
   public isOpeningAaw: boolean
   public isNight: boolean
   public remainingAmmoModifier: number
+  public optionalPowerModifiers?: AttackPowerModifierRecord
 
   private attackerStatus: AswAttackStatus
 
@@ -72,7 +53,8 @@ export default class AswAttack {
     isCritical = false,
     isOpeningAaw = false,
     isNight = false,
-    remainingAmmoModifier = 1
+    remainingAmmoModifier = 1,
+    optionalPowerModifiers
   }: AswAttackParams) {
     this.attacker = attacker
     this.defender = defender
@@ -81,12 +63,9 @@ export default class AswAttack {
     this.isOpeningAaw = isOpeningAaw
     this.isNight = isNight
     this.remainingAmmoModifier = remainingAmmoModifier
+    this.optionalPowerModifiers = optionalPowerModifiers
 
     this.attackerStatus = new AswAttackStatus(attacker.ship, isNight)
-  }
-
-  private get type() {
-    return this.attackerStatus.type
   }
 
   private getFormationModifiers = () => {
@@ -103,26 +82,24 @@ export default class AswAttack {
   }
 
   get power() {
-    const { isCritical, isOpeningAaw } = this
+    const { isCritical, isOpeningAaw, optionalPowerModifiers } = this
     const formationModifier = this.getFormationModifiers().power
     const engagementModifier = this.engagement.modifier
 
-    return this.attackerStatus.createPower({ formationModifier, engagementModifier, isCritical, isOpeningAaw })
+    return this.attackerStatus.createPower({
+      formationModifier,
+      engagementModifier,
+      isCritical,
+      isOpeningAaw,
+      optionalModifiers: optionalPowerModifiers
+    })
   }
 
   get accuracy() {
     const { ship } = this.attacker
     const { luck, level } = ship.nakedStats
 
-    const aswEquipmentModifier = ship.totalEquipmentStats(gear => {
-      if (gear.is("Sonar")) {
-        return 2 * gear.asw
-      }
-      if (gear.is("AdditionalDepthCharge")) {
-        return gear.asw
-      }
-      return 0
-    })
+    const aswEquipmentModifier = this.attackerStatus.aswEquipmentAccuracyModifier
 
     const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.aswAccuracyModifier)
 

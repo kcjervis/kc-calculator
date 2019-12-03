@@ -22,10 +22,18 @@ type AswPrecapModifiers = BasicPrecapPowerModifiers & {
   synergyModifier: number
 }
 
-export type AswPowerFactors = AswBasicPowerFactors & AswPrecapModifiers & { additionalFm?: FunctionalModifier }
+export type AswPowerFactors = AswBasicPowerFactors &
+  AswPrecapModifiers & { optionalModifiers?: AttackPowerModifierRecord; additionalFm?: FunctionalModifier }
 
-const createPower = (factors: AswPowerFactors, optionalModifiers?: AttackPowerModifierRecord) => {
-  const { formationModifier, engagementModifier, healthModifier, synergyModifier, additionalFm } = factors
+const createPower = (factors: AswPowerFactors) => {
+  const {
+    formationModifier,
+    engagementModifier,
+    healthModifier,
+    synergyModifier,
+    optionalModifiers,
+    additionalFm
+  } = factors
 
   const basic = calcBasicPower(factors)
   const cap = 150

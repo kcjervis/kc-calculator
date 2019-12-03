@@ -1,5 +1,5 @@
 import { NumberRecord } from "../data/SpecialEnemyModifier"
-import { flow, values } from "lodash-es"
+import { flow } from "lodash-es"
 import { softcap } from "../utils"
 
 export type FunctionalModifier = (value: number) => number

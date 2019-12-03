@@ -1,27 +1,11 @@
-import { FunctionalModifier, createAttackPower, createHitRate } from "../formulas"
+import { FunctionalModifier, createHitRate } from "../formulas"
 import { ShipInformation } from "../types"
-import { Engagement, Formation, FleetType, Side } from "../constants"
+import { Engagement } from "../constants"
 import { Damage } from "../Battle"
 import { IShip } from "../objects"
 import TorpedoAttackStatus from "./TorpedoAttackStatus"
-import { getAswFleetFactor } from "./FleetFactor"
-
-type TorpedoBasicPowerFactors = {
-  torpedo: number
-  fleetFactor: number
-  improvementModifier: number
-}
-const calcBasicPower = ({ torpedo, improvementModifier, fleetFactor }: TorpedoBasicPowerFactors) => {
-  return torpedo + improvementModifier + fleetFactor
-}
-
-type TorpedoPowerFactors = {
-  formationModifier: number
-  engagementModifier: number
-  healthModifier: number
-
-  additionalFm?: FunctionalModifier
-}
+import { getTorpedoFleetFactor } from "./FleetFactor"
+import { AttackPowerModifierRecord } from "../data/SpecialEnemyModifier"
 
 type TorpedoAttackParams = {
   attacker: ShipInformation
@@ -31,6 +15,7 @@ type TorpedoAttackParams = {
 
   remainingAmmoModifier?: number
   innateTorpedoAccuracy?: number
+  optionalPowerModifiers?: AttackPowerModifierRecord
 }
 
 const isPossible = (attacker: IShip, defender: IShip) => {
@@ -55,6 +40,7 @@ export default class TorpedoAttack {
   public isCritical: boolean
   public remainingAmmoModifier: number
   public innateTorpedoAccuracy: number
+  public optionalPowerModifiers?: AttackPowerModifierRecord
 
   private attackerStatus: TorpedoAttackStatus
 
@@ -64,7 +50,8 @@ export default class TorpedoAttack {
     engagement,
     isCritical = false,
     remainingAmmoModifier = 1,
-    innateTorpedoAccuracy = 0
+    innateTorpedoAccuracy = 0,
+    optionalPowerModifiers
   }: TorpedoAttackParams) {
     this.attacker = attacker
     this.defender = defender
@@ -72,6 +59,7 @@ export default class TorpedoAttack {
     this.isCritical = isCritical
     this.remainingAmmoModifier = remainingAmmoModifier
     this.innateTorpedoAccuracy = innateTorpedoAccuracy
+    this.optionalPowerModifiers = optionalPowerModifiers
 
     this.attackerStatus = new TorpedoAttackStatus(attacker.ship)
   }
@@ -84,31 +72,19 @@ export default class TorpedoAttack {
     }
   }
 
-  private getPowerModifiers = () => {
-    const { attacker, engagement } = this
-    const formationModifier = this.getFormationModifiers().attacker.power
-    const engagementModifier = engagement.modifier
-    const healthModifier = attacker.ship.health.torpedoPowerModifire
-
-    const a14 = formationModifier * engagementModifier * healthModifier
-    return { a14 }
-  }
-
-  private getPreCriticalPower = () => {
-    const fleetFactor = getAswFleetFactor(this.attacker, this.defender)
-    const modifiers = this.getPowerModifiers()
-    return this.attackerStatus.createPreCriticalPower({ fleetFactor, modifiers })
-  }
-
   get power() {
-    const { isCritical } = this
-    const preCriticalPower = this.getPreCriticalPower()
+    const { isCritical, optionalPowerModifiers } = this
+    const fleetFactor = getTorpedoFleetFactor(this.attacker, this.defender)
+    const formationModifier = this.getFormationModifiers().attacker.power
+    const engagementModifier = this.engagement.modifier
 
-    if (!isCritical) {
-      return preCriticalPower
-    }
-    const postcap = Math.floor(preCriticalPower.postcap * 1.5)
-    return { ...preCriticalPower, postcap, preCritical: preCriticalPower.precap }
+    return this.attackerStatus.createPower({
+      fleetFactor,
+      formationModifier,
+      engagementModifier,
+      isCritical,
+      optionalModifiers: optionalPowerModifiers
+    })
   }
 
   get accuracy() {
@@ -119,7 +95,7 @@ export default class TorpedoAttack {
     const shipAccuracy = 1.5 * Math.sqrt(luck) + 2 * Math.sqrt(level)
     const equipmentAccuracy = ship.totalEquipmentStats("accuracy")
     const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.torpedoAccuracyModifier)
-    const powerModifier = Math.floor(0.2 * this.getPreCriticalPower().postcap)
+    const powerModifier = Math.floor(0.2 * this.power.preCritical)
     const { innateTorpedoAccuracy } = this
 
     const formationModifier = this.getFormationModifiers().attacker.accuracy

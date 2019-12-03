@@ -88,7 +88,7 @@ export const getShellingFleetFactor = (attacker: ShipFleetState, defender: ShipF
   return found ? found.factors[factorIndex] : 0
 }
 
-export const getAswFleetFactor = (attacker: ShipFleetState, defender: ShipFleetState) => {
+export const getTorpedoFleetFactor = (attacker: ShipFleetState, defender: ShipFleetState) => {
   const getFleetTypeBySide = (side: Side) => {
     return attacker.side === side ? attacker.fleetType : defender.fleetType
   }
@@ -107,6 +107,6 @@ export const getAswFleetFactor = (attacker: ShipFleetState, defender: ShipFleetS
 
 export const getFleetFactors = (attacker: ShipFleetState, defender: ShipFleetState) => {
   const shelling = getShellingFleetFactor(attacker, defender)
-  const asw = getAswFleetFactor(attacker, defender)
-  return { shelling, asw }
+  const torpedo = getTorpedoFleetFactor(attacker, defender)
+  return { shelling, torpedo }
 }
