@@ -5,8 +5,16 @@ import { AttackPowerModifierRecord } from "../data/SpecialEnemyModifier"
 export default class TorpedoAttackStatus {
   constructor(private ship: IShip) {}
 
+  get torpedo() {
+    return this.ship.stats.torpedo
+  }
+
   get improvementModifier() {
     return this.ship.totalEquipmentStats(gear => gear.improvement.torpedoPowerModifier)
+  }
+
+  get healthModifier() {
+    return this.ship.health.torpedoPowerModifier
   }
 
   public createPower = (params: {
@@ -17,10 +25,8 @@ export default class TorpedoAttackStatus {
     optionalModifiers?: AttackPowerModifierRecord
   }) => {
     const { fleetFactor, formationModifier, engagementModifier, optionalModifiers = {} } = params
-    const { ship, improvementModifier } = this
-    const { torpedo } = ship.stats
+    const { torpedo, improvementModifier, healthModifier } = this
 
-    const healthModifier = ship.health.torpedoPowerModifire
     const a14 = formationModifier * engagementModifier * healthModifier
     const modifiers = AttackPowerModifierRecord.compose({ a14 }, optionalModifiers)
 

@@ -15,9 +15,9 @@ export interface IHealth {
   gte: (damage: HealthDamage) => boolean
   lte: (damage: HealthDamage) => boolean
   shellingPowerModifier: number
-  torpedoPowerModifire: number
-  aswPowerModifire: number
-  nightAttackPowerModifire: number
+  torpedoPowerModifier: number
+  aswPowerModifier: number
+  nightAttackPowerModifier: number
 }
 
 export default class Health implements IHealth {
@@ -67,7 +67,7 @@ export default class Health implements IHealth {
     return 0
   }
 
-  get torpedoPowerModifire() {
+  get torpedoPowerModifier() {
     switch (this.damage) {
       case "Less":
       case "Shouha":
@@ -78,11 +78,11 @@ export default class Health implements IHealth {
     return 0
   }
 
-  get aswPowerModifire() {
+  get aswPowerModifier() {
     return this.shellingPowerModifier
   }
 
-  get nightAttackPowerModifire() {
+  get nightAttackPowerModifier() {
     if (this.lte("Taiha")) {
       return 0
     }

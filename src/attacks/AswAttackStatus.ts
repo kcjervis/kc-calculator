@@ -66,6 +66,14 @@ export default class AswAttackStatus {
     return this.type === "DepthCharge" ? 13 : 8
   }
 
+  get nakedAsw() {
+    return this.ship.nakedStats.asw
+  }
+
+  get healthModifier() {
+    return this.ship.health.aswPowerModifier
+  }
+
   /**
    * @see https://twitter.com/KennethWWKK/status/1156195106837286912
    */
@@ -127,16 +135,16 @@ export default class AswAttackStatus {
     isOpeningAaw: boolean
     optionalModifiers?: AttackPowerModifierRecord
   }) => {
-    const { ship, typeConstant, equipmentAsw, improvementModifier, synergyModifier } = this
+    const { nakedAsw, healthModifier, typeConstant, equipmentAsw, improvementModifier, synergyModifier } = this
     const additionalFm = this.getAdditionalFm(params.isCritical, params.isOpeningAaw)
 
     return Asw.createPower({
-      nakedAsw: ship.nakedStats.asw,
+      nakedAsw,
       equipmentAsw,
       improvementModifier,
       typeConstant,
 
-      healthModifier: ship.health.aswPowerModifire,
+      healthModifier,
       synergyModifier,
       additionalFm,
       ...params

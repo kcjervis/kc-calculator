@@ -4,7 +4,7 @@ import { IShip, IGear } from "../objects"
 import { Asw, FunctionalModifier, createCriticalFm, createHitRate } from "../formulas"
 import { Engagement, Formation } from "../constants"
 import { Damage } from "../Battle"
-import AswAttackStatus, { isAswAircraft, isAswGear, getAswType } from "./AswAttackStatus"
+import AswAttackStatus, { getAswType } from "./AswAttackStatus"
 import { AttackPowerModifierRecord } from "../data/SpecialEnemyModifier"
 
 export const isPossible = (attacker: IShip, defender: IShip) => {

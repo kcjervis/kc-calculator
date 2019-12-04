@@ -75,7 +75,7 @@ export default class ShipNightAttackStatus {
     const nightAerialAttackPower = this.calcNightAerialAttackPower(isAntiInstallationWarfare)
 
     const formationModifier = formation.getModifiersWithRole(role).nightBattle.power
-    const healthModifier = ship.health.nightAttackPowerModifire
+    const healthModifier = ship.health.nightAttackPowerModifier
 
     let antiInstallationModifiers = ship.getAntiInstallationModifier(target)
     if (isAntiInstallationWarfare && specialAttack && specialAttack.isAerialAttack) {

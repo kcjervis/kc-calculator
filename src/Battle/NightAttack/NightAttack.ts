@@ -82,7 +82,8 @@ export default class NightAttack {
       formation,
       specialAttack,
       isCritical,
-      target: defender.ship
+      target: defender.ship,
+      eventMapModifier
     })
   }
 

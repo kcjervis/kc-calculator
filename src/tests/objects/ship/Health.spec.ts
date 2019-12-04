@@ -42,23 +42,41 @@ describe("ship/Morale", () => {
   })
 
   it("shellingPowerModifier", () => {
-    const expectation: Array<[Health, number]> = [[less, 1], [shouha, 1], [chuuha, 0.7], [taiha, 0.4], [sunk, 0]]
+    const expectation: Array<[Health, number]> = [
+      [less, 1],
+      [shouha, 1],
+      [chuuha, 0.7],
+      [taiha, 0.4],
+      [sunk, 0]
+    ]
     expectation.forEach(([health, value]) => {
       expect(health.shellingPowerModifier).toBe(value)
     })
   })
 
-  it("torpedoPowerModifire", () => {
-    const expectation: Array<[Health, number]> = [[less, 1], [shouha, 1], [chuuha, 0.8], [taiha, 0], [sunk, 0]]
+  it("torpedoPowerModifier", () => {
+    const expectation: Array<[Health, number]> = [
+      [less, 1],
+      [shouha, 1],
+      [chuuha, 0.8],
+      [taiha, 0],
+      [sunk, 0]
+    ]
     expectation.forEach(([health, value]) => {
-      expect(health.torpedoPowerModifire).toBe(value)
+      expect(health.torpedoPowerModifier).toBe(value)
     })
   })
 
-  it("nightAttackPowerModifire", () => {
-    const expectation: Array<[Health, number]> = [[less, 1], [shouha, 1], [chuuha, 0.7], [taiha, 0], [sunk, 0]]
+  it("nightAttackPowerModifier", () => {
+    const expectation: Array<[Health, number]> = [
+      [less, 1],
+      [shouha, 1],
+      [chuuha, 0.7],
+      [taiha, 0],
+      [sunk, 0]
+    ]
     expectation.forEach(([health, value]) => {
-      expect(health.nightAttackPowerModifire).toBe(value)
+      expect(health.nightAttackPowerModifier).toBe(value)
     })
   })
 })
