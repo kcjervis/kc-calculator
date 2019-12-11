@@ -198,7 +198,7 @@ export default class Improvement implements IImprovement {
       return 0.2 * star
     }
     if (gearIs("DepthCharge") || gearIs("Sonar")) {
-      return Math.floor(star)
+      return Math.sqrt(star)
     }
     if (gearIs("Autogyro")) {
       const multiplier = stats.asw > 10 ? 0.3 : 0.2
