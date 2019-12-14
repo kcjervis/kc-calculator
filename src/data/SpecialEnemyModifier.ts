@@ -61,7 +61,7 @@ export const compose = (...args: AttackPowerModifierRecord[]) => {
   const setModifier = (mod: AttackPowerModifierRecord) => {
     positions.forEach(key => {
       const value = mod[key]
-      if (value) {
+      if (typeof value === "number") {
         setValue(key, value)
       }
     })

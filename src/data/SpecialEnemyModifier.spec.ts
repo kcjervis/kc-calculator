@@ -21,6 +21,9 @@ describe("SpecialEnemyModifier", () => {
   it("compose", () => {
     expect(compose({ a5: 1.1 }, { a5: 1.2 }, { a5: 1.3 })).toEqual({ a5: 1.1 * 1.2 * 1.3 })
     expect(compose({ a5: 2, b5: 11 }, { b5: 12 })).toEqual({ a5: 2, b5: 23 })
+
+    expect(compose({ a5: 1.2 }, { a5: 0 })).toEqual({ a5: 0 })
+    expect(compose({ b14: 10 }, { b14: 0 })).toEqual({ b14: 10 })
   })
 
   it("getSpecialEnemyModifier", () => {
