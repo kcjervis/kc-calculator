@@ -39,7 +39,10 @@ const data: Array<[number, number, number, number]> = [
   [34, 8, 1.6, 60],
   [35, 7, 1.55, 53],
   [36, 7, 1.55, 59],
-  [37, 5, 1.45, 38]
+  [37, 5, 1.45, 38],
+  [39, 10, 1.7, 60],
+  [40, 10, 1.7, 60],
+  [41, 9, 1.65, 60]
 ]
 /** 対空カットイン */
 export default class AntiAirCutin {
@@ -66,4 +69,6 @@ export default class AntiAirCutin {
     /** 発動定数 */
     public readonly probability: number
   ) {}
+
+  public isSpecialAaci = () => [34, 35, 39, 40, 41].includes(this.id)
 }

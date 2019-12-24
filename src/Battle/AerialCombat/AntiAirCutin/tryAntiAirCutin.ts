@@ -11,7 +11,7 @@ const tryAntiAirCutin = (arg: IShip | IShip[]): AntiAirCutin | undefined => {
     const ship = arg
     const randomNum = random(100)
     const shipAaci = AntiAirCutin.getPossibleAntiAirCutins(ship).find(aaci => {
-      if (aaci.id === 34 || aaci.id === 35) {
+      if (aaci.isSpecialAaci()) {
         return aaci.probability > random(100)
       }
       return aaci.probability > randomNum
