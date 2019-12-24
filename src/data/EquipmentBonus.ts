@@ -413,7 +413,7 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
     byGear: { gearId: GearId["5inch単装砲 Mk.30改+GFCS Mk.37"] },
     rules: [
       {
-        byShip: { attrs: "UsNavy", shipTypeId: ShipTypeId.Destroyer },
+        byShip: { attrs: "UsNavy" },
         multiple: { firepower: 1, antiAir: 1, evasion: 1 }
       },
       {
@@ -541,6 +541,89 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
       {
         byShip: { shipClassId: ShipClassId.GotlandClass },
         multiple: { firepower: 1, antiAir: 1, evasion: 1 }
+      }
+    ]
+  },
+
+  {
+    byGear: { gearId: { $in: [GearId["8inch三連装砲 Mk.9"], GearId["8inch三連装砲 Mk.9 mod.2"]] } },
+    rules: [
+      {
+        byShip: { shipClassId: ShipClassId.NorthamptonClass },
+        multiple: { firepower: 2 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.MogamiClass },
+        multiple: { firepower: 1 }
+      }
+    ]
+  },
+
+  {
+    byGear: GearId["6inch 連装速射砲 Mk.XXI"],
+    rules: [
+      {
+        byShip: { shipClassId: ShipClassId.PerthClass },
+        multiple: { firepower: 2, antiAir: 2, evasion: 1 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.YuubariClass },
+        multiple: { firepower: 1, antiAir: 1, evasion: 1 }
+      }
+    ]
+  },
+
+  {
+    byGear: {
+      gearId: {
+        $in: [
+          GearId["Bofors 15cm連装速射砲 Mk.9 Model 1938"],
+          GearId["Bofors 15cm連装速射砲 Mk.9改+単装速射砲 Mk.10改 Model 1938"]
+        ]
+      }
+    },
+    rules: [
+      {
+        byShip: { shipClassId: ShipClassId.DeRuyterClass },
+        multiple: { firepower: 2, antiAir: 2, evasion: 1 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.GotlandClass },
+        multiple: { firepower: 2, antiAir: 1, evasion: 1 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.AganoClass },
+        multiple: { firepower: 1, antiAir: 1 }
+      }
+    ]
+  },
+
+  {
+    byGear: { gearId: { $in: [GearId["5inch連装両用砲(集中配備)"], GearId["GFCS Mk.37+5inch連装両用砲(集中配備)"]] } },
+    rules: [
+      {
+        byShip: { shipClassId: ShipClassId.AtlantaClass },
+        multiple: { firepower: 1, antiAir: 3, evasion: 2 }
+      },
+      {
+        byShip: { shipClassId: { $in: [ShipClassId.ColoradoClass, ShipClassId.NorthamptonClass] } },
+        multiple: { antiAir: 1, evasion: 1 }
+      },
+      {
+        byShip: { shipClassId: { $in: [ShipClassId.OoyodoClass, ShipClassId.AganoClass, ShipClassId.DeRuyterClass] } },
+        multiple: { antiAir: -1, evasion: -2 }
+      },
+      {
+        byShip: { shipClassId: { $in: [ShipClassId.GotlandClass, ShipClassId.KatoriClass] } },
+        multiple: { firepower: -2, antiAir: -1, evasion: -4 }
+      },
+      {
+        byShip: { shipClassId: { $in: [ShipClassId.KumaClass, ShipClassId.NagaraClass, ShipClassId.SendaiClass] } },
+        multiple: { firepower: -3, antiAir: -2, evasion: -6 }
+      },
+      {
+        byShip: { shipClassId: { $in: [ShipClassId.TenryuuClass, ShipClassId.YuubariClass] } },
+        multiple: { firepower: -3, antiAir: -3, evasion: -8 }
       }
     ]
   },
@@ -794,6 +877,21 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
           $or: [{ shipClassId: ShipClassId.NagatoClass, rank: { $lte: 2 } }, { shipId: ShipId["Colorado"] }]
         },
         multiple: { firepower: 1 }
+      }
+    ]
+  },
+
+  // 副砲
+  {
+    byGear: GearId["5inch 単装高角砲群"],
+    rules: [
+      {
+        byShip: { attrs: { $in: ["UsNavy", "RoyalNavy"] } },
+        multiple: { firepower: 1, antiAir: 1, evasion: 1 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.NorthamptonClass },
+        multiple: { firepower: 1, antiAir: 2, evasion: 2 }
       }
     ]
   },

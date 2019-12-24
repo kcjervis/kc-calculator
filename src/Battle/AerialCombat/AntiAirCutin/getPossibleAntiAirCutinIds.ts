@@ -82,10 +82,11 @@ export default (ship: IShip) => {
   }
 
   if (ship.shipClass.is("AtlantaClass") && ship.hasGear(GearId["GFCS Mk.37+5inch連装両用砲(集中配備)"])) {
-    list.push(39, 41)
+    list.push(39)
     if (ship.hasGear(GearId["GFCS Mk.37"])) {
       list.push(40)
     }
+    list.push(41)
   }
 
   // 秋月型 かつ 高角砲を装備

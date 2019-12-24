@@ -16,7 +16,9 @@ const UsNavy = makeShipClassMatcher(
   "LexingtonClass",
   "EssexClass",
   "CasablancaClass",
-  "ColoradoClass"
+  "ColoradoClass",
+  "NorthamptonClass",
+  "AtlantaClass"
 )
 const SovietNavy = or(ship => ship.shipId === ShipId["Верный"], makeShipClassMatcher("TashkentClass", "GangutClass"))
 
