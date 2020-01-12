@@ -1,4 +1,4 @@
-import { compose, getSpecialEnemyModifier } from "./SpecialEnemyModifier"
+import { getSpecialEnemyModifiers } from "./SpecialEnemyModifier"
 import { makeShip } from "./EquipmentBonus.spec"
 
 const normal = makeShip("駆逐イ級")
@@ -8,9 +8,9 @@ const supplyDepot = makeShip("集積地棲姫")
 const expectModifier = (...params: Parameters<typeof makeShip>) => {
   const ship = makeShip(...params)
   const actual = {
-    normal: getSpecialEnemyModifier(ship, normal),
-    pillbox: getSpecialEnemyModifier(ship, pillbox),
-    supplyDepot: getSpecialEnemyModifier(ship, supplyDepot)
+    normal: getSpecialEnemyModifiers(ship, normal),
+    pillbox: getSpecialEnemyModifiers(ship, pillbox),
+    supplyDepot: getSpecialEnemyModifiers(ship, supplyDepot)
   }
   const toEqual = (expected: typeof actual) => expect(actual).toEqual(expected)
   const toMatchObject = (expected: Partial<typeof actual>) => expect(actual).toMatchObject(expected)
@@ -18,15 +18,7 @@ const expectModifier = (...params: Parameters<typeof makeShip>) => {
 }
 
 describe("SpecialEnemyModifier", () => {
-  it("compose", () => {
-    expect(compose({ a5: 1.1 }, { a5: 1.2 }, { a5: 1.3 })).toEqual({ a5: 1.1 * 1.2 * 1.3 })
-    expect(compose({ a5: 2, b5: 11 }, { b5: 12 })).toEqual({ a5: 2, b5: 23 })
-
-    expect(compose({ a5: 1.2 }, { a5: 0 })).toEqual({ a5: 0 })
-    expect(compose({ b14: 10 }, { b14: 0 })).toEqual({ b14: 10 })
-  })
-
-  it("getSpecialEnemyModifier", () => {
+  it("getSpecialEnemyModifiers", () => {
     expectModifier("睦月", "WG42 (Wurfgerät 42)").toMatchObject({
       supplyDepot: { a13: 1.3, a5: 1.25, b13next: 75 }
     })

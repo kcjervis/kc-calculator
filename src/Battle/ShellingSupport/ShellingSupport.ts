@@ -1,6 +1,6 @@
 import { ShipInformation, BattleState } from "../../types"
 
-import Damage from "../Damage"
+import { Damage } from "../../attacks"
 import { createHitRate } from "../../formulas"
 import { calcBasicPower, calcPreCapPower, calcPower } from "../Shelling/ShellingPower"
 import ShipShellingStatus from "../Shelling/ShipShellingStatus"
@@ -17,7 +17,7 @@ type ShellingSupportPowerDef = {
 
 export default class ShellingSupport {
   // 改式だと1.1 実際いくつかわからない
-  public static criticalRateConstant = 1.3
+  public static criticalRateMultiplier = 1.3
   public static getShellingSupportPower = ({
     battleState,
     attacker,
@@ -143,7 +143,7 @@ export default class ShellingSupport {
       accuracy: accuracy.value,
       evasion: defenderEvasionValue,
       moraleModifier,
-      criticalRateConstant: ShellingSupport.criticalRateConstant
+      criticalRateMultiplier: ShellingSupport.criticalRateMultiplier
     })
   }
 

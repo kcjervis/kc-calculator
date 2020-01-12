@@ -1,4 +1,4 @@
-import { FunctionalModifier } from "./attackPower"
+import { FunctionalModifier } from "../common"
 
 type EvasionValueFactors = {
   evasion: number

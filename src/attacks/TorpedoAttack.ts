@@ -1,11 +1,11 @@
-import { FunctionalModifier, createHitRate } from "../formulas"
+import { createHitRate } from "../formulas"
 import { ShipInformation } from "../types"
 import { Engagement } from "../constants"
-import { Damage } from "../Battle"
 import { IShip } from "../objects"
-import TorpedoAttackStatus from "./TorpedoAttackStatus"
 import { getTorpedoFleetFactor } from "./FleetFactor"
-import { AttackPowerModifierRecord } from "../data/SpecialEnemyModifier"
+import { AttackPowerModifierRecord } from "../common"
+import ShipTorpedoAttackCalculator from "./ShipTorpedoAttackCalculator"
+import Damage from "./Damage"
 
 type TorpedoAttackParams = {
   attacker: ShipInformation
@@ -30,7 +30,7 @@ const isPossible = (attacker: IShip, defender: IShip) => {
 
 export default class TorpedoAttack {
   public static readonly cap = 150
-  public static readonly criticalRateConstant = 1.5
+  public static readonly criticalRateMultiplier = 1.5
 
   public static isPossible = isPossible
 
@@ -42,7 +42,7 @@ export default class TorpedoAttack {
   public innateTorpedoAccuracy: number
   public optionalPowerModifiers?: AttackPowerModifierRecord
 
-  private attackerStatus: TorpedoAttackStatus
+  private attackCalculator: ShipTorpedoAttackCalculator
 
   constructor({
     attacker,
@@ -61,7 +61,7 @@ export default class TorpedoAttack {
     this.innateTorpedoAccuracy = innateTorpedoAccuracy
     this.optionalPowerModifiers = optionalPowerModifiers
 
-    this.attackerStatus = new TorpedoAttackStatus(attacker.ship)
+    this.attackCalculator = ShipTorpedoAttackCalculator.fromShip(attacker.ship)
   }
 
   private getFormationModifiers = () => {
@@ -78,7 +78,7 @@ export default class TorpedoAttack {
     const formationModifier = this.getFormationModifiers().attacker.power
     const engagementModifier = this.engagement.modifier
 
-    return this.attackerStatus.createPower({
+    return this.attackCalculator.calcPower({
       fleetFactor,
       formationModifier,
       engagementModifier,
@@ -88,24 +88,15 @@ export default class TorpedoAttack {
   }
 
   get accuracy() {
-    const { ship } = this.attacker
-    const { luck, level } = ship.nakedStats
-
-    const constant = 85
-    const shipAccuracy = 1.5 * Math.sqrt(luck) + 2 * Math.sqrt(level)
-    const equipmentAccuracy = ship.totalEquipmentStats("accuracy")
-    const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.torpedoAccuracyModifier)
     const powerModifier = Math.floor(0.2 * this.power.preCritical)
+    const formationModifier = this.getFormationModifiers().attacker.accuracy
     const { innateTorpedoAccuracy } = this
 
-    const formationModifier = this.getFormationModifiers().attacker.accuracy
-    const moraleModifier = ship.morale.getAccuracyModifier("torpedo")
-
-    return Math.floor(
-      (constant + shipAccuracy + equipmentAccuracy + improvementModifier + powerModifier + innateTorpedoAccuracy) *
-        formationModifier *
-        moraleModifier
-    )
+    return this.attackCalculator.calcAccuracy({
+      formationModifier,
+      powerModifier,
+      innateTorpedoAccuracy
+    })
   }
 
   get evasion() {
@@ -123,8 +114,8 @@ export default class TorpedoAttack {
   get hitRate() {
     const { accuracy, defender, evasion } = this
     const moraleModifier = defender.ship.morale.evasionModifier
-    const criticalRateConstant = TorpedoAttack.criticalRateConstant
-    return createHitRate({ accuracy, evasion, moraleModifier, criticalRateConstant })
+    const { criticalRateMultiplier } = TorpedoAttack
+    return createHitRate({ accuracy, evasion, moraleModifier, criticalRateMultiplier })
   }
 
   get damage() {

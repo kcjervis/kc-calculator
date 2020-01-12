@@ -78,12 +78,19 @@ export default class Improvement implements IImprovement {
   }
 
   get fighterPowerModifier() {
-    const { value, gearIs } = this
+    const { star, gearIs } = this
     if (gearIs("Fighter")) {
-      return 0.2 * value
-    } else if (gearIs("CarrierBasedDiveBomber")) {
-      return 0.25 * value
+      return 0.2 * star
     }
+
+    if (gearIs("FighterBomber")) {
+      return 0.25 * star
+    }
+
+    if (gearIs("LandBasedAttackAircraft")) {
+      return 0.5 * Math.sqrt(star)
+    }
+
     return 0
   }
 

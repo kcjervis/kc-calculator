@@ -2,12 +2,12 @@ import NightCombatSpecialAttack from "./NightCombatSpecialAttack"
 import { ShipInformation } from "../../types"
 
 import ShipNightAttackStatus from "./ShipNightAttackStatus"
-import Damage from "../Damage"
 import NightAttackAccuracy from "./NightAttackAccuracy"
 import { createHitRate } from "../../formulas"
+import { Damage } from "../../attacks"
 
 export default class NightAttack {
-  public static criticalRateConstant = 1.5
+  public static criticalRateMultiplier = 1.5
   constructor(
     public attacker: ShipInformation,
     public defender: ShipInformation,
@@ -27,7 +27,7 @@ export default class NightAttack {
     if (this.nightContactModifier === 5) {
       return { power: 5, accuracy: 1.1, criticalRate: 1.57 }
     }
-    return { power: 0, accuracy: 1, criticalRate: NightAttack.criticalRateConstant }
+    return { power: 0, accuracy: 1, criticalRate: NightAttack.criticalRateMultiplier }
   }
 
   get accuracy() {
@@ -103,7 +103,7 @@ export default class NightAttack {
       accuracy: accuracy.value,
       evasion: defenderEvasionValue,
       moraleModifier,
-      criticalRateConstant: contactModifier.criticalRate
+      criticalRateMultiplier: contactModifier.criticalRate
     })
   }
 

@@ -1,7 +1,22 @@
-import { createFm, createPrecapFm, createPostcapFm, createAttackPower } from "./attackPower"
+import {
+  composeAttackPowerModifierRecord,
+  createFm,
+  createPrecapFm,
+  createPostcapFm,
+  createAttackPower,
+  FunctionalModifier
+} from "./AttackPower"
 import { softcap } from "../utils"
 
-describe("attackPower", () => {
+describe("AttackPower", () => {
+  it("composeAttackPowerModifierRecord", () => {
+    expect(composeAttackPowerModifierRecord({ a5: 1.1 }, { a5: 1.2 }, { a5: 1.3 })).toEqual({ a5: 1.1 * 1.2 * 1.3 })
+    expect(composeAttackPowerModifierRecord({ a5: 2, b5: 11 }, { b5: 12 })).toEqual({ a5: 2, b5: 23 })
+
+    expect(composeAttackPowerModifierRecord({ a5: 1.2 }, { a5: 0 })).toEqual({ a5: 0 })
+    expect(composeAttackPowerModifierRecord({ b14: 10 }, { b14: 0 })).toEqual({ b14: 10 })
+  })
+
   it("createFm", () => {
     expect(createFm(20)(1)).toBe(1 * 20)
     expect(createFm(10, 3.2)(4)).toBe(4 * 10 + 3.2)
@@ -23,6 +38,19 @@ describe("attackPower", () => {
         b14: 1.42
       })(13)
     ).toBe((((13 * 1.21 + 1.22) * 1.31 + 1.32) * 1.33 + 1.34) * 1.41 + 1.42)
+
+    const fm14prev: FunctionalModifier = value => value * 1.6
+    expect(
+      createPrecapFm(
+        {
+          a13next: 1.33,
+          b13next: 1.34,
+          a14: 1.41,
+          b14: 1.42
+        },
+        fm14prev
+      )(13)
+    ).toBe((13 * 1.33 + 1.34) * 1.6 * 1.41 + 1.42)
   })
 
   it("createPostcapFm", () => {
@@ -44,16 +72,22 @@ describe("attackPower", () => {
     ).toBe(Math.floor(Math.floor(17 * 1.1 + 1.2) * 1.3 + 1.4) * 1.5 + 1.6)
   })
 
-  it("getAttackPower", () => {
+  it("createAttackPower", () => {
     const basic = 100
     const cap = 150
     const precap = basic * 1.5
     const capped = softcap(cap, precap)
+    const isCapped = capped > cap
     const postcap = capped * 1.4
-    const params = { basic, cap, modifiers: { a14: 1.5, a11: 1.4 } }
-    expect(createAttackPower(params)).toEqual({ precap, capped, postcap })
+    const factors = { basic, cap, modifiers: { a14: 1.5, a11: 1.4 } }
+    expect(createAttackPower(factors)).toEqual({ precap, capped, isCapped, postcap })
 
-    const additionalFm = (value: number) => Math.floor(value * 1.5)
-    expect(createAttackPower({ ...params, additionalFm })).toEqual({ precap, capped, postcap: additionalFm(postcap) })
+    const fm11next = (value: number) => Math.floor(value * 1.5)
+    expect(createAttackPower({ ...factors, fm11next })).toEqual({
+      precap,
+      capped,
+      isCapped,
+      postcap: fm11next(postcap)
+    })
   })
 })

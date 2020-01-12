@@ -3,7 +3,7 @@ export type HitRateFactors = {
   evasion: number
   moraleModifier: number
 
-  criticalRateConstant: number
+  criticalRateMultiplier: number
   hitRateBonus?: number
   criticalRateBonus?: number
 }
@@ -20,11 +20,11 @@ export const calcHitRateBase = ({ accuracy, evasion, moraleModifier }: HitRateFa
 }
 
 export const createHitRate = (factors: HitRateFactors) => {
-  const { criticalRateConstant, hitRateBonus = 0, criticalRateBonus = 0 } = factors
+  const { criticalRateMultiplier, hitRateBonus = 0, criticalRateBonus = 0 } = factors
   const hitRateBase = calcHitRateBase(factors)
 
   const hitPercent = Math.floor(hitRateBase + 1 + hitRateBonus * 100)
-  const criticalPercent = Math.floor(Math.sqrt(hitRateBase) * criticalRateConstant + 1 + criticalRateBonus * 100)
+  const criticalPercent = Math.floor(Math.sqrt(hitRateBase) * criticalRateMultiplier + 1 + criticalRateBonus * 100)
 
   const hitRate = Math.min(hitPercent / 100, 1)
   const criticalRate = Math.min(criticalPercent / 100, 1)

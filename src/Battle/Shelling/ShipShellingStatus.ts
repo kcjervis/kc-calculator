@@ -20,26 +20,6 @@ type ShipShellingPowerOptions = Partial<{
 }
 
 /**
- * 巡洋艦砲フィット補正
- *
- * 軽巡軽量砲補正と伊重巡フィット砲補正
- * @see https://github.com/Nishisonic/UnexpectedDamage/blob/develop/攻撃力資料/キャップ前攻撃力.md#軽巡軽量砲補正
- * @see https://github.com/Nishisonic/UnexpectedDamage/blob/develop/攻撃力資料/キャップ前攻撃力.md#伊重巡フィット砲補正
- */
-export const calcCruiserFitBonus = (ship: IShip) => {
-  let fitBonus = 0
-  if (ship.shipType.any("LightCruiser", "TorpedoCruiser", "TrainingCruiser")) {
-    const singleGunCount = ship.countGear(gear => [4, 11].includes(gear.masterId))
-    const twinGunCount = ship.countGear(gear => [65, 119, 139].includes(gear.masterId))
-    fitBonus += Math.sqrt(singleGunCount) + 2 * Math.sqrt(twinGunCount)
-  }
-  if (ship.shipClass.is("ZaraClass")) {
-    fitBonus += Math.sqrt(ship.countGear(162))
-  }
-  return fitBonus
-}
-
-/**
  * 熟練度補正
  * 戦爆連合は適当
  */
@@ -88,7 +68,7 @@ export default class ShipShellingStatus {
   }
 
   get cruiserFitBonus() {
-    return calcCruiserFitBonus(this.ship)
+    return this.ship.getCruiserFitBonus()
   }
 
   get healthModifier() {

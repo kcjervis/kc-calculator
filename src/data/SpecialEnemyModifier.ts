@@ -1,78 +1,12 @@
-import { GearStats } from "../types"
-import { IGear, IShip } from "../objects"
+import { IShip } from "../objects"
 import { GearQuery } from "../objects/gear/Gear"
 import { GearId, ShipClassId, ShipId } from "@jervis/data"
 import { ShipQuery } from "../objects/ship/ship"
 import { GearCategoryId } from "./GearCategory"
 import { SiftQuery } from "sift"
 import ShipTypeId from "./ShipTypeId"
-
-const positions = [
-  "a1",
-  "a2",
-  "a3",
-  "a4",
-  "a5",
-  "a6",
-  "a7",
-  "a8",
-  "a9",
-  "a10",
-  "a11",
-  "a12",
-  "a13",
-  "a13next",
-  "a14",
-  "b1",
-  "b2",
-  "b3",
-  "b4",
-  "b5",
-  "b6",
-  "b7",
-  "b8",
-  "b9",
-  "b10",
-  "b11",
-  "b12",
-  "b13",
-  "b13next",
-  "b14"
-] as const
-
-type AttackPowerModifierPosition = typeof positions[number]
-
-export type NumberRecord<T extends string> = { [K in T]?: number }
-
-export type AttackPowerModifierRecord = NumberRecord<AttackPowerModifierPosition>
-
-export const compose = (...args: AttackPowerModifierRecord[]) => {
-  const result: AttackPowerModifierRecord = {}
-
-  const setValue = (key: AttackPowerModifierPosition, value: number) => {
-    let next: number
-    if (key.startsWith("a")) {
-      next = (result[key] || 1) * value
-    } else {
-      next = (result[key] || 0) + value
-    }
-    result[key] = next
-  }
-  const setModifier = (mod: AttackPowerModifierRecord) => {
-    positions.forEach(key => {
-      const value = mod[key]
-      if (typeof value === "number") {
-        setValue(key, value)
-      }
-    })
-  }
-
-  args.forEach(setModifier)
-
-  return result
-}
-
-export const AttackPowerModifierRecord = { compose }
+import { isNonNullable } from "../utils"
+import { AttackPowerModifierRecord, composeAttackPowerModifierRecord } from "../common"
 
 type CountRule<T> = {
   count1?: T
@@ -282,7 +216,8 @@ const data: SpecialEnemyModifierRule[] = [
         target: isInstallation,
         count1: { b13next: 60 },
         count2: { b13next: 110 },
-        count3: { b13next: 150 }
+        count3: { b13next: 150 },
+        count4: { b13next: 180 }
       }
     ]
   },
@@ -569,10 +504,10 @@ const getImprovementModifiers = (ship: IShip, target: IShip) => {
   ]
 }
 
-export const getSpecialEnemyModifier = (ship: IShip, target: IShip): AttackPowerModifierRecord => {
+export const getSpecialEnemyModifiers = (ship: IShip, target: IShip): AttackPowerModifierRecord => {
   const createModifiers = makeModifiersCreater(ship, target)
   const modifiers = data.flatMap(rule => createModifiers(rule))
   const improvementModifiers = getImprovementModifiers(ship, target)
 
-  return compose(...modifiers, ...improvementModifiers)
+  return composeAttackPowerModifierRecord(...modifiers, ...improvementModifiers)
 }

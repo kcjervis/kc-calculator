@@ -13,7 +13,8 @@ import { getApShellModifiers, calcCruiserFitBonus, calcEvasionValue } from "../.
 import { IGear } from "../gear"
 import { IPlane } from "../plane"
 import { DefensePower, InstallationType, ShipShellingStats, ShellingType } from "../../types"
-import { AttackPowerModifierRecord, getSpecialEnemyModifier } from "../../data/SpecialEnemyModifier"
+import { AttackPowerModifierRecord } from "../../common"
+import { getSpecialEnemyModifiers } from "../../data"
 
 export type ShipQuery =
   | ShipId
@@ -27,6 +28,8 @@ export type ShipQuery =
     }>
 
 export type GearIteratee<R> = GearId | GearAttribute | ((gear: IGear) => R)
+
+type ProficiencyModifiers = { power: number; hitRate: number; criticalRate: number }
 
 export interface IShip {
   masterId: number
@@ -55,6 +58,8 @@ export interface IShip {
 
   fighterPower: number
 
+  shipAccuracy: number
+
   installationType: InstallationType
   isInstallation: boolean
 
@@ -70,13 +75,16 @@ export interface IShip {
 
   canNightAttack: boolean
 
+  getCruiserFitBonus: () => number
+
   getDefensePower: () => DefensePower
-  getSpecialEnemyModifier: (target: IShip) => AttackPowerModifierRecord
+  getSpecialEnemyModifiers: (target: IShip) => AttackPowerModifierRecord
   getAntiInstallationModifier: (
     target: IShip
   ) => Required<Pick<AttackPowerModifierRecord, "a5" | "a13" | "a13next" | "b12" | "b13" | "b13next">>
   getShellingStats: () => ShipShellingStats
-  getNormalProficiencyModifiers: () => { power: number; hitRate: number; criticalRate: number }
+  getNormalProficiencyModifiers: () => ProficiencyModifiers
+  getSpecialProficiencyModifiers: () => ProficiencyModifiers
 
   calcEvasionValue: (formationModifier: number, postcapModifier?: number) => number
 
@@ -140,6 +148,11 @@ export default class Ship implements IShip {
 
   get level() {
     return this.nakedStats.level
+  }
+
+  get shipAccuracy() {
+    const { level, luck } = this.nakedStats
+    return 2 * Math.sqrt(level) + 1.5 * Math.sqrt(luck)
   }
 
   get fighterPower() {
@@ -274,7 +287,7 @@ export default class Ship implements IShip {
     return master.firepower[0] > 0
   }
 
-  private calcCruiserFitBonus = () => {
+  public getCruiserFitBonus = () => {
     const { shipType, shipClass, countGear } = this
     const isLightCruiserClass = shipType.any("LightCruiser", "TorpedoCruiser", "TrainingCruiser")
     const isZaraClass = shipClass.is("ZaraClass")
@@ -373,7 +386,7 @@ export default class Ship implements IShip {
    * 戦爆熟練度補正
    * 分からないから適当
    */
-  private getSpecialProficiencyModifiers = () => {
+  public getSpecialProficiencyModifiers = () => {
     const modifiers = { power: 1, hitRate: 0, criticalRate: 0 }
     if (this.getShellingType() !== "CarrierShelling") {
       return modifiers
@@ -391,10 +404,10 @@ export default class Ship implements IShip {
     return modifiers
   }
 
-  public getSpecialEnemyModifier = (target: IShip): AttackPowerModifierRecord => getSpecialEnemyModifier(this, target)
+  public getSpecialEnemyModifiers = (target: IShip): AttackPowerModifierRecord => getSpecialEnemyModifiers(this, target)
 
   public getAntiInstallationModifier = (target: IShip) => {
-    const modifier = this.getSpecialEnemyModifier(target)
+    const modifier = this.getSpecialEnemyModifiers(target)
     const defaultModifier = { a13: 1, a13next: 1, a5: 1, b12: 0, b13: 0, b13next: 0 }
     return { ...defaultModifier, ...modifier }
   }
@@ -422,7 +435,7 @@ export default class Ship implements IShip {
       torpedo,
       bombing,
 
-      cruiserFitBonus: this.calcCruiserFitBonus(),
+      cruiserFitBonus: this.getCruiserFitBonus(),
       healthModifier: this.health.shellingPowerModifier,
 
       accuracy: this.totalEquipmentStats("accuracy"),

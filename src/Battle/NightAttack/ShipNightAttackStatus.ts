@@ -9,7 +9,7 @@ import {
 import { sumBy } from "lodash-es"
 import { Formation } from "../../constants"
 import NightAttackPower from "./NightAttackPower"
-import { calcCruiserFitBonus, getProficiencyModifier } from "../Shelling/ShipShellingStatus"
+import { getProficiencyModifier } from "../Shelling/ShipShellingStatus"
 import NightCombatSpecialAttack, { isNightAerialAttackShip } from "./NightCombatSpecialAttack"
 import { GearId } from "@jervis/data"
 
@@ -90,7 +90,7 @@ export default class ShipNightAttackStatus {
       }
     }
 
-    const cruiserFitBonus = calcCruiserFitBonus(ship)
+    const cruiserFitBonus = ship.getCruiserFitBonus()
 
     const effectivenessMultiplicative = antiInstallationModifiers.a5
     const effectivenessAdditive = 0

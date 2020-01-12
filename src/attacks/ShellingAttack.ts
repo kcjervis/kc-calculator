@@ -1,31 +1,58 @@
-import DayCombatSpecialAttack from "./DayCombatSpecialAttack"
-import { ShipInformation, BattleState, ShellingPowerFactors, ShellingAccuracyFactors } from "../../types"
+import { ShipInformation, BattleState } from "../types"
 
-import { getShellingFleetFactor } from "../../attacks/FleetFactor"
-import { Damage } from "../../attacks"
-import { createHitRate } from "../../formulas"
-import { Side, Formation } from "../../constants"
-import ShellingPower from "./ShellingPower"
-import ShellingAccuracy from "./ShellingAccuracy"
+import { getShellingFleetFactor, getShellingAccuracyFleetFactor } from "./FleetFactor"
+import Damage from "./Damage"
+import { createHitRate } from "../formulas"
+import { Side, Formation } from "../constants"
+import ShipShellingCalculator from "./ShipShellingCalculator"
+import { DayCombatSpecialAttack } from "../Battle"
+import { AttackPowerModifierRecord, composeAttackPowerModifierRecord } from "../common"
 
-export default class Shelling {
+type ShellingAttackParams = {
+  battleState: BattleState
+  attacker: ShipInformation
+  defender: ShipInformation
+  specialAttack?: DayCombatSpecialAttack
+  isCritical?: boolean
+  remainingAmmoModifier?: number
+  fitGunBonus?: number
+  optionalPowerModifiers?: AttackPowerModifierRecord
+}
+
+export default class ShellingAttack {
   public static criticalRateMultiplier = 1.3
 
-  constructor(
-    public battleState: BattleState,
-    public attacker: ShipInformation,
-    public defender: ShipInformation,
+  private battleState: BattleState
+  private attacker: ShipInformation
+  private defender: ShipInformation
 
-    public specialAttack?: DayCombatSpecialAttack,
-    public isCritical?: boolean,
+  private specialAttack?: DayCombatSpecialAttack
+  private isCritical?: boolean
+  private remainingAmmoModifier?: number
+  private fitGunBonus?: number
+  private optionalPowerModifiers?: AttackPowerModifierRecord
 
-    public eventMapModifier = 1,
-    public remainingAmmoModifier = 1,
-    public fitGunBonus = 0
-  ) {}
+  private attackCalculator: ShipShellingCalculator
 
-  private get attackStats() {
-    return this.attacker.ship.getShellingStats()
+  constructor({
+    battleState,
+    attacker,
+    defender,
+    specialAttack,
+    isCritical,
+    remainingAmmoModifier,
+    fitGunBonus,
+    optionalPowerModifiers
+  }: ShellingAttackParams) {
+    this.battleState = battleState
+    this.attacker = attacker
+    this.defender = defender
+    this.specialAttack = specialAttack
+    this.isCritical = isCritical
+    this.remainingAmmoModifier = remainingAmmoModifier
+    this.fitGunBonus = fitGunBonus
+    this.optionalPowerModifiers = optionalPowerModifiers
+    this.attackCalculator = new ShipShellingCalculator(attacker.ship)
   }
 
   get isArmorPiercing() {
@@ -37,21 +64,15 @@ export default class Shelling {
     )
   }
 
-  private get combinedFleetFactors() {
-    const { attacker, defender } = this
-    const power = getShellingFleetFactor(attacker, defender)
-    // accuracy 仮置き
-    return { power, accuracy: 0 }
+  get proficiencyModifiers() {
+    return this.attackCalculator.getProficiencyModifiers(this.specialAttack?.isCarrierSpecialAttack)
   }
 
-  get proficiencyModifiers() {
-    const { specialAttack } = this
-    const { shellingType, normalProficiencyModifiers, specialProficiencyModifiers } = this.attackStats
-
-    if (shellingType === "Shelling") {
-      return { power: 1, hitRate: 0, criticalRate: 0 }
-    }
-    return specialAttack ? specialProficiencyModifiers : normalProficiencyModifiers
+  private get fleetFactors() {
+    const { attacker, defender } = this
+    const power = getShellingFleetFactor(attacker, defender)
+    const accuracy = getShellingAccuracyFleetFactor(attacker)
+    return { power, accuracy }
   }
 
   get power() {
@@ -59,101 +80,58 @@ export default class Shelling {
       battleState,
       attacker,
       defender,
-      isCritical,
-      combinedFleetFactors,
-      eventMapModifier,
+
+      fleetFactors,
       specialAttack,
-      isArmorPiercing
+      isCritical,
+      isArmorPiercing,
+      optionalPowerModifiers
     } = this
 
     const { engagement } = battleState
     const { role, formation } = attacker
-    const combinedFleetFactor = combinedFleetFactors.power
-
-    const {
-      shellingType,
-      firepower,
-      torpedo,
-      bombing,
-      improvementModifiers,
-      healthModifier,
-      cruiserFitBonus,
-      apShellModifiers
-    } = this.attackStats
 
     const formationModifier = formation.getModifiersWithRole(role).shelling.power
     const engagementModifier = engagement.modifier
-
-    const criticalModifier = isCritical ? 1.5 : 1
-
     const specialAttackModifier = specialAttack ? specialAttack.modifier.power : 1
-    const apShellModifier = isArmorPiercing ? apShellModifiers.power : 1
 
-    const antiInstallationModifiers = attacker.ship.getAntiInstallationModifier(defender.ship)
-    const isAntiInstallationWarfare = defender.ship.isInstallation
+    const specialEnemyModifiers = attacker.ship.getSpecialEnemyModifiers(defender.ship)
+    const isAntiInstallation = defender.ship.isInstallation
 
-    const effectiveBombing = isAntiInstallationWarfare
-      ? attacker.ship.totalEquipmentStats(gear => (gear.is("AntiInstallationBomber") ? gear.bombing : 0))
-      : bombing
-
-    const effectivenessMultiplicative = antiInstallationModifiers.a5
-    const effectivenessAdditive = 0
+    const modifiers = composeAttackPowerModifierRecord(specialEnemyModifiers, optionalPowerModifiers)
 
     const proficiencyModifier = this.proficiencyModifiers.power
 
-    const factors: ShellingPowerFactors = {
-      shellingType,
-      combinedFleetFactor,
-      firepower,
-      torpedo: isAntiInstallationWarfare ? 0 : torpedo,
-      bombing: effectiveBombing,
-      improvementModifier: improvementModifiers.power,
-
-      antiInstallationModifiers,
+    return this.attackCalculator.calcPower({
       formationModifier,
       engagementModifier,
-      healthModifier,
-      cruiserFitBonus,
-
-      effectivenessMultiplicative,
-      effectivenessAdditive,
       specialAttackModifier,
-      apShellModifier,
-      criticalModifier,
-      proficiencyModifier,
-      eventMapModifier
-    }
-
-    return new ShellingPower(factors)
+      modifiers,
+      fleetFactor: fleetFactors.power,
+      isCritical,
+      isAntiInstallation,
+      isArmorPiercing,
+      proficiencyModifier
+    })
   }
 
   get accuracy() {
-    const { attacker, defender, combinedFleetFactors, isArmorPiercing, specialAttack, fitGunBonus } = this
+    const { attacker, defender, fleetFactors, isArmorPiercing, specialAttack, fitGunBonus = 0 } = this
 
     let formationModifier = attacker.formation.getModifiersWithRole(attacker.role).shelling.accuracy
     if (Formation.isIneffective(attacker.formation, defender.formation)) {
       formationModifier = 1
     }
 
-    const { level, luck, accuracy, improvementModifiers, moraleModifier, apShellModifiers } = this.attackStats
-
     const specialAttackModifier = specialAttack ? specialAttack.modifier.accuracy : 1
-    const apShellModifier = isArmorPiercing ? apShellModifiers.accuracy : 1
 
-    const factors: ShellingAccuracyFactors = {
-      combinedFleetFactor: combinedFleetFactors.accuracy,
-      level,
-      luck,
-      equipmentAccuracy: accuracy,
-      improvementModifier: improvementModifiers.accuracy,
-      moraleModifier,
+    return this.attackCalculator.calcAccuracy({
+      fleetFactor: fleetFactors.accuracy,
       formationModifier,
-      fitGunBonus,
       specialAttackModifier,
-      apShellModifier
-    }
-
-    return new ShellingAccuracy(factors)
+      isArmorPiercing,
+      fitGunBonus
+    })
   }
 
   get defenderEvasionValue() {
@@ -167,11 +145,11 @@ export default class Shelling {
     const moraleModifier = defender.ship.morale.evasionModifier
 
     return createHitRate({
-      accuracy: accuracy.value,
+      accuracy: accuracy,
       evasion: defenderEvasionValue,
       moraleModifier,
 
-      criticalRateMultiplier: Shelling.criticalRateMultiplier,
+      criticalRateMultiplier: ShellingAttack.criticalRateMultiplier,
       hitRateBonus: this.proficiencyModifiers.hitRate,
       criticalRateBonus: this.proficiencyModifiers.criticalRate
     })
@@ -184,7 +162,7 @@ export default class Shelling {
   get damage() {
     const { power, defender, remainingAmmoModifier } = this
     const defensePower = defender.ship.getDefensePower()
-    return new Damage(power.value, defensePower, defender.ship.health.currentHp, remainingAmmoModifier)
+    return new Damage(power.postcap, defensePower, defender.ship.health.currentHp, remainingAmmoModifier)
   }
 
   get taihaRate() {
@@ -228,7 +206,7 @@ export default class Shelling {
   get can() {
     const { attacker, defender } = this
     const defenderIsInstallation = defender.ship.isInstallation
-    const { shellingType } = this.attackStats
+    const { type } = this.attackCalculator
 
     const { ship } = attacker
 
@@ -240,7 +218,7 @@ export default class Shelling {
       return false
     }
 
-    if (shellingType === "CarrierShelling") {
+    if (type === "CarrierShelling") {
       if (ship.health.lte("Taiha")) {
         return false
       }

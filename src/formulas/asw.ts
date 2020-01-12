@@ -1,51 +1,51 @@
-import { FunctionalModifier, createAttackPower } from "./attackPower"
-import { AttackPowerModifierRecord } from "../data/SpecialEnemyModifier"
+import {
+  AttackPowerModifierRecord,
+  composeAttackPowerModifierRecord,
+  FunctionalModifier,
+  createAttackPower
+} from "../common"
 
-type AswBasicPowerFactors = {
+export type AswPowerFactors = {
   nakedAsw: number
   equipmentAsw: number
   improvementModifier: number
   typeConstant: number
-}
 
-export const calcBasicPower = ({ nakedAsw, equipmentAsw, improvementModifier, typeConstant }: AswBasicPowerFactors) => {
-  return Math.sqrt(nakedAsw) * 2 + equipmentAsw * 1.5 + improvementModifier + typeConstant
-}
-
-type BasicPrecapPowerModifiers = {
   formationModifier: number
   engagementModifier: number
   healthModifier: number
-}
 
-type AswPrecapModifiers = BasicPrecapPowerModifiers & {
   synergyModifier: number
-}
 
-export type AswPowerFactors = AswBasicPowerFactors &
-  AswPrecapModifiers & { optionalModifiers?: AttackPowerModifierRecord; additionalFm?: FunctionalModifier }
+  optionalModifiers?: AttackPowerModifierRecord
+  fm11next?: FunctionalModifier
+}
 
 const createPower = (factors: AswPowerFactors) => {
   const {
+    nakedAsw,
+    equipmentAsw,
+    improvementModifier,
+    typeConstant,
+
     formationModifier,
     engagementModifier,
     healthModifier,
     synergyModifier,
     optionalModifiers,
-    additionalFm
+    fm11next
   } = factors
 
-  const basic = calcBasicPower(factors)
+  const basic = Math.sqrt(nakedAsw) * 2 + equipmentAsw * 1.5 + improvementModifier + typeConstant
   const cap = 150
   const a14 = formationModifier * engagementModifier * healthModifier * synergyModifier
-  const modifiers = optionalModifiers ? AttackPowerModifierRecord.compose(optionalModifiers, { a14 }) : { a14 }
+  const modifiers = optionalModifiers ? composeAttackPowerModifierRecord(optionalModifiers, { a14 }) : { a14 }
 
-  return createAttackPower({ basic, cap, modifiers, additionalFm })
+  return createAttackPower({ basic, cap, modifiers, fm11next })
 }
 
 type AccuracyFactors = {
-  luck: number
-  level: number
+  shipAccuracy: number
   aswEquipmentModifier: number
   improvementModifier: number
 
@@ -54,9 +54,8 @@ type AccuracyFactors = {
 }
 
 const calcAccuracy = (factors: AccuracyFactors) => {
-  const { luck, level, aswEquipmentModifier, improvementModifier, formationModifier, moraleModifier } = factors
+  const { shipAccuracy, aswEquipmentModifier, improvementModifier, formationModifier, moraleModifier } = factors
   const constant = 80
-  const shipAccuracy = 2 * Math.sqrt(level) + 1.5 * Math.sqrt(luck)
 
   return (constant + shipAccuracy + aswEquipmentModifier + improvementModifier) * formationModifier * moraleModifier
 }

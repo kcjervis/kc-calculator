@@ -57,6 +57,21 @@ const enemyAttackMatchers = [
   }
 ]
 
+const accuracyMatchers = [
+  {
+    fleetType: FleetType.CarrierTaskForce,
+    factors: [78, 43]
+  },
+  {
+    fleetType: FleetType.SurfaceTaskForce,
+    factors: [70, 46]
+  },
+  {
+    fleetType: FleetType.TransportEscort,
+    factors: [51, 46]
+  }
+]
+
 export type ShipFleetState = Pick<ShipInformation, "side" | "fleetType" | "formation" | "role">
 
 export const getShellingFleetFactor = (attacker: ShipFleetState, defender: ShipFleetState) => {
@@ -105,8 +120,15 @@ export const getTorpedoFleetFactor = (attacker: ShipFleetState, defender: ShipFl
   return singleFleetFactor + 10
 }
 
+export const getShellingAccuracyFleetFactor = ({ fleetType, role }: ShipFleetState) => {
+  const factorIndex = role === "Main" ? 0 : 1
+  const factor = accuracyMatchers.find(matcher => matcher.fleetType === fleetType)?.factors[factorIndex]
+  return factor ?? 90
+}
+
 export const getFleetFactors = (attacker: ShipFleetState, defender: ShipFleetState) => {
   const shelling = getShellingFleetFactor(attacker, defender)
+  const shellingAccuracy = getShellingAccuracyFleetFactor(attacker)
   const torpedo = getTorpedoFleetFactor(attacker, defender)
-  return { shelling, torpedo }
+  return { shelling, torpedo, shellingAccuracy }
 }

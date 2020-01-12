@@ -42,10 +42,10 @@ describe("gear/Improvement", () => {
 
     expectFighterPower(10, {}, []).toBe(0)
     expectFighterPower(10, {}, ["Fighter"]).toBe(0.2 * 10)
-    expectFighterPower(10, {}, ["CarrierBasedDiveBomber"]).toBe(0.25 * 10)
+    expectFighterPower(10, {}, ["FighterBomber"]).toBe(0.25 * 10)
   })
 
-  it("fighterPowerModifier", () => {
+  it("adjustedAntiAirModifier", () => {
     const expectAdjustedAntiAir = makeExpect("adjustedAntiAirModifier")
 
     expectAdjustedAntiAir(10, {}, []).toBe(0)

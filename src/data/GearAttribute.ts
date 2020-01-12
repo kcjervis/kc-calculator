@@ -89,6 +89,9 @@ export const isReconnaissanceAircraft = createCategoryMatcher(
   "LandBasedReconnaissanceAircraft"
 )
 
+/** 爆戦 */
+const FighterBomber = and(isDiveBomber, gear => gear.bombing >= 4)
+
 /** 航空機 */
 export const isAircraft = or(
   isFighter,
@@ -108,6 +111,32 @@ export const isAntiInstallationBomber = createGearIdMatcher(
   GearId["F4U-1D"],
   GearId["FM-2"],
   GearId["彗星一二型(六三四空/三号爆弾搭載機)"]
+)
+
+/** 対潜火力装備 */
+export const AswGear = createCategoryMatcher(
+  "Sonar",
+  "DepthCharge",
+  "LargeSonar",
+
+  "CarrierBasedDiveBomber",
+  "CarrierBasedTorpedoBomber",
+  "SeaplaneBomber",
+  "Autogyro",
+  "AntiSubmarinePatrolAircraft"
+)
+
+/** 対潜航空機 */
+export const AswAircraft = and(
+  gear => gear.asw > 0,
+  createCategoryMatcher(
+    "CarrierBasedDiveBomber",
+    "CarrierBasedTorpedoBomber",
+    "SeaplaneBomber",
+    "Autogyro",
+    "AntiSubmarinePatrolAircraft",
+    "LargeFlyingBoat"
+  )
 )
 
 /** 爆雷投射機 */
@@ -148,9 +177,12 @@ const matchers = createMatchers({
   DiveBomber: isDiveBomber,
   TorpedoBomber: isTorpedoBomber,
   ReconnaissanceAircraft: isReconnaissanceAircraft,
+  FighterBomber,
   Aircraft: isAircraft,
   AntiInstallationBomber: isAntiInstallationBomber,
 
+  AswGear,
+  AswAircraft,
   DepthChargeProjector,
   AdditionalDepthCharge: isAdditionalDepthCharge,
   AntiGroundRocketLauncher,

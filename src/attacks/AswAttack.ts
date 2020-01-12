@@ -1,21 +1,9 @@
-import { ShipId } from "@jervis/data"
 import { ShipInformation } from "../types"
-import { IShip, IGear } from "../objects"
-import { Asw, FunctionalModifier, createCriticalFm, createHitRate } from "../formulas"
+import { createHitRate } from "../formulas"
 import { Engagement, Formation } from "../constants"
-import { Damage } from "../Battle"
-import AswAttackStatus, { getAswType } from "./AswAttackStatus"
-import { AttackPowerModifierRecord } from "../data/SpecialEnemyModifier"
-
-export const isPossible = (attacker: IShip, defender: IShip) => {
-  if (!defender.shipType.isSubmarineClass) {
-    return false
-  }
-  if (getAswType(attacker) === "None") {
-    return false
-  }
-  return true
-}
+import Damage from "./Damage"
+import ShipAswCalculator, { AswTime } from "./ShipAswCalculator"
+import { AttackPowerModifierRecord } from "../common"
 
 export type AswAttackParams = {
   attacker: ShipInformation
@@ -23,36 +11,31 @@ export type AswAttackParams = {
   engagement: Engagement
   isCritical: boolean
 
-  isOpeningAaw?: boolean
-  isNight?: boolean
+  time?: AswTime
   remainingAmmoModifier?: number
   optionalPowerModifiers?: AttackPowerModifierRecord
 }
 
 export default class AswAttack {
   public static readonly cap = 150
-  public static readonly criticalRateConstant = 1.1
-
-  public static isPossible = isPossible
+  public static readonly criticalRateMultiplier = 1.1
 
   public attacker: ShipInformation
   public defender: ShipInformation
   public engagement: Engagement
   public isCritical: boolean
-  public isOpeningAaw: boolean
-  public isNight: boolean
+  public time: AswTime
   public remainingAmmoModifier: number
   public optionalPowerModifiers?: AttackPowerModifierRecord
 
-  private attackerStatus: AswAttackStatus
+  private attackCalculator: ShipAswCalculator
 
   constructor({
     attacker,
     defender,
     engagement,
     isCritical = false,
-    isOpeningAaw = false,
-    isNight = false,
+    time = "Day",
     remainingAmmoModifier = 1,
     optionalPowerModifiers
   }: AswAttackParams) {
@@ -60,12 +43,24 @@ export default class AswAttack {
     this.defender = defender
     this.engagement = engagement
     this.isCritical = isCritical
-    this.isOpeningAaw = isOpeningAaw
-    this.isNight = isNight
+    this.time = time
     this.remainingAmmoModifier = remainingAmmoModifier
     this.optionalPowerModifiers = optionalPowerModifiers
 
-    this.attackerStatus = new AswAttackStatus(attacker.ship, isNight)
+    this.attackCalculator = ShipAswCalculator.fromShip(attacker.ship, time)
+  }
+
+  public isPossible = () => {
+    const { defender, attackCalculator } = this
+    if (!defender.ship.shipType.isSubmarineClass) {
+      return false
+    }
+
+    if (attackCalculator.type === "None") {
+      return false
+    }
+
+    return true
   }
 
   private getFormationModifiers = () => {
@@ -82,38 +77,21 @@ export default class AswAttack {
   }
 
   get power() {
-    const { isCritical, isOpeningAaw, optionalPowerModifiers } = this
+    const { isCritical, optionalPowerModifiers } = this
     const formationModifier = this.getFormationModifiers().power
     const engagementModifier = this.engagement.modifier
 
-    return this.attackerStatus.createPower({
+    return this.attackCalculator.calcPower({
       formationModifier,
       engagementModifier,
       isCritical,
-      isOpeningAaw,
       optionalModifiers: optionalPowerModifiers
     })
   }
 
   get accuracy() {
-    const { ship } = this.attacker
-    const { luck, level } = ship.nakedStats
-
-    const aswEquipmentModifier = this.attackerStatus.aswEquipmentAccuracyModifier
-
-    const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.aswAccuracyModifier)
-
-    const moraleModifier = ship.morale.getAccuracyModifier("asw")
-
     const formationModifier = this.getFormationModifiers().accuracy
-    return Asw.calcAccuracy({
-      luck,
-      level,
-      aswEquipmentModifier,
-      improvementModifier,
-      moraleModifier,
-      formationModifier
-    })
+    return this.attackCalculator.calcAccuracy({ formationModifier })
   }
 
   get evasion() {
@@ -124,14 +102,14 @@ export default class AswAttack {
   get hitRate() {
     const { accuracy, defender, evasion } = this
     const moraleModifier = defender.ship.morale.evasionModifier
-    const criticalRateConstant = AswAttack.criticalRateConstant
-    return createHitRate({ accuracy, evasion, moraleModifier, criticalRateConstant })
+    const criticalRateMultiplier = AswAttack.criticalRateMultiplier
+    return createHitRate({ accuracy, evasion, moraleModifier, criticalRateMultiplier })
   }
 
   get damage() {
-    const { power, defender, remainingAmmoModifier, attackerStatus } = this
+    const { power, defender, remainingAmmoModifier } = this
     const defensePower = defender.ship.getDefensePower()
-    const { armorPenetration } = attackerStatus
+    const { armorPenetration } = this.attackCalculator
     return new Damage(
       power.postcap,
       defensePower,
