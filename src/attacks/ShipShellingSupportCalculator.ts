@@ -9,13 +9,6 @@ export default class ShipShellingSupportCalculator {
     return getShellingType(this.ship)
   }
 
-  private calcBasicPower = () => {
-    const { ship } = this
-    const { firepower } = ship.stats
-    const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.shellingPowerModifier)
-    return 4 + firepower + improvementModifier
-  }
-
   private getCarrierShellingFm = (isAntiInstallation = false): FunctionalModifier | undefined => {
     const { ship, type } = this
     if (type === "Shelling") {
@@ -38,10 +31,10 @@ export default class ShipShellingSupportCalculator {
     isCritical?: boolean
     isAntiInstallation?: boolean
   }) => {
-    const { formationModifier, engagementModifier, isCritical, isAntiInstallation } = params
-    const basic = this.calcBasicPower()
-    const cap = 150
     const { ship } = this
+    const { formationModifier, engagementModifier, isCritical, isAntiInstallation } = params
+    const basic = 4 + ship.stats.firepower
+    const cap = 150
 
     const healthModifier = ship.health.shellingPowerModifier
     const a14 = formationModifier * engagementModifier * healthModifier

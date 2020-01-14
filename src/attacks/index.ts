@@ -1,7 +1,7 @@
 export { default as ShipTorpedoAttackCalculator } from "./ShipTorpedoAttackCalculator"
 export { default as ShipAswCalculator } from "./ShipAswCalculator"
 export { default as ShipShellingCalculator } from "./ShipShellingCalculator"
-export { default as ShipShellingSupportCalculatorS } from "./ShipShellingSupportCalculator"
+export { default as ShipShellingSupportCalculator } from "./ShipShellingSupportCalculator"
 export { default as ShipNightAttackCalculator } from "./ShipNightAttackCalculator"
 
 export { default as AswAttack } from "./AswAttack"

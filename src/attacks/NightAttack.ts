@@ -6,21 +6,57 @@ import { NightCombatSpecialAttack } from "../Battle"
 import { GearId } from "@jervis/data"
 import { AttackPowerModifierRecord, composeAttackPowerModifierRecord } from "../common"
 
+type NightAttackParams = {
+  attacker: ShipInformation
+  defender: ShipInformation
+  specialAttack?: NightCombatSpecialAttack
+  isCritical?: boolean
+  starshell: boolean
+  searchlight: boolean
+  nightContactModifier?: number
+  remainingAmmoModifier?: number
+  optionalPowerModifiers?: AttackPowerModifierRecord
+}
+
 export default class NightAttack {
   public static criticalRateMultiplier = 1.5
-  public attackCalculator: ShipNightAttackCalculator
-  constructor(
-    public attacker: ShipInformation,
-    public defender: ShipInformation,
-    public specialAttack?: NightCombatSpecialAttack,
-    public isCritical?: boolean,
 
-    public starshell = false,
-    public searchlight = false,
-    public nightContactModifier = 0,
-    public remainingAmmoModifier = 1,
-    public optionalPowerModifiers?: AttackPowerModifierRecord
-  ) {
+  private attacker: ShipInformation
+  private defender: ShipInformation
+  private specialAttack?: NightCombatSpecialAttack
+  private isCritical?: boolean
+
+  private starshell: boolean
+  private searchlight: boolean
+  private nightContactModifier?: number
+  private remainingAmmoModifier?: number
+  private optionalPowerModifiers?: AttackPowerModifierRecord
+
+  private attackCalculator: ShipNightAttackCalculator
+
+  constructor({
+    attacker,
+    defender,
+    specialAttack,
+    isCritical,
+    starshell,
+    searchlight,
+    nightContactModifier,
+    remainingAmmoModifier,
+    optionalPowerModifiers
+  }: NightAttackParams) {
+    this.attacker = attacker
+    this.defender = defender
+    this.specialAttack = specialAttack
+    this.isCritical = isCritical
+
+    this.starshell = starshell
+    this.searchlight = searchlight
+    this.nightContactModifier = nightContactModifier
+
+    this.remainingAmmoModifier = remainingAmmoModifier
+    this.optionalPowerModifiers = optionalPowerModifiers
+
     this.attackCalculator = new ShipNightAttackCalculator(attacker.ship)
   }
 

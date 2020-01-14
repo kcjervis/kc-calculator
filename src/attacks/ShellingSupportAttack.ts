@@ -1,4 +1,4 @@
-import { ShipInformation, BattleState } from "../types"
+import { ShipInformation, BattleState, ShipRole } from "../types"
 
 import Damage from "./Damage"
 import { createHitRate } from "../formulas"
@@ -39,9 +39,9 @@ export default class ShellingSupportAttack {
     const { battleState, attacker, defender, isCritical } = this
 
     const { engagement } = battleState
-    const { role, formation } = attacker
+    const { formation } = attacker
 
-    const formationModifier = formation.getModifiersWithRole(role).shelling.power
+    const formationModifier = formation.shellingSupportModifiers.power
     const engagementModifier = engagement.modifier
     const isAntiInstallation = defender.ship.isInstallation
 
@@ -54,19 +54,9 @@ export default class ShellingSupportAttack {
   }
 
   get accuracy() {
-    const { formation, role } = this.attacker
+    const formationModifier = this.attacker.formation.shellingSupportModifiers.accuracy
 
-    let formationModifier = formation.getModifiersWithRole(role).shelling.accuracy
-    if (Formation.combinedFleetFormations.includes(formation)) {
-      formationModifier = 1
-    }
-    if (Formation.Vanguard === formation) {
-      formationModifier = 0.8
-    }
-
-    return this.attackCalculator.calcAccuracy({
-      formationModifier
-    })
+    return this.attackCalculator.calcAccuracy({ formationModifier })
   }
 
   get defenderEvasionValue() {

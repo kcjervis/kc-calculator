@@ -7,6 +7,7 @@ import {
   FunctionalModifier,
   createCriticalFm
 } from "../common"
+import { DayCombatSpecialAttack } from "../Battle"
 
 export const getShellingType = (ship: IShip) => {
   const { shipType, shipClass, isInstallation, hasGear } = ship
@@ -70,7 +71,8 @@ export default class ShipShellingCalculator {
     if (type === "Shelling") {
       return
     }
-    const { torpedo } = ship.stats
+
+    const torpedo = isAntiInstallation ? 0 : ship.stats.torpedo
 
     const bombing = isAntiInstallation
       ? ship.totalEquipmentStats(gear => (gear.is("AntiInstallationBomber") ? gear.bombing : 0))
@@ -81,26 +83,27 @@ export default class ShipShellingCalculator {
   }
 
   public calcPower = (params: {
+    fleetFactor: number
     formationModifier: number
     engagementModifier: number
-    specialAttackModifier?: number
     modifiers: AttackPowerModifierRecord
 
-    fleetFactor?: number
     isCritical?: boolean
     isAntiInstallation?: boolean
     isArmorPiercing?: boolean
-    proficiencyModifier: number
+
+    specialAttack?: DayCombatSpecialAttack
   }) => {
     const {
+      fleetFactor,
       formationModifier,
       engagementModifier,
-      specialAttackModifier,
-      fleetFactor,
+
       isCritical,
       isAntiInstallation,
       isArmorPiercing,
-      proficiencyModifier
+
+      specialAttack
     } = params
     const basic = this.calcBasicPower(fleetFactor)
     const cap = 180
@@ -109,6 +112,9 @@ export default class ShipShellingCalculator {
 
     const healthModifier = ship.health.shellingPowerModifier
     const cruiserFitBonus = ship.getCruiserFitBonus()
+
+    const specialAttackModifier = specialAttack ? specialAttack.modifier.power : 1
+    const proficiencyModifier = this.getProficiencyModifiers(specialAttack?.isCarrierSpecialAttack).power
 
     const a14 = formationModifier * engagementModifier * healthModifier
     const b14 = cruiserFitBonus

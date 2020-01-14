@@ -93,25 +93,21 @@ export default class ShellingAttack {
 
     const formationModifier = formation.getModifiersWithRole(role).shelling.power
     const engagementModifier = engagement.modifier
-    const specialAttackModifier = specialAttack ? specialAttack.modifier.power : 1
 
     const specialEnemyModifiers = attacker.ship.getSpecialEnemyModifiers(defender.ship)
     const isAntiInstallation = defender.ship.isInstallation
 
     const modifiers = composeAttackPowerModifierRecord(specialEnemyModifiers, optionalPowerModifiers)
 
-    const proficiencyModifier = this.proficiencyModifiers.power
-
     return this.attackCalculator.calcPower({
       formationModifier,
       engagementModifier,
-      specialAttackModifier,
       modifiers,
       fleetFactor: fleetFactors.power,
       isCritical,
       isAntiInstallation,
       isArmorPiercing,
-      proficiencyModifier
+      specialAttack
     })
   }
 

@@ -132,6 +132,20 @@ export default class Formation {
     return this.modifiers.fleetAntiAir
   }
 
+  get isCombinedFleetFormation() {
+    return this.id > 10
+  }
+
+  get shellingSupportModifiers() {
+    if (this === Formation.Vanguard) {
+      return { power: 0.5, accuracy: 0.8 }
+    }
+    if (this.isCombinedFleetFormation) {
+      return { power: 1, accuracy: 1 }
+    }
+    return this.getModifiersWithRole("Main").shelling
+  }
+
   public getModifiersWithRole = (role: ShipRole): FormationModifiers => {
     if (this !== Formation.Vanguard) {
       return this.modifiers
