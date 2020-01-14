@@ -136,21 +136,29 @@ export default class MasterShip implements ShipBase {
     return this.remodel.nextId > 0
   }
 
-  get canConvert() {
-    const {
-      shipId,
-      remodel: { nextId }
-    } = this
-
-    const nextShip = MasterShip.all.find(ship => ship.shipId === nextId)
-    if (!nextShip) {
-      return false
+  private getNextShip = () => {
+    if (!this.canRemodel) {
+      return
     }
-    return nextShip.remodel.nextId === shipId
+    return MasterShip.all.find(ship => this.remodel.nextId === ship.shipId)
   }
 
   private getPrevShip = () => {
     return MasterShip.all.find(ship => ship.remodel.nextId === this.shipId)
+  }
+
+  get canConvert() {
+    const ships: MasterShip[] = []
+
+    while (!ships.includes(this)) {
+      const nextShip = this.getNextShip()
+      if (!nextShip) {
+        return false
+      }
+      ships.push(nextShip)
+    }
+
+    return true
   }
 
   get remodelGroup() {
