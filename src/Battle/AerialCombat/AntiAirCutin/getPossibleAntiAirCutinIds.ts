@@ -1,7 +1,8 @@
 import { IGear, IShip } from "../../../objects"
-import { GearId } from "@jervis/data"
+import { GearId, ShipId } from "@jervis/data"
 
 export default (ship: IShip) => {
+  const { shipId, hasGear } = ship
   enum MasterShipId {
     MayaKai2 = 428,
     IsuzuKai2 = 141,
@@ -114,31 +115,44 @@ export default (ship: IShip) => {
         list.push(10)
       }
       list.push(11)
+    }
 
-      // 五十鈴改二 かつ 高角砲を装備 かつ 対空機銃を装備
-    } else if (shipIs(MasterShipId.IsuzuKai2) && hasSome(isHighAngleMount) && hasSome(isAAGun)) {
+    // 五十鈴改二 かつ 高角砲を装備 かつ 対空機銃を装備
+    if (shipIs(MasterShipId.IsuzuKai2) && hasSome(isHighAngleMount) && hasSome(isAAGun)) {
       if (hasSome(isAARadar)) {
         list.push(14)
       }
       list.push(15)
+    }
 
-      // 霞改二乙 かつ 高角砲を装備 かつ 対空機銃を装備
-    } else if (shipIs(MasterShipId.KasumiKai2B) && hasSome(isHighAngleMount) && hasSome(isAAGun)) {
+    // 霞改二乙 かつ 高角砲を装備 かつ 対空機銃を装備
+    if (shipIs(MasterShipId.KasumiKai2B) && hasSome(isHighAngleMount) && hasSome(isAAGun)) {
       if (hasSome(isAARadar)) {
         list.push(16)
       }
       list.push(17)
+    }
+    if (
+      shipId === ShipId["夕張改二"] &&
+      hasGear("HighAngleMount") &&
+      hasGear("AntiAircraftGun") &&
+      hasGear("AirRadar")
+    ) {
+      list.push(16)
+    }
 
+    if (shipIs(MasterShipId.KinuKai2) && hasSome(isCDMG) && hasSome(isNormalHighAngleMount)) {
       // 鬼怒改二 かつ 特殊機銃を装備 かつ 標準高角砲を装備
-    } else if (shipIs(MasterShipId.KinuKai2) && hasSome(isCDMG) && hasSome(isNormalHighAngleMount)) {
       list.push(19)
+    }
 
-      // 由良改二 かつ 高角砲を装備 かつ 対空電探
-    } else if (shipIs(MasterShipId.YuraKai2) && hasSome(isHighAngleMount) && hasSome(isAARadar)) {
+    // 由良改二 かつ 高角砲を装備 かつ 対空電探
+    if (shipIs(MasterShipId.YuraKai2) && hasSome(isHighAngleMount) && hasSome(isAARadar)) {
       list.push(21)
+    }
 
-      // 伊勢型航空戦艦 かつ 12㎝30連装噴進砲改二を装備 かつ 対空強化弾(三式弾)を装備 かつ 対空電探を装備
-    } else if (
+    // 伊勢型航空戦艦 かつ 12㎝30連装噴進砲改二を装備 かつ 対空強化弾(三式弾)を装備 かつ 対空電探を装備
+    if (
       ship.shipClass.is("IseClass") &&
       ship.shipType.is("AviationBattleship") &&
       hasSome(is12cm30tubeRocketLauncherKai2) &&

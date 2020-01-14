@@ -316,6 +316,22 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
 
   {
     byGear: GearId["12.7cm単装高角砲(後期型)"],
+    byShip: { shipClassId: ShipClassId.YuubariClass, attrs: "Kai2" },
+    multiple: { firepower: 1, antiAir: 1 },
+    synergies: [
+      {
+        byGear: { attrs: "SurfaceRadar" },
+        count1: { firepower: 1, evasion: 1 }
+      },
+      {
+        byGear: { attrs: "AirRadar" },
+        count1: { antiAir: 2, evasion: 2 }
+      }
+    ]
+  },
+
+  {
+    byGear: GearId["12.7cm単装高角砲(後期型)"],
     minStar: 7,
 
     rules: [
@@ -510,8 +526,17 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
 
     rules: [
       {
-        byShip: { shipClassId: ShipClassId.YuubariClass },
+        byShip: { shipId: { $in: [ShipId["夕張"], ShipId["夕張改"]] } },
         multiple: { firepower: 2, antiAir: 1, evasion: 1 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.YuubariClass, attrs: "Kai2" },
+        multiple: { firepower: 4, antiAir: 1, evasion: 2, asw: 1 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.YuubariClass, attrs: "Kai2" },
+        minStar: 8,
+        multiple: { firepower: 1 }
       },
       {
         byShip: { shipClassId: ShipClassId.KatoriClass },
@@ -520,6 +545,14 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
       {
         byShip: { shipClassId: ShipClassId.NisshinClass },
         multiple: { firepower: 3, torpedo: 2, antiAir: 1, evasion: 1 }
+      }
+    ],
+
+    synergies: [
+      {
+        byShip: { shipClassId: ShipClassId.YuubariClass, attrs: "Kai2" },
+        byGear: { attrs: "SurfaceRadar" },
+        count1: { firepower: 3, torpedo: 2, evasion: 2 }
       }
     ]
   },
@@ -567,8 +600,12 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
         multiple: { firepower: 2, antiAir: 2, evasion: 1 }
       },
       {
-        byShip: { shipClassId: ShipClassId.YuubariClass },
+        byShip: { shipId: { $in: [ShipId["夕張"], ShipId["夕張改"]] } },
         multiple: { firepower: 1, antiAir: 1, evasion: 1 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.YuubariClass, attrs: "Kai2" },
+        multiple: { firepower: 2, antiAir: 2, evasion: 1 }
       }
     ]
   },
@@ -907,6 +944,10 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
       {
         byShip: { shipId: ShipId["金剛改二丙"] },
         multiple: { torpedo: 6, evasion: 3 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.YuubariClass, attrs: "Kai2" },
+        multiple: { firepower: 2, torpedo: 4 }
       }
     ]
   },
@@ -996,6 +1037,31 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
     byGear: GearId["53cm艦首(酸素)魚雷"],
     byShip: { shipTypeId: { $nin: [ShipTypeId.Submarine, ShipTypeId.SubmarineAircraftCarrier] } },
     multiple: { torpedo: -5 }
+  },
+
+  // 特殊潜航艇
+  {
+    byGear: GearId["甲標的 丁型改(蛟龍改)"],
+    rules: [
+      {
+        byShip: ShipId["夕張改二特"],
+        multiple: { firepower: 1, torpedo: 4, evasion: -2 }
+      },
+      {
+        byShip: ShipId["北上改二"],
+        multiple: { torpedo: 2, evasion: -2 }
+      },
+      {
+        byShip: { shipId: { $in: [ShipId["大井改二"], ShipId["日進甲"]] } },
+        multiple: { torpedo: 1, evasion: -2 }
+      },
+      {
+        byShip: {
+          shipId: { $not: { $in: [ShipId["夕張改二特"], ShipId["北上改二"], ShipId["大井改二"], ShipId["日進甲"]] } }
+        },
+        multiple: { firepower: -1, evasion: -7 }
+      }
+    ]
   },
 
   // 水上爆撃機
@@ -1644,6 +1710,30 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
     ]
   },
 
+  {
+    byGear: GearId["四式水中聴音機"],
+    rules: [
+      {
+        byShip: {
+          shipId: {
+            $in: [
+              ShipId["那珂改二"],
+              ShipId["由良改二"],
+              ShipId["五十鈴改二"],
+              ShipId["夕張改二"],
+              ShipId["夕張改二特"]
+            ]
+          }
+        },
+        count1: { evasion: 3, asw: 1 }
+      },
+      {
+        byShip: ShipId["夕張改二丁"],
+        count1: { evasion: 5, asw: 3 }
+      }
+    ]
+  },
+
   // 対空強化弾
   {
     byGear: GearId["三式弾"],
@@ -1874,7 +1964,7 @@ const getSpeedBonus = (ship: IShip) => {
     return { speed: speedIncrement }
   }
 
-  if (ship.shipClassId === ShipClassId.JohnCButlerClass) {
+  if (ship.shipClassId === ShipClassId.JohnCButlerClass || ship.shipId === ShipId["夕張改二特"]) {
     return { speed: 5 }
   }
 

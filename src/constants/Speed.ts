@@ -1,4 +1,5 @@
 import { IShip } from "../objects"
+import { ShipId, RemodelGroup } from "@jervis/data"
 
 type SpeedValue = 0 | 5 | 10 | 15 | 20
 
@@ -34,13 +35,14 @@ export default class Speed {
    * 参考 http://kancolle.wikia.com/wiki/Partials/Speed_system
    */
   public static getSpeedGroup(ship: IShip) {
-    const { shipType, shipClass } = ship
+    const { shipType, shipClass, shipId, remodelGroup } = ship
 
     const isFastAV = Speed.fromNumber(ship.nakedStats.speed) === Speed.Fast && shipType.is("SeaplaneTender")
 
     if (
       isFastAV ||
       shipType.isSubmarineClass ||
+      [ShipId["夕張"], ShipId["夕張改"]].includes(shipId) ||
       ["加賀型", "夕張型", "特種船丙型", "工作艦", "改風早型"].includes(shipClass.name)
     ) {
       return SpeedGroup.OtherC
@@ -53,14 +55,12 @@ export default class Speed {
     if (["阿賀野型", "蒼龍型", "飛龍型", "金剛型", "大和型", "Iowa級"].includes(shipClass.name)) {
       return SpeedGroup.FastB1SlowA
     }
-    // 天津風
-    const isAmatsukaze = [181, 316].includes(ship.masterId)
-    // 雲龍
-    const isUnryuu = [404, 406].includes(ship.masterId)
-    // 天城
-    const isAmagi = [331, 429].includes(ship.masterId)
-    // 長門改二
-    const isNagatoKai2 = 541 === ship.masterId
+
+    const isAmatsukaze = remodelGroup === RemodelGroup["天津風"]
+    const isUnryuu = remodelGroup === RemodelGroup["雲龍"]
+    const isAmagi = remodelGroup === RemodelGroup["天城"]
+    const isNagatoKai2 = shipId === ShipId["長門改二"]
+
     if (isAmatsukaze || isUnryuu || isAmagi || isNagatoKai2) {
       return SpeedGroup.FastB1SlowA
     }
