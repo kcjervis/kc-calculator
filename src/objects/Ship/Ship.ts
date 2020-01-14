@@ -190,7 +190,7 @@ export default class Ship implements IShip {
   public is = (attr: ShipAttribute) => this.attrs.includes(attr)
 
   public canEquip = (gear: IGear, slotIndex: number) => {
-    const shipId = this.masterId
+    const { shipId, shipClass } = this
     const { equippable, isAbyssal } = this.master
     const { gearId, categoryId } = gear
 
@@ -215,8 +215,17 @@ export default class Ship implements IShip {
       )
     }
 
-    if (this.shipClass.is("IseClass") && shipNameIsKai2(this.name)) {
+    if (shipClass.is("IseClass") && this.is("Kai2")) {
       return !(slotIndex > 1 && gear.is("MainGun"))
+    }
+
+    if (shipClass.is("YuubariClass") && this.is("Kai2")) {
+      if (slotIndex >= 3 && (gear.is("MainGun") || gear.is("Torpedo") || gear.is("MidgetSubmarine"))) {
+        return false
+      }
+      if (slotIndex === 4) {
+        return gear.is("AntiAircraftGun") || gear.is("SmallRadar") || gear.is("CombatRation")
+      }
     }
 
     return true
