@@ -1,4 +1,4 @@
-import { FleetTypeName, Side } from "../../constants"
+import { FleetTypeName, Side } from "../../common"
 import { IFleet } from "../fleet"
 import { ILandBasedAirCorps } from "../landBasedAirCorps"
 import { sumBy } from "lodash-es"

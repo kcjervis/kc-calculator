@@ -1,6 +1,6 @@
 import { IShip } from "../objects"
 
-import BattleType from "../constants/BattleType"
+import BattleType from "../common/BattleType"
 import { IBattleFleet, IShipBattleInformation } from "./BattleFleet"
 
 export interface ICombatInformation {

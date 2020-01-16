@@ -1,4 +1,4 @@
-import { Side, FleetType } from "../constants"
+import { Side, FleetType } from "../common"
 import { ShipInformation } from "../types"
 
 const playerAttackMatchers = [

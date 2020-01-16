@@ -1,9 +1,8 @@
 import { ShipInformation } from "../types"
 import { createHitRate } from "../formulas"
-import { Engagement, Formation } from "../constants"
+import { Engagement, Formation, AttackPowerModifierRecord } from "../common"
 import Damage from "./Damage"
 import ShipAswCalculator, { AswTime } from "./ShipAswCalculator"
-import { AttackPowerModifierRecord } from "../common"
 
 export type AswAttackParams = {
   attacker: ShipInformation

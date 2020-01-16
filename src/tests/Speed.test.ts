@@ -1,4 +1,4 @@
-import Speed, { SpeedGroup } from "../constants/Speed"
+import Speed, { SpeedGroup } from "../common/Speed"
 
 describe("getSpeedIncrement", () => {
   const fastA = {

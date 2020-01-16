@@ -1,4 +1,4 @@
-import { AirControlState } from "../../constants"
+import { AirControlState } from "../../common"
 import { GearCategory } from "../../data"
 import { IGear } from "../gear"
 

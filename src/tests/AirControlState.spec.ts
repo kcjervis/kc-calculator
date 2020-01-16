@@ -1,4 +1,4 @@
-import { AirControlState } from "../constants"
+import { AirControlState } from "../common"
 
 describe("AirControlState", () => {
   it("getBoundaryValues", () => {

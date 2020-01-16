@@ -1,6 +1,6 @@
 import { random } from "lodash-es"
 
-import { AirControlState, Side } from "../../constants"
+import { AirControlState, Side } from "../../common"
 import { IPlane, IShip } from "../../objects"
 import { ICombatInformation } from "../CombatInformation"
 import ShipAntiAir from "./ShipAntiAir"

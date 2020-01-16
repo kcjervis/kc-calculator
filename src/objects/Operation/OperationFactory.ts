@@ -1,4 +1,4 @@
-import { FleetTypeName, Side } from "../../constants"
+import { FleetTypeName, Side } from "../../common"
 import { FleetFactory, IFleetDataObject } from "../fleet"
 import { ILandBasedAirCorpsDataObject, LandBasedAirCorpsFactory } from "../landBasedAirCorps"
 import Operation from "./Operation"

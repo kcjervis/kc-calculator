@@ -1,5 +1,5 @@
 import { IGear, IShip } from "../../objects"
-import { Side } from "../../constants"
+import { Side } from "../../common"
 import AntiAirCutin from "./AntiAirCutin"
 import { ShipType } from "../../data"
 

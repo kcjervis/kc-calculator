@@ -4,7 +4,7 @@ import { ShipQuery, IShip } from "../objects/ship/ship"
 import { GearQuery } from "../objects/gear/Gear"
 import { ShipTypeId } from "."
 import { GearCategoryId } from "./GearCategory"
-import { Speed } from "../constants"
+import { Speed } from "../common"
 
 export const shipStatKeys = [
   "firepower",

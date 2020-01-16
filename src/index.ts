@@ -20,7 +20,6 @@ export {
 
 export * from "./data"
 
-export * from "./constants"
 export * from "./common"
 
 export * from "./attacks"

@@ -1,4 +1,4 @@
-import { Formation } from "../../constants"
+import { Formation } from "../../common"
 import { IShip } from "./ship"
 
 export interface IEvasionValue {

@@ -1,6 +1,6 @@
 import { flatMap } from "lodash-es"
 
-import { AirControlState, Side } from "../../constants"
+import { AirControlState, Side } from "../../common"
 import { ILandBasedAirCorps, IPlane } from "../../objects"
 import { ICombatInformation } from "../CombatInformation"
 

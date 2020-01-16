@@ -1,5 +1,4 @@
-import { createAttackPower } from "../common"
-import { AttackPowerModifierRecord, composeAttackPowerModifierRecord } from "../common"
+import { AttackPowerModifierRecord, composeAttackPowerModifierRecord, createAttackPower } from "../common"
 import { IShip } from "../objects"
 
 type TorpedoAttackPowerShipFactors = {

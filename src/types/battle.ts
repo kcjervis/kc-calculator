@@ -1,5 +1,5 @@
 import { IShip } from "../objects"
-import { Side, FleetType, Formation, Engagement, AirControlState } from "../constants"
+import { Side, FleetType, Formation, Engagement, AirControlState } from "../common"
 
 export type FleetTypeKey = "Single" | "CarrierTaskForce" | "SurfaceTaskForce" | "TransportEscort" | "Combined"
 

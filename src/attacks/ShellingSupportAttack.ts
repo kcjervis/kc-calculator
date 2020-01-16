@@ -2,7 +2,7 @@ import { ShipInformation, BattleState, ShipRole } from "../types"
 
 import Damage from "./Damage"
 import { createHitRate } from "../formulas"
-import { Formation } from "../constants"
+import { Formation } from "../common"
 import ShipShellingSupportCalculator from "./ShipShellingSupportCalculator"
 
 type ShellingSupportAttackParams = {

@@ -1,5 +1,5 @@
 import { IGear, IFleet, IShip } from "../../objects"
-import { BattleType, FleetRole, Side } from "../../constants"
+import { BattleType, FleetRole, Side } from "../../common"
 import { sumBy } from "lodash-es"
 
 export const gearFleetAntiAir = (gear: IGear) => {

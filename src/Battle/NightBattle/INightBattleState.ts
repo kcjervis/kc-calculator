@@ -1,4 +1,4 @@
-import { Formation, Side } from "../../constants"
+import { Formation, Side } from "../../common"
 
 interface INightContactState {
   powerModifier: number

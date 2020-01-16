@@ -1,9 +1,8 @@
 import { createHitRate } from "../formulas"
 import { ShipInformation } from "../types"
-import { Engagement } from "../constants"
+import { Engagement, AttackPowerModifierRecord } from "../common"
 import { IShip } from "../objects"
 import { getTorpedoFleetFactor } from "./FleetFactor"
-import { AttackPowerModifierRecord } from "../common"
 import ShipTorpedoAttackCalculator from "./ShipTorpedoAttackCalculator"
 import Damage from "./Damage"
 

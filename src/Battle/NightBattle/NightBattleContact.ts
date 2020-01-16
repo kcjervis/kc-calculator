@@ -1,6 +1,6 @@
 import { flatMap, random } from "lodash-es"
 
-import { AirControlState } from "../../constants"
+import { AirControlState } from "../../common"
 import { IPlane, IShip } from "../../objects"
 
 const isNightRecon = (plane: IPlane) => plane.slotSize > 0 && plane.gear.name.includes("夜偵")

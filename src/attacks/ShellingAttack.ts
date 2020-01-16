@@ -3,10 +3,9 @@ import { ShipInformation, BattleState } from "../types"
 import { getShellingFleetFactor, getShellingAccuracyFleetFactor } from "./FleetFactor"
 import Damage from "./Damage"
 import { createHitRate } from "../formulas"
-import { Side, Formation } from "../constants"
+import { Side, Formation, AttackPowerModifierRecord, composeAttackPowerModifierRecord } from "../common"
 import ShipShellingCalculator from "./ShipShellingCalculator"
 import DayCombatSpecialAttack from "./DayCombatSpecialAttack"
-import { AttackPowerModifierRecord, composeAttackPowerModifierRecord } from "../common"
 
 type ShellingAttackParams = {
   battleState: BattleState
