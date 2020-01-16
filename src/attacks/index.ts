@@ -10,5 +10,8 @@ export { default as ShellingAttack } from "./ShellingAttack"
 export { default as ShellingSupportAttack } from "./ShellingSupportAttack"
 export { default as NightAttack } from "./NightAttack"
 
+export { default as DayCombatSpecialAttack } from "./DayCombatSpecialAttack"
+export { default as NightCombatSpecialAttack } from "./NightCombatSpecialAttack"
+
 export { getFleetFactors } from "./FleetFactor"
 export { default as Damage } from "./Damage"

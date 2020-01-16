@@ -7,7 +7,7 @@ import {
   FunctionalModifier,
   createCriticalFm
 } from "../common"
-import { DayCombatSpecialAttack } from "../Battle"
+import DayCombatSpecialAttack from "./DayCombatSpecialAttack"
 
 export const getShellingType = (ship: IShip) => {
   const { shipType, shipClass, isInstallation, hasGear } = ship

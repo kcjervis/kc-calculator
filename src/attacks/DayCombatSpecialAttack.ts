@@ -1,5 +1,5 @@
-import { IShip, IFleet } from "../../objects"
-import { AirControlState } from "../../constants"
+import { IShip, IFleet } from "../objects"
+import { AirControlState } from "../constants"
 import { sumBy, random } from "lodash-es"
 
 export default class DayCombatSpecialAttack {

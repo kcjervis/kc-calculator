@@ -15,7 +15,7 @@ type ShellingSupportAttackParams = {
 
 export default class ShellingSupportAttack {
   // 改式だと1.1 実際いくつかわからない
-  public static criticalRateMultiplier = 1.3
+  public static criticalRateMultiplier = 1.1
 
   private battleState: BattleState
   private attacker: ShipInformation

@@ -5,7 +5,7 @@ import Damage from "./Damage"
 import { createHitRate } from "../formulas"
 import { Side, Formation } from "../constants"
 import ShipShellingCalculator from "./ShipShellingCalculator"
-import { DayCombatSpecialAttack } from "../Battle"
+import DayCombatSpecialAttack from "./DayCombatSpecialAttack"
 import { AttackPowerModifierRecord, composeAttackPowerModifierRecord } from "../common"
 
 type ShellingAttackParams = {

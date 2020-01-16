@@ -1,7 +1,5 @@
 import { IShip } from "../../objects"
 import { getAirstrikePower } from "./AirstrikePower"
-import { sumBy } from "lodash-es"
-import { getProficiencyModifier } from "../Shelling/ShipShellingStatus"
 
 export default class Airstrike {
   constructor(
@@ -12,14 +10,10 @@ export default class Airstrike {
     private isCritical = false
   ) {}
 
-  get proficiencyModifier() {
-    return getProficiencyModifier(this.attacker)
-  }
-
   get powers() {
     const { attacker, torpedoBomberModifier, contactModifier, isCritical } = this
     const criticalModifier = isCritical ? 1.5 : 1
-    const proficiencyModifier = this.proficiencyModifier.power
+    const proficiencyModifier = attacker.getNormalProficiencyModifiers().power
 
     const planes = attacker.planes.filter(plane => {
       if (plane.slotSize <= 0) {

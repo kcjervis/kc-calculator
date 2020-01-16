@@ -2,7 +2,7 @@ import { ShipInformation } from "../types"
 import ShipNightAttackCalculator from "./ShipNightAttackCalculator"
 import Damage from "./Damage"
 import { createHitRate } from "../formulas"
-import { NightCombatSpecialAttack } from "../Battle"
+import NightCombatSpecialAttack from "./NightCombatSpecialAttack"
 import { GearId } from "@jervis/data"
 import { AttackPowerModifierRecord, composeAttackPowerModifierRecord } from "../common"
 

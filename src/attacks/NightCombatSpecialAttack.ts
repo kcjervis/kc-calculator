@@ -1,5 +1,5 @@
-import { IShip } from "../../objects"
-import { Formation, Side } from "../../constants"
+import { IShip } from "../objects"
+import { Formation, Side } from "../constants"
 import { GearId } from "@jervis/data"
 
 export const isNightAerialAttackShip = (ship: IShip) => {
