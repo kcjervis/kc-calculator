@@ -73,7 +73,8 @@ export default class ShipNightAttackCalculator {
     const basic = this.calcBasicPower(nightContactModifier, isAntiInstallation)
     const cap = 300
 
-    const a14 = formationModifier * specialAttackModifier
+    const healthModifier = this.ship.health.nightAttackPowerModifier
+    const a14 = formationModifier * specialAttackModifier * healthModifier
     let modifiers: AttackPowerModifierRecord = { a14 }
     if (params.modifiers) {
       modifiers = composeAttackPowerModifierRecord(modifiers, params.modifiers)
