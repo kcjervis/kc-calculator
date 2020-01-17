@@ -28,15 +28,15 @@
     }
   },
   "dependencies": {
-    "fp-ts": "^2.4.0",
+    "fp-ts": "^2.4.1",
     "lodash-es": "^4.17.15",
     "sift": "^9.0.7"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.25",
+    "@types/jest": "^24.9.0",
     "@types/lodash-es": "^4.17.3",
     "@types/nedb": "^1.8.9",
-    "@types/node": "^13.1.6",
+    "@types/node": "^13.1.7",
     "@typescript-eslint/eslint-plugin": "^2.15.0",
     "@typescript-eslint/parser": "^2.15.0",
     "babel-jest": "^24.9.0",
@@ -49,7 +49,7 @@
     "prettier": "^1.19.1",
     "ts-jest": "^24.3.0",
     "ts-node": "^8.6.1",
-    "typescript": "^3.7.4",
+    "typescript": "^3.7.5",
     "utility-types": "^3.10.0"
   }
 }

@@ -72,7 +72,7 @@ const accuracyMatchers = [
   }
 ]
 
-export type ShipFleetState = Pick<ShipInformation, "side" | "fleetType" | "formation" | "role">
+export type ShipFleetState = Pick<ShipInformation, "side" | "fleetType" | "role">
 
 export const getShellingFleetFactor = (attacker: ShipFleetState, defender: ShipFleetState) => {
   // 通常vs通常

@@ -14,10 +14,10 @@ export default class EvasionValue {
 
     if (base >= 65) {
       return Math.floor(55 + 2 * Math.sqrt(base - 65))
-    } else if (base >= 40) {
-      return Math.floor(40 + 3 * Math.sqrt(base - 40))
-    } else {
-      return base
     }
+    if (base >= 40) {
+      return Math.floor(40 + 3 * Math.sqrt(base - 40))
+    }
+    return base
   }
 }
