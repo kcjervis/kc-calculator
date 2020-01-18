@@ -187,9 +187,6 @@ export default class Improvement implements IImprovement {
       gearIs("Radar") ||
       gearIs("MainGun") ||
       gearIs("SecondaryGun") ||
-      gearIs("Sonar") ||
-      gearIs("LargeSonar") ||
-      gearIs("DepthCharge") ||
       gearIs("ArmorPiercingShell") ||
       gearIs("AntiAircraftFireDirector")
     ) {
