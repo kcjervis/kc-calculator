@@ -46,7 +46,8 @@ export default class ShipNightAttackCalculator {
 
   private calcBasicPower = (nightContactModifier: number, isAntiInstallation?: boolean) => {
     const { ship, type } = this
-    const { firepower, torpedo } = ship.stats
+    const { firepower } = ship.stats
+    const torpedo = isAntiInstallation ? 0 : ship.stats.torpedo
     const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.nightAttackPowerModifier)
     if (type === "NightAerialAttack") {
       return this.calcNightAerialAttackPower(isAntiInstallation) + nightContactModifier

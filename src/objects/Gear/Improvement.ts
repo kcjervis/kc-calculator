@@ -169,7 +169,7 @@ export default class Improvement implements IImprovement {
       return Math.sqrt(this.value)
     }
 
-    if (gearIs("Sonar") || gearIs("LargeRadar") || gearIs("DepthCharge")) {
+    if (gearIs("Sonar") || gearIs("LargeSonar") || gearIs("DepthCharge")) {
       return 0.75 * Math.sqrt(this.value)
     }
 
