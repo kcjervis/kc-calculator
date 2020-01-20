@@ -29,3 +29,5 @@ export * from "./Battle"
 export * from "./types"
 
 export * from "./utils"
+
+export { createShipAttackCalculator } from "./ShipAttackCalculator"
