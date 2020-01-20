@@ -20,7 +20,7 @@ export type FormationModifiers = {
   shelling: WarfareModifiers
   torpedo: WarfareModifiers
   asw: WarfareModifiers
-  nightBattle: WarfareModifiers
+  night: WarfareModifiers
 }
 
 export type InstallationType = "None" | "SoftSkinned" | "Pillbox" | "SupplyDepot" | "IsolatedIsland"

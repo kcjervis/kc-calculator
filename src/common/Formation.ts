@@ -1,4 +1,4 @@
-import { ShipRole, WarfareModifiers, FormationModifiers } from "../types"
+import { ShipRole, FormationModifiers } from "../types"
 
 const keys = [
   "LineAhead",
@@ -24,7 +24,7 @@ export default class Formation {
     shelling: { power: 1, accuracy: 1, evasion: 1 },
     torpedo: { power: 1, accuracy: 1, evasion: 1 },
     asw: { power: 0.6, accuracy: 1, evasion: 1 },
-    nightBattle: { power: 1, accuracy: 1, evasion: 1 }
+    night: { power: 1, accuracy: 1, evasion: 1 }
   })
 
   public static readonly DoubleLine = new Formation(2, "複縦陣", {
@@ -32,7 +32,7 @@ export default class Formation {
     shelling: { power: 0.8, accuracy: 1.2, evasion: 1 },
     torpedo: { power: 0.8, accuracy: 0.8, evasion: 1 },
     asw: { power: 0.8, accuracy: 1.2, evasion: 1 },
-    nightBattle: { power: 1, accuracy: 0.9, evasion: 1 }
+    night: { power: 1, accuracy: 0.9, evasion: 1 }
   })
 
   public static readonly Diamond = new Formation(3, "輪形陣", {
@@ -40,7 +40,7 @@ export default class Formation {
     shelling: { power: 0.7, accuracy: 1, evasion: 1.1 },
     torpedo: { power: 0.7, accuracy: 0.4, evasion: 1.1 },
     asw: { power: 1.2, accuracy: 1, evasion: 1 },
-    nightBattle: { power: 1, accuracy: 0.7, evasion: 1 }
+    night: { power: 1, accuracy: 0.7, evasion: 1 }
   })
 
   public static readonly Echelon = new Formation(4, "梯形陣", {
@@ -49,7 +49,7 @@ export default class Formation {
     torpedo: { power: 0.6, accuracy: 0.6, evasion: 1.3 },
     asw: { power: 1.1, accuracy: 1.2, evasion: 1.3 },
     // https://twitter.com/shiro_sh39/status/1121812791843627008
-    nightBattle: { power: 1, accuracy: 0.9, evasion: 1.2 }
+    night: { power: 1, accuracy: 0.9, evasion: 1.2 }
   })
 
   public static readonly LineAbreast = new Formation(5, "単横陣", {
@@ -57,7 +57,7 @@ export default class Formation {
     shelling: { power: 0.6, accuracy: 1.2, evasion: 1.3 },
     torpedo: { power: 0.6, accuracy: 0.3, evasion: 1.4 },
     asw: { power: 1.3, accuracy: 1.2, evasion: 1.1 },
-    nightBattle: { power: 1, accuracy: 0.8, evasion: 1.2 }
+    night: { power: 1, accuracy: 0.8, evasion: 1.2 }
   })
 
   public static readonly Vanguard = new Formation(6, "警戒陣", {
@@ -65,7 +65,7 @@ export default class Formation {
     shelling: { power: 1, accuracy: 1, evasion: 1 },
     torpedo: { power: 1, accuracy: 1, evasion: 1 },
     asw: { power: 1, accuracy: 1, evasion: 1 },
-    nightBattle: { power: 1, accuracy: 1, evasion: 1 }
+    night: { power: 1, accuracy: 1, evasion: 1 }
   })
 
   public static readonly CruisingFormation1 = new Formation(11, "第一警戒航行序列", {
@@ -73,7 +73,7 @@ export default class Formation {
     shelling: { power: 0.8, accuracy: 1, evasion: 1 },
     torpedo: { power: 0.7, accuracy: 1, evasion: 1 },
     asw: { power: 1.3, accuracy: 1, evasion: 1 },
-    nightBattle: { power: 1, accuracy: 1, evasion: 1 }
+    night: { power: 1, accuracy: 1, evasion: 1 }
   })
 
   public static readonly CruisingFormation2 = new Formation(12, "第二警戒航行序列", {
@@ -81,7 +81,7 @@ export default class Formation {
     shelling: { power: 1, accuracy: 1, evasion: 1 },
     torpedo: { power: 0.9, accuracy: 1, evasion: 1 },
     asw: { power: 1.1, accuracy: 1, evasion: 1 },
-    nightBattle: { power: 1, accuracy: 1, evasion: 1 }
+    night: { power: 1, accuracy: 1, evasion: 1 }
   })
 
   public static readonly CruisingFormation3 = new Formation(13, "第三警戒航行序列", {
@@ -89,7 +89,7 @@ export default class Formation {
     shelling: { power: 0.7, accuracy: 1, evasion: 1 },
     torpedo: { power: 0.6, accuracy: 1, evasion: 1 },
     asw: { power: 1, accuracy: 1, evasion: 1 },
-    nightBattle: { power: 1, accuracy: 1, evasion: 1 }
+    night: { power: 1, accuracy: 1, evasion: 1 }
   })
 
   public static readonly CruisingFormation4 = new Formation(14, "第四警戒航行序列", {
@@ -98,7 +98,7 @@ export default class Formation {
     shelling: { power: 1.1, accuracy: 1.1, evasion: 1 },
     torpedo: { power: 1, accuracy: 1, evasion: 1 },
     asw: { power: 0.7, accuracy: 1, evasion: 1 },
-    nightBattle: { power: 1, accuracy: 1, evasion: 1 }
+    night: { power: 1, accuracy: 1, evasion: 1 }
   })
 
   public static get singleFleetFormations() {
@@ -156,7 +156,7 @@ export default class Formation {
         shelling: { power: 0.5, accuracy: 0.8, evasion: 1 },
         torpedo: { power: 1, accuracy: 1, evasion: 1 },
         asw: { power: 1, accuracy: 1, evasion: 1 },
-        nightBattle: { power: 0.5, accuracy: 1, evasion: 1 }
+        night: { power: 0.5, accuracy: 1, evasion: 1 }
       }
     }
     return {
@@ -164,7 +164,7 @@ export default class Formation {
       shelling: { power: 1, accuracy: 1.2, evasion: 1 },
       torpedo: { power: 1, accuracy: 1, evasion: 1 },
       asw: { power: 0.6, accuracy: 1, evasion: 1 },
-      nightBattle: { power: 1, accuracy: 1, evasion: 1 }
+      night: { power: 1, accuracy: 1, evasion: 1 }
     }
   }
 }

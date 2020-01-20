@@ -71,7 +71,7 @@ export default class NightAttack {
     const { attacker, specialAttack, starshell, searchlight } = this
     const { formation, role } = attacker
 
-    const formationModifier = formation.getModifiers(role).nightBattle.accuracy
+    const formationModifier = formation.getModifiers(role).night.accuracy
 
     const specialAttackModifier = specialAttack?.modifier.accuracy
 
@@ -109,7 +109,7 @@ export default class NightAttack {
     const { attacker, defender, isCritical, specialAttack, typeDModifier, optionalPowerModifiers } = this
     const { role, formation } = attacker
 
-    const formationModifier = formation.getModifiers(role).nightBattle.power
+    const formationModifier = formation.getModifiers(role).night.power
 
     let specialAttackModifier = 1
     if (specialAttack) {
@@ -132,7 +132,7 @@ export default class NightAttack {
 
   get defenderEvasionValue() {
     const { ship, formation, role } = this.defender
-    const formationModifier = formation.getModifiers(role).nightBattle.evasion
+    const formationModifier = formation.getModifiers(role).night.evasion
     const shipTypeMod = ship.shipType.isHeavyCruiserClass ? 5 : 0
     return ship.calcEvasionValue(formationModifier, shipTypeMod)
   }
