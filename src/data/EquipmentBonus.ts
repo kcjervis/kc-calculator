@@ -1674,6 +1674,7 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
     ]
   },
 
+  // ソナー
   {
     byGear: GearId["三式水中探信儀"],
     rules: [
@@ -1730,6 +1731,10 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
       {
         byShip: ShipId["夕張改二丁"],
         count1: { evasion: 5, asw: 3 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.AkizukiClass },
+        count1: { evasion: 2, asw: 1 }
       }
     ]
   },

@@ -1,7 +1,7 @@
 {
   "name": "kc-calculator",
   "sideEffects": false,
-  "version": "0.12.4",
+  "version": "0.13.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "madono (https://github.com/MadonoHaru)",
@@ -36,7 +36,7 @@
     "@types/jest": "^24.9.0",
     "@types/lodash-es": "^4.17.3",
     "@types/nedb": "^1.8.9",
-    "@types/node": "^13.1.7",
+    "@types/node": "^13.1.8",
     "@typescript-eslint/eslint-plugin": "^2.15.0",
     "@typescript-eslint/parser": "^2.15.0",
     "babel-jest": "^24.9.0",
