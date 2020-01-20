@@ -64,8 +64,8 @@ export default class AswAttack {
 
   private getFormationModifiers = () => {
     const { attacker, defender } = this
-    const { power, accuracy } = attacker.formation.getModifiersWithRole(attacker.role).asw
-    const { evasion } = defender.formation.getModifiersWithRole(defender.role).asw
+    const { power, accuracy } = attacker.formation.getModifiers(attacker.role).asw
+    const { evasion } = defender.formation.getModifiers(defender.role).asw
 
     const modifiers = { power, accuracy, evasion }
 

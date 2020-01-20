@@ -61,7 +61,7 @@ export default class ShellingSupportAttack {
 
   get defenderEvasionValue() {
     const { ship, formation, role } = this.defender
-    const formationModifier = formation.getModifiersWithRole(role).shelling.evasion
+    const formationModifier = formation.getModifiers(role).shelling.evasion
     return ship.calcEvasionValue(formationModifier)
   }
 

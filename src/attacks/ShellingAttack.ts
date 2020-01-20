@@ -90,7 +90,7 @@ export default class ShellingAttack {
     const { engagement } = battleState
     const { role, formation } = attacker
 
-    const formationModifier = formation.getModifiersWithRole(role).shelling.power
+    const formationModifier = formation.getModifiers(role).shelling.power
     const engagementModifier = engagement.modifier
 
     const specialEnemyModifiers = attacker.ship.getSpecialEnemyModifiers(defender.ship)
@@ -113,7 +113,7 @@ export default class ShellingAttack {
   get accuracy() {
     const { attacker, defender, fleetFactors, isArmorPiercing, specialAttack, fitGunBonus = 0 } = this
 
-    let formationModifier = attacker.formation.getModifiersWithRole(attacker.role).shelling.accuracy
+    let formationModifier = attacker.formation.getModifiers(attacker.role).shelling.accuracy
     if (Formation.isIneffective(attacker.formation, defender.formation)) {
       formationModifier = 1
     }
@@ -131,7 +131,7 @@ export default class ShellingAttack {
 
   get defenderEvasionValue() {
     const { ship, formation, role } = this.defender
-    const formationModifier = formation.getModifiersWithRole(role).shelling.evasion
+    const formationModifier = formation.getModifiers(role).shelling.evasion
     return ship.calcEvasionValue(formationModifier)
   }
 

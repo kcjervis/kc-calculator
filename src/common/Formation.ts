@@ -143,10 +143,10 @@ export default class Formation {
     if (this.isCombinedFleetFormation) {
       return { power: 1, accuracy: 1 }
     }
-    return this.getModifiersWithRole("Main").shelling
+    return this.getModifiers("Main").shelling
   }
 
-  public getModifiersWithRole = (role: ShipRole): FormationModifiers => {
+  public getModifiers = (role: ShipRole): FormationModifiers => {
     if (this !== Formation.Vanguard) {
       return this.modifiers
     }

@@ -66,8 +66,8 @@ export default class TorpedoAttack {
   private getFormationModifiers = () => {
     const { attacker, defender } = this
     return {
-      attacker: attacker.formation.getModifiersWithRole(attacker.role).torpedo,
-      defender: defender.formation.getModifiersWithRole(defender.role).torpedo
+      attacker: attacker.formation.getModifiers(attacker.role).torpedo,
+      defender: defender.formation.getModifiers(defender.role).torpedo
     }
   }
 
