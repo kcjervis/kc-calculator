@@ -18,7 +18,7 @@ type AirstrikePowerFactors = AirstrikeBasicPowerFactors & AirstrikePowerPostCapM
 
 const calcAirstrikeBasicPower = (factors: AirstrikeBasicPowerFactors) => {
   const { stat, planeCount, fleetConstant, planeTypeModifier } = factors
-  return planeTypeModifier * (stat * Math.floor(planeCount) + fleetConstant)
+  return planeTypeModifier * (stat * Math.sqrt(planeCount) + fleetConstant)
 }
 
 const calcAirstrikePower = (cappedPower: number, modifiers: AirstrikePowerPostCapModifiers) => {

@@ -63,7 +63,10 @@ export const createShipAttackCalculator = ({
   const aswCalculator = ShipAswCalculator.fromShip(ship, "Day")
   const nightCalculator = new ShipNightAttackCalculator(ship)
 
-  const getShellingPower = (isCritical: boolean, specialAttack?: DayCombatSpecialAttack) => {
+  const canDoTorpedoAttack = ship.nakedStats.torpedo > 0
+  const canDoAsw = aswCalculator.type !== "None"
+
+  const calcShellingPower = (isCritical: boolean, specialAttack?: DayCombatSpecialAttack) => {
     const modifiers = composeAttackPowerModifierRecord(specialEnemyModifiers, optionalPowerModifiers)
 
     return shellingCalculator.calcPower({
@@ -80,7 +83,7 @@ export const createShipAttackCalculator = ({
     })
   }
 
-  const getShellingSupportPower = (isCritical: boolean) => {
+  const calcShellingSupportPower = (isCritical: boolean) => {
     const formationModifier = formation.shellingSupportModifiers.power
 
     return shellingSupportCalculator.calcPower({
@@ -91,7 +94,7 @@ export const createShipAttackCalculator = ({
     })
   }
 
-  const getTorpedoPower = (isCritical: boolean) => {
+  const calcTorpedoPower = (isCritical: boolean) => {
     return torpedoAttackCalculator.calcPower({
       fleetFactor: fleetFactors.torpedo,
       formationModifier: formationModifiers.torpedo.power,
@@ -101,7 +104,7 @@ export const createShipAttackCalculator = ({
     })
   }
 
-  const getAswPower = (isCritical: boolean) => {
+  const calcAswPower = (isCritical: boolean) => {
     return aswCalculator.calcPower({
       formationModifier: formationModifiers.asw.power,
       engagementModifier,
@@ -110,7 +113,7 @@ export const createShipAttackCalculator = ({
     })
   }
 
-  const getNightPower = (isCritical: boolean, specialAttack?: NightCombatSpecialAttack) => {
+  const calcNightPower = (isCritical: boolean, specialAttack?: NightCombatSpecialAttack) => {
     const modifiers = composeAttackPowerModifierRecord(specialEnemyModifiers, optionalPowerModifiers)
     return nightCalculator.calcPower({
       formationModifier: formationModifiers.night.power,
@@ -123,10 +126,13 @@ export const createShipAttackCalculator = ({
   }
 
   return {
-    getShellingPower,
-    getShellingSupportPower,
-    getTorpedoPower,
-    getAswPower,
-    getNightPower
+    calcShellingPower,
+    calcShellingSupportPower,
+    calcTorpedoPower,
+    calcAswPower,
+    calcNightPower,
+
+    canDoTorpedoAttack,
+    canDoAsw
   }
 }
