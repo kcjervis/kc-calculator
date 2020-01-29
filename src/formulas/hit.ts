@@ -8,26 +8,55 @@ export type HitRateFactors = {
   criticalRateBonus?: number
 }
 
-export const calcHitRateBase = ({ accuracy, evasion, moraleModifier }: HitRateFactors) => {
-  let base = (accuracy - evasion) * moraleModifier
-  if (base < 10) {
-    base = 10
+/**
+ * @returns 10~96
+ */
+export const calcHitRateBasis = ({ accuracy, evasion, moraleModifier }: HitRateFactors) => {
+  const value = (accuracy - evasion) * moraleModifier
+
+  if (value < 10) {
+    return 10
   }
-  if (base > 96) {
-    base = 96
+
+  if (value > 96) {
+    return 96
   }
-  return base
+
+  return value
 }
 
-export const createHitRate = (factors: HitRateFactors) => {
+type HitRate = {
+  total: number
+  criticalRate: number
+  normalRate: number
+}
+
+export const createHitRate = (factors: HitRateFactors): HitRate => {
   const { criticalRateMultiplier, hitRateBonus = 0, criticalRateBonus = 0 } = factors
-  const hitRateBase = calcHitRateBase(factors)
+  const hitRateBasis = calcHitRateBasis(factors)
 
-  const hitPercent = Math.floor(hitRateBase + 1 + hitRateBonus * 100)
-  const criticalPercent = Math.floor(Math.sqrt(hitRateBase) * criticalRateMultiplier + 1 + criticalRateBonus * 100)
+  const hitPercent = Math.floor(hitRateBasis + 1 + hitRateBonus * 100)
+  const criticalPercent = Math.floor(Math.sqrt(hitRateBasis) * criticalRateMultiplier + 1 + criticalRateBonus * 100)
 
-  const hitRate = Math.min(hitPercent / 100, 1)
+  const total = Math.min(hitPercent / 100, 1)
   const criticalRate = Math.min(criticalPercent / 100, 1)
-  const normalHitRate = hitRate - criticalRate
-  return { hitRate, criticalRate, normalHitRate }
+  const normalRate = total - criticalRate
+
+  return { total, criticalRate, normalRate }
+}
+
+type HitStatus = "Miss" | "Normal" | "Critical"
+
+export const getHitStatus = (rate: HitRate): HitStatus => {
+  const randomNum = Math.random()
+
+  if (randomNum < rate.criticalRate) {
+    return "Critical"
+  }
+
+  if (randomNum < rate.total) {
+    return "Normal"
+  }
+
+  return "Miss"
 }

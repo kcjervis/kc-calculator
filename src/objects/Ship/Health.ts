@@ -5,7 +5,7 @@
  * Taiha 大破
  * Sunk 轟沈
  */
-type HealthDamage = "Less" | "Shouha" | "Chuuha" | "Taiha" | "Sunk"
+export type HealthDamage = "Less" | "Shouha" | "Chuuha" | "Taiha" | "Sunk"
 
 export interface IHealth {
   maxHp: number

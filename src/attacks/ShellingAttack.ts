@@ -195,7 +195,7 @@ export default class ShellingAttack {
     if (isCritical) {
       return hitRate.criticalRate * taihaDamageRate
     }
-    return hitRate.normalHitRate * taihaDamageRate
+    return hitRate.normalRate * taihaDamageRate
   }
 
   get can() {

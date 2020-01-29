@@ -60,6 +60,8 @@ export interface IShip {
 
   shipAccuracy: number
 
+  fleetLosFactor: number
+
   installationType: InstallationType
   isInstallation: boolean
 
@@ -160,6 +162,13 @@ export default class Ship implements IShip {
       this.planes.filter(({ gear }) => gear.is("Fighter") || gear.is("TorpedoBomber") || gear.is("DiveBomber")),
       "fighterPower"
     )
+  }
+
+  get fleetLosFactor() {
+    const nakedLos = this.nakedStats.los
+    const totalSeaplanesLos = sumBy(this.planes, plane => plane.fleetLosModifier)
+
+    return nakedLos + totalSeaplanesLos
   }
 
   get isInstallation() {
@@ -334,6 +343,8 @@ export default class Ship implements IShip {
 
   /**
    * 通常熟練度補正
+   * @see https://kancolle.fandom.com/ja/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:464#49
+   * @see https://twitter.com/sumika_green/status/665186962043637760
    */
   public getNormalProficiencyModifiers = () => {
     const modifiers = { power: 1, hitRate: 0, criticalRate: 0 }
@@ -381,11 +392,11 @@ export default class Ship implements IShip {
 
     modifiers.criticalRate = sumBy(planes, plane => {
       const { internal, level } = plane.gear.proficiency
-      let levelBonus = 0
-      if (level === 7) {
-        levelBonus = 3
-      }
-      return (Math.sqrt(Math.sqrt(0.1 * internal)) + levelBonus) / 100
+
+      const firstSlotBonus = plane.index === 0 ? 10 : 0
+
+      const modifier = (Math.sqrt(internal * 0.1) + level) / 2
+      return Math.floor(modifier + firstSlotBonus) / 100
     })
 
     return modifiers

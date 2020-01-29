@@ -40,7 +40,10 @@ export default class Fleet implements IFleet {
   }
 
   get fighterPower() {
-    return sumBy(this.planes.filter(plane => !plane.is("ReconnaissanceAircraft")), "fighterPower")
+    return sumBy(
+      this.planes.filter(plane => !plane.is("ReconnaissanceAircraft")),
+      "fighterPower"
+    )
   }
 
   public effectiveLos = (nodeDivaricatedFactor: number, hqLevel: number): number => {

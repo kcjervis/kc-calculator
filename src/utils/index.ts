@@ -34,4 +34,9 @@ export const calcDeadlyPower = (ship: IShip) => {
   return currentHp + defensePower.max
 }
 
+export const sample = <T>(array: T[]) => {
+  const index = Math.floor(Math.random() * array.length)
+  return array[index]
+}
+
 export * from "./typeGuards"

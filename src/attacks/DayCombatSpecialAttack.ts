@@ -87,9 +87,7 @@ export default class DayCombatSpecialAttack {
   }
 
   public static calcFleetLosModifier = (fleet: IFleet) => {
-    const totalNakedLos = fleet.totalShipStats(ship => ship.nakedStats.los)
-    const totalSeaplanesLos = sumBy(fleet.planes, plane => plane.fleetLosModifier)
-    const base = totalNakedLos + totalSeaplanesLos
+    const base = fleet.totalShipStats(ship => ship.fleetLosFactor)
     return Math.floor(Math.sqrt(base) + 0.1 * base)
   }
 
