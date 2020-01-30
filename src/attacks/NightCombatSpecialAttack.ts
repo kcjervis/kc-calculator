@@ -1,5 +1,6 @@
 import { IShip } from "../objects"
-import { Formation, Side } from "../common"
+import { Formation } from "../common"
+import { Side } from "../types"
 import { GearId } from "@jervis/data"
 
 export const isNightAerialAttackShip = (ship: IShip) => {

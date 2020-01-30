@@ -13,9 +13,9 @@ const calcTriggerRate = (totalTriggerFactor: number, airStateModifier: number) =
 export default class Contact {
   constructor(private planes: IPlane[]) {}
 
-  public calcRate = (airState: AirControlState) => {
+  public calcRate = (airControlState: AirControlState) => {
     const { planes } = this
-    const airStateModifier = airState.contactMultiplier
+    const airStateModifier = airControlState.contactMultiplier
 
     const totalTriggerFactor = sumBy(
       planes.filter(plane => plane.is("ReconnaissanceAircraft")),
@@ -33,7 +33,7 @@ export default class Contact {
       .filter(plane => plane.canContact)
       .sort((plane1, plane2) => plane2.gear.accuracy - plane1.gear.accuracy)
       .reduce((acc, plane) => {
-        const curRate = (1 - acc) * plane.contactSelectionRate(airState)
+        const curRate = (1 - acc) * plane.contactSelectionRate(airControlState)
         const { accuracy } = plane.gear
         if (accuracy >= 3) {
           selectionRateMap[1.2] += curRate
@@ -57,7 +57,8 @@ export default class Contact {
       successRate,
       triggerRate,
       selectionRateMap,
-      rateMap
+      rateMap,
+      airControlState
     }
   }
 

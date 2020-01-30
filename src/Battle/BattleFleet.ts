@@ -1,4 +1,5 @@
-import { FleetRole, FleetTypeName, Formation, Side } from "../common"
+import { FleetRole, FleetTypeName, Formation } from "../common"
+import { Side } from "../types"
 import { IFleet, ILandBasedAirCorps, IShip } from "../objects"
 import { FleetAntiAir } from "./AerialCombat"
 

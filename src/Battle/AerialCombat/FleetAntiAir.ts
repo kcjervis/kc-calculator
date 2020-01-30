@@ -1,9 +1,10 @@
 import { IGear, IFleet, IShip } from "../../objects"
-import { BattleType, FleetRole, Side } from "../../common"
+import { BattleType, FleetRole } from "../../common"
+import { Side } from "../../types"
 import { sumBy } from "lodash-es"
 
 export const gearFleetAntiAir = (gear: IGear) => {
-  const { name, antiAir, category, improvement } = gear
+  const { name, antiAir, improvement } = gear
   if (antiAir === 0) {
     return 0
   }
@@ -30,7 +31,7 @@ export const calcFleetAntiAir = (fleet: IFleet, side: Side, formationModifier: n
   const totalShipFleetAntiAir = totalShipStats(shipFleetAntiAir)
   const postFloor = Math.floor(formationModifier * totalShipFleetAntiAir) * 2
 
-  if (side === Side.Player) {
+  if (side === "Player") {
     return postFloor / 1.3
   }
   return postFloor
@@ -56,7 +57,7 @@ export default class FleetAntiAir {
     const totalShipFleetAntiAir = sumBy(ships, shipFleetAntiAir)
     const postFloor = Math.floor(formationModifier * totalShipFleetAntiAir) * 2
 
-    if (side === Side.Player) {
+    if (side === "Player") {
       return postFloor / 1.3
     }
     return postFloor

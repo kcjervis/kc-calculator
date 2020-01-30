@@ -1,9 +1,11 @@
 import { IShip } from "../objects"
-import { Side, FleetType, Formation, Engagement, AirControlState } from "../common"
+import { FleetType, Formation, Engagement, AirControlState } from "../common"
 
 export type FleetTypeKey = "Single" | "CarrierTaskForce" | "SurfaceTaskForce" | "TransportEscort" | "Combined"
 
 export type ShipRole = "Main" | "Escort"
+
+export type Side = "Player" | "Enemy"
 
 type ContactLevel = 0 | 1 | 2 | 3
 

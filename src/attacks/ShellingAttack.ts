@@ -3,7 +3,7 @@ import { ShipInformation, BattleState } from "../types"
 import { getShellingFleetFactor, getShellingAccuracyFleetFactor } from "./FleetFactor"
 import Damage from "./Damage"
 import { createHitRate } from "../formulas"
-import { Side, Formation, AttackPowerModifierRecord, composeAttackPowerModifierRecord } from "../common"
+import { Formation, AttackPowerModifierRecord, composeAttackPowerModifierRecord } from "../common"
 import ShipShellingCalculator from "./ShipShellingCalculator"
 import DayCombatSpecialAttack from "./DayCombatSpecialAttack"
 
@@ -174,13 +174,13 @@ export default class ShellingAttack {
     }
 
     const { scratchDamageProbability, scratchDamages, deadlyDamageProbability, stopperDamages } = damage
-    const stopperDamageProbability = side === Side.Player ? deadlyDamageProbability : 0
+    const stopperDamageProbability = side === "Player" ? deadlyDamageProbability : 0
 
     const normalDamages = damage.values.filter(value => {
       if (value <= 0) {
         return false
       }
-      if (side === Side.Player && currentHp - value <= 0) {
+      if (side === "Player" && currentHp - value <= 0) {
         return false
       }
       return true

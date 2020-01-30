@@ -1,7 +1,7 @@
 {
   "name": "kc-calculator",
   "sideEffects": false,
-  "version": "0.15.0",
+  "version": "0.16.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "madono (https://github.com/MadonoHaru)",
@@ -28,26 +28,26 @@
     }
   },
   "dependencies": {
-    "fp-ts": "^2.4.2",
+    "fp-ts": "^2.4.3",
     "lodash-es": "^4.17.15",
     "sift": "^9.0.7"
   },
   "devDependencies": {
-    "@types/jest": "^24.9.1",
+    "@types/jest": "^25.1.1",
     "@types/lodash-es": "^4.17.3",
     "@types/nedb": "^1.8.9",
-    "@types/node": "^13.5.0",
-    "@typescript-eslint/eslint-plugin": "^2.17.0",
-    "@typescript-eslint/parser": "^2.17.0",
+    "@types/node": "^13.5.2",
+    "@typescript-eslint/eslint-plugin": "^2.18.0",
+    "@typescript-eslint/parser": "^2.18.0",
     "babel-jest": "^25.1.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.9.0",
+    "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
     "jest": "^25.1.0",
     "nedb": "^1.8.0",
     "prettier": "^1.19.1",
-    "ts-jest": "^25.0.0",
+    "ts-jest": "^25.1.0",
     "ts-node": "^8.6.1",
     "typescript": "^3.7.5",
     "utility-types": "^3.10.0"

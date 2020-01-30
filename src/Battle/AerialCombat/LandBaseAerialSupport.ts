@@ -1,6 +1,6 @@
 import { flatMap } from "lodash-es"
 
-import { AirControlState, Side } from "../../common"
+import { AirControlState } from "../../common"
 import { ILandBasedAirCorps, IPlane } from "../../objects"
 import { ICombatInformation } from "../CombatInformation"
 
@@ -27,10 +27,8 @@ export default class LandBaseAerialSupport extends AerialCombat {
     const playerFighterCombatPlanes = playerPlanes.filter(participates)
     const enemyFighterCombatPlanes = enemyPlanes.filter(participates)
 
-    playerFighterCombatPlanes.forEach(plane =>
-      this.shotdownInFighterCombat(plane, airControlState.constant, Side.Player)
-    )
-    enemyFighterCombatPlanes.forEach(plane => this.shotdownInFighterCombat(plane, airControlState.constant, Side.Enemy))
+    playerFighterCombatPlanes.forEach(plane => this.shotdownInFighterCombat(plane, airControlState.constant, "Player"))
+    enemyFighterCombatPlanes.forEach(plane => this.shotdownInFighterCombat(plane, airControlState.constant, "Enemy"))
 
     // stage2
     const playerAirstrikePlanes = playerFighterCombatPlanes.filter(

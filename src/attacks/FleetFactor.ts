@@ -1,5 +1,5 @@
-import { Side, FleetType } from "../common"
-import { ShipInformation } from "../types"
+import { FleetType } from "../common"
+import { Side, ShipInformation } from "../types"
 
 const playerAttackMatchers = [
   {
@@ -83,7 +83,7 @@ export const getShellingFleetFactor = (attacker: ShipFleetState, defender: ShipF
   const factorIndex = attacker.role === "Main" ? 0 : 1
 
   // 攻撃側[自軍]
-  if (attacker.side === Side.Player) {
+  if (attacker.side === "Player") {
     const found = playerAttackMatchers.find(
       matcher => matcher.attackerFleetType === attacker.fleetType && matcher.defenderFleetType === defender.fleetType
     )
@@ -107,8 +107,9 @@ export const getTorpedoFleetFactor = (attacker: ShipFleetState, defender: ShipFl
   const getFleetTypeBySide = (side: Side) => {
     return attacker.side === side ? attacker.fleetType : defender.fleetType
   }
-  const playerFleetIsCombined = getFleetTypeBySide(Side.Player).isCombined
-  const enemyFleetIsCombined = getFleetTypeBySide(Side.Enemy).isCombined
+
+  const playerFleetIsCombined = getFleetTypeBySide("Player").isCombined
+  const enemyFleetIsCombined = getFleetTypeBySide("Enemy").isCombined
 
   const singleFleetFactor = 5
   if (!playerFleetIsCombined && !enemyFleetIsCombined) {

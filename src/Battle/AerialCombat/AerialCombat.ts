@@ -1,6 +1,7 @@
 import { random } from "lodash-es"
 
-import { AirControlState, Side } from "../../common"
+import { AirControlState } from "../../common"
+import { Side } from "../../types"
 import { IPlane, IShip } from "../../objects"
 import { ICombatInformation } from "../CombatInformation"
 import ShipAntiAir from "./ShipAntiAir"
@@ -16,8 +17,8 @@ export default abstract class AerialCombat {
 
     const airControlState = AirControlState.fromFighterPower(playerFp, enemyFp)
 
-    playerPlanes.forEach(plane => this.shotdownInFighterCombat(plane, airControlState.constant, Side.Player))
-    enemyPlanes.forEach(plane => this.shotdownInFighterCombat(plane, airControlState.constant, Side.Enemy))
+    playerPlanes.forEach(plane => this.shotdownInFighterCombat(plane, airControlState.constant, "Player"))
+    enemyPlanes.forEach(plane => this.shotdownInFighterCombat(plane, airControlState.constant, "Enemy"))
 
     return airControlState
   }
@@ -31,7 +32,7 @@ export default abstract class AerialCombat {
 
   public shotdownInFighterCombat = (plane: IPlane, airControlStateConstant: number, side: Side) => {
     let randomValue: number
-    if (side === Side.Player) {
+    if (side === "Player") {
       const minNum = airControlStateConstant / 4
       const maxRandomValue = Math.floor((airControlStateConstant / 3) * 100)
       randomValue = Math.floor(Math.random() * (maxRandomValue + 1)) / 100 + minNum
@@ -54,20 +55,10 @@ export default abstract class AerialCombat {
     const { battleType } = this.combatInformation
     const { side: shipSide, fleetRole, fleetAntiAir } = this.combatInformation.getShipInformation(ship)
     const combinedFleetModifier = FleetAntiAir.getCombinedFleetModifier(fleetRole, battleType)
+
     const shipAntiAir = new ShipAntiAir(ship, shipSide, fleetAntiAir, combinedFleetModifier, antiAirCutin)
 
-    let shotdownNumber = 0
-    // 割合撃墜
-    if (Math.random() > 0.5) {
-      shotdownNumber += Math.floor(airstrikePlane.slotSize * shipAntiAir.calcProportionalShotdownRate())
-    }
-    // 固定撃墜
-    if (Math.random() > 0.5) {
-      shotdownNumber += shipAntiAir.calcFixedShotdownNumber()
-    }
-    // 最低保証
-    shotdownNumber += shipAntiAir.minimumBonus
-
+    const shotdownNumber = shipAntiAir.getShotdownNumber(airstrikePlane)
     airstrikePlane.shotdown(shotdownNumber)
   }
 }

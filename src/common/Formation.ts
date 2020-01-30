@@ -167,4 +167,16 @@ export default class Formation {
       night: { power: 1, accuracy: 1, evasion: 1 }
     }
   }
+
+  get protectionRate() {
+    if (this === Formation.LineAhead) {
+      return 0.45
+    }
+
+    if (this === Formation.Diamond) {
+      return 0.75
+    }
+
+    return 0.6
+  }
 }
