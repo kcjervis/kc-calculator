@@ -1,6 +1,7 @@
 import { AirControlState } from "../../common"
 import { GearCategory } from "../../data"
 import { IGear } from "../gear"
+import { GearId } from "@jervis/data"
 
 export interface IPlane {
   gear: IGear
@@ -26,6 +27,10 @@ export interface IPlane {
   isNightPlane: boolean
   isNightAircraft: boolean
   calcNightAerialAttackPower: (isAntiInstallation?: boolean) => number
+
+  fighterCombatResistModifier: number
+  adjustedAntiAirResistModifier: number
+  fleetAntiAirResistModifier: number
 
   shotdown: (value: number) => void
 }
@@ -156,6 +161,75 @@ export default class Plane implements IPlane {
       nightAircraftModifierB * (firepower + torpedo + asw + bombing) * Math.sqrt(slotSize) +
       improvementModifier
     )
+  }
+
+  get fighterCombatResistModifier() {
+    return this.is("JetPoweredAircraft") ? 0.6 : 1
+  }
+
+  get adjustedAntiAirResistModifier() {
+    const { gearId } = this.gear
+    if (
+      [
+        GearId["九七式艦攻(友永隊)"],
+        GearId["天山一二型(友永隊)"],
+        GearId["九七式艦攻(村田隊)"],
+        GearId["天山一二型(村田隊)"],
+
+        GearId["九九式艦爆(江草隊)"],
+        GearId["彗星(江草隊)"],
+        GearId["零戦62型(爆戦/岩井隊)"],
+        GearId["彗星一二型(六三四空/三号爆弾搭載機)"],
+        GearId["彗星一二型(三一号光電管爆弾搭載機)"],
+
+        GearId["瑞雲(六三四空)"],
+        GearId["瑞雲12型"],
+        GearId["瑞雲12型(六三四空)"],
+        GearId["瑞雲(六三四空/熟練)"],
+
+        GearId["一式陸攻(野中隊)"]
+      ].includes(gearId)
+    ) {
+      return 0.6
+    }
+
+    if (
+      [
+        GearId["瑞雲改二(六三四空)"],
+        GearId["瑞雲改二(六三四空/熟練)"],
+
+        GearId["噴式景雲改"],
+        GearId["橘花改"]
+      ].includes(gearId)
+    ) {
+      return 0.5
+    }
+
+    return 1
+  }
+
+  get fleetAntiAirResistModifier() {
+    const { gearId } = this.gear
+    if (
+      [
+        GearId["彗星(江草隊)"],
+        GearId["零戦62型(爆戦/岩井隊)"],
+
+        GearId["瑞雲12型(六三四空)"],
+        GearId["瑞雲(六三四空/熟練)"],
+        GearId["瑞雲改二(六三四空)"],
+
+        GearId["噴式景雲改"]
+      ].includes(gearId)
+    ) {
+      return 0.7
+    }
+
+    if ([GearId["瑞雲改二(六三四空/熟練)"], GearId["橘花改"]].includes(gearId)) {
+      return 0.5
+    }
+
+    return 1
   }
 
   public shotdown = (value: number) => {

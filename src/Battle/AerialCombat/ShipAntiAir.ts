@@ -2,6 +2,7 @@ import { IGear, IShip } from "../../objects"
 import { Side } from "../../types"
 import AntiAirCutin from "./AntiAirCutin"
 import { ShipType } from "../../data"
+import { GearId } from "@jervis/data"
 
 export const calcGearAdjustedAntiAir = (gear: IGear) => {
   const { antiAir, improvement } = gear
@@ -38,15 +39,10 @@ export const calcShipAdjustedAntiAir = (ship: IShip, side: Side) => {
 const isPropellantBarrageShipType = (type: ShipType) =>
   type.isAircraftCarrierClass || type.any("AviationCruiser", "AviationBattleship", "SeaplaneTender")
 
-type AntiAirResistModifiers = {
-  adjustedAntiAir: number
-  fleetAntiAir: number
-}
-
 type PlaneParams = {
   slotSize: number
-  adjustedAntiAirResistModifier?: number
-  fleetAntiAirResistModifier?: number
+  adjustedAntiAirResistModifier: number
+  fleetAntiAirResistModifier: number
 }
 
 export default class ShipAntiAir {
@@ -100,7 +96,7 @@ export default class ShipAntiAir {
     if (!isPropellantBarrageShipType(shipType)) {
       return 0
     }
-    const count = ship.countGear(274)
+    const count = ship.countGear(GearId["12cm30連装噴進砲改二"])
     if (!count) {
       return 0
     }

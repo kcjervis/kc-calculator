@@ -1,28 +1,47 @@
-import { IFleet, IShip } from "../objects"
+import { IFleet, IShip, IPlane } from "../objects"
 import { Formation } from "../common"
 import { doAerialCombat } from "./AerialCombat"
 import DamageCounter from "./DamageCounter"
+import PlaneLossCounter from "./PlaneLossCounter"
 import FleetInitialState from "./FleetInitialState"
 import { times } from "lodash-es"
 
-class BattleRecord {
-  private data = new Map<IShip, DamageCounter>()
+type Counter<K> = {
+  increase: (key: K) => void
+}
 
-  private getCounter = (ship: IShip) => {
-    let counter = this.data.get(ship)
+class Log<K, C extends Counter<K> = Counter<K>> {
+  private data = new Map<K, C>()
+
+  constructor(private creater: () => C) {}
+
+  public update = (key: K) => {
+    let counter = this.data.get(key)
+
     if (!counter) {
-      counter = new DamageCounter()
-      this.data.set(ship, counter)
+      counter = this.creater()
+      this.data.set(key, counter)
     }
-    return counter
+
+    counter.increase(key)
   }
 
-  public update = (ship: IShip) => {
-    const counter = this.getCounter(ship)
-    counter[ship.health.damage] += 1
-  }
+  public entries = () => Array.from(this.data.entries())
+}
 
-  public entries = () => this.data.entries()
+class BattleRecord {
+  public damageLog = new Log<IShip>(() => new DamageCounter())
+  public planeLossLog = new Log<IPlane>(() => new PlaneLossCounter())
+
+  public update = (fleet: IFleet) => {
+    fleet.nonNullableShips.forEach(ship => {
+      this.damageLog.update(ship)
+    })
+
+    fleet.planes.forEach(plane => {
+      this.planeLossLog.update(plane)
+    })
+  }
 }
 
 export default class BattleSimulator {
@@ -50,7 +69,7 @@ export default class BattleSimulator {
     const { playerFleet, enemyFleet, enemyFormation } = this
     const airControlState = doAerialCombat({ playerFleet, enemyFleet, enemyFormation })
 
-    enemyFleet.nonNullableShips.forEach(this.record.update)
+    this.record.update(enemyFleet)
     this.init()
   }
 

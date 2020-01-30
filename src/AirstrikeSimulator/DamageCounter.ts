@@ -1,3 +1,6 @@
+import { Health, IShip } from "../objects/ship"
+import { HealthDamage } from "../objects/ship/Health"
+
 export default class DamageCounter {
   public Less = 0
   public Shouha = 0
@@ -23,5 +26,9 @@ export default class DamageCounter {
   }
   public get sunkRate() {
     return this.Sunk / this.total
+  }
+
+  public increase = ({ health }: IShip) => {
+    this[health.damage] += 1
   }
 }
