@@ -30,15 +30,15 @@ class Log<K, C extends Counter<K> = Counter<K>> {
 }
 
 class BattleRecord {
-  public damageLog = new Log<IShip>(() => new DamageCounter())
-  public planeLossLog = new Log<IPlane>(() => new PlaneLossCounter())
+  public damageLog = new Log<IShip, DamageCounter>(() => new DamageCounter())
+  public planeLossLog = new Log<IPlane, PlaneLossCounter>(() => new PlaneLossCounter())
 
-  public update = (fleet: IFleet) => {
-    fleet.nonNullableShips.forEach(ship => {
+  public update = (playerFleet: IFleet, enemyFleet: IFleet) => {
+    enemyFleet.nonNullableShips.forEach(ship => {
       this.damageLog.update(ship)
     })
 
-    fleet.planes.forEach(plane => {
+    playerFleet.planes.forEach(plane => {
       this.planeLossLog.update(plane)
     })
   }
@@ -69,7 +69,7 @@ export default class BattleSimulator {
     const { playerFleet, enemyFleet, enemyFormation } = this
     const airControlState = doAerialCombat({ playerFleet, enemyFleet, enemyFormation })
 
-    this.record.update(enemyFleet)
+    this.record.update(playerFleet, enemyFleet)
     this.init()
   }
 

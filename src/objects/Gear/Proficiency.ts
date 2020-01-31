@@ -4,7 +4,10 @@ import { GearAttribute } from "../../data"
 type LevelBonus = { level: number; value: number }
 
 export const getLevelBonusValue = (bonuses: LevelBonus[], level: number) => {
-  const maxBonus = maxBy(bonuses.filter(bonus => bonus.level <= level), "value")
+  const maxBonus = maxBy(
+    bonuses.filter(bonus => bonus.level <= level),
+    "value"
+  )
   return maxBonus ? maxBonus.value : 0
 }
 
@@ -47,7 +50,12 @@ export default class Proficiency implements IProficiency {
       { level: 2, value: 2 },
       { level: 0, value: 0 }
     ],
-    seaplaneBomber: [{ level: 7, value: 6 }, { level: 5, value: 3 }, { level: 2, value: 1 }, { level: 0, value: 0 }]
+    seaplaneBomber: [
+      { level: 7, value: 6 },
+      { level: 5, value: 3 },
+      { level: 2, value: 1 },
+      { level: 0, value: 0 }
+    ]
   }
 
   public static readonly criticalModifierLevelBonuses = [

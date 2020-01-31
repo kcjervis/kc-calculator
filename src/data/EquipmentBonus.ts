@@ -1,6 +1,6 @@
 import { mapValues } from "lodash-es"
 import { GearId, ShipClassId, ShipId, RemodelGroup } from "@jervis/data"
-import { ShipQuery, IShip } from "../objects/ship/ship"
+import Ship, { ShipQuery, IShip } from "../objects/ship/ship"
 import { GearQuery } from "../objects/gear/Gear"
 import { ShipTypeId } from "."
 import { GearCategoryId } from "./GearCategory"
@@ -1735,6 +1735,36 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
       {
         byShip: { shipClassId: ShipClassId.AkizukiClass },
         count1: { evasion: 2, asw: 1 }
+      }
+    ]
+  },
+
+  // 対艦強化弾
+  {
+    byGear: GearId["一式徹甲弾改"],
+    rules: [
+      {
+        byShip: { shipId: ShipId["金剛改二丙"] },
+        count1: { firepower: 3 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.YamatoClass, rank: { $gte: 2 } },
+        count1: { firepower: 2 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.NagatoClass, attrs: "Kai2" },
+        count1: { firepower: 2 }
+      },
+      {
+        byShip: {
+          shipClassId: { $in: [ShipClassId.KongouClass, ShipClassId.FusouClass, ShipClassId.IseClass] },
+          rank: { $lte: 6 }
+        },
+        count1: { firepower: 1 }
+      },
+      {
+        byShip: { shipClassId: { $in: [ShipClassId.NagatoClass, ShipClassId.YamatoClass] }, rank: 1 },
+        count1: { firepower: 1 }
       }
     ]
   },
