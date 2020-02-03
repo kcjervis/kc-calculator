@@ -1,5 +1,4 @@
 import { Health, IShip } from "../objects/ship"
-import { HealthDamage } from "../objects/ship/Health"
 
 export default class DamageCounter {
   public Less = 0

@@ -55,6 +55,15 @@ export default class ShipNightAttackCalculator {
     return firepower + torpedo + improvementModifier + nightContactModifier
   }
 
+  private getCriticalFm = () => {
+    if (this.type === "NightAerialAttack") {
+      const proficiencyModifiers = this.ship.getNormalProficiencyModifiers()
+      return createCriticalFm(proficiencyModifiers.power)
+    }
+
+    return createCriticalFm()
+  }
+
   public calcPower = (params: {
     nightContactModifier: number
     formationModifier: number
@@ -81,7 +90,7 @@ export default class ShipNightAttackCalculator {
       modifiers = composeAttackPowerModifierRecord(modifiers, params.modifiers)
     }
 
-    const fm11next = isCritical ? createCriticalFm() : undefined
+    const fm11next = isCritical ? this.getCriticalFm() : undefined
     return createAttackPower({ basic, cap, modifiers, fm11next })
   }
 

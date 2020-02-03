@@ -43,7 +43,7 @@ export default class Speed {
       isFastAV ||
       shipType.isSubmarineClass ||
       [ShipId["夕張"], ShipId["夕張改"]].includes(shipId) ||
-      ["加賀型", "夕張型", "特種船丙型", "工作艦", "改風早型"].includes(shipClass.name)
+      ["加賀型", "特種船丙型", "工作艦", "改風早型"].includes(shipClass.name)
     ) {
       return SpeedGroup.OtherC
     }

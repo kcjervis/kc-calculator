@@ -15,10 +15,12 @@ export interface IGear extends GearStats {
   /** 改修 */
   improvement: IImprovement
 
-  /** 熟練度 */
+  /** 熟練 */
   proficiency: IProficiency
 
   star: number
+
+  exp: number
 
   category: GearCategory
 
@@ -115,6 +117,10 @@ export default class Gear implements IGear {
 
   get star() {
     return this.improvement.value
+  }
+
+  get exp() {
+    return this.proficiency.internal
   }
 
   public match = (query: GearQuery) => {
