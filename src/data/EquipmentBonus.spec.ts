@@ -172,6 +172,8 @@ describe("EquipmentBonus", () => {
     })
 
     it("12.7cm連装砲B型改四(戦時改修)+高射装置", () => {
+      expectBonus("敷波改二", "12.7cm連装砲B型改四(戦時改修)+高射装置").toMultiple({ firepower: 3, torpedo: 1 })
+
       expectSynergy("綾波", "12.7cm連装砲B型改四(戦時改修)+高射装置", "22号対水上電探").toCount1({
         firepower: 1,
         torpedo: 2,

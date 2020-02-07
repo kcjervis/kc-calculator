@@ -118,6 +118,10 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
         multiple: { firepower: 1 }
       },
       {
+        byShip: ShipId["敷波改二"],
+        multiple: { firepower: 2, torpedo: 1 }
+      },
+      {
         byShip: { shipClassId: ShipClassId.HatsuharuClass },
         multiple: { firepower: 1, evasion: 1 }
       },

@@ -8,19 +8,12 @@ import { GearId } from "@jervis/data"
 
 export type GearQuery = GearId | SiftQuery<GearStats & { attrs: GearAttribute[]; star: number }>
 
-export interface IGear extends GearStats {
-  /** 装備ID */
-  masterId: number
-
+export interface IGear extends GearStats, GearState {
   /** 改修 */
   improvement: IImprovement
 
   /** 熟練 */
   proficiency: IProficiency
-
-  star: number
-
-  exp: number
 
   category: GearCategory
 
@@ -131,9 +124,9 @@ export default class Gear implements IGear {
   }
 
   public toState = (): GearState => ({
-    masterId: this.masterId,
-    improvement: this.improvement.value,
-    proficiency: this.proficiency.internal
+    gearId: this.gearId,
+    star: this.star,
+    exp: this.exp
   })
 
   public calcFighterPower = (slotSize: number, isInterception = false) => {

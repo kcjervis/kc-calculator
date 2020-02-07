@@ -135,7 +135,11 @@ export default class Plane implements IPlane {
    */
   get isNightAircraft() {
     const { isNightPlane, isSwordfish, gear } = this
-    return isNightPlane || isSwordfish || [154, 320].includes(gear.masterId)
+    return (
+      isNightPlane ||
+      isSwordfish ||
+      [GearId["零戦62型(爆戦/岩井隊)"], GearId["彗星一二型(三一号光電管爆弾搭載機)"]].includes(gear.gearId)
+    )
   }
 
   public calcNightAerialAttackPower = (isAntiInstallation = false) => {

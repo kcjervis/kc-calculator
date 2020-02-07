@@ -26,11 +26,11 @@ export type GearStats = {
 
 export type GearState = {
   /** 装備ID */
-  masterId: number
+  gearId: number
 
-  /** 改修度 */
-  improvement: number
+  /** 改修値 */
+  star: number
 
   /** 内部熟練度 */
-  proficiency: number
+  exp: number
 }

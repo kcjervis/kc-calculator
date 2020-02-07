@@ -43,9 +43,9 @@ export default (ship: IShip) => {
   /** 標準機銃 */
   const isNormalAAGun: GearIteratee = gear => isAAGun(gear) && gear.antiAir >= 3 && gear.antiAir < 9
 
-  const is12cm30tubeRocketLauncherKai2: GearIteratee = gear => gear.masterId === 274
+  const is12cm30tubeRocketLauncherKai2: GearIteratee = gear => gear.gearId === 274
 
-  const is10cmTwinHighAngleMountKaiAMG: GearIteratee = gear => gear.masterId === 275
+  const is10cmTwinHighAngleMountKaiAMG: GearIteratee = gear => gear.gearId === 275
 
   const isAAShell: GearIteratee = gear => gear.is("AntiAircraftShell")
 

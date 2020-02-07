@@ -12,7 +12,7 @@ import { isNonNullable, shipNameIsKai2 } from "../../utils"
 import { getApShellModifiers, calcCruiserFitBonus, calcEvasionValue } from "../../formulas"
 import { IGear } from "../gear"
 import { IPlane } from "../plane"
-import { DefensePower, InstallationType, ShipShellingStats, ShellingType } from "../../types"
+import { DefensePower, InstallationType, ShellingType } from "../../types"
 import { AttackPowerModifierRecord } from "../../common"
 import { getSpecialEnemyModifiers } from "../../data"
 
@@ -84,7 +84,6 @@ export interface IShip {
   getAntiInstallationModifier: (
     target: IShip
   ) => Required<Pick<AttackPowerModifierRecord, "a5" | "a13" | "a13next" | "b12" | "b13" | "b13next">>
-  getShellingStats: () => ShipShellingStats
   getNormalProficiencyModifiers: () => ProficiencyModifiers
   getSpecialProficiencyModifiers: () => ProficiencyModifiers
 
@@ -132,6 +131,7 @@ export default class Ship implements IShip {
     return this.gears
   }
 
+  /** 廃止予定 */
   get masterId() {
     return this.master.shipId
   }
@@ -253,7 +253,7 @@ export default class Ship implements IShip {
       return gears.some(gear => gear.is(iteratee))
     }
     if (typeof iteratee === "number") {
-      return gears.some(({ masterId }) => masterId === iteratee)
+      return gears.some(({ gearId }) => gearId === iteratee)
     }
     return gears.some(iteratee)
   }
@@ -267,7 +267,7 @@ export default class Ship implements IShip {
       return gears.filter(gear => gear.is(iteratee)).length
     }
     if (typeof iteratee === "number") {
-      return gears.filter(({ masterId }) => masterId === iteratee).length
+      return gears.filter(({ gearId }) => gearId === iteratee).length
     }
     return gears.filter(iteratee).length
   }
@@ -309,9 +309,9 @@ export default class Ship implements IShip {
     const { shipType, shipClass, countGear } = this
     const isLightCruiserClass = shipType.any("LightCruiser", "TorpedoCruiser", "TrainingCruiser")
     const isZaraClass = shipClass.is("ZaraClass")
-    const singleGunCount = countGear(gear => [GearId["14cm単装砲"], GearId["15.2cm単装砲"]].includes(gear.masterId))
+    const singleGunCount = countGear(gear => [GearId["14cm単装砲"], GearId["15.2cm単装砲"]].includes(gear.gearId))
     const twinGunCount = countGear(gear =>
-      [GearId["15.2cm連装砲"], GearId["14cm連装砲"], GearId["15.2cm連装砲改"]].includes(gear.masterId)
+      [GearId["15.2cm連装砲"], GearId["14cm連装砲"], GearId["15.2cm連装砲改"]].includes(gear.gearId)
     )
     return calcCruiserFitBonus({
       isLightCruiserClass,
@@ -430,48 +430,6 @@ export default class Ship implements IShip {
     const modifier = this.getSpecialEnemyModifiers(target)
     const defaultModifier = { a13: 1, a13next: 1, a5: 1, b12: 0, b13: 0, b13next: 0 }
     return { ...defaultModifier, ...modifier }
-  }
-
-  public getShellingStats = (): ShipShellingStats => {
-    const { firepower, torpedo, luck } = this.stats
-    const bombing = this.totalEquipmentStats("bombing")
-    const improvementModifiers = {
-      power: this.totalEquipmentStats(gear => gear.improvement.shellingPowerModifier),
-      accuracy: this.totalEquipmentStats(gear => gear.improvement.shellingAccuracyModifier)
-    }
-
-    const apShellModifiers = getApShellModifiers({
-      hasMainGun: this.hasGear("MainGun"),
-      hasArmorPiercingShell: this.hasGear("ArmorPiercingShell"),
-      hasSecondaryGun: this.hasGear("SecondaryGun"),
-      hasRader: this.hasGear("Radar")
-    })
-
-    const normalProficiencyModifiers = this.getNormalProficiencyModifiers()
-    const specialProficiencyModifiers = this.getSpecialProficiencyModifiers()
-    return {
-      shellingType: this.getShellingType(),
-      firepower,
-      torpedo,
-      bombing,
-
-      cruiserFitBonus: this.getCruiserFitBonus(),
-      healthModifier: this.health.shellingPowerModifier,
-
-      accuracy: this.totalEquipmentStats("accuracy"),
-      level: this.level,
-      luck,
-
-      moraleModifier: this.morale.getAccuracyModifier("shelling"),
-
-      improvementModifiers,
-      apShellModifiers,
-
-      fitGunAccuracyBonus: 0,
-
-      normalProficiencyModifiers,
-      specialProficiencyModifiers
-    }
   }
 
   public calcEvasionValue = (formationModifier: number, postcapModifier?: number) => {

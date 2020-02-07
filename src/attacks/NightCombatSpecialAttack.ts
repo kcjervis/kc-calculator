@@ -9,7 +9,7 @@ export const isNightAerialAttackShip = (ship: IShip) => {
   }
 
   // Saratoga Mk.II | 赤城改二戊 | 夜間作戦航空要員
-  const hasNoap = [545, 599].includes(ship.masterId) || ship.hasGear(gear => [258, 259].includes(gear.masterId))
+  const hasNoap = [545, 599].includes(ship.shipId) || ship.hasGear(gear => [258, 259].includes(gear.gearId))
   if (!hasNoap) {
     return false
   }
@@ -30,8 +30,6 @@ export type SidedNightCombatState = {
   starshell: boolean
   contact?: NightContactState
 }
-
-const Lookout = 129
 
 const calcPreModifierValue = (ship: IShip) => {
   const { nakedStats, level } = ship
@@ -54,7 +52,7 @@ const calcBaseValue = (
   if (ship.health.damage === "Chuuha") {
     baseValue += 18
   }
-  if (ship.hasGear(Lookout)) {
+  if (ship.hasGear(GearId["熟練見張員"])) {
     baseValue += 5
   }
 
@@ -109,7 +107,7 @@ export default class NightCombatSpecialAttack {
       const hasNightFighter = nightFighterCount >= 1
       const hasNightAttacker = nightAttackerCount >= 1
       const hasNightPlane = nightPlaneCount >= 1
-      const hasFuzeBomber = planes.some(plane => plane.gear.masterId === 320)
+      const hasFuzeBomber = planes.some(plane => plane.gear.gearId === 320)
 
       if (nightFighterCount >= 2 && hasNightAttacker) {
         possibleSpecialAttacks.push(NightCombatSpecialAttack.AerialAttack1)
@@ -145,7 +143,7 @@ export default class NightCombatSpecialAttack {
       if (hasGear(gear => gear.is("SmallCaliberMainGun"))) {
         possibleSpecialAttacks.push(NightCombatSpecialAttack.MainTorpRadar)
       }
-      if (hasGear(Lookout)) {
+      if (hasGear(GearId["熟練見張員"])) {
         possibleSpecialAttacks.push(NightCombatSpecialAttack.TorpRadarLookout)
       }
     }
