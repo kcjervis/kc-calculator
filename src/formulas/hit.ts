@@ -35,7 +35,7 @@ export const createHitRate = (factors: HitRateFactors): HitRate => {
   const { criticalRateMultiplier, hitRateBonus = 0, criticalRateBonus = 0 } = factors
   const hitRateBasis = calcHitRateBasis(factors)
 
-  const hitPercent = Math.floor(hitRateBasis + 1 + hitRateBonus * 100)
+  const hitPercent = Math.floor(hitRateBasis + 1 + hitRateBonus)
   const criticalPercent = Math.floor(Math.sqrt(hitRateBasis) * criticalRateMultiplier + 1 + criticalRateBonus * 100)
 
   const total = Math.min(hitPercent / 100, 1)

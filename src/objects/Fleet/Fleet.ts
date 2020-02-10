@@ -18,6 +18,7 @@ export interface IFleet {
 
   fighterPower: number
   effectiveLos: (nodeDivaricatedFactor: number, hqLevel: number) => number
+  aviationDetectionScore: number
 }
 
 export default class Fleet implements IFleet {
@@ -48,5 +49,19 @@ export default class Fleet implements IFleet {
 
   public effectiveLos = (nodeDivaricatedFactor: number, hqLevel: number): number => {
     return EffectiveLos.calcFleetEffectiveLos(this, nodeDivaricatedFactor, hqLevel)
+  }
+
+  get aviationDetectionScore() {
+    return sumBy(this.planes, plane => {
+      if (plane.is("LargeFlyingBoat")) {
+        return plane.gear.los * Math.sqrt(plane.slotSize)
+      }
+
+      if (plane.is("ReconnaissanceSeaplane") || plane.is("SeaplaneBomber")) {
+        return plane.gear.los * Math.sqrt(Math.sqrt(plane.slotSize))
+      }
+
+      return 0
+    })
   }
 }
