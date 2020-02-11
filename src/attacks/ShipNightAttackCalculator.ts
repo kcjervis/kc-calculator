@@ -85,7 +85,9 @@ export default class ShipNightAttackCalculator {
 
     const healthModifier = this.ship.health.nightAttackPowerModifier
     const a14 = formationModifier * specialAttackModifier * healthModifier
-    let modifiers: AttackPowerModifierRecord = { a14 }
+    const b14 = this.ship.getCruiserFitBonus()
+
+    let modifiers: AttackPowerModifierRecord = { a14, b14 }
     if (params.modifiers) {
       modifiers = composeAttackPowerModifierRecord(modifiers, params.modifiers)
     }

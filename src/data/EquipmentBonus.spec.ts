@@ -6,13 +6,9 @@ import {
   StatsBonusRecord,
   shipStatKeys
 } from "./EquipmentBonus"
-import { ObjectFactory, IGearDataObject, IShip } from "../objects"
 import { ShipName, GearName } from "@jervis/data"
-import { MasterData } from "."
-import { range, isEqual, mergeWith } from "lodash-es"
-
-const data = new MasterData()
-const factory = new ObjectFactory(data)
+import { range, isEqual } from "lodash-es"
+import { makeShip } from "../tests/testUtils"
 
 type GearState = GearName | { name: GearName; star?: number }
 
@@ -25,36 +21,7 @@ export const subBonus = (bonus: StatsBonusRecord, other: StatsBonusRecord) => {
   return result
 }
 
-const toGearData = (state: GearState): IGearDataObject => {
-  if (typeof state === "string") {
-    state = { name: state }
-  }
-  const { name, star } = state
-  const id = data.gearNameToId(name)
-  if (!id) {
-    throw Error(`${name} is not found`)
-  }
-  return { masterId: id, improvement: star }
-}
-
-const toShipId = (name: ShipName) => {
-  const shipId = data.shipNameToId(name)
-  if (!shipId) {
-    throw Error(`${name} is not found`)
-  }
-  return shipId
-}
-
 const getGears = (state: GearState, qty: number) => Array.from({ length: qty }, () => state)
-
-export const makeShip = (shipName: ShipName, ...gears: GearState[]) => {
-  const shipId = toShipId(shipName)
-  const ship = factory.createShip({ masterId: shipId, equipments: gears.map(toGearData) })
-  if (!ship) {
-    throw Error(`${shipId} is not found`)
-  }
-  return ship
-}
 
 const makeBonus = (shipName: ShipName, ...gears: GearState[]) => {
   const ship = makeShip(shipName, ...gears)
