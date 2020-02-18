@@ -15,7 +15,7 @@ export default class AirstrikeCombat {
   ) {}
 
   private getTarget = () => {
-    const ships = this.enemyFleet.nonNullableShips
+    const ships = this.enemyFleet.nonNullableShips.filter(ship => !ship.shipType.isSubmarineClass)
     const target = sample(ships)
     const flagship = ships[0]
 

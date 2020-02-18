@@ -1,5 +1,5 @@
 import { getSpecialEnemyModifiers } from "./SpecialEnemyModifier"
-import { makeShip } from "./EquipmentBonus.spec"
+import { makeShip } from "../tests/testUtils"
 
 const normal = makeShip("駆逐イ級")
 const pillbox = makeShip("砲台小鬼")
