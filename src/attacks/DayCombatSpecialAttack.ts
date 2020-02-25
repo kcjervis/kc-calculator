@@ -2,6 +2,14 @@ import { IShip, IFleet } from "../objects"
 import { AirControlState } from "../common"
 import { sumBy, random } from "lodash-es"
 
+type SpecialAttackConfig = {
+  id: number
+  name: string
+  typeFactor: number
+  power: number
+  accuracy: number
+}
+
 export default class DayCombatSpecialAttack {
   public static all: DayCombatSpecialAttack[] = []
 
@@ -74,12 +82,12 @@ export default class DayCombatSpecialAttack {
     return attacks.sort((attack1, attack2) => attack2.id - attack1.id)
   }
 
-  public static getPossibleAttacks = (ship: IShip): DayCombatSpecialAttack[] => {
+  public static getPossibleAttacks = (ship: IShip, isAntiInstallation = false): DayCombatSpecialAttack[] => {
     if (ship.health.damage === "Taiha") {
       return []
     }
 
-    if (ship.shipType.isAircraftCarrierClass) {
+    if (ship.shipType.isAircraftCarrierClass && !isAntiInstallation) {
       return DayCombatSpecialAttack.getPossibleAircraftCarrierCutins(ship)
     }
 

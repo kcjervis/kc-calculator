@@ -93,58 +93,66 @@ export default class NightCombatSpecialAttack {
   public static MainTorpRadar = new NightCombatSpecialAttack(7, "主魚電", 130, { power: 1.3, accuracy: 1 })
   public static TorpRadarLookout = new NightCombatSpecialAttack(8, "魚見電", 150, { power: 1.2, accuracy: 1 })
 
-  public static getPossibleSpecialAttacks = (ship: IShip) => {
-    const { shipType, hasGear, countGear } = ship
-    const possibleSpecialAttacks = new Array<NightCombatSpecialAttack>()
+  private static getPossibleAerialAttacks = (ship: IShip) => {
+    const attcks: NightCombatSpecialAttack[] = []
 
-    if (isNightAerialAttackShip(ship)) {
-      const planes = ship.planes.filter(plane => plane.slotSize > 0)
-      const nightFighterCount = planes.filter(plane => plane.isNightFighter).length
-      const nightAttackerCount = planes.filter(plane => plane.isNightAttacker).length
-      const nightPlaneCount = planes.filter(plane => plane.isNightPlane).length
-      const semiNightPlaneCount = planes.filter(plane => plane.isNightAircraft && !plane.isNightPlane).length
+    const planes = ship.planes.filter(plane => plane.slotSize > 0)
+    const nightFighterCount = planes.filter(plane => plane.isNightFighter).length
+    const nightAttackerCount = planes.filter(plane => plane.isNightAttacker).length
+    const nightPlaneCount = planes.filter(plane => plane.isNightPlane).length
+    const semiNightPlaneCount = planes.filter(plane => plane.isNightAircraft && !plane.isNightPlane).length
 
-      const hasNightFighter = nightFighterCount >= 1
-      const hasNightAttacker = nightAttackerCount >= 1
-      const hasNightPlane = nightPlaneCount >= 1
-      const hasFuzeBomber = planes.some(plane => plane.gear.gearId === 320)
+    const hasNightFighter = nightFighterCount >= 1
+    const hasNightAttacker = nightAttackerCount >= 1
+    const hasNightPlane = nightPlaneCount >= 1
+    const hasFuzeBomber = planes.some(plane => plane.gear.gearId === 320)
 
-      if (nightFighterCount >= 2 && hasNightAttacker) {
-        possibleSpecialAttacks.push(NightCombatSpecialAttack.AerialAttack1)
-      }
-      if (hasNightFighter && hasNightAttacker) {
-        possibleSpecialAttacks.push(NightCombatSpecialAttack.AerialAttack2)
-      }
-      if (hasNightPlane && hasFuzeBomber) {
-        possibleSpecialAttacks.push(NightCombatSpecialAttack.SuiseiAttack)
-      }
-
-      if (!hasNightFighter) {
-        return possibleSpecialAttacks
-      }
-      if (nightFighterCount + semiNightPlaneCount >= 3 || nightAttackerCount + semiNightPlaneCount >= 2) {
-        possibleSpecialAttacks.push(NightCombatSpecialAttack.AerialAttack3)
-      }
-
-      return possibleSpecialAttacks
+    if (nightFighterCount >= 2 && hasNightAttacker) {
+      attcks.push(NightCombatSpecialAttack.AerialAttack1)
     }
+    if (hasNightFighter && hasNightAttacker) {
+      attcks.push(NightCombatSpecialAttack.AerialAttack2)
+    }
+    if (hasNightPlane && hasFuzeBomber) {
+      attcks.push(NightCombatSpecialAttack.SuiseiAttack)
+    }
+
+    if (!hasNightFighter) {
+      return attcks
+    }
+
+    if (nightFighterCount + semiNightPlaneCount >= 3 || nightAttackerCount + semiNightPlaneCount >= 2) {
+      attcks.push(NightCombatSpecialAttack.AerialAttack3)
+    }
+
+    return attcks
+  }
+
+  public static getPossibleAttacks = (ship: IShip, isAntiInstallation = false) => {
+    const { shipType, hasGear, countGear } = ship
+    const attacks = new Array<NightCombatSpecialAttack>()
 
     if (!ship.canNightAttack) {
-      return possibleSpecialAttacks
+      return attacks
     }
 
-    const submarineCutinTorpedoCount =
-      countGear(GearId["後期型艦首魚雷(6門)"]) + countGear(GearId["熟練聴音員+後期型艦首魚雷(6門)"])
+    if (isNightAerialAttackShip(ship)) {
+      return NightCombatSpecialAttack.getPossibleAerialAttacks(ship)
+    }
 
-    const torpedoCount = countGear("Torpedo") + countGear("SubmarineTorpedo")
+    const submarineCutinTorpedoCount = isAntiInstallation
+      ? 0
+      : countGear(GearId["後期型艦首魚雷(6門)"]) + countGear(GearId["熟練聴音員+後期型艦首魚雷(6門)"])
+
+    const torpedoCount = isAntiInstallation ? 0 : countGear("Torpedo") + countGear("SubmarineTorpedo")
 
     // 駆逐カットイン
     if (shipType.is("Destroyer") && hasGear(gear => gear.is("SurfaceRadar")) && torpedoCount >= 1) {
       if (hasGear(gear => gear.is("SmallCaliberMainGun"))) {
-        possibleSpecialAttacks.push(NightCombatSpecialAttack.MainTorpRadar)
+        attacks.push(NightCombatSpecialAttack.MainTorpRadar)
       }
       if (hasGear(GearId["熟練見張員"])) {
-        possibleSpecialAttacks.push(NightCombatSpecialAttack.TorpRadarLookout)
+        attacks.push(NightCombatSpecialAttack.TorpRadarLookout)
       }
     }
 
@@ -153,23 +161,23 @@ export default class NightCombatSpecialAttack {
 
     // 潜水カットイン
     if (submarineCutinTorpedoCount >= 1 && hasGear(gear => gear.is("SubmarineEquipment"))) {
-      possibleSpecialAttacks.push(NightCombatSpecialAttack.SubmarineRadarTorp)
+      attacks.push(NightCombatSpecialAttack.SubmarineRadarTorp)
     } else if (submarineCutinTorpedoCount >= 2) {
-      possibleSpecialAttacks.push(NightCombatSpecialAttack.SubmarineTorpTorp)
+      attacks.push(NightCombatSpecialAttack.SubmarineTorpTorp)
     } else if (mainGunCount >= 3) {
       // 以降汎用カットイン
-      possibleSpecialAttacks.push(NightCombatSpecialAttack.MainMainMain)
+      attacks.push(NightCombatSpecialAttack.MainMainMain)
     } else if (mainGunCount >= 2 && secondaryGunCount >= 1) {
-      possibleSpecialAttacks.push(NightCombatSpecialAttack.MainMainSecond)
+      attacks.push(NightCombatSpecialAttack.MainMainSecond)
     } else if (torpedoCount >= 2) {
-      possibleSpecialAttacks.push(NightCombatSpecialAttack.TorpTorp)
+      attacks.push(NightCombatSpecialAttack.TorpTorp)
     } else if (mainGunCount >= 1 && torpedoCount >= 1) {
-      possibleSpecialAttacks.push(NightCombatSpecialAttack.MainTorp)
+      attacks.push(NightCombatSpecialAttack.MainTorp)
     } else if (mainGunCount + secondaryGunCount >= 2) {
-      possibleSpecialAttacks.push(NightCombatSpecialAttack.DoubleAttack)
+      attacks.push(NightCombatSpecialAttack.DoubleAttack)
     }
 
-    return possibleSpecialAttacks
+    return attacks
   }
 
   public static calcPreModifierValue = calcPreModifierValue
