@@ -18,6 +18,7 @@ export type ImprovementModifiers = {
 
   torpedoPowerModifier: number
   torpedoAccuracyModifier: number
+  torpedoEvasionModifier: number
 
   nightAttackPowerModifier: number
   nightAttackAccuracyModifier: number
@@ -238,6 +239,14 @@ export default class Improvement implements IImprovement {
       case GearCategoryId.Torpedo:
       case GearCategoryId.MidgetSubmarine:
         return 2 * Math.sqrt(star)
+    }
+    return 0
+  }
+
+  get torpedoEvasionModifier() {
+    const { star, gearIs } = this
+    if (gearIs("Sonar") || gearIs("LargeSonar")) {
+      return 1.5 * Math.sqrt(star)
     }
     return 0
   }

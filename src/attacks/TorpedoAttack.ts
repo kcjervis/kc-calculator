@@ -101,13 +101,10 @@ export default class TorpedoAttack {
   get evasion() {
     const { ship } = this.defender
     const formationModifier = this.getFormationModifiers().defender.evasion
-    const sonarImprovementBonus = ship.totalEquipmentStats(gear => {
-      if (gear.is("Sonar") || gear.is("LargeSonar")) {
-        return 0
-      }
-      return 1.5 * Math.sqrt(gear.star)
-    })
-    return ship.calcEvasionValue(formationModifier, sonarImprovementBonus)
+
+    const torpedoEvasionModifier = ship.totalEquipmentStats(gear => gear.improvement.torpedoEvasionModifier)
+
+    return ship.calcEvasionValue(formationModifier, torpedoEvasionModifier)
   }
 
   get hitRate() {
