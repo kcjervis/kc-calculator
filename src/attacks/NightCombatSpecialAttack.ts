@@ -132,12 +132,12 @@ export default class NightCombatSpecialAttack {
     const { shipType, hasGear, countGear } = ship
     const attacks = new Array<NightCombatSpecialAttack>()
 
-    if (!ship.canNightAttack) {
-      return attacks
-    }
-
     if (isNightAerialAttackShip(ship)) {
       return NightCombatSpecialAttack.getPossibleAerialAttacks(ship)
+    }
+
+    if (!ship.canNightAttack) {
+      return attacks
     }
 
     const submarineCutinTorpedoCount = isAntiInstallation
