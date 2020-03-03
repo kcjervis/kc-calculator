@@ -23,8 +23,6 @@ export type FormationModifiers = {
   night: WarfareModifiers
 }
 
-export type InstallationType = "None" | "SoftSkinned" | "Pillbox" | "SupplyDepot" | "IsolatedIsland"
-
 export type AntiInstallationModifiers = {
   b12: number
   a13: number

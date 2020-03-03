@@ -165,12 +165,13 @@ export default class Improvement implements IImprovement {
       gearIs("AntiAircraftGun") ||
       gearIs("LandingCraft") ||
       gearIs("SpecialAmphibiousTank") ||
-      gearIs("AntiAircraftShell")
+      gearIs("AntiAircraftShell") ||
+      gearIs("AntiGroundEquipment")
     ) {
       return Math.sqrt(this.value)
     }
 
-    if (gearIs("Sonar") || gearIs("LargeSonar") || gearIs("DepthCharge")) {
+    if (gearIs("Sonar") || gearIs("LargeSonar") || gearIs("DepthChargeProjector") || gearIs("Mortar")) {
       return 0.75 * Math.sqrt(this.value)
     }
 
@@ -268,11 +269,12 @@ export default class Improvement implements IImprovement {
       gearIs("SecondaryGun") ||
       gearIs("ArmorPiercingShell") ||
       gearIs("AntiAircraftShell") ||
-      gearIs("AntiAircraftFireDirector") ||
       gearIs("Searchlight") ||
-      gearIs("Torpedo") ||
+      gearIs("AntiAircraftFireDirector") ||
       gearIs("LandingCraft") ||
       gearIs("SpecialAmphibiousTank") ||
+      gearIs("AntiGroundEquipment") ||
+      gearIs("Torpedo") ||
       gearIs("MidgetSubmarine")
     ) {
       return Math.sqrt(this.value)

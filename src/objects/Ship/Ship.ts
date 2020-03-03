@@ -12,7 +12,7 @@ import { isNonNullable, shipNameIsKai2 } from "../../utils"
 import { getApShellModifiers, calcCruiserFitBonus, calcEvasionValue } from "../../formulas"
 import { IGear } from "../gear"
 import { IPlane } from "../plane"
-import { DefensePower, InstallationType, ShellingType } from "../../types"
+import { DefensePower, ShellingType } from "../../types"
 import { AttackPowerModifierRecord } from "../../common"
 import { getSpecialEnemyModifiers } from "../../data"
 
@@ -62,7 +62,6 @@ export interface IShip {
 
   fleetLosFactor: number
 
-  installationType: InstallationType
   isInstallation: boolean
 
   is: (attr: ShipAttribute) => boolean

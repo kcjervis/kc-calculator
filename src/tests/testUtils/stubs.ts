@@ -78,6 +78,7 @@ export const createStubbedImprovement = makeStubCreator<IImprovement>({
 
   torpedoPowerModifier: 0,
   torpedoAccuracyModifier: 0,
+  torpedoEvasionModifier: 0,
 
   nightAttackPowerModifier: 0,
   nightAttackAccuracyModifier: 0,

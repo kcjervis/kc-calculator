@@ -10,6 +10,7 @@ export const shipStatKeys = [
   "firepower",
   "armor",
   "torpedo",
+  "accuracy",
   "evasion",
   "antiAir",
   "asw",
@@ -715,11 +716,11 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
       },
       {
         byShip: { shipId: ShipId["伊勢改二"] },
-        multiple: { firepower: 3, antiAir: 2, evasion: 1 }
+        multiple: { firepower: 3, antiAir: 2, evasion: 1, accuracy: 3 }
       },
       {
         byShip: { shipId: ShipId["日向改二"] },
-        multiple: { firepower: 3, antiAir: 2, evasion: 2 }
+        multiple: { firepower: 3, antiAir: 2, evasion: 2, accuracy: 3 }
       }
     ],
 
@@ -729,7 +730,7 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
         rules: [
           {
             byShip: { shipClassId: ShipClassId.NagatoClass, attrs: "Kai2" },
-            count1: { firepower: 2, evasion: 2, armor: 1 }
+            count1: { firepower: 2, evasion: 2, armor: 1, accuracy: 1 }
           },
           {
             byShip: { shipClassId: ShipClassId.IseClass, shipTypeId: ShipTypeId.AviationBattleship },
@@ -737,7 +738,7 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
           },
           {
             byShip: { shipId: ShipId["日向改二"] },
-            count1: { firepower: 1 }
+            count1: { firepower: 1, accuracy: 1 }
           }
         ]
       }
@@ -750,7 +751,11 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
     rules: [
       {
         byShip: { shipClassId: ShipClassId.NagatoClass, attrs: "Kai2" },
-        multiple: { firepower: 3, antiAir: 2, evasion: 1 }
+        multiple: { firepower: 3, antiAir: 2, evasion: 1, accuracy: 2 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.IseClass, attrs: "Kai2" },
+        multiple: { accuracy: 3 }
       },
       {
         byShip: { shipClassId: ShipClassId.IseClass, shipTypeId: ShipTypeId.AviationBattleship },
@@ -774,7 +779,7 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
       {
         byGear: { attrs: "AirRadar" },
         byShip: { shipClassId: ShipClassId.IseClass, shipTypeId: ShipTypeId.AviationBattleship },
-        count1: { antiAir: 2, evasion: 3 }
+        count1: { antiAir: 2, evasion: 3, accuracy: 1 }
       }
     ]
   },
@@ -1593,15 +1598,15 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
     rules: [
       {
         byShip: ShipId["伊勢改二"],
-        count1: { firepower: 3, evasion: 2, armor: 1, range: 1 }
+        count1: { firepower: 3, evasion: 2, armor: 1, accuracy: 5, range: 1 }
       },
       {
         byShip: ShipId["日向改二"],
-        count1: { firepower: 3, evasion: 3, armor: 3, range: 1 }
+        count1: { firepower: 3, evasion: 3, armor: 3, accuracy: 5, range: 1 }
       },
       {
         byShip: { shipId: { $in: [ShipId["飛龍改二"], ShipId["蒼龍改二"]] } },
-        count1: { range: 1 }
+        count1: { accuracy: 5, range: 1 }
       },
       {
         byShip: { shipClassId: ShipClassId.SouryuuClass },

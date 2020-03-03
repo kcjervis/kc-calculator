@@ -24,7 +24,7 @@ export default class ShipStats implements IShipStats {
     return 0
   }
 
-  private getStat(key: keyof Omit<StatsBonusRecord, "effectiveLos">) {
+  private getStat(key: keyof Omit<StatsBonusRecord, "effectiveLos" | "accuracy">) {
     const { nakedStats, gears } = this
     return nakedStats[key] + sumBy(gears.filter(isNonNullable), key) + this.getBonus(key)
   }

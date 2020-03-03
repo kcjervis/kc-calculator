@@ -54,7 +54,7 @@ export class Equipment<GearType extends { masterId: number }> implements IEquipm
     return this.count(iteratee) > 0
   }
 
-  public sumBy = (iteratee: ((gear: GearType) => number) | keyof PickByValue<GearType, number> & string) => {
+  public sumBy = (iteratee: ((gear: GearType) => number) | (keyof PickByValue<GearType, number> & string)) => {
     return sumBy(this.gears, iteratee)
   }
 }
