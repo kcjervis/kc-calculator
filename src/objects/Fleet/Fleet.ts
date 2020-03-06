@@ -4,6 +4,9 @@ import EffectiveLos from "../../EffectiveLos"
 import { isNonNullable } from "../../utils"
 import { IPlane } from "../plane"
 import { IShip } from "../ship"
+import { ShipType, ShipTypeId } from "../../data"
+import { GearId, ShipId } from "@jervis/data"
+import { IGear } from "../gear"
 
 type ShipIterator<R> = (ship: IShip) => R
 
@@ -19,6 +22,58 @@ export interface IFleet {
   fighterPower: number
   effectiveLos: (nodeDivaricatedFactor: number, hqLevel: number) => number
   aviationDetectionScore: number
+}
+
+const shipTypeToTp = (shipType: ShipTypeId) => {
+  switch (shipType) {
+    case ShipTypeId.SubmarineAircraftCarrier:
+      return 1
+    case ShipTypeId.Destroyer:
+      return 5
+    case ShipTypeId.LightCruiser:
+      return 2
+    case ShipTypeId.AviationCruiser:
+      return 4
+    case ShipTypeId.AviationBattleship:
+      return 7
+    case ShipTypeId.FleetOiler:
+      return 12
+    case ShipTypeId.AmphibiousAssaultShip:
+      return 12
+    case ShipTypeId.SeaplaneTender:
+      return 9
+    case ShipTypeId.SubmarineTender:
+      return 7
+    case ShipTypeId.TrainingCruiser:
+      return 6
+  }
+  return 0
+}
+
+const gearToTp = (gear: IGear) => {
+  if (gear.category.is("LandingCraft")) {
+    return 8
+  }
+
+  if (gear.category.is("CombatRation")) {
+    return 1
+  }
+
+  switch (gear.gearId) {
+    case GearId["ドラム缶(輸送用)"]:
+      return 5
+    case GearId["特二式内火艇"]:
+      return 2
+  }
+
+  return 0
+}
+
+const shipToTp = (ship: IShip) => {
+  const equipmentTp = ship.totalEquipmentStats(gearToTp)
+  const shipTypeTp = shipTypeToTp(ship.shipTypeId)
+  const shipBonus = ship.shipId === ShipId["鬼怒改二"] ? 8 : 0
+  return equipmentTp + shipTypeTp + shipBonus
 }
 
 export default class Fleet implements IFleet {
@@ -45,6 +100,10 @@ export default class Fleet implements IFleet {
       this.planes.filter(plane => !plane.is("ReconnaissanceAircraft")),
       "fighterPower"
     )
+  }
+
+  get tp() {
+    return sumBy(this.nonNullableShips, shipToTp)
   }
 
   public effectiveLos = (nodeDivaricatedFactor: number, hqLevel: number): number => {

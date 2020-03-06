@@ -154,7 +154,7 @@ export default class Formation {
       return {
         ...this.modifiers,
         shelling: { power: 0.5, accuracy: 0.8, evasion: 1 },
-        torpedo: { power: 1, accuracy: 1, evasion: 1 },
+        torpedo: { power: 1, accuracy: 0.75, evasion: 1 },
         asw: { power: 1, accuracy: 1, evasion: 1 },
         night: { power: 0.5, accuracy: 1, evasion: 1 }
       }
@@ -162,7 +162,7 @@ export default class Formation {
     return {
       ...this.modifiers,
       shelling: { power: 1, accuracy: 1.2, evasion: 1 },
-      torpedo: { power: 1, accuracy: 1, evasion: 1 },
+      torpedo: { power: 1, accuracy: 0.95, evasion: 1 },
       asw: { power: 0.6, accuracy: 1, evasion: 1 },
       night: { power: 1, accuracy: 1, evasion: 1 }
     }
