@@ -7,6 +7,7 @@ import { IShip } from "../ship"
 import { ShipType, ShipTypeId } from "../../data"
 import { GearId, ShipId } from "@jervis/data"
 import { IGear } from "../gear"
+import { calcExpeditionBonus } from "../../expedition"
 
 type ShipIterator<R> = (ship: IShip) => R
 
@@ -104,6 +105,10 @@ export default class Fleet implements IFleet {
 
   get tp() {
     return sumBy(this.nonNullableShips, shipToTp)
+  }
+
+  get expeditionBonus() {
+    return calcExpeditionBonus(this.nonNullableShips)
   }
 
   public effectiveLos = (nodeDivaricatedFactor: number, hqLevel: number): number => {

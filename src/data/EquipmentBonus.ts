@@ -283,7 +283,51 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
   },
 
   {
-    byGear: { gearId: GearId["12cm単装砲改二"] },
+    byGear: GearId["12.7cm連装砲D型改三"],
+
+    rules: [
+      {
+        byShip: { shipClassId: ShipClassId.YuugumoClass, attrs: "Kai2" },
+        multiple: { firepower: 3, antiAir: 3, evasion: 1 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.YuugumoClass, attrs: { $not: "Kai2" } },
+        multiple: { firepower: 2, evasion: 1 }
+      },
+      {
+        byShip: ShipId["島風改"],
+        multiple: { firepower: 2, antiAir: 3, evasion: 1 }
+      },
+      {
+        byShip: ShipId["島風"],
+        multiple: { firepower: 2, evasion: 1 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.KagerouClass, attrs: "Kai2" },
+        multiple: { firepower: 2, antiAir: 2, evasion: 1 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.YuugumoClass, attrs: { $not: "Kai2" } },
+        multiple: { firepower: 1, evasion: 1 }
+      }
+    ],
+
+    synergies: [
+      {
+        byGear: { attrs: "SurfaceRadar" },
+        byShip: { $or: [{ shipClassId: ShipClassId.YuugumoClass, attrs: "Kai2" }, { shipId: ShipId["島風改"] }] },
+        count1: { firepower: 2, torpedo: 4, evasion: 2 }
+      },
+      {
+        byGear: { attrs: "AirRadar" },
+        byShip: { $or: [{ shipClassId: ShipClassId.YuugumoClass, attrs: "Kai2" }, { shipId: ShipId["島風改"] }] },
+        count1: { firepower: 1, antiAir: 5, evasion: 2 }
+      }
+    ]
+  },
+
+  {
+    byGear: GearId["12cm単装砲改二"],
 
     rules: [
       {
