@@ -71,17 +71,19 @@ export default class ShipNightAttackCalculator {
     const typeD3Count = ship.countGear(GearId["12.7cm連装砲D型改三"])
     const typeDCount = typeD2Count + typeD3Count
 
-    const record: AttackPowerModifierRecord = {}
     if (typeDCount === 0) {
       return
     }
+
+    const record: AttackPowerModifierRecord = {}
+
     if (typeDCount === 1) {
       record.a14 = 1.25
     }
     if (typeDCount >= 2) {
       record.a13 = 1.12
     }
-    if (typeD3Count >= 1) {
+    if (typeD2Count && typeD3Count) {
       record.b13 = 10
     }
     return record
