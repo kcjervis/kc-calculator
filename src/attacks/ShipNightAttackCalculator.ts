@@ -67,14 +67,24 @@ export default class ShipNightAttackCalculator {
 
   private get typeDModifier() {
     const { ship } = this
-    const typeDCount = ship.countGear(GearId["12.7cm連装砲D型改二"])
+    const typeD2Count = ship.countGear(GearId["12.7cm連装砲D型改二"])
+    const typeD3Count = ship.countGear(GearId["12.7cm連装砲D型改三"])
+    const typeDCount = typeD2Count + typeD3Count
+
+    const record: AttackPowerModifierRecord = {}
     if (typeDCount === 0) {
-      return 1
+      return
     }
     if (typeDCount === 1) {
-      return 1.25
+      record.a14 = 1.25
     }
-    return 1.4
+    if (typeDCount >= 2) {
+      record.a13 = 1.12
+    }
+    if (typeD3Count >= 1) {
+      record.b13 = 10
+    }
+    return record
   }
 
   public calcPower = (params: {
@@ -93,7 +103,7 @@ export default class ShipNightAttackCalculator {
     const healthModifier = this.ship.health.nightAttackPowerModifier
 
     let specialAttackModifier = 1
-    let typeDModifier = 1
+    let typeDModifier: AttackPowerModifierRecord | undefined
     if (specialAttack) {
       specialAttackModifier = specialAttack.modifier.power
       if (specialAttack.isDestroyerCutin) {
@@ -101,13 +111,10 @@ export default class ShipNightAttackCalculator {
       }
     }
 
-    const a14 = formationModifier * healthModifier * specialAttackModifier * typeDModifier
+    const a14 = formationModifier * healthModifier * specialAttackModifier
     const b14 = this.ship.getCruiserFitBonus()
 
-    let modifiers: AttackPowerModifierRecord = { a14, b14 }
-    if (params.modifiers) {
-      modifiers = composeAttackPowerModifierRecord(modifiers, params.modifiers)
-    }
+    const modifiers = composeAttackPowerModifierRecord({ a14, b14 }, params.modifiers, typeDModifier)
 
     const fm11next = isCritical ? this.getCriticalFm() : undefined
     return createAttackPower({ basic, cap, modifiers, fm11next })
