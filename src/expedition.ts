@@ -44,7 +44,7 @@ export const calcExpeditionBonus = (ships: IShip[]) => {
   const kinuBonus = ships.some(ship => ship.shipId === ShipId["鬼怒改二"]) ? 0.05 : 0
   const bonus1 = Math.min(sumBy(gears, toGearExpeditionBonus) + kinuBonus, 0.2)
 
-  const average = sumBy(expeditionGears, gear => gear.star) / expeditionGears.length
+  const average = expeditionGears.length && sumBy(expeditionGears, gear => gear.star) / expeditionGears.length
   const averageStarBonus = 0.01 * bonus1 * average
 
   const bonus2 = getBonus2(gears)

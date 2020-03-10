@@ -118,7 +118,7 @@ export const createShipAttackCalculator = ({
     return nightCalculator.calcPower({
       formationModifier: formationModifiers.night.power,
       nightContactModifier,
-      specialAttackModifier: specialAttack?.modifier.power,
+      specialAttack,
       modifiers,
       isCritical,
       isAntiInstallation

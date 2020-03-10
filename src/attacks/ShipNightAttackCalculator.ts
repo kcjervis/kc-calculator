@@ -7,6 +7,7 @@ import {
   composeAttackPowerModifierRecord
 } from "../common"
 import { ShipId, GearId } from "@jervis/data"
+import NightCombatSpecialAttack from "./NightCombatSpecialAttack"
 
 const isNoap = ({ gearId }: IGear) =>
   gearId === GearId["夜間作戦航空要員"] || gearId === GearId["夜間作戦航空要員+熟練甲板員"]
@@ -64,27 +65,43 @@ export default class ShipNightAttackCalculator {
     return createCriticalFm()
   }
 
+  private get typeDModifier() {
+    const { ship } = this
+    const typeDCount = ship.countGear(GearId["12.7cm連装砲D型改二"])
+    if (typeDCount === 0) {
+      return 1
+    }
+    if (typeDCount === 1) {
+      return 1.25
+    }
+    return 1.4
+  }
+
   public calcPower = (params: {
     nightContactModifier: number
     formationModifier: number
-    specialAttackModifier?: number
+    specialAttack?: NightCombatSpecialAttack
     modifiers: AttackPowerModifierRecord
 
     isCritical?: boolean
     isAntiInstallation?: boolean
   }) => {
-    const {
-      nightContactModifier,
-      formationModifier,
-      specialAttackModifier = 1,
-      isCritical,
-      isAntiInstallation
-    } = params
+    const { nightContactModifier, formationModifier, specialAttack, isCritical, isAntiInstallation } = params
     const basic = this.calcBasicPower(nightContactModifier, isAntiInstallation)
     const cap = 300
 
     const healthModifier = this.ship.health.nightAttackPowerModifier
-    const a14 = formationModifier * specialAttackModifier * healthModifier
+
+    let specialAttackModifier = 1
+    let typeDModifier = 1
+    if (specialAttack) {
+      specialAttackModifier = specialAttack.modifier.power
+      if (specialAttack.isDestroyerCutin) {
+        typeDModifier = this.typeDModifier
+      }
+    }
+
+    const a14 = formationModifier * healthModifier * specialAttackModifier * typeDModifier
     const b14 = this.ship.getCruiserFitBonus()
 
     let modifiers: AttackPowerModifierRecord = { a14, b14 }

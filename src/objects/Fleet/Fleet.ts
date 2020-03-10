@@ -22,6 +22,8 @@ export interface IFleet {
 
   fighterPower: number
   effectiveLos: (nodeDivaricatedFactor: number, hqLevel: number) => number
+  tp: number
+  expeditionBonus: number
   aviationDetectionScore: number
 }
 

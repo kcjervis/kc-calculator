@@ -88,33 +88,11 @@ export default class NightAttack {
     })
   }
 
-  private get typeDModifier() {
-    const { attacker, specialAttack } = this
-
-    if (!specialAttack?.isDestroyerCutin) {
-      return 1
-    }
-
-    const typeDCount = attacker.ship.countGear(GearId["12.7cm連装砲D型改二"])
-    if (typeDCount === 0) {
-      return 1
-    }
-    if (typeDCount === 1) {
-      return 1.25
-    }
-    return 1.4
-  }
-
   get power() {
-    const { attacker, defender, isCritical, specialAttack, typeDModifier, optionalPowerModifiers } = this
+    const { attacker, defender, isCritical, specialAttack, optionalPowerModifiers } = this
     const { role, formation } = attacker
 
     const formationModifier = formation.getModifiers(role).night.power
-
-    let specialAttackModifier = 1
-    if (specialAttack) {
-      specialAttackModifier = specialAttack.modifier.power * typeDModifier
-    }
 
     const isAntiInstallation = defender.ship.isInstallation
     const specialEnemyModifiers = attacker.ship.getSpecialEnemyModifiers(defender.ship)
@@ -123,7 +101,7 @@ export default class NightAttack {
     return this.attackCalculator.calcPower({
       nightContactModifier: this.contactModifiers.power,
       formationModifier,
-      specialAttackModifier,
+      specialAttack,
       isCritical,
       isAntiInstallation,
       modifiers
