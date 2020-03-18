@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/kcjervis/kc-calculator.git"
   },
-  "license": "MIT",
+  "license": "UNLICENSED",
   "scripts": {
     "test": "jest --coverage",
     "ts-check": "tsc --noEmit",

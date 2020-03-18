@@ -82,15 +82,11 @@ export default (ship: IShip) => {
     }
   }
 
-  if (
-    ship.shipClass.is("AtlantaClass") &&
-    ship.hasGear(GearId["GFCS Mk.37+5inch連装両用砲(集中配備)"]) &&
-    ship.hasGear(GearId["5inch連装両用砲(集中配備)"])
-  ) {
-    list.push(39)
-    if (ship.hasGear(GearId["GFCS Mk.37"])) {
-      list.push(40)
-    }
+  const gfcs5inchCount = ship.countGear(GearId["GFCS Mk.37+5inch連装両用砲(集中配備)"])
+  const atlantaGunCount = ship.countGear(GearId["5inch連装両用砲(集中配備)"]) + gfcs5inchCount
+  if (ship.shipClass.is("AtlantaClass") && atlantaGunCount >= 2) {
+    if (gfcs5inchCount >= 1) list.push(39)
+    if (ship.hasGear(GearId["GFCS Mk.37"])) list.push(40)
     list.push(41)
   }
 
