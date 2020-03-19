@@ -291,6 +291,10 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
         multiple: { firepower: 3, antiAir: 3, evasion: 1 }
       },
       {
+        byShip: ShipId["沖波改二"],
+        multiple: { firepower: 1, antiAir: 1 }
+      },
+      {
         byShip: { shipClassId: ShipClassId.YuugumoClass, attrs: { $not: "Kai2" } },
         multiple: { firepower: 2, evasion: 1 }
       },
@@ -322,6 +326,11 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
         byGear: { attrs: "AirRadar" },
         byShip: { $or: [{ shipClassId: ShipClassId.YuugumoClass, attrs: "Kai2" }, { shipId: ShipId["島風改"] }] },
         count1: { firepower: 1, antiAir: 5, evasion: 2 }
+      },
+      {
+        byGear: { attrs: "AirRadar" },
+        byShip: ShipId["沖波改二"],
+        count1: { firepower: 1, antiAir: 2, evasion: 3 }
       }
     ]
   },
