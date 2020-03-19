@@ -326,11 +326,6 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
         byGear: { attrs: "AirRadar" },
         byShip: { $or: [{ shipClassId: ShipClassId.YuugumoClass, attrs: "Kai2" }, { shipId: ShipId["島風改"] }] },
         count1: { firepower: 1, antiAir: 5, evasion: 2 }
-      },
-      {
-        byGear: { attrs: "AirRadar" },
-        byShip: ShipId["沖波改二"],
-        count1: { firepower: 1, antiAir: 2, evasion: 3 }
       }
     ]
   },
@@ -1738,6 +1733,11 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
         count1: { range: 1 }
       }
     ]
+  },
+  {
+    byGear: { attrs: "AirRadar" },
+    byShip: ShipId["沖波改二"],
+    count1: { firepower: 1, antiAir: 2, evasion: 3 }
   },
 
   // ソナー
