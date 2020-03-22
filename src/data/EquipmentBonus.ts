@@ -140,7 +140,7 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
       },
       {
         byShip: { shipId: ShipId["夕立改二"] },
-        multiple: { firepower: 2, antiAir: 1, evasion: 1 }
+        multiple: { firepower: 2, torpedo: 1, evasion: 1 }
       },
       {
         byShip: { shipId: { $in: [ShipId["海風改二"], ShipId["江風改二"]] } },
