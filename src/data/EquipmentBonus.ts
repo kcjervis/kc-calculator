@@ -560,24 +560,6 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
   },
 
   {
-    byGear: GearId["20.3cm(3号)連装砲"],
-    rules: [
-      {
-        byShip: { shipClassId: { $in: [7, 13, 8, 29, 9, 31] } },
-        count1: { firepower: 1 }
-      },
-      {
-        byShip: { shipClassId: { $in: [8, 29, 9, 31] } },
-        count1: { firepower: 1, evasion: 1 }
-      },
-      {
-        byShip: { shipClassId: { $in: [9, 31] } },
-        count2: { firepower: 1 }
-      }
-    ]
-  },
-
-  {
     byGear: { gearId: GearId["Bofors 15.2cm連装砲 Model 1930"] },
 
     rules: [
@@ -2175,8 +2157,46 @@ const getSpeedBonus = (ship: IShip) => {
   return {}
 }
 
+const get3gouBonus = (ship: IShip): StatsBonusRecord => {
+  const { shipTypeId } = ship
+  const count = ship.countGear(GearId["20.3cm(3号)連装砲"])
+
+  if (!count) {
+    return {}
+  }
+
+  const bonuses: StatsBonusRecord[] = []
+  if ([7, 13, 8, 29, 9, 31].includes(shipTypeId)) {
+    bonuses.push({ firepower: 1 })
+  }
+  if ([8, 29, 9, 31].includes(shipTypeId)) {
+    bonuses.push({ firepower: 1, evasion: 1 })
+  }
+  if ([9, 31].includes(shipTypeId) && count >= 2) {
+    bonuses.push({ firepower: 1 })
+  }
+
+  const bonus1 = multiplyBonus(bonuses.reduce(addBonus, {}), count)
+  let bonus2: StatsBonusRecord = {}
+
+  if (ship.hasGear("SurfaceRadar")) {
+    if ([8, 29, 9, 31].includes(shipTypeId)) {
+      bonus2 = { firepower: 3, evasion: 2, torpedo: 2 }
+    }
+    if ([7, 13].includes(shipTypeId) && !ship.hasGear(GearId["20.3cm(2号)連装砲"])) {
+      bonus2 = { firepower: 1, evasion: 1, torpedo: 1 }
+    }
+  }
+
+  return addBonus(bonus1, bonus2)
+}
+
 export const getEquipmentBonus = (ship: IShip): StatsBonusRecord => {
   const speedBonus = getSpeedBonus(ship)
-  const record = equipmentBonusRules.map(equipmentBonusRuleToRecord(ship)).reduce(addBonus, speedBonus)
+  const bonus3gou = get3gouBonus(ship)
+  const base = addBonus(speedBonus, bonus3gou)
+
+  const record = equipmentBonusRules.map(equipmentBonusRuleToRecord(ship)).reduce(addBonus, base)
+
   return record
 }
