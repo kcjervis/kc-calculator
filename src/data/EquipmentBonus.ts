@@ -2158,7 +2158,7 @@ const getSpeedBonus = (ship: IShip) => {
 }
 
 const get3gouBonus = (ship: IShip): StatsBonusRecord => {
-  const { shipTypeId } = ship
+  const { shipClassId } = ship
   const count = ship.countGear(GearId["20.3cm(3号)連装砲"])
 
   if (!count) {
@@ -2166,13 +2166,13 @@ const get3gouBonus = (ship: IShip): StatsBonusRecord => {
   }
 
   const bonuses: StatsBonusRecord[] = []
-  if ([7, 13, 8, 29, 9, 31].includes(shipTypeId)) {
+  if ([7, 13, 8, 29, 9, 31].includes(shipClassId)) {
     bonuses.push({ firepower: 1 })
   }
-  if ([8, 29, 9, 31].includes(shipTypeId)) {
+  if ([8, 29, 9, 31].includes(shipClassId)) {
     bonuses.push({ firepower: 1, evasion: 1 })
   }
-  if ([9, 31].includes(shipTypeId) && count >= 2) {
+  if ([9, 31].includes(shipClassId) && count >= 2) {
     bonuses.push({ firepower: 1 })
   }
 
@@ -2180,10 +2180,10 @@ const get3gouBonus = (ship: IShip): StatsBonusRecord => {
   let bonus2: StatsBonusRecord = {}
 
   if (ship.hasGear("SurfaceRadar")) {
-    if ([8, 29, 9, 31].includes(shipTypeId)) {
+    if ([8, 29, 9, 31].includes(shipClassId)) {
       bonus2 = { firepower: 3, evasion: 2, torpedo: 2 }
     }
-    if ([7, 13].includes(shipTypeId) && !ship.hasGear(GearId["20.3cm(2号)連装砲"])) {
+    if ([7, 13].includes(shipClassId) && !ship.hasGear(GearId["20.3cm(2号)連装砲"])) {
       bonus2 = { firepower: 1, evasion: 1, torpedo: 1 }
     }
   }
@@ -2194,9 +2194,8 @@ const get3gouBonus = (ship: IShip): StatsBonusRecord => {
 export const getEquipmentBonus = (ship: IShip): StatsBonusRecord => {
   const speedBonus = getSpeedBonus(ship)
   const bonus3gou = get3gouBonus(ship)
-  const base = addBonus(speedBonus, bonus3gou)
+  const bonuses = equipmentBonusRules.map(equipmentBonusRuleToRecord(ship))
 
-  const record = equipmentBonusRules.map(equipmentBonusRuleToRecord(ship)).reduce(addBonus, base)
-
+  const record = [...bonuses, speedBonus, bonus3gou].reduce(addBonus, {})
   return record
 }
