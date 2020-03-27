@@ -212,8 +212,11 @@ export default class Ship implements IShip {
 
     // Richelieu
     if ([492, 392].includes(shipId) && gear.is("SeaplaneBomber")) {
-      // Laté 298B
-      return gearId === 194
+      return gearId === GearId["Laté 298B"]
+    }
+
+    if (this.is("RoyalNavy") && this.shipType.isBattleshipClass && gear.is("SeaplaneBomber")) {
+      return [GearId["Swordfish(水上機型)"], GearId["Swordfish Mk.III改(水上機型)"]].includes(gearId)
     }
 
     if (this.slots.length <= slotIndex) {

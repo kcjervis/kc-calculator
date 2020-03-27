@@ -521,12 +521,27 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
         multiple: { firepower: 1 }
       },
       {
-        byShip: { shipId: ShipId["青葉改"] },
+        byShip: ShipId["青葉改"],
         multiple: { firepower: 1, antiAir: 1 }
       },
       {
-        byShip: { shipId: ShipId["衣笠改二"] },
+        byShip: ShipId["衣笠改二"],
         multiple: { firepower: 2, evasion: 1 }
+      },
+      {
+        byShip: {
+          shipClassId: {
+            $in: [
+              ShipClassId.FurutakaClass,
+              ShipClassId.TakaoClass,
+              ShipClassId.AobaClass,
+              ShipClassId.MyoukouClass,
+              ShipClassId.MogamiClass,
+              ShipClassId.ToneClass
+            ]
+          }
+        },
+        count1: { firepower: 1 }
       }
     ],
 
@@ -540,6 +555,24 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
         byGear: { attrs: "AirRadar" },
         byShip: { shipId: { $in: [ShipId["青葉"], ShipId["青葉改"]] } },
         count1: { antiAir: 5, evasion: 2 }
+      }
+    ]
+  },
+
+  {
+    byGear: GearId["20.3cm(3号)連装砲"],
+    rules: [
+      {
+        byShip: { shipClassId: { $in: [7, 13, 8, 29, 9, 31] } },
+        count1: { firepower: 1 }
+      },
+      {
+        byShip: { shipClassId: { $in: [8, 29, 9, 31] } },
+        count1: { firepower: 1, evasion: 1 }
+      },
+      {
+        byShip: { shipClassId: { $in: [9, 31] } },
+        count2: { firepower: 1 }
       }
     ]
   },
@@ -1212,6 +1245,50 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
     ]
   },
 
+  {
+    byGear: GearId["Swordfish(水上機型)"],
+    rules: [
+      {
+        byShip: { remodelGroup: RemodelGroup["Gotland"] },
+        multiple: { firepower: 2, asw: 1, evasion: 1, los: 1 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.CommandantTesteClass },
+        multiple: { firepower: 1, asw: 1, evasion: 1, los: 1 }
+      },
+      {
+        byShip: { shipClassId: { $in: [ShipClassId.MizuhoClass, ShipClassId.KamoiClass] } },
+        multiple: { firepower: 1, evasion: 1, los: 1 }
+      },
+      {
+        byShip: { attrs: "RoyalNavy" },
+        multiple: { firepower: 2, evasion: 2, los: 2 }
+      }
+    ]
+  },
+
+  {
+    byGear: GearId["Swordfish Mk.III改(水上機型)"],
+    rules: [
+      {
+        byShip: { remodelGroup: RemodelGroup["Gotland"] },
+        multiple: { firepower: 4, asw: 3, evasion: 2, los: 3 }
+      },
+      {
+        byShip: { shipClassId: ShipClassId.CommandantTesteClass },
+        multiple: { firepower: 2, asw: 3, evasion: 1, los: 2 }
+      },
+      {
+        byShip: { shipClassId: { $in: [ShipClassId.MizuhoClass, ShipClassId.KamoiClass] } },
+        multiple: { firepower: 1, asw: 2, evasion: 1, los: 2 }
+      },
+      {
+        byShip: { attrs: "RoyalNavy" },
+        multiple: { firepower: 2, asw: 2, evasion: 2, los: 2 }
+      }
+    ]
+  },
+
   // 艦上戦闘機
   {
     byGear: GearId["九六式艦戦"],
@@ -1222,11 +1299,11 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
       },
       {
         byShip: { shipClassId: ShipClassId.HoushouClass },
-        multiple: { firepower: 1, asw: 1, evasion: 1 }
+        multiple: { firepower: 2, asw: 2, evasion: 2, antiAir: 2 }
       },
       {
         byShip: { shipClassId: { $in: [ShipClassId.KasugaMaruClass, ShipClassId.TaiyouClass] } },
-        multiple: { firepower: 1, asw: 2 }
+        multiple: { firepower: 2, asw: 3 }
       }
     ]
   },
@@ -1240,11 +1317,11 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
       },
       {
         byShip: { shipClassId: ShipClassId.HoushouClass },
-        multiple: { firepower: 1, antiAir: 2, evasion: 2 }
+        multiple: { firepower: 3, antiAir: 3, evasion: 4, asw: 4 }
       },
       {
         byShip: { shipClassId: { $in: [ShipClassId.KasugaMaruClass, ShipClassId.TaiyouClass] } },
-        multiple: { firepower: 1, antiAir: 1, asw: 2, evasion: 1 }
+        multiple: { firepower: 2, antiAir: 1, asw: 5, evasion: 1 }
       }
     ]
   },
@@ -1908,29 +1985,37 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
     rules: [
       {
         byShip: { remodelGroup: RemodelGroup["神通"] },
-        count1: { firepower: 2, torpedo: 2, evasion: -1 }
+        count1: { firepower: 8, torpedo: 6, evasion: -1 }
       },
       {
         byShip: {
           remodelGroup: { $in: [RemodelGroup["比叡"], RemodelGroup["霧島"], RemodelGroup["鳥海"], RemodelGroup["暁"]] }
         },
-        count1: { firepower: 2, evasion: -1 }
+        count1: { firepower: 4, evasion: -1 }
       },
       {
         byShip: { remodelGroup: RemodelGroup["秋雲"] },
-        multiple: { firepower: 1 }
+        multiple: { firepower: 2 }
       },
       {
         byShip: { remodelGroup: RemodelGroup["雪風"] },
-        multiple: { antiAir: 1 }
+        multiple: { firepower: 1, antiAir: 1 }
       }
     ]
   },
 
   {
     byGear: GearId["96式150cm探照灯"],
-    byShip: { remodelGroup: { $in: [RemodelGroup["比叡"], RemodelGroup["霧島"]] } },
-    count1: { firepower: 3, evasion: -2 }
+    rules: [
+      {
+        byShip: { remodelGroup: { $in: [RemodelGroup["比叡"], RemodelGroup["霧島"]] } },
+        count1: { firepower: 6, evasion: -2 }
+      },
+      {
+        byShip: { remodelGroup: { $in: [RemodelGroup["大和"], RemodelGroup["武蔵"]] } },
+        count1: { firepower: 4, evasion: -1 }
+      }
+    ]
   },
 
   // 回転翼機
@@ -1972,6 +2057,24 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
       {
         byShip: ShipId["日向改二"],
         multiple: { firepower: 2, asw: 4, evasion: 2 }
+      }
+    ]
+  },
+
+  {
+    byGear: GearId["熟練見張員"],
+    rules: [
+      {
+        byShip: { shipClassId: { $in: [66, 28, 12, 1, 5, 10, 23, 18, 30, 38, 22, 54] } },
+        multiple: { firepower: 1, torpedo: 2, evasion: 2, asw: 2, los: 1 }
+      },
+      {
+        byShip: { shipClassId: { $in: [21, 4, 20, 16, 34, 56, 41, 52] } },
+        multiple: { firepower: 1, torpedo: 2, evasion: 2, los: 3 }
+      },
+      {
+        byShip: { shipClassId: { $in: [7, 13, 29, 8, 9, 31] } },
+        multiple: { firepower: 1, evasion: 2, los: 3 }
       }
     ]
   }
