@@ -251,13 +251,6 @@ describe("EquipmentBonus", () => {
     })
   })
 
-  describe("中口径主砲", () => {
-    it("20.3cm(2号)連装砲", () => {
-      expectSynergy("古鷹", "20.3cm(2号)連装砲", "22号対水上電探").toCount1({ firepower: 3, torpedo: 2, evasion: 2 })
-      expectSynergy("青葉", "20.3cm(2号)連装砲", "13号対空電探").toCount1({ antiAir: 5, evasion: 2 })
-    })
-  })
-
   describe("大口径主砲", () => {
     it("35.6cm三連装砲改(ダズル迷彩仕様)", () => {
       expectSynergy("金剛改二", "35.6cm三連装砲改(ダズル迷彩仕様)", "22号対水上電探").toCount1({
@@ -292,6 +285,7 @@ describe("EquipmentBonus", () => {
         firepower: 3,
         evasion: 2,
         armor: 1,
+        accuracy: 5,
         range: 1
       })
       expectBonus("伊勢改二", { name: "二式艦上偵察機", star: 2 }).toCount1({
@@ -300,6 +294,7 @@ describe("EquipmentBonus", () => {
         armor: 1,
         los: 1,
         effectiveLos: 1,
+        accuracy: 5,
         range: 1
       })
       expectBonus("伊勢改二", { name: "二式艦上偵察機", star: 4 }).toCount1({
@@ -308,6 +303,7 @@ describe("EquipmentBonus", () => {
         armor: 1,
         los: 1,
         effectiveLos: 1,
+        accuracy: 5,
         range: 1
       })
       expectBonus("伊勢改二", { name: "二式艦上偵察機", star: 6 }).toCount1({
@@ -316,6 +312,7 @@ describe("EquipmentBonus", () => {
         armor: 1,
         los: 2,
         effectiveLos: 2,
+        accuracy: 5,
         range: 1
       })
       expectBonus("伊勢改二", { name: "二式艦上偵察機", star: 10 }).toCount1({
@@ -324,6 +321,7 @@ describe("EquipmentBonus", () => {
         armor: 1,
         los: 3,
         effectiveLos: 3,
+        accuracy: 5,
         range: 1
       })
 
@@ -347,16 +345,6 @@ describe("EquipmentBonus", () => {
         firepower: 4,
         los: 5,
         effectiveLos: 5
-      })
-      expectBonus("蒼龍改", { name: "二式艦上偵察機", star: 8 }).toCount1({
-        firepower: 5,
-        los: 6,
-        effectiveLos: 6
-      })
-      expectBonus("蒼龍改", { name: "二式艦上偵察機", star: 10 }).toCount1({
-        firepower: 6,
-        los: 7,
-        effectiveLos: 7
       })
     })
   })

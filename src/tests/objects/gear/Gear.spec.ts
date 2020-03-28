@@ -31,9 +31,9 @@ describe("gear/Gear", () => {
 
     expect(gear.gearId).toBe(gear.masterId)
     expect(gear.toState()).toEqual({
-      masterId: stats.gearId,
-      improvement: improvement.value,
-      proficiency: proficiency.internal
+      gearId: stats.gearId,
+      star: improvement.value,
+      exp: proficiency.internal
     })
   })
 

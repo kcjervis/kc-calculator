@@ -8,5 +8,5 @@ export { default as ShipTypeId } from "./ShipTypeId"
 export { default as ShipClass } from "./ShipClass"
 export { default as ShipAttribute } from "./ShipAttribute"
 
-export { getEquipmentBonus } from "./EquipmentBonus"
+export { getEquipmentBonus, StatsBonusRecord } from "./EquipmentBonus"
 export { getSpecialEnemyModifiers } from "./SpecialEnemyModifier"

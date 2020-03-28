@@ -34,6 +34,7 @@ type ProficiencyModifiers = { power: number; hitRate: number; criticalRate: numb
 export interface IShip {
   masterId: number
   name: string
+  ruby: string
 
   shipId: number
   shipClassId: number
@@ -137,6 +138,10 @@ export default class Ship implements IShip {
 
   get name() {
     return this.master.name
+  }
+
+  get ruby() {
+    return this.master.readingName
   }
 
   get shipClass() {
