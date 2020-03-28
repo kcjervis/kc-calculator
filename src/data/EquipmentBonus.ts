@@ -1,11 +1,12 @@
 import { mapValues } from "lodash-es"
 import { GearId, ShipClassId, ShipId } from "@jervis/data"
-import { createEquipmentBonus } from "equipment-bonus"
 
 import { ShipQuery, IShip } from "../objects/ship/ship"
 import { GearQuery } from "../objects/gear/Gear"
-import { GearCategoryId } from "./GearCategory"
 import { Speed } from "../common"
+
+import { GearCategoryId } from "./GearCategory"
+import { createEquipmentBonus } from "./EquipmentBonusData"
 
 export const shipStatKeys = [
   "firepower",

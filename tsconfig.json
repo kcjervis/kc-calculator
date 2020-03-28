@@ -10,6 +10,7 @@
     "esModuleInterop": true,
     "strict": true,
     "declaration": true,
+    "allowJs": true,
     "outDir": "./dist",
     "experimentalDecorators": true,
     "typeRoots": ["node_modules/@types", "src/types"]
