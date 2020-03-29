@@ -57,15 +57,15 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
     rules: [
       {
         byShip: ShipId["Richelieu改"],
-        multiple: { firepower: 1, evasion: 2, los: 2 }
+        multiple: { los: 2 }
       },
       {
         byShip: { shipClassId: ShipClassId.CommandantTesteClass },
-        multiple: { firepower: 3, evasion: 2, los: 2 }
+        multiple: { los: 2 }
       },
       {
         byShip: { shipClassId: { $in: [ShipClassId.MizuhoClass, ShipClassId.KamoiClass] } },
-        multiple: { evasion: 1, los: 2 }
+        multiple: { los: 2 }
       }
     ]
   },
@@ -80,9 +80,8 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
     effectiveLosBonus: true,
     rules: [
       { minStar: 2, count1: { los: 1 } },
-      { minStar: 4, count1: { firepower: 1 } },
       { minStar: 6, count1: { los: 1 } },
-      { minStar: 10, count1: { firepower: 1, los: 1 } }
+      { minStar: 10, count1: { los: 1 } }
     ]
   },
 
@@ -90,18 +89,6 @@ export const equipmentBonusRules: EquipmentBonusRule[] = [
     byGear: GearId["二式艦上偵察機"],
     effectiveLosBonus: true,
     rules: [
-      {
-        byShip: ShipId["伊勢改二"],
-        count1: { firepower: 3, evasion: 2, armor: 1, accuracy: 5, range: 1 }
-      },
-      {
-        byShip: ShipId["日向改二"],
-        count1: { firepower: 3, evasion: 3, armor: 3, accuracy: 5, range: 1 }
-      },
-      {
-        byShip: { shipId: { $in: [ShipId["飛龍改二"], ShipId["蒼龍改二"]] } },
-        count1: { accuracy: 5, range: 1 }
-      },
       {
         byShip: { shipClassId: ShipClassId.SouryuuClass },
         minStar: 1,
