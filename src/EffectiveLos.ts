@@ -24,7 +24,7 @@ const calcShipEffectiveLos = (ship: IShip, nodeDivaricatedFactor: number, withou
 
   let equipTotal: number
   if (withoutExslot) {
-    const mainGears = gears.filter((g, index) => index === gears.length - 1).filter(isNonNullable)
+    const mainGears = gears.filter((g, index) => index !== gears.length - 1).filter(isNonNullable)
     equipTotal = sumBy(mainGears, calcGearEffectiveLos)
   } else {
     equipTotal = totalEquipmentStats(calcGearEffectiveLos)
