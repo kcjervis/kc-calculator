@@ -1,4 +1,4 @@
-import { flatMap, sumBy } from "lodash-es"
+import { flatMap, sumBy, without } from "lodash-es"
 
 import EffectiveLos from "../../EffectiveLos"
 import { isNonNullable } from "../../utils"
@@ -113,8 +113,8 @@ export default class Fleet implements IFleet {
     return calcExpeditionBonus(this.nonNullableShips)
   }
 
-  public effectiveLos = (nodeDivaricatedFactor: number, hqLevel: number): number => {
-    return EffectiveLos.calcFleetEffectiveLos(this, nodeDivaricatedFactor, hqLevel)
+  public effectiveLos = (nodeDivaricatedFactor: number, hqLevel: number, withoutExslot?: boolean): number => {
+    return EffectiveLos.calcFleetEffectiveLos(this, nodeDivaricatedFactor, hqLevel, withoutExslot)
   }
 
   get aviationDetectionScore() {
