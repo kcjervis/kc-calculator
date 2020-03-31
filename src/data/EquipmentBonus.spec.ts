@@ -1,13 +1,15 @@
+import { ShipName, GearName } from "@jervis/data"
+import { range, isEqual } from "lodash-es"
+
 import {
   multiplyBonus,
   addBonus,
   getEquipmentBonus,
   StatBonusRuleBase,
   StatsBonusRecord,
-  shipStatKeys
+  shipStatKeys,
+  getEffectiveLosBonus
 } from "./EquipmentBonus"
-import { ShipName, GearName } from "@jervis/data"
-import { range, isEqual } from "lodash-es"
 import { makeShip } from "../tests/testUtils"
 
 type GearState = GearName | { name: GearName; star?: number }
@@ -347,5 +349,9 @@ describe("EquipmentBonus", () => {
         effectiveLos: 5
       })
     })
+  })
+
+  it("熟練見張員", () => {
+    expect(getEffectiveLosBonus(makeShip("長波", "熟練見張員"))).toBe(1)
   })
 })
