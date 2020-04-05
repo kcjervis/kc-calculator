@@ -349,6 +349,14 @@ describe("EquipmentBonus", () => {
         effectiveLos: 5
       })
     })
+
+    it("試製景雲(艦偵型)", () => {
+      expectBonus("翔鶴改二甲", { name: "試製景雲(艦偵型)", star: 10 }).toCount1({
+        firepower: 2,
+        los: 3,
+        effectiveLos: 3
+      })
+    })
   })
 
   it("熟練見張員", () => {
