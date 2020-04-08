@@ -64,7 +64,7 @@ const accuracyMatchers = [
   },
   {
     fleetType: FleetType.SurfaceTaskForce,
-    factors: [70, 46]
+    factors: [46, 70]
   },
   {
     fleetType: FleetType.TransportEscort,
