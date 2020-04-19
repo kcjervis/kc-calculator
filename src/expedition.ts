@@ -26,9 +26,8 @@ const isExpeditionGear = (gear: IGear) =>
 const toGearExpeditionBonus = (gear: IGear) => {
   switch (gear.gearId) {
     case GearId["大発動艇"]:
-      return 0.05
     case GearId["特大発動艇"]:
-      return 0.075
+      return 0.05
     case GearId["大発動艇(八九式中戦車&陸戦隊)"]:
       return 0.02
     case GearId["特二式内火艇"]:
