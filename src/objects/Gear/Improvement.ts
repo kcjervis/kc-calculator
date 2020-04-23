@@ -162,6 +162,7 @@ export default class Improvement implements IImprovement {
       gearIs("ArmorPiercingShell") ||
       gearIs("AntiAircraftFireDirector") ||
       gearIs("Searchlight") ||
+      gearIs("LargeSearchlight") ||
       gearIs("AntiAircraftGun") ||
       gearIs("LandingCraft") ||
       gearIs("SpecialAmphibiousTank") ||
@@ -270,6 +271,7 @@ export default class Improvement implements IImprovement {
       gearIs("ArmorPiercingShell") ||
       gearIs("AntiAircraftShell") ||
       gearIs("Searchlight") ||
+      gearIs("LargeSearchlight") ||
       gearIs("AntiAircraftFireDirector") ||
       gearIs("LandingCraft") ||
       gearIs("SpecialAmphibiousTank") ||
