@@ -90,7 +90,7 @@ export const isReconnaissanceAircraft = createCategoryMatcher(
 )
 
 /** 爆戦 */
-const FighterBomber = and(createCategoryMatcher("CarrierBasedDiveBomber"), gear => gear.antiAir >= 4)
+const FighterBomber = and(createCategoryMatcher("CarrierBasedDiveBomber"), gear => gear.antiAir >= 1)
 
 /** 航空機 */
 export const isAircraft = or(
