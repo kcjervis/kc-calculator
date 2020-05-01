@@ -72,8 +72,7 @@ export default class ShipShellingCalculator {
       return
     }
 
-    const torpedo = isAntiInstallation ? 0 : ship.stats.torpedo
-
+    const torpedo = isAntiInstallation ? 0 : ship.totalEquipmentStats("torpedo")
     const bombing = isAntiInstallation
       ? ship.totalEquipmentStats(gear => (gear.is("AntiInstallationBomber") ? gear.bombing : 0))
       : ship.totalEquipmentStats("bombing")

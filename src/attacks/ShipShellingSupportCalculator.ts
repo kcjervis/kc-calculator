@@ -14,8 +14,8 @@ export default class ShipShellingSupportCalculator {
     if (type === "Shelling") {
       return
     }
-    const { torpedo } = ship.stats
 
+    const torpedo = isAntiInstallation ? 0 : ship.totalEquipmentStats("torpedo")
     const bombing = isAntiInstallation
       ? ship.totalEquipmentStats(gear => (gear.is("AntiInstallationBomber") ? gear.bombing : 0))
       : ship.totalEquipmentStats("bombing")
