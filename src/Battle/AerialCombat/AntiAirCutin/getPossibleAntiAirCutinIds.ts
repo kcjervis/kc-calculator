@@ -211,9 +211,9 @@ export default (ship: IShip) => {
       list.push(9)
     }
 
-    // Gotland改 かつ 高角砲を装備 かつ 対空4以上の対空機銃を装備
+    // Gotland改以上 かつ 高角砲を装備 かつ 対空4以上の対空機銃を装備
     if (
-      ship.name === "Gotland改" &&
+      [ShipId["Gotland改"], ShipId["Gotland andra"]].includes(ship.shipId) &&
       ship.hasGear(isHighAngleMount) &&
       ship.hasGear(gear => gear.is("AntiAircraftGun") && gear.antiAir >= 4)
     ) {
