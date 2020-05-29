@@ -60,26 +60,21 @@ export default (ship: IShip) => {
   const list: number[] = []
 
   if (ship.shipClass.is("FletcherClass")) {
-    const mk30Count = ship.countGear(GearId["5inch単装砲 Mk.30"]) + ship.countGear(GearId["5inch単装砲 Mk.30改"])
+    const mk30KaiCount = ship.countGear(GearId["5inch単装砲 Mk.30改"])
+    const mk30Count = ship.countGear(GearId["5inch単装砲 Mk.30"]) + mk30KaiCount
     const gfcsCount = ship.countGear(GearId["5inch単装砲 Mk.30改+GFCS Mk.37"])
 
     // 5inch単装砲 Mk.30改＋GFCS Mk.37 2本
-    if (gfcsCount >= 2) {
-      list.push(34)
-    }
-    // 5inch単装砲 Mk.30改＋GFCS Mk.37 & 5inch単装砲 Mk.30(改)
-    if (gfcsCount > 0 && mk30Count > 0) {
-      list.push(35)
-    }
+    if (gfcsCount >= 2) list.push(34)
 
-    // 5inch単装砲 Mk.30(改) 2本
-    if (mk30Count >= 2) {
-      // GFCS Mk.37
-      if (ship.hasGear(GearId["GFCS Mk.37"])) {
-        list.push(36)
-      }
-      list.push(37)
-    }
+    // 5inch単装砲 Mk.30改＋GFCS Mk.37 & 5inch単装砲 Mk.30(改)
+    if (gfcsCount > 0 && mk30Count > 0) list.push(35)
+
+    // Mk.30(改) 2本
+    if (mk30Count >= 2 && ship.hasGear(GearId["GFCS Mk.37"])) list.push(36)
+
+    // Mk.30改 2本
+    if (mk30KaiCount >= 2) list.push(37)
   }
 
   const gfcs5inchCount = ship.countGear(GearId["GFCS Mk.37+5inch連装両用砲(集中配備)"])
