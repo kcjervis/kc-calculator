@@ -66,10 +66,7 @@ const getSpeedBonus = (ship: IShip) => {
 }
 
 const isEffectiveLosBonusGear = (gear: IGear) => {
-  if ([GearId["Laté 298B"], GearId["熟練見張員"], GearId["Swordfish Mk.II改(水偵型)"]].includes(gear.gearId)) {
-    return true
-  }
-  return gear.category.any("CarrierBasedReconnaissanceAircraft", "CarrierBasedReconnaissanceAircraft2")
+  return !gear.is("SmallRadar")
 }
 
 export const getEffectiveLosBonus = (ship: IShip) => {
