@@ -10,7 +10,7 @@ export default class ShipClass {
     if (found) {
       return found
     }
-    const newShipClass = new ShipClass("unkown", id)
+    const newShipClass = new ShipClass("unknown", id)
     ShipClass.all.push(newShipClass)
     return newShipClass
   }
