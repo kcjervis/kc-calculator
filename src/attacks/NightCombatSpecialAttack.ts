@@ -142,7 +142,13 @@ export default class NightCombatSpecialAttack {
 
     const submarineCutinTorpedoCount = isAntiInstallation
       ? 0
-      : countGear(GearId["後期型艦首魚雷(6門)"]) + countGear(GearId["熟練聴音員+後期型艦首魚雷(6門)"])
+      : countGear(gear =>
+          [
+            GearId["後期型艦首魚雷(6門)"],
+            GearId["熟練聴音員+後期型艦首魚雷(6門)"],
+            GearId["後期型53cm艦首魚雷(8門)"]
+          ].includes(gear.gearId)
+        )
 
     const torpedoCount = isAntiInstallation ? 0 : countGear("Torpedo") + countGear("SubmarineTorpedo")
 
