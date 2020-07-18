@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "fp-ts": "^2.4.4",
+    "lodash": "^4.17.19",
     "lodash-es": "^4.17.15",
     "sift": "^9.0.7"
   },
