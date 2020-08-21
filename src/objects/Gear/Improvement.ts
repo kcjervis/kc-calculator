@@ -146,7 +146,8 @@ export default class Improvement implements IImprovement {
         GearId["12.7cm連装高角砲"],
         GearId["8cm高角砲"],
         GearId["8cm高角砲改+増設機銃"],
-        GearId["10cm連装高角砲改+増設機銃"]
+        GearId["10cm連装高角砲改+増設機銃"],
+        GearId["5inch 単装高角砲群"]
       ].includes(gearId)
     ) {
       return 0.2 * this.value
@@ -256,12 +257,20 @@ export default class Improvement implements IImprovement {
   get nightAttackPowerModifier() {
     const { gearIs } = this
     const { gearId } = this.stats
-    // 12.7cm 連装高角砲、8cm 高角砲、8cm 高角砲改＋増設機銃、10cm 連装高角砲改＋増設機銃
-    if ([10, 66, 220, 275].includes(gearId)) {
+
+    if (
+      [
+        GearId["12.7cm連装高角砲"],
+        GearId["8cm高角砲"],
+        GearId["8cm高角砲改+増設機銃"],
+        GearId["10cm連装高角砲改+増設機銃"],
+        GearId["5inch 単装高角砲群"]
+      ].includes(gearId)
+    ) {
       return 0.2 * this.value
     }
-    // 15.5cm 三連装副砲、15.5cm 三連装副砲改、15.2cm 三連装砲
-    if ([12, 234, 247].includes(gearId)) {
+
+    if ([GearId["15.5cm三連装副砲"], GearId["15.5cm三連装副砲改"], GearId["15.2cm三連装砲"]].includes(gearId)) {
       return 0.3 * this.value
     }
 
