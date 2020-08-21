@@ -59,10 +59,19 @@ export default class ShipShellingCalculator {
     return value => Math.floor(value * apShellModifier)
   }
 
-  private calcBasicPower = (additive = 0) => {
+  private calcBasicPower = (additive: number, isAntiInstallation = false) => {
     const { ship } = this
     const { firepower } = ship.stats
-    const improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.shellingPowerModifier)
+
+    let improvementModifier
+    if (isAntiInstallation) {
+      improvementModifier = ship.totalEquipmentStats(gear =>
+        gear.is("TorpedoBomber") ? 0 : gear.improvement.shellingPowerModifier
+      )
+    } else {
+      improvementModifier = ship.totalEquipmentStats(gear => gear.improvement.shellingPowerModifier)
+    }
+
     return 5 + firepower + improvementModifier + additive
   }
 
@@ -104,7 +113,7 @@ export default class ShipShellingCalculator {
 
       specialAttack
     } = params
-    const basic = this.calcBasicPower(fleetFactor)
+    const basic = this.calcBasicPower(fleetFactor, isAntiInstallation)
     const cap = 180
 
     const { ship } = this
