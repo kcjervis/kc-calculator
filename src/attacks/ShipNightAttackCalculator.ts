@@ -1,4 +1,4 @@
-import { IShip, IGear } from "../objects"
+import { IShip } from "../objects"
 import { sumBy } from "lodash-es"
 import {
   AttackPowerModifierRecord,
@@ -6,24 +6,8 @@ import {
   createAttackPower,
   composeAttackPowerModifierRecord
 } from "../common"
-import { ShipId, GearId } from "@jervis/data"
-import NightCombatSpecialAttack from "./NightCombatSpecialAttack"
-
-const isNoap = ({ gearId }: IGear) =>
-  gearId === GearId["夜間作戦航空要員"] || gearId === GearId["夜間作戦航空要員+熟練甲板員"]
-
-export const isNightAerialAttackShip = (ship: IShip) => {
-  if (!ship.shipType.isAircraftCarrierClass) {
-    return false
-  }
-
-  const hasNoap = [ShipId["Saratoga Mk.II"], ShipId["赤城改二戊"]].includes(ship.shipId) || ship.hasGear(isNoap)
-  if (!hasNoap) {
-    return false
-  }
-
-  return ship.planes.some(plane => plane.slotSize > 0 && plane.isNightPlane)
-}
+import { GearId } from "@jervis/data"
+import NightCombatSpecialAttack, { isNightAerialAttackShip } from "./NightCombatSpecialAttack"
 
 export default class ShipNightAttackCalculator {
   constructor(private ship: IShip) {}
