@@ -1,7 +1,7 @@
 import { IShip } from "../objects"
 import { Formation } from "../common"
 import { Side } from "../types"
-import { GearId } from "@jervis/data"
+import { GearId, ShipId } from "@jervis/data"
 
 export const isNightAerialAttackShip = (ship: IShip) => {
   if (!ship.shipType.isAircraftCarrierClass) {
@@ -9,7 +9,11 @@ export const isNightAerialAttackShip = (ship: IShip) => {
   }
 
   // Saratoga Mk.II | 赤城改二戊 | 夜間作戦航空要員
-  const hasNoap = [545, 599].includes(ship.shipId) || ship.hasGear(gear => [258, 259].includes(gear.gearId))
+
+  const hasNoap =
+    [ShipId["Saratoga Mk.II"], ShipId["赤城改二戊"], ShipId["加賀改二戊"]].includes(ship.shipId) ||
+    ship.hasGear(gear => [258, 259].includes(gear.gearId))
+
   if (!hasNoap) {
     return false
   }
