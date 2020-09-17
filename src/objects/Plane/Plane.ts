@@ -179,6 +179,7 @@ export default class Plane implements IPlane {
         GearId["天山一二型(友永隊)"],
         GearId["九七式艦攻(村田隊)"],
         GearId["天山一二型(村田隊)"],
+        GearId["流星改(一航戦/熟練)"],
 
         GearId["九九式艦爆(江草隊)"],
         GearId["彗星(江草隊)"],
