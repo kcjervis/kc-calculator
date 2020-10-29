@@ -154,6 +154,9 @@ export enum GearCategoryId {
   /** 潜水艦装備 */
   SubmarineEquipment = 51,
 
+  /** 大型陸上機 */
+  LargeLandBasedAircraft = 53,
+
   /** 噴式戦闘機 */
   JetPoweredFighter = 56,
 

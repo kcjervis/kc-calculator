@@ -50,7 +50,8 @@ export const isSeaplane = createCategoryMatcher(
 export const isLandBasedAircraft = createCategoryMatcher(
   "LandBasedAttackAircraft",
   "LandBasedFighter",
-  "LandBasedReconnaissanceAircraft"
+  "LandBasedReconnaissanceAircraft",
+  "LargeLandBasedAircraft"
 )
 
 /** 噴式機 */
