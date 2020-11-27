@@ -200,7 +200,7 @@ describe("EquipmentBonus", () => {
 
       expectSynergy("夕雲改二", "12.7cm連装砲D型改二", "22号対水上電探").toCount1({
         firepower: 3,
-        torpedo: 4,
+        torpedo: 6,
         evasion: 3
       })
       expectSynergy("夕雲", "12.7cm連装砲D型改二", "22号対水上電探").toCount1({

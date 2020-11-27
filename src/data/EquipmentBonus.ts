@@ -1,12 +1,12 @@
 import { mapValues } from "lodash-es"
 import { GearId, ShipClassId, ShipId } from "@jervis/data"
+import { createEquipmentBonuses, ShipData, GearData } from "equipment-bonus"
 
-import { ShipQuery, IShip } from "../objects/ship/ship"
-import { GearQuery, IGear } from "../objects/gear/Gear"
+import { IShip } from "../objects/ship/ship"
+import { IGear } from "../objects/gear/Gear"
 import { Speed } from "../common"
 
-import { GearCategoryId } from "./GearCategory"
-import { createEquipmentBonus } from "./EquipmentBonusData"
+import { isNonNullable } from "../utils"
 
 export const shipStatKeys = [
   "firepower",
@@ -69,14 +69,56 @@ const isEffectiveLosBonusGear = (gear: IGear) => {
   return !gear.is("SmallRadar")
 }
 
+const getType2 = (id: number) => {
+  if (id === 38) return 3
+  if (id === 93) return 13
+  if (id === 94) return 9
+  return id
+}
+
+const toGearData = (gear: IGear): GearData => {
+  const types = [0, 0, getType2(gear.categoryId), gear.iconId, 0]
+  return {
+    accuracy: gear.accuracy,
+    antiAir: gear.antiAir,
+    armor: gear.armor,
+    asw: gear.asw,
+    bombing: gear.bombing,
+    evasion: gear.evasion,
+    firepower: gear.firepower,
+    gearId: gear.gearId,
+    los: gear.los,
+    name: gear.name,
+    radius: gear.radius,
+    range: gear.range,
+    torpedo: gear.torpedo,
+    ace: gear.proficiency.level,
+    stars: gear.improvement.value,
+    types,
+    specialType2: gear.categoryId
+  }
+}
+
+const getEquipmentBonuses = (ship: IShip, gears: IShip["gears"]) => {
+  const shipData: ShipData = {
+    shipId: ship.shipId,
+    stype: ship.shipTypeId,
+    ctype: ship.shipClassId,
+    yomi: ship.ruby
+  }
+
+  const gearDataList = gears.filter(isNonNullable).map(toGearData)
+
+  return createEquipmentBonuses(shipData, gearDataList)
+}
+
 export const getEffectiveLosBonus = (ship: IShip) => {
   const gears = ship.gears.filter(gear => gear && isEffectiveLosBonusGear(gear))
-  const { shipId, ruby, shipTypeId, shipClassId } = ship
-  return createEquipmentBonus({ shipId, ruby, shipTypeId, shipClassId, gears }).los
+  return getEquipmentBonuses(ship, gears).los
 }
 
 export const getEquipmentBonus = (ship: IShip): StatsBonusRecord => {
-  const base = createEquipmentBonus(ship)
+  const base = getEquipmentBonuses(ship, ship.gears)
   const speedBonus = getSpeedBonus(ship)
   const effectiveLosBonus = { effectiveLos: getEffectiveLosBonus(ship) }
 
