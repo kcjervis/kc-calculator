@@ -400,9 +400,9 @@ export default class Ship implements IShip {
     modifiers.criticalRate = sumBy(planes, plane => {
       const { internal, level } = plane.gear.proficiency
 
-      const firstSlotBonus = plane.index === 0 ? 10 : 0
+      const firstSlotBonus = plane.index === 0 ? 6 : 0
 
-      const modifier = (Math.sqrt(internal * 0.1) + level) / 2
+      const modifier = (Math.sqrt(internal * 0.1) + level) / 2 + 1
       return Math.floor(modifier + firstSlotBonus) / 100
     })
 
