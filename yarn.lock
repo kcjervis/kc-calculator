@@ -1200,10 +1200,10 @@ end-of-stream@^1.1.0:
   dependencies:
     once "^1.4.0"
 
-equipment-bonus@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/equipment-bonus/-/equipment-bonus-4.0.4.tgz#63a1711b05e53d42f98250e36f671a032e53b89c"
-  integrity sha512-3fMbFERTCnt55u2uVjmlA1HXLw80Q2sb5bYaothSkgmAE7VlvPOwKenXFN+0pkCMZOLS/JH7r4Qc0O4pBmm1WA==
+equipment-bonus@^5.0.5:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/equipment-bonus/-/equipment-bonus-5.0.5.tgz#4a7348fda880954ce761a94e9f77caf606274207"
+  integrity sha512-KGD8ipuQ0ihYVjoggpMAraOYVXF0U2/29CiyuKjHlryU3N9Px2UBeLnahcKQzZ21Exxy2pwjxhXWsBEkgBWFXA==
 
 escape-string-regexp@^1.0.5:
   version "1.0.5"
