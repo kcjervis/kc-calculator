@@ -21,19 +21,18 @@ export const calcGearAdjustedAntiAir = (gear: IGear) => {
   return multiplier * antiAir + improvement.adjustedAntiAirModifier
 }
 
-export const calcShipAdjustedAntiAir = (ship: IShip, side: Side) => {
+const calcInternalAdjustedAA = (ship: IShip, side: Side) => {
   const { stats, nakedStats, totalEquipmentStats } = ship
 
   const totalEquipAdjustedAA = totalEquipmentStats(calcGearAdjustedAntiAir)
+
   if (side === "Enemy") {
-    return Math.floor(Math.floor(Math.sqrt(stats.antiAir)) * 2 + totalEquipAdjustedAA)
+    return Math.floor(Math.sqrt(stats.antiAir)) + 0.5 * totalEquipAdjustedAA
   }
 
-  const preFloor = nakedStats.antiAir + totalEquipAdjustedAA
-  if (ship.countGear() === 0) {
-    return preFloor
-  }
-  return 2 * Math.floor(preFloor / 2)
+  const preFloor = 0.5 * (nakedStats.antiAir + totalEquipAdjustedAA)
+
+  return ship.countGear() === 0 ? preFloor : Math.floor(preFloor)
 }
 
 const isPropellantBarrageShipType = (type: ShipType) =>
@@ -54,27 +53,44 @@ export default class ShipAntiAir {
     private antiAirCutin?: AntiAirCutin
   ) {}
 
-  get adjustedAntiAir() {
+  private get internalAdjustedAA() {
     const { ship, side } = this
-    return calcShipAdjustedAntiAir(ship, side)
+    return calcInternalAdjustedAA(ship, side)
   }
 
-  public calcProportionalShotdownRate = (adjustedAntiAirResistModifier = 1) => {
-    const { adjustedAntiAir, combinedFleetModifier } = this
+  private calcAdjustedAntiAir = (adjustedAntiAirResistance = 1) => {
+    const internal = this.internalAdjustedAA
 
-    return Math.floor(adjustedAntiAir * adjustedAntiAirResistModifier) * combinedFleetModifier * 0.5 * 0.25 * 0.02
+    if (adjustedAntiAirResistance < 1) {
+      return 2 * Math.floor(internal * adjustedAntiAirResistance)
+    }
+
+    return 2 * internal
   }
 
-  public calcFixedShotdownNumber = (adjustedAntiAirResistModifier = 1, fleetAntiAirResistModifier = 1) => {
-    const { adjustedAntiAir, fleetAntiAir, side, antiAirCutin, combinedFleetModifier } = this
+  get adjustedAntiAir() {
+    return this.calcAdjustedAntiAir()
+  }
+
+  public calcProportionalShotdownRate = (adjustedAntiAirResistance = 1) => {
+    const { combinedFleetModifier } = this
+
+    const adjustedAntiAir = this.calcAdjustedAntiAir(adjustedAntiAirResistance)
+
+    return Math.floor(adjustedAntiAir) * combinedFleetModifier * 0.5 * 0.25 * 0.02
+  }
+
+  public calcFixedShotdownNumber = (adjustedAntiAirResistance = 1, fleetAntiAirResistance = 1) => {
+    const { fleetAntiAir, side, antiAirCutin, combinedFleetModifier } = this
+
+    const adjustedAntiAir = this.calcAdjustedAntiAir(adjustedAntiAirResistance)
+
+    const base = 0.5 * (Math.floor(adjustedAntiAir) + Math.floor(fleetAntiAir * fleetAntiAirResistance))
+
     // 敵味方補正
     const sideModifier = side === "Player" ? 0.8 : 0.75
 
-    const base =
-      Math.floor(adjustedAntiAir * adjustedAntiAirResistModifier) +
-      Math.floor(fleetAntiAir * fleetAntiAirResistModifier)
-
-    let preFloor = base * 0.5 * 0.25 * sideModifier * combinedFleetModifier
+    let preFloor = base * 0.25 * sideModifier * combinedFleetModifier
 
     if (antiAirCutin) {
       preFloor *= antiAirCutin.fixedAirDefenseModifier
