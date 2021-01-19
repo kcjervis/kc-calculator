@@ -1200,10 +1200,10 @@ end-of-stream@^1.1.0:
   dependencies:
     once "^1.4.0"
 
-equipment-bonus@^5.0.5:
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/equipment-bonus/-/equipment-bonus-5.0.5.tgz#4a7348fda880954ce761a94e9f77caf606274207"
-  integrity sha512-KGD8ipuQ0ihYVjoggpMAraOYVXF0U2/29CiyuKjHlryU3N9Px2UBeLnahcKQzZ21Exxy2pwjxhXWsBEkgBWFXA==
+equipment-bonus@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/equipment-bonus/-/equipment-bonus-6.0.0.tgz#3e4743434f343fec8f217e0016d5423125d123c5"
+  integrity sha512-+iZArhHhAXN3SlyRIN7hZ5kt/CfsF7c7W9K8d14GzKZiGrl6bMrTvkEmrbWaPsrtjT/2krtDZVqeP5HajkRZOg==
 
 escape-string-regexp@^1.0.5:
   version "1.0.5"
@@ -1564,11 +1564,6 @@ form-data@~2.3.2:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
-
-fp-ts@^2.4.4:
-  version "2.5.3"
-  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.5.3.tgz#7f09cc7f3e09623c6ade303d98a2cccdb2cc861f"
-  integrity sha512-lQd+hahLd8cygNoXbEHDjH/cbF6XVWlEPb8h5GXXlozjCSDxWgclvkpOoTRfBA0P+r69l9VvW1nEsSGIJRQpWw==
 
 fragment-cache@^0.2.1:
   version "0.2.1"
