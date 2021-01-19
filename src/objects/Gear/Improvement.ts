@@ -88,7 +88,7 @@ export default class Improvement implements IImprovement {
       return 0.25 * star
     }
 
-    if (gearIs("LandBasedAttackAircraft")) {
+    if (gearIs("LandBasedAttackAircraft") || gearIs("LargeLandBasedAircraft")) {
       return 0.5 * Math.sqrt(star)
     }
 

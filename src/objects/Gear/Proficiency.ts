@@ -30,7 +30,15 @@ export const ProficiencyType = {
     if (gearIs("SeaplaneBomber")) {
       return "SeaplaneBomber"
     }
-    if (gearIs("DiveBomber") || gearIs("TorpedoBomber") || gearIs("ReconnaissanceAircraft")) {
+    if (
+      gearIs("DiveBomber") ||
+      gearIs("TorpedoBomber") ||
+      gearIs("ReconnaissanceAircraft") ||
+      gearIs("CarrierBasedAircraft") ||
+      gearIs("Seaplane") ||
+      gearIs("JetPoweredAircraft") ||
+      gearIs("LandBasedAircraft")
+    ) {
       return "Other"
     }
     return "None"
