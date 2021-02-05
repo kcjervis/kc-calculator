@@ -8,7 +8,7 @@ export type ShipMatcher = (ship: ShipBase) => boolean
 const makeShipClassMatcher = (...keys: ShipClassKey[]): ShipMatcher => ship =>
   keys.map(key => ShipClassId[key]).includes(ship.shipClassId)
 
-const RoyalNavy = makeShipClassMatcher("QueenElizabethClass", "NelsonClass", "ArkRoyalClass", "JClass")
+const RoyalNavy = makeShipClassMatcher("QueenElizabethClass", "NelsonClass", "ArkRoyalClass", "JClass", "TownClass")
 const UsNavy = makeShipClassMatcher(
   "JohnCButlerClass",
   "FletcherClass",
