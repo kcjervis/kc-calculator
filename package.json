@@ -28,7 +28,7 @@
     }
   },
   "dependencies": {
-    "equipment-bonus": "^6.0.0",
+    "equipment-bonus": "^6.0.1",
     "lodash": "^4.17.19",
     "lodash-es": "^4.17.15",
     "sift": "^9.0.7"
