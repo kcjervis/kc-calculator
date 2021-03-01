@@ -1,6 +1,7 @@
 import { IShip } from "../objects"
 import { Asw } from "../formulas"
 import { AttackPowerModifierRecord, FunctionalModifier, createCriticalFm } from "../common"
+import { ShipId } from "@jervis/data"
 
 export type AswTime = "Opening" | "Day" | "Night"
 
@@ -59,7 +60,8 @@ const canDoAircraftAsw = (ship: IShip) => {
       "LightAircraftCarrier",
       "AmphibiousAssaultShip"
     ) ||
-    ship.shipClass.is("RevisedKazahayaClass")
+    ship.shipClass.is("RevisedKazahayaClass") ||
+    ship.shipId === ShipId["加賀改二護"]
   ) {
     return ship.planes.some(plane => plane.slotSize > 0 && plane.is("AswAircraft"))
   }
