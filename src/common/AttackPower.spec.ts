@@ -74,7 +74,7 @@ describe("AttackPower", () => {
 
   it("createAttackPower", () => {
     const basic = 100
-    const cap = 150
+    const cap = 170
     const precap = basic * 1.5
     const capped = softcap(cap, precap)
     const isCapped = capped > cap

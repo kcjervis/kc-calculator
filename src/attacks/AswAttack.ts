@@ -4,6 +4,8 @@ import { Engagement, Formation, AttackPowerModifierRecord } from "../common"
 import Damage from "./Damage"
 import ShipAswCalculator, { AswTime } from "./ShipAswCalculator"
 
+const ASW_POWER_CAP = 170
+
 export type AswAttackParams = {
   attacker: ShipInformation
   defender: ShipInformation
@@ -16,7 +18,7 @@ export type AswAttackParams = {
 }
 
 export default class AswAttack {
-  public static readonly cap = 150
+  public static readonly cap = ASW_POWER_CAP
   public static readonly criticalRateMultiplier = 1.1
 
   public attacker: ShipInformation

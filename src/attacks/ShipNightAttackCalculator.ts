@@ -9,6 +9,8 @@ import {
 import { GearId } from "@jervis/data"
 import NightCombatSpecialAttack, { isNightAerialAttackShip } from "./NightCombatSpecialAttack"
 
+const NIGHT_POWER_CAP = 360
+
 export default class ShipNightAttackCalculator {
   constructor(private ship: IShip) {}
 
@@ -84,7 +86,6 @@ export default class ShipNightAttackCalculator {
   }) => {
     const { nightContactModifier, formationModifier, specialAttack, isCritical, isAntiInstallation } = params
     const basic = this.calcBasicPower(nightContactModifier, isAntiInstallation)
-    const cap = 300
 
     const healthModifier = this.ship.health.nightAttackPowerModifier
 
@@ -103,7 +104,7 @@ export default class ShipNightAttackCalculator {
     const modifiers = composeAttackPowerModifierRecord({ a14, b14 }, params.modifiers)
 
     const fm11next = isCritical ? this.getCriticalFm() : undefined
-    return createAttackPower({ basic, cap, modifiers, fm11next })
+    return createAttackPower({ basic, cap: NIGHT_POWER_CAP, modifiers, fm11next })
   }
 
   public calcAccuracy = (params: {

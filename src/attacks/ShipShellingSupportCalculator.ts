@@ -2,6 +2,8 @@ import { IShip } from "../objects"
 import { AttackPowerModifierRecord, createAttackPower, FunctionalModifier, createCriticalFm } from "../common"
 import { getShellingType } from "./ShipShellingCalculator"
 
+const SHELLING_SUPPORT_POWER_CAP = 170
+
 export default class ShipShellingSupportCalculator {
   constructor(private ship: IShip) {}
 
@@ -34,7 +36,6 @@ export default class ShipShellingSupportCalculator {
     const { ship } = this
     const { formationModifier, engagementModifier, isCritical, isAntiInstallation } = params
     const basic = 4 + ship.stats.firepower
-    const cap = 150
 
     const healthModifier = ship.health.shellingPowerModifier
     const a14 = formationModifier * engagementModifier * healthModifier
@@ -43,7 +44,7 @@ export default class ShipShellingSupportCalculator {
     const fm14prev = this.getCarrierShellingFm(isAntiInstallation)
     const fm11next = isCritical ? createCriticalFm() : undefined
 
-    return createAttackPower({ basic, cap, modifiers, fm14prev, fm11next })
+    return createAttackPower({ basic, cap: SHELLING_SUPPORT_POWER_CAP, modifiers, fm14prev, fm11next })
   }
 
   private get accuracyShipFactors() {

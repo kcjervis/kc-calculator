@@ -9,6 +9,8 @@ import {
 } from "../common"
 import DayCombatSpecialAttack from "./DayCombatSpecialAttack"
 
+const SHELLING_POWER_CAP = 220
+
 export const getShellingType = (ship: IShip) => {
   const { shipType, shipClass, isInstallation, hasGear } = ship
   if (shipType.isAircraftCarrierClass) {
@@ -114,7 +116,6 @@ export default class ShipShellingCalculator {
       specialAttack
     } = params
     const basic = this.calcBasicPower(fleetFactor, isAntiInstallation)
-    const cap = 180
 
     const { ship } = this
 
@@ -144,7 +145,7 @@ export default class ShipShellingCalculator {
       return value
     }
 
-    return createAttackPower({ basic, cap, modifiers, fm14prev, fm11next })
+    return createAttackPower({ basic, cap: SHELLING_POWER_CAP, modifiers, fm14prev, fm11next })
   }
 
   private get accuracyShipFactors() {

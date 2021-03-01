@@ -37,7 +37,7 @@ const createPower = (factors: AswPowerFactors) => {
   } = factors
 
   const basic = Math.sqrt(nakedAsw) * 2 + equipmentAsw * 1.5 + improvementModifier + typeConstant
-  const cap = 150
+  const cap = 170
   const a14 = formationModifier * engagementModifier * healthModifier * synergyModifier
   const modifiers = optionalModifiers ? composeAttackPowerModifierRecord(optionalModifiers, { a14 }) : { a14 }
 

@@ -28,7 +28,7 @@ const isPossible = (attacker: IShip, defender: IShip) => {
 }
 
 export default class TorpedoAttack {
-  public static readonly cap = 150
+  public static readonly cap = 170
   public static readonly criticalRateMultiplier = 1.5
 
   public static isPossible = isPossible

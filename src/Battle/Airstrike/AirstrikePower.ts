@@ -32,7 +32,7 @@ const calcAirstrikePower = (cappedPower: number, modifiers: AirstrikePowerPostCa
 
 export const getAirstrikePower = (factors: AirstrikePowerFactors) => {
   const basicPower = calcAirstrikeBasicPower(factors)
-  const cappedPower = softcap(150, basicPower)
+  const cappedPower = softcap(170, basicPower)
   const value = calcAirstrikePower(cappedPower, factors)
 
   return {

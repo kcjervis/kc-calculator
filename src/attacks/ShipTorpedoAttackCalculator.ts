@@ -1,6 +1,8 @@
 import { AttackPowerModifierRecord, composeAttackPowerModifierRecord, createAttackPower } from "../common"
 import { IShip } from "../objects"
 
+const TORPEDO_POWER_CAP = 180
+
 type TorpedoAttackPowerShipFactors = {
   torpedo: number
   improvementModifier: number
@@ -53,8 +55,7 @@ const calcPower = (factors: TorpedoAttackPowerFactors) => {
   const modifiers = composeAttackPowerModifierRecord({ a14 }, optionalModifiers)
 
   const basic = torpedo + improvementModifier + fleetFactor
-  const cap = 150
-  const preCriticalPower = createAttackPower({ basic, cap, modifiers })
+  const preCriticalPower = createAttackPower({ basic, cap: TORPEDO_POWER_CAP, modifiers })
   const preCritical = preCriticalPower.postcap
 
   if (!isCritical) {

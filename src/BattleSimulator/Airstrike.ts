@@ -77,7 +77,7 @@ export default class Airstrike {
     const fleetFactor = 0
 
     const basic = typeModifier * (stat * Math.sqrt(slotSize) + fleetFactor)
-    const cap = 150
+    const cap = 170
 
     const modifiers = { a11: contactModifier }
 
