@@ -111,7 +111,8 @@ export const isAntiInstallationBomber = createGearIdMatcher(
   GearId["試製南山"],
   GearId["F4U-1D"],
   GearId["FM-2"],
-  GearId["彗星一二型(六三四空/三号爆弾搭載機)"]
+  GearId["彗星一二型(六三四空/三号爆弾搭載機)"],
+  GearId["TBM-3W+3S"]
 )
 
 /** 対潜火力装備 */
