@@ -28,7 +28,7 @@
     }
   },
   "dependencies": {
-    "@jervis/data": "file:../data",
+    "@jervis/data": "link:../data",
     "equipment-bonus": "^6.0.9",
     "lodash": "^4.17.19",
     "lodash-es": "^4.17.15",

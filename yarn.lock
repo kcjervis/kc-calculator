@@ -224,8 +224,9 @@
   resolved "https://registry.yarnpkg.com/@istanbuljs/schema/-/schema-0.1.2.tgz#26520bf09abe4a5644cd5414e37125a8954241dd"
   integrity sha512-tsAQNx32a8CoFhjhijUIhI4kccIAgmGhy8LZMZgGfmXcpMbPRUqn5LWmgRttILi6yeGmBJd2xsPkFMs0PzgPCw==
 
-"@jervis/data@file:../data":
-  version "0.14.12"
+"@jervis/data@link:../data":
+  version "0.0.0"
+  uid ""
 
 "@jest/console@^25.2.6":
   version "25.2.6"
