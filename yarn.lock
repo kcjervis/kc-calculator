@@ -224,8 +224,8 @@
   resolved "https://registry.yarnpkg.com/@istanbuljs/schema/-/schema-0.1.2.tgz#26520bf09abe4a5644cd5414e37125a8954241dd"
   integrity sha512-tsAQNx32a8CoFhjhijUIhI4kccIAgmGhy8LZMZgGfmXcpMbPRUqn5LWmgRttILi6yeGmBJd2xsPkFMs0PzgPCw==
 
-"@jervis/data@../data":
-  version "0.14.10"
+"@jervis/data@file:../data":
+  version "0.14.12"
 
 "@jest/console@^25.2.6":
   version "25.2.6"
@@ -1203,10 +1203,10 @@ end-of-stream@^1.1.0:
   dependencies:
     once "^1.4.0"
 
-equipment-bonus@^6.0.5:
-  version "6.0.5"
-  resolved "https://registry.yarnpkg.com/equipment-bonus/-/equipment-bonus-6.0.5.tgz#16804824d041bc9785c4a0fb926cfb2adbad74b2"
-  integrity sha512-2F9/iZ38PzKAATLFVQGDavUQbMh5C3xfLwasCe0xk9HblQXwGgk7kH0Q+QznS91yxehiT/AwNlQDEM2Vc3nZUA==
+equipment-bonus@^6.0.9:
+  version "6.0.9"
+  resolved "https://registry.yarnpkg.com/equipment-bonus/-/equipment-bonus-6.0.9.tgz#35d2cb5ec2d05e8551590cff277e007857ddd4b4"
+  integrity sha512-++tAWyO0l//O8fdIL2TLAByRqZu4srekc1Sa/JPKwqWDRHU5JC0vVPQO2HURAV7m8/sTWcxCgbMQq5zkKLOo5A==
 
 escape-string-regexp@^1.0.5:
   version "1.0.5"
