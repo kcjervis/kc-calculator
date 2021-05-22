@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@jervis/data": "link:../data",
-    "equipment-bonus": "^6.0.12",
+    "equipment-bonus": "latest",
     "lodash": "^4.17.19",
     "lodash-es": "^4.17.15",
     "sift": "^9.0.7"
