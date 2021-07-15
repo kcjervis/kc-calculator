@@ -104,7 +104,6 @@ export const isAircraft = or(
 
 /** 対地艦爆 */
 export const isAntiInstallationBomber = createGearIdMatcher(
-  GearId["零式艦戦62型(爆戦)"],
   GearId["Ju87C改"],
   GearId["Ju87C改二(KMX搭載機)"],
   GearId["Ju87C改二(KMX搭載機/熟練)"],
@@ -112,6 +111,12 @@ export const isAntiInstallationBomber = createGearIdMatcher(
   GearId["F4U-1D"],
   GearId["FM-2"],
   GearId["彗星一二型(六三四空/三号爆弾搭載機)"],
+  GearId["彗星一二型(三一号光電管爆弾搭載機)"],
+  GearId["九九式艦爆二二型"],
+  GearId["九九式艦爆二二型(熟練)"],
+  GearId["SB2C-3"],
+  GearId["SB2C-5"],
+  GearId["零式艦戦62型(爆戦)"],
   GearId["TBM-3W+3S"]
 )
 

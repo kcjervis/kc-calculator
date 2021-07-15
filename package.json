@@ -1,7 +1,7 @@
 {
   "name": "kc-calculator",
   "sideEffects": false,
-  "version": "0.23.6",
+  "version": "0.23.7",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "madono (https://github.com/MadonoHaru)",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@jervis/data": "link:../data",
-    "equipment-bonus": "latest",
+    "equipment-bonus": "^6.0.15",
     "lodash": "^4.17.19",
     "lodash-es": "^4.17.15",
     "sift": "^9.0.7"
