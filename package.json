@@ -30,7 +30,7 @@
   "dependencies": {
     "@jervis/data": "link:../data",
     "equipment-bonus": "^6.0.15",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "lodash-es": "^4.17.15",
     "sift": "^9.0.7"
   },
